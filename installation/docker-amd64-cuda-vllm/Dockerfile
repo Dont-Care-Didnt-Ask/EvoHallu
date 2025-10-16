@@ -51,20 +51,16 @@ FROM runtime-apt-pkgs AS runtime-deps
 #     apt-get update && apt-get upgrade -y && apt-get install -y --fix-missing --no-install-recommends \
 #     sagemath
 
-# Install Miniconda
+# Install Miniforge (conda-forge based, no TOS requirements)
 ENV CONDA_DIR=/opt/conda
 ENV PATH=$CONDA_DIR/bin:$PATH
-RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -o miniconda.sh && \
-    bash miniconda.sh -b -p $CONDA_DIR && \
-    rm miniconda.sh && \
+RUN curl -fsSL https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -o miniforge.sh && \
+    bash miniforge.sh -b -p $CONDA_DIR && \
+    rm miniforge.sh && \
     conda clean -afy
 
-RUN echo "channels:" > /root/.condarc && \
-    echo "  - conda-forge" >> /root/.condarc && \
-    echo "channel_priority: strict" >> /root/.condarc && \
-    echo "auto_activate_base: false" >> /root/.condarc
 RUN $CONDA_DIR/bin/conda install -y python=3.10
-RUN $CONDA_DIR/bin/conda install -y -c conda-forge --override-channels sage
+RUN $CONDA_DIR/bin/conda install -y sage
 
 # Install pip packages.
 ENV PIP_CACHE_DIR=/root/.cache/pip
