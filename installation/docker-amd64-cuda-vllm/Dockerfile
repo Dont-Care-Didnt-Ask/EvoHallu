@@ -59,9 +59,10 @@ RUN curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_6
     rm miniconda.sh && \
     conda clean -afy
 
-RUN $CONDA_DIR/bin/conda config --remove channels defaults && \
-    $CONDA_DIR/bin/conda config --add channels conda-forge && \
-    $CONDA_DIR/bin/conda config --set channel_priority strict
+RUN echo "channels:" > /root/.condarc && \
+    echo "  - conda-forge" >> /root/.condarc && \
+    echo "channel_priority: strict" >> /root/.condarc && \
+    echo "auto_activate_base: false" >> /root/.condarc
 RUN $CONDA_DIR/bin/conda install -y python=3.10
 RUN $CONDA_DIR/bin/conda install -y -c conda-forge --override-channels sage
 
