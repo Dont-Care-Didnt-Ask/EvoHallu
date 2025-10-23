@@ -31,14 +31,14 @@ if [ -n "${SKIP_INSTALL_PROJECT}" ]; then
   # Best practice is to install the project.
   echo "[TEMPLATE INFO] Skipping the installation of the project."
 else
-  echo "[TEMPLATE INFO] Installing the project with pip."
+  echo "[TEMPLATE INFO] Installing the project with pip (python3)."
   echo "[TEMPLATE INFO] Expecting ${PROJECT_ROOT_AT} to be a Python project."
   echo "[TEMPLATE INFO] To skip this installation use the env variable SKIP_INSTALL_PROJECT=1."
   # The path is relative on purpose.
-  pip install --user --no-build-isolation -e "${PROJECT_ROOT_AT}"
+  python3 -m pip install --user --no-build-isolation -e "${PROJECT_ROOT_AT}"
   # Test that the package can be imported.
   echo "[TEMPLATE INFO] Testing that the package can be imported."
-  python -c "import ${PACKAGE_NAME}"
+  python3 -c "import ${PACKAGE_NAME}"
   echo "[TEMPLATE INFO] Package imported successfully."
 fi
 
