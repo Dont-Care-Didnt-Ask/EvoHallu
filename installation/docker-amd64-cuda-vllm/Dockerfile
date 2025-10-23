@@ -51,16 +51,7 @@ FROM runtime-apt-pkgs AS runtime-deps
 #     apt-get update && apt-get upgrade -y && apt-get install -y --fix-missing --no-install-recommends \
 #     sagemath
 
-# Install Miniforge (conda-forge based, no TOS requirements)
-ENV CONDA_DIR=/opt/conda
-ENV PATH=$CONDA_DIR/bin:$PATH
-RUN curl -fsSL https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh -o miniforge.sh && \
-    bash miniforge.sh -b -p $CONDA_DIR && \
-    rm miniforge.sh && \
-    conda clean -afy
-
-RUN $CONDA_DIR/bin/conda install -y python=3.10
-RUN $CONDA_DIR/bin/conda install -y sage
+# Use Python and pip from the base image (no additional conda/miniforge)
 
 # Install pip packages.
 ENV PIP_CACHE_DIR=/root/.cache/pip
@@ -68,7 +59,7 @@ RUN pip freeze > ${DEPENDENCIES_DIR}/requirements-freeze-before-pip-install.txt
 RUN pip list --format freeze > ${DEPENDENCIES_DIR}/requirements-list-before-pip-install.txt
 COPY requirements.txt ${DEPENDENCIES_DIR}/requirements.txt
 RUN --mount=type=cache,target=${PIP_CACHE_DIR},sharing=private \
-    $CONDA_DIR/bin/pip install -r ${DEPENDENCIES_DIR}/requirements.txt
+    pip install -r ${DEPENDENCIES_DIR}/requirements.txt
 # Podman: Comment the above and use this instead with podman as it doesn't support sharing mount modes.
 #RUN --mount=type=cache,target=${PIP_CACHE_DIR} \
 #    pip install -r ${DEPENDENCIES_DIR}/requirements.txt
@@ -155,8 +146,7 @@ RUN {   echo "fpath+=${PURE_PATH}"; \
         echo "alias update-env-file='source \${PROJECT_ROOT_AT}/installation/docker-amd64-cuda/update-env-file.sh'"; \
     } >> /etc/zsh/zshrc
 
-# vLLM symlink
-RUN ln -s $(which python3) /usr/bin/python
+# vLLM symlink (not needed when using base image Python)
 
 # Entrypoints.
 # Don't overwrite the entrypoint, it is installing the project
