@@ -20,8 +20,9 @@ ARG PASSWD
 ENV PASSWD=${PASSWD}
 
 # Add user to sudoer to be able to install apt packages.
-RUN groupadd -f -g ${GRPID} "${GRP}" && \
-    useradd --shell /bin/zsh --create-home -u ${USRID} -g "${GRP}" -p  $(openssl passwd -1 ${PASSWD}) ${USR} && \
+RUN SANITIZED_GRP=$(echo "${GRP}" | tr ' ' '_') && \
+    groupadd -f -g ${GRPID} "$SANITIZED_GRP" && \
+    useradd --shell /bin/zsh --create-home -u ${USRID} -g ${GRPID} -p  $(openssl passwd -1 ${PASSWD}) ${USR} && \
     usermod -aG sudo ${USR}
 
 USER ${USR}
@@ -40,8 +41,9 @@ ARG PASSWD
 ENV PASSWD=${PASSWD}
 
 # Add user to sudoer to be able to install apt packages.
-RUN groupadd -f -g ${GRPID} "${GRP}" && \
-    useradd --shell /bin/zsh --create-home -u ${USRID} -g "${GRP}" -p  $(openssl passwd -1 ${PASSWD}) ${USR} && \
+RUN SANITIZED_GRP=$(echo "${GRP}" | tr ' ' '_') && \
+    groupadd -f -g ${GRPID} "$SANITIZED_GRP" && \
+    useradd --shell /bin/zsh --create-home -u ${USRID} -g ${GRPID} -p  $(openssl passwd -1 ${PASSWD}) ${USR} && \
     usermod -aG sudo ${USR}
 
 USER ${USR}
