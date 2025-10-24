@@ -93,8 +93,8 @@ def get_initial_func(cfg):
     return initial_function, function_str_to_extract
 
 
-FloatArray = npt.NDArray[np.float_]
-IntArray = npt.NDArray[np.int_]
+FloatArray = npt.NDArray[np.float64]
+IntArray = npt.NDArray[np.int64]
 usecache = True
 
 

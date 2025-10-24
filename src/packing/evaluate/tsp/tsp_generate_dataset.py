@@ -45,7 +45,7 @@ sizes = list(iter_limit_map.keys())
 
 
 class TSPInstance:
-    def __init__(self, positions: npt.NDArray[np.float_], adjacency: npt.NDArray[np.float_]) -> None:
+    def __init__(self, positions: npt.NDArray[np.float64], adjacency: npt.NDArray[np.float64]) -> None:
         self.positions = positions
         self.adjacency = adjacency
         self.n = positions.shape[0]
