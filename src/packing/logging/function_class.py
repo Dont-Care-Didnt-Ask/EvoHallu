@@ -58,6 +58,7 @@ class FunctionClass:
     eval: EvalData = field(default_factory=EvalData)
     function_num: int = -1
     prompt_num: int = -1
+    extra_metrics: dict = field(default_factory=dict)
 
     def __setattr__(self, name, value):
         # Get all field names from the dataclass
