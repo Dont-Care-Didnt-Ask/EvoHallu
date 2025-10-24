@@ -38,13 +38,16 @@ class DPODataBuffer:
 
         pairs = []
 
-        wandb.log(
-            {"dpodata/passed_chats": len(passed_chats), "dpodata/failed_chats": len(failed_chats)}
-        )
+        if getattr(cfg, "wandb", 0):
+            wandb.log({
+                "dpodata/passed_chats": len(passed_chats),
+                "dpodata/failed_chats": len(failed_chats)
+            })
 
         if passed_chats:
             unique_scores = set(passed_scores)
-            wandb.log({"dpodata/unique_passed_scores": len(unique_scores)})
+            if getattr(cfg, "wandb", 0):
+                wandb.log({"dpodata/unique_passed_scores": len(unique_scores)})
             chat_ranking = sorted(
                 zip(passed_chats, passed_scores), key=lambda x: x[1], reverse=True
             )
@@ -89,7 +92,7 @@ class DPODataBuffer:
             # Add pairs to the dataset
             self.add_chat(pair[0], pair[1], pair[2])
 
-        if cfg.wandb:
+        if getattr(cfg, "wandb", 0):
             wandb.log({"dpodata/num_of_pairs": len(pairs)})
 
     def add_chat(self, chosen_conv, rejected_conv, chosen_chat_score):

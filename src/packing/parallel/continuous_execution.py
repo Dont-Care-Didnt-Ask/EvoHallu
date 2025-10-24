@@ -637,7 +637,10 @@ def evaluate_on_evalset(
     end_time = time.time()
     eval_wandb_dict[f"{evalset}/time_taken_to_evaluate"] = end_time - start_time
     eval_wandb_dict[f"round_num"] = round_num
-    wandb.log(eval_wandb_dict)
+    import os
+    if (getattr(cfg, "wandb", 0) and os.environ.get("WANDB_DISABLED", "").lower() not in ("true", "1", "yes")
+        and getattr(wandb, "run", None) is not None):
+        wandb.log(eval_wandb_dict)
 
     metrics = {}
     metrics["round_num"] = round_num
@@ -802,7 +805,10 @@ def evaluate_on_dataset(
     end_time = time.time()
     eval_wandb_dict[f"{dataset}/time_taken_to_evaluate"] = end_time - start_time
     eval_wandb_dict[f"round_num"] = round_num
-    wandb.log(eval_wandb_dict)
+    import os
+    if (getattr(cfg, "wandb", 0) and os.environ.get("WANDB_DISABLED", "").lower() not in ("true", "1", "yes")
+        and getattr(wandb, "run", None) is not None):
+        wandb.log(eval_wandb_dict)
 
     metrics = {}
     metrics["round_num"] = round_num

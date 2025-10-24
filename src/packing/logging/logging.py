@@ -13,6 +13,14 @@ import os
 import json
 
 
+def _safe_wandb_log(data):
+    import os
+    if os.environ.get("WANDB_DISABLED", "").lower() in ("true", "1", "yes"):
+        return
+    if getattr(wandb, "run", None) is not None:
+        wandb.log(data)
+
+
 def wandb_log_running_dict(running_dict):
     # If one of the logged values is -inf, log it as Nan
     wandb_dict = copy.deepcopy(running_dict)
@@ -23,7 +31,7 @@ def wandb_log_running_dict(running_dict):
         else:
             if value == float("-inf") or value == float("inf"):
                 wandb_dict[key] = float("nan")
-    wandb.log(wandb_dict)
+    _safe_wandb_log(wandb_dict)
 
 
 def log_to_wandb(function_class_instance, running_dict, prefix=""):
@@ -60,7 +68,7 @@ def log_to_wandb(function_class_instance, running_dict, prefix=""):
 
     def is_loggable(value):
         # Accept scalar types: int, float, bool, str, and NumPy scalars
-        if isinstance(value, (int, float, bool, np.integer, np.floating, np.bool_)):
+        if isinstance(value, (int, float, bool, np.integer, np.floating)):
             return True
         else:
             return False  # Exclude non-scalar types
@@ -75,7 +83,7 @@ def log_to_wandb(function_class_instance, running_dict, prefix=""):
     flattened_dict.update(prefixed_extra_dict)
 
     # Log the flattened dictionary to wandb
-    wandb.log(flattened_dict)
+    _safe_wandb_log(flattened_dict)
 
 
 def log_train_keys_containing_loop(cfg, running_dict):
@@ -107,7 +115,7 @@ def log_train_keys_containing_loop(cfg, running_dict):
             logging.info(
                 f"Logging {key} with value {value[idx]} and loop_num {loop_num}"
             )
-            wandb.log({key: value[idx], "loop_num": loop_num})
+            _safe_wandb_log({key: value[idx], "loop_num": loop_num})
 
     # Delete keys_with_loop from running_dict
     for key in keys_with_loop:
@@ -384,7 +392,7 @@ def wandb_log_plot(cfg, data, wandb_name, title, xlabel, ylabel, plot_type='hist
     plt.title(title)
 
     # log the plot as an artifact to wandb
-    wandb.log({wandb_name: wandb.Image(plt)})
+    _safe_wandb_log({wandb_name: wandb.Image(plt)})
 
 
 def write_to_json(json_file, data):

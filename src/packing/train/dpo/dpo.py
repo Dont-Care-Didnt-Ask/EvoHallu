@@ -67,8 +67,11 @@ def DPO(
         running_dict[f"traindata_loop/score_threshold_{model_name}"].append(copy.deepcopy(score_threshold))
         running_dict[f"{model_name}_loop_num"].append(last_loop_num + tuning_loop)
 
-        wandb.log(
-            {"traindata/num_datapoints": num_datapoints, "traindata/score_threshold": copy.deepcopy(score_threshold)})
+        if getattr(cfg, "wandb", 0):
+            wandb.log({
+                "traindata/num_datapoints": num_datapoints,
+                "traindata/score_threshold": copy.deepcopy(score_threshold)
+            })
 
         learning_rate = learning_rate_schedule(cfg, cfg.train.dpo_config.learning_rate, num_datapoints, tuning_loop,
                                                round_num)
