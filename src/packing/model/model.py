@@ -42,6 +42,10 @@ def get_full_model_name(cfg):
             model_id = "meta-llama/Llama-3.2-1B-Instruct"
         elif name == "phi":
             model_id = "microsoft/Phi-3.5-mini-instruct"
+        elif name == "qwensmall":
+            model_id = "Qwen/Qwen2.5-0.5B-Instruct"
+        elif name == "qwen14b":
+            model_id = "Qwen/Qwen2.5-14B-Instruct"
         else:
             raise ValueError(f"Invalid model name: {name}")
         return model_id
