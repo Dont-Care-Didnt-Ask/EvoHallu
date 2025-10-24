@@ -16,7 +16,7 @@ defaults:
   - cluster: example
   - task: bin
   - model: llama32
-  - train: dpo
+  - train: none
   - _self_
 
 # LLM settings
