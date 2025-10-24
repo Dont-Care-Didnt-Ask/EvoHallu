@@ -14,8 +14,8 @@ hydra:
 
 defaults:
   - cluster: example
-  - task: bin
-  - model: llama32
+  - task: hallu
+  - model: qwensmall
   - train: none
   - _self_
 
@@ -36,10 +36,10 @@ initial_percentile: 0.6
 final_percentile: 0.2
 
 # Timing config
-num_cont_rounds: 100
+num_cont_rounds: 10
 num_outputs_per_prompt: 8
 num_workers: 12
-num_rounds: 2701
+num_rounds: 10
 
 # Finetuning
 finetuning_frequency: ${train.finetuning_frequency}
@@ -66,6 +66,7 @@ logs_path: .
 logs_dir: out/logs/${prefix}/${task.task_name}_${run_identifier_name}_${seed}
 
 # Wandb settings
+wandb: 0
 project: "project_name"
 entity: project_entity
 
