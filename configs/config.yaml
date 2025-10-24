@@ -15,7 +15,7 @@ hydra:
 defaults:
   - cluster: example
   - task: hallu
-  - model: qwensmall
+  - model: qwen14b
   - train: none
   - _self_
 
@@ -23,7 +23,7 @@ defaults:
 multiple_models: 0
 creative_prompt: 1
 descending_order: 1
-gpu_nums: 0 # On which GPU index to put the model when launching the server
+gpu_nums: 1 # On which GPU index to put the model when launching the server
 flash_attn: 0
 
 # Program database
