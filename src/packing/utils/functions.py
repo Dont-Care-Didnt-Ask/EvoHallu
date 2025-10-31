@@ -80,43 +80,85 @@ def extract_imports(code_output):
 
 def extract_functions(code_output):
     """
-    Extracts the outer function definition from the given code output,
-    including any nested functions within it.
+    Extract the first top-level Python function definition from a model output.
+
+    Robust behavior:
+    - If fenced code blocks (``` ... ```) are present, prefer the first code block
+      that contains a function definition. Reasoning outside code fences is ignored.
+    - If no fences are present, scan the whole text.
+    - Capture the full function body until the next top-level dedent (or end of block).
+    - Does not stop on the first 'return' line (supports multi-line returns).
 
     Parameters:
-    code_output (str): The output string containing the code.
+    code_output (str): The raw assistant output.
 
     Returns:
-    str: The extracted outer function definition, or an empty string if no function is found.
+    str: The extracted function definition text, or an empty string if not found.
     """
-    lines = code_output.split("\n")
-    in_function = False
-    nested_level = 0
-    function_lines = []
 
-    for line in lines:
-        stripped_line = line.strip()
+    def _split_code_blocks(text):
+        blocks = []
+        lines_local = text.split("\n")
+        in_block = False
+        current = []
+        for ln in lines_local:
+            if ln.startswith("```"):
+                if not in_block:
+                    in_block = True
+                    current = []
+                    # Skip the opening fence line (may include a language tag)
+                    continue
+                else:
+                    # Closing fence: end current block
+                    blocks.append("\n".join(current))
+                    in_block = False
+                    current = []
+                    continue
+            if in_block:
+                current.append(ln)
+        return blocks
 
-        # Check if the line is the start of a function definition
-        if stripped_line.startswith("def "):
-            if not in_function:
-                in_function = True
-            nested_level += 1
-
-        # If inside a function, add the line to the function_lines list
-        if in_function:
-            function_lines.append(line)
-
-        # Check for the return statement to end the current function scope
-        if in_function and stripped_line.startswith("return "):
-            nested_level -= 1
-            if nested_level == 0:
+    def _extract_first_function(text_segment):
+        seg_lines = text_segment.split("\n")
+        start_idx = -1
+        for i, ln in enumerate(seg_lines):
+            if ln.lstrip().startswith("def "):
+                start_idx = i
                 break
+        if start_idx == -1:
+            return ""
 
-    if function_lines:
-        return "\n".join(function_lines)
-    else:
-        return ""
+        def_line = seg_lines[start_idx]
+        def_indent = len(def_line) - len(def_line.lstrip())
+
+        collected = [def_line]
+        # Collect subsequent lines that remain indented beyond the def indentation
+        for j in range(start_idx + 1, len(seg_lines)):
+            lnj = seg_lines[j]
+            stripped = lnj.strip()
+            if stripped == "":
+                collected.append(lnj)
+                continue
+            indent = len(lnj) - len(lnj.lstrip())
+            if indent <= def_indent and not lnj.lstrip().startswith("@") and not lnj.lstrip().startswith("def "):
+                # Dedent to top-level or lower: end of function body
+                break
+            if lnj.lstrip().startswith("def ") and indent <= def_indent:
+                break
+            collected.append(lnj)
+        return "\n".join(collected)
+
+    # 1) Prefer code-fenced blocks
+    if "```" in code_output:
+        blocks = _split_code_blocks(code_output)
+        for blk in blocks:
+            if "def " in blk:
+                extracted = _extract_first_function(blk)
+                if extracted:
+                    return extracted
+
+    # 2) Fallback: scan the entire text
+    return _extract_first_function(code_output)
 
 
 def separate_imports_from_func(func_str):
