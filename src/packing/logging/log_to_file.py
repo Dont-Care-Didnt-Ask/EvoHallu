@@ -39,6 +39,8 @@ def save_func_class_to_file(cfg, result_function_class: FunctionClass, filename=
         f.write("\n\n")
         f.write(f"# Score: {result_function_class.score}\n")
         f.write(f"# True score {result_function_class.true_score}\n")
+        if result_function_class.extra_metrics:
+            f.write(f"# Extra metrics: {json.dumps(result_function_class.extra_metrics, indent=2)}\n")
         # Append the best programs to the txt file
         f.write(result_function_class.imports_str)
         f.write("\n")
@@ -57,6 +59,8 @@ def save_failed_func_class_to_file(cfg, result_function_class: FunctionClass, fi
         f.write("\n")
         f.write(result_function_class.function_str)
         f.write("\n\n")
+        if result_function_class.extra_metrics:
+            f.write(f"# Extra metrics: {json.dumps(result_function_class.extra_metrics, indent=2)}\n")
 
 
 def write_chat_to_file(cfg, running_dict, function_class: FunctionClass, folder_name="chats"):
