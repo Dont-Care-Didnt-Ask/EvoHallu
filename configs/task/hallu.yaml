@@ -1,0 +1,24 @@
+# Task hallucination detection (prompt evolution)
+task_name: "hallu"
+function_str_to_extract: "make_prompt"
+
+dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/popqa/popqa_train_filtered_10shot.csv"
+filter_datasets: true
+test_dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/geometry/common_claim_true_false.csv"
+sample_size: 1024
+split_seed: ${seed}
+
+failed_score: -1
+timeout_period: 600
+mem_limit_gb: 32
+
+# Detector server settings (you must start vLLM externally)
+detector_vllm_port: 8088  # Must differ from generator vLLM port (8080 + gpu_nums)
+detector_model: "VityaVitalich/Llama3.1-8b-instruct"  # replace with the exact model being served
+detector_max_concurrent_requests: 16
+detector_max_tokens: 256
+
+programdatabaseConfig:
+  temp: 40.0
+
+
