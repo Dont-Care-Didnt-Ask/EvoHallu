@@ -20,13 +20,15 @@ PY
 
 echo "[wrapper] Starting vLLM detector: model=${DETECTOR_MODEL} port=${DETECTOR_PORT} device=${DETECTOR_DEVICES}"
 echo "[wrapper] vLLM logs will be written to /tmp/vllm.log"
+# TODO: make gpu memory utilization configurable
+# CUDA_VISIBLE_DEVICES="${DETECTOR_DEVICES}" vllm serve "${DETECTOR_MODEL}" --gpu-memory-utilization "0.35" --port "${DETECTOR_PORT}" >/tmp/vllm.log 2>&1 &
 CUDA_VISIBLE_DEVICES="${DETECTOR_DEVICES}" vllm serve "${DETECTOR_MODEL}" --port "${DETECTOR_PORT}" >/tmp/vllm.log 2>&1 &
 VLLM_PID=$!
 echo "[wrapper] vLLM started with PID=${VLLM_PID}"
 sleep 2
 if ! ps -p ${VLLM_PID} > /dev/null 2>&1; then
     echo "[wrapper] ERROR: vLLM process died immediately. Log tail:"
-    tail -50 /tmp/vllm.log
+    tail -n 200 /tmp/vllm.log
     exit 1
 fi
 
@@ -48,7 +50,7 @@ for i in range(300):  # Wait up to 5 minutes
             print(f'[wrapper] Still waiting... ({i}s elapsed). Last error: {type(e).__name__}', file=sys.stderr)
             # Show last few lines of vLLM log
             try:
-                result = subprocess.run(['tail', '-10', '/tmp/vllm.log'], capture_output=True, text=True)
+                result = subprocess.run(['tail', '-50', '/tmp/vllm.log'], capture_output=True, text=True)
                 if result.stdout.strip():
                     print(f'[wrapper] vLLM log tail:\\n{result.stdout}', file=sys.stderr)
             except:
