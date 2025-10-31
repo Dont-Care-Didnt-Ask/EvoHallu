@@ -14,6 +14,7 @@ import wandb
 from pathlib import Path
 from omegaconf import OmegaConf, DictConfig
 import logging
+import csv
 import copy
 import threading
 import multiprocessing
@@ -385,6 +386,111 @@ def main(cfg: DictConfig):
         logging.info(f"Num of passed functions: {len(passed_function_classes)}")
         logging.info(f"Num of failed functions: {len(failed_function_classes)}")
         logging.info("###################")
+
+        # Log every evaluated candidate's metrics to CSV from the parent process
+        logging.info(f"======== cfg.logs_dir={cfg.logs_dir} =======")
+        csv_file = os.path.join(cfg.logs_dir, "all_metrics.csv")
+        new_file = not os.path.exists(csv_file)
+        with open(csv_file, "a", newline="") as _f:
+            writer = csv.writer(_f)
+            if new_file:
+                writer.writerow(["function_num", "prompt_num", "auc", "precision", "recall", "invalid_responses_percentage", "auc_lower_bound", "auc_upper_bound"])
+            for function_class in passed_function_classes:
+                em = getattr(function_class, "extra_metrics", {}) or {}
+                # Parse bootstrap CI string, expected format "({lower:.4f}, {upper:.4f})"
+                ci_str = em.get("auc_ci", "(nan, nan)")
+                # Remove surrounding parentheses, split on first comma
+                parts = ci_str.strip("()").split(",", 1)
+                lower_str = parts[0].strip()
+                upper_str = parts[1].strip() if len(parts) > 1 else "nan"
+                try:
+                    lower = float(lower_str)
+                    upper = float(upper_str)
+                except ValueError:
+                    lower, upper = float("nan"), float("nan")
+                writer.writerow([
+                    function_class.function_num,
+                    function_class.prompt_num,
+                    em.get("auc", ""),
+                    em.get("precision_at_0_5", ""),
+                    em.get("recall_at_0_5", ""),
+                    em.get("invalid_responses_percentage", ""),
+                    lower,
+                    upper,
+                ])
+
+        # Evaluate top-1 best prompt on the TEST set for the hallu task after each iteration
+        if cfg.task.task_name == "hallu":
+            # Select candidates with valid AUC and invalid_responses_percentage < 1
+            candidates = [
+                fc for fc in passed_function_classes
+                if isinstance(getattr(fc, "extra_metrics", None), dict)
+                and "auc" in fc.extra_metrics
+                and fc.extra_metrics.get("invalid_responses_percentage", 100.0) < 1.0
+            ]
+
+            if len(candidates) > 0:
+                # Highest ROC-AUC wins
+                best_fc = max(candidates, key=lambda fc: fc.extra_metrics.get("auc", float("-inf")))
+                prompt_text = best_fc.extra_metrics.get("prompt_text", "")
+
+                test_csv_path = os.path.join(cfg.logs_dir, "test_metrics.csv")
+                already_evaluated = False
+                if os.path.exists(test_csv_path):
+                    with open(test_csv_path, "r", newline="") as tf:
+                        reader = csv.DictReader(tf)
+                        for row in reader:
+                            if row.get("prompt_text", "") == prompt_text:
+                                already_evaluated = True
+                                break
+
+                if not already_evaluated:
+                    # Load test set and evaluate using the same generation params
+                    test_data = generate_input(cfg.task, "testset")
+                    num_test_samples = len(test_data[0]) if isinstance(test_data, tuple) else -1
+                    test_fc = copy.deepcopy(best_fc)
+                    test_result = evaluate_func(cfg, copy.deepcopy(test_data), test_fc)
+                    em = getattr(test_result, "extra_metrics", {}) or {}
+
+                    # Parse CI into numeric bounds for consistency
+                    ci_str = em.get("auc_ci", "(nan, nan)")
+                    parts = ci_str.strip("()").split(",", 1)
+                    try:
+                        lower = float(parts[0].strip())
+                        upper = float(parts[1].strip()) if len(parts) > 1 else float("nan")
+                    except Exception:
+                        lower, upper = float("nan"), float("nan")
+
+                    new_file_test = not os.path.exists(test_csv_path)
+                    with open(test_csv_path, "a", newline="") as tf:
+                        writer = csv.writer(tf)
+                        if new_file_test:
+                            writer.writerow([
+                                "iteration",
+                                "function_num",
+                                "prompt_num",
+                                "num_test_samples",
+                                "auc",
+                                "precision",
+                                "recall",
+                                "invalid_responses_percentage",
+                                "auc_lower_bound",
+                                "auc_upper_bound",
+                                "prompt_text",
+                            ])
+                        writer.writerow([
+                            round_num,
+                            test_result.function_num,
+                            test_result.prompt_num,
+                            num_test_samples,
+                            em.get("auc", ""),
+                            em.get("precision_at_0_5", ""),
+                            em.get("recall_at_0_5", ""),
+                            em.get("invalid_responses_percentage", ""),
+                            lower,
+                            upper,
+                            em.get("prompt_text", ""),
+                        ])
 
         # Clean up
         passed_function_classes_global[:] = []
