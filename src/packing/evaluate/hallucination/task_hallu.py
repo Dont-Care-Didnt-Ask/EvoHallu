@@ -1,5 +1,6 @@
 import pandas as pd
 import logging
+import csv, os
 from typing import List, Tuple
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -12,13 +13,30 @@ from sklearn.model_selection import train_test_split
 from packing.evaluate.registry import TASK_REGISTRY
 
 
+def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) -> str:
+    """Compute bootstrap confidence interval for ROC-AUC."""
+    bootstrapped_scores = []
+    n = len(y_true)
+    for _ in range(B):
+        idxs = np.random.choice(np.arange(n), size=n, replace=True)
+        if (y_true[idxs] == 1).any() and (y_true[idxs] == 0).any():
+            try:
+                bs = roc_auc_score(y_true[idxs], y_score[idxs])
+                bootstrapped_scores.append(bs)
+            except Exception:
+                pass
+    if bootstrapped_scores:
+        lower = float(np.percentile(bootstrapped_scores, 2.5))
+        upper = float(np.percentile(bootstrapped_scores, 97.5))
+        return f"({lower:.4f}, {upper:.4f})"
+    return "(nan, nan)"
+
+
 def get_initial_func(cfg: DictConfig):
     def make_prompt() -> str:
-        """Return a system prompt for a binary factuality detector.
-        """
         return (
-            "You verify atomic claims. Output exactly FALSE if the claim is hallucinated (false), "
-            "otherwise output exactly TRUE. No extra words or punctuation."
+            "You verify atomic claims. Output FALSE if the claim is hallucinated (false), "
+            "otherwise output exactly TRUE."
         )
 
     initial_function = make_prompt
@@ -26,8 +44,14 @@ def get_initial_func(cfg: DictConfig):
     return initial_function, function_str_to_extract
 
 
-def _load_claims_and_labels(csv_path: str) -> Tuple[List[str], List[int]]:
+def _load_claims_and_labels(csv_path: str, do_filter: bool) -> Tuple[List[str], List[int]]:
     df = pd.read_csv(csv_path)
+
+    # if do_filter:
+    #     assert "is_good" in df.columns, "CSV must contain 'is_good' column"
+    #     raise ValueError(f"df['is_good'].value_counts():\n{df['is_good'].value_counts()}")
+    #     df = df[df["is_good"] == "GOOD"]
+
     assert "claim" in df.columns and "is_hallu" in df.columns, (
         f"CSV must contain 'claim' and 'is_hallu' columns. Found {df.columns.tolist()}"
     )
@@ -42,12 +66,12 @@ def _load_claims_and_labels(csv_path: str) -> Tuple[List[str], List[int]]:
     claims = df["claim"].tolist()
     labels = df["is_hallu"].tolist()
 
-    assert len(claims) == len(labels) and len(claims) > 0, "No data loaded from CSV"
+    assert len(claims) == len(labels) and len(claims) > 0, f"No data loaded from CSV, or {len(claims)=} != {len(labels)=}"
     return claims, labels
 
 
 def _prepare_splits(cfg_task: DictConfig) -> Tuple[Tuple[List[str], List[int]], Tuple[List[str], List[int]]]:
-    claims, labels = _load_claims_and_labels(cfg_task.dataset_path)
+    claims, labels = _load_claims_and_labels(cfg_task.dataset_path, cfg_task.filter_datasets)
     seed = int(cfg_task.split_seed)
     sample_size = int(cfg_task.sample_size)
 
@@ -76,8 +100,13 @@ def _prepare_splits(cfg_task: DictConfig) -> Tuple[Tuple[List[str], List[int]], 
 
 
 def generate_input(cfg_task: DictConfig, set: str):
-    train_split, val_split = _prepare_splits(cfg_task)
     name = (set or "").lower()
+    if name == "testset":
+        test_path = getattr(cfg_task, "test_dataset_path", None)
+        assert isinstance(test_path, str) and len(test_path) > 0, "cfg.task.test_dataset_path must be provided"
+        assert os.path.isfile(test_path), f"Test dataset not found at {test_path}"
+        return _load_claims_and_labels(test_path, False)
+    train_split, val_split = _prepare_splits(cfg_task)
     if name == "train":
         return train_split
     return val_split
@@ -104,14 +133,25 @@ def _call_vllm(detector_url: str, model_id: str, system_prompt: str, claim_text:
 
 
 def _parse_label_to_score(text: str) -> float:
-    s = (text or "").strip().upper()
     # Normalize common noise
-    if s.startswith("TRUE"):
-        return 0.0  # TRUE => not hallucination => score for positive class = 0
-    if s.startswith("FALSE"):
-        return 1.0  # FALSE => hallucination => score for positive class = 1
-    # Fallback: mark invalid
-    return -1.0
+    s = (text or "").strip().upper()
+    if "FALSE" in s:
+        return 1.0
+    if "TRUE" in s:
+        return 0.0
+    # Conservative approach: consider unclear responses as hallucination
+    return 1.0
+    # Approach below introduces invalid scores, which complicate the evaluation and misalign with the approach used in ICLR submission
+    
+    # # Avoid objective hacking via including both responses in the generation
+    # if "TRUE" in s and "FALSE" in s:
+    #     return -1.0
+    # if "TRUE" in s:
+    #     return 0.0  # TRUE => not hallucination => score for positive class = 0
+    # if  "FALSE" in s:
+    #     return 1.0  # FALSE => hallucination => score for positive class = 1
+    # # Fallback: mark invalid
+    # return -1.0
 
 
 def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_class):
@@ -164,7 +204,10 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
 
     valid_mask = scores >= 0.0
     num_valid = int(valid_mask.sum())
-    invalid_pct = 100.0 * (1.0 - (num_valid / max(1, len(scores))))
+    invalid_responses_percentage = 100.0 * (1.0 - (num_valid / max(1, len(scores))))
+
+    # Always record the exact prompt used
+    function_class.extra_metrics["prompt_text"] = prompt_text
 
     if num_valid >= 2:
         y_true = np.asarray(labels, dtype=int)[valid_mask]
@@ -173,6 +216,8 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
         if (y_true == 1).any() and (y_true == 0).any():
             auc = float(roc_auc_score(y_true, y_score))
             score = round(100.0 * auc, 4)
+            B = getattr(cfg.task, "bootstrap_samples", 1000)
+            auc_ci = _bootstrap_auc_ci(y_true, y_score, B)
             # Precision/Recall at 0.5 threshold on valid predictions
             y_pred = (y_score >= 0.5).astype(int)
             try:
@@ -183,11 +228,13 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
             # Save detailed metrics
             function_class.extra_metrics = {
                 "auc": auc,
+                "auc_ci": auc_ci,
                 "precision_at_0_5": prec,
                 "recall_at_0_5": rec,
-                "invalid_pct": float(invalid_pct),
-                "num_valid": int(num_valid),
+                "invalid_responses_percentage": float(invalid_responses_percentage),
+                "num_valid_responses": int(num_valid),
                 "num_total": int(len(scores)),
+                "prompt_text": prompt_text,
             }
         else:
             score = float(cfg.task.failed_score)
@@ -201,15 +248,23 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
     return function_class
 
 
+# Encourage formatting that keeps reasoning outside and code inside a fenced block
 append_prompt = (
-    "Write ONLY a Python function make_prompt() that returns a SYSTEM prompt for a binary factuality detector.\n"
-    "The prompt may allow brief reasoning or few-shot demonstrations, but it must require the final output to be exactly TRUE or FALSE (no other text).\n"
-    "Return only the function; use a normal Python string (use \\n for line breaks), no triple quotes or extra text."
+    "After any reasoning, provide the function inside a fenced python code block.\n"
+    "Use exactly this format (no extra text inside the fence):\n\n"
+    "```python\n"
+    "def make_prompt() -> str:\n"
+    "    \"\"\"Short description of the hypothesis being tested here ...\"\"\"\n"
+    "    return (\n"
+    "        \"... your system prompt string here ...\"\n"
+    "    )\n"
+    "```\n\n"
+    "Keep auxiliary reasoning and explanations outside the code block."
 )
 
 system_prompt = (
     "You are an expert prompt engineer optimizing a SYSTEM prompt for a binary factuality detector.\n"
-    "Objective: maximize ROC-AUC when classifying atomic factualclaims as hallucinated (FALSE) vs truthful (TRUE).\n"
+    "Objective: maximize ROC-AUC when classifying atomic factual claims as hallucinated (FALSE) vs truthful (TRUE).\n"
     "Hard constraints:\n"
     "- Final output must be exactly TRUE or FALSE and nothing else (no punctuation, quotes, or extra words).\n"
     "- If using reasoning, keep it concise and ensure the last token is the bare label.\n"
@@ -221,7 +276,9 @@ system_prompt = (
     "- Calibration guidance: when uncertain, choose the most plausible label; never abstain.\n"
     "- Formatting guardrails: separate any reasoning from the final label; enforce exact label on the last line.\n"
     "- Domain-agnostic phrasing and minimal token usage for robustness.\n"
-    "Return only the function make_prompt()."
+    "Reason carefully step-by-step before returning the function make_prompt(). "
+    "The function make_prompt() takes no arguments and returns a system prompt string. "
+    "Include a short description of the hypothesis behind the prompt design being tested in the documentation string of the function make_prompt()."
 )
 
 
