@@ -18,6 +18,7 @@ from packing.utils.functions import separate_imports_from_func
 import math
 import os
 import json
+import csv
 
 try:
     import torch
@@ -576,6 +577,37 @@ def evaluate_on_evalset(
     logging.info(f"Num of passed functions on {evalset} set: {len(passed_function_classes)}")
     logging.info(f"Num of failed functions on {evalset} set: {len(failed_function_classes)}")
     logging.info("###################")
+    # Log every evaluated candidate's metrics to CSV from the parent process
+    logging.info(f"======== {cfg.logs_dir=} =======")
+    csv_file = os.path.join(cfg.logs_dir, "all_metrics.csv")
+    new_file = not os.path.exists(csv_file)
+    with open(csv_file, "a", newline="") as _f:
+        writer = csv.writer(_f)
+        if new_file:
+            writer.writerow(["function_num", "prompt_num", "auc", "precision", "recall", "invalid_responses_percentage", "auc_lower_bound", "auc_upper_bound"])
+        for function_class in passed_function_classes:
+            em = function_class.extra_metrics or {}
+            # Parse bootstrap CI string, expected format "({lower:.4f}, {upper:.4f})"
+            ci_str = em.get("auc_ci", "(nan, nan)")
+            # Remove surrounding parentheses, split on first comma
+            parts = ci_str.strip("()").split(",", 1)
+            lower_str = parts[0].strip()
+            upper_str = parts[1].strip() if len(parts) > 1 else "nan"
+            try:
+                lower = float(lower_str)
+                upper = float(upper_str)
+            except ValueError:
+                lower, upper = float("nan"), float("nan")
+            writer.writerow([
+                function_class.function_num,
+                function_class.prompt_num,
+                em.get("auc", ""),
+                em.get("precision_at_0_5", ""),
+                em.get("recall_at_0_5", ""),
+                em.get("invalid_responses_percentage", ""),
+                lower,
+                upper,
+            ])
 
     # Clean up
     passed_function_classes_global[:] = []
