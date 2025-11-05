@@ -47,10 +47,12 @@ def get_initial_func(cfg: DictConfig):
 def _load_claims_and_labels(csv_path: str, do_filter: bool) -> Tuple[List[str], List[int]]:
     df = pd.read_csv(csv_path)
 
-    # if do_filter:
-    #     assert "is_good" in df.columns, "CSV must contain 'is_good' column"
-    #     raise ValueError(f"df['is_good'].value_counts():\n{df['is_good'].value_counts()}")
-    #     df = df[df["is_good"] == "GOOD"]
+    if do_filter:
+        assert "is_good" in df.columns, "CSV must contain 'is_good' column"
+        if pd.api.types.is_bool_dtype(df["is_good"]):
+            df = df[df["is_good"] == True]
+        else:
+            df = df[(df["is_good"] == "GOOD") | (df["is_good"] == "True")]
 
     assert "claim" in df.columns and "is_hallu" in df.columns, (
         f"CSV must contain 'claim' and 'is_hallu' columns. Found {df.columns.tolist()}"
@@ -112,7 +114,7 @@ def generate_input(cfg_task: DictConfig, set: str):
     return val_split
 
 
-def _call_vllm(detector_url: str, model_id: str, system_prompt: str, claim_text: str, max_tokens: int) -> str:
+def _call_vllm(detector_url: str, model_id: str, system_prompt: str, claim_text: str, max_tokens: int, temperature: float = 0.0) -> str:
     payload = {
         "model": model_id,
         "messages": [
@@ -123,7 +125,7 @@ def _call_vllm(detector_url: str, model_id: str, system_prompt: str, claim_text:
             },
         ],
         "max_tokens": int(max_tokens),
-        "temperature": 0.0,
+        "temperature": float(temperature),
         "top_p": 1.0,
     }
     resp = requests.post(detector_url, json=payload, timeout=60)
@@ -183,12 +185,13 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
     detector_url = f"http://localhost:{cfg.task.detector_vllm_port}/v1/chat/completions"
     model_id = cfg.task.detector_model
     max_tokens = getattr(cfg.task, "detector_max_tokens", 4)
+    temperature = float(getattr(cfg.task, "detector_temperature", 0.0))
     max_workers = int(getattr(cfg.task, "detector_max_concurrent_requests", 8))
     # Per-sample threaded chat requests
     scores_list: List[float] = [0.0] * len(claims)
     with ThreadPoolExecutor(max_workers=max_workers) as ex:
         futures = {
-            ex.submit(_call_vllm, detector_url, model_id, prompt_text, claim, max_tokens): idx
+            ex.submit(_call_vllm, detector_url, model_id, prompt_text, claim, max_tokens, temperature): idx
             for idx, claim in enumerate(claims)
         }
         for fut in as_completed(futures):
@@ -263,22 +266,12 @@ append_prompt = (
 )
 
 system_prompt = (
-    "You are an expert prompt engineer optimizing a SYSTEM prompt for a binary factuality detector.\n"
-    "Objective: maximize ROC-AUC when classifying atomic factual claims as hallucinated (FALSE) vs truthful (TRUE).\n"
-    "Hard constraints:\n"
-    "- Final output must be exactly TRUE or FALSE and nothing else (no punctuation, quotes, or extra words).\n"
-    "- If using reasoning, keep it concise and ensure the last token is the bare label.\n"
-    "Techniques to explore (pick the most promising and keep them minimal):\n"
-    "- Precise definition: state what counts as hallucination vs truthful.\n"
-    "- Brief internal reasoning: e.g., 'think briefly, then answer with only TRUE or FALSE'.\n"
-    "- Few-shot demonstrations: include a few compact claim→label examples showing both TRUE and FALSE.\n"
-    "- Decision rubric: check dates/numbers consistency, entity plausibility, logical contradictions, verifiability.\n"
-    "- Calibration guidance: when uncertain, choose the most plausible label; never abstain.\n"
-    "- Formatting guardrails: separate any reasoning from the final label; enforce exact label on the last line.\n"
-    "- Domain-agnostic phrasing and minimal token usage for robustness.\n"
-    "Reason carefully step-by-step before returning the function make_prompt(). "
-    "The function make_prompt() takes no arguments and returns a system prompt string. "
-    "Include a short description of the hypothesis behind the prompt design being tested in the documentation string of the function make_prompt()."
+    "You are an expert in evolutionary optimization for prompt engineering. You are designing a SYSTEM prompt for an LLM-based binary factuality detector.\n"
+    "Your objective: maximize ROC-AUC when classifying atomic factual claims as hallucinated (FALSE) vs truthful (TRUE).\n"
+    "Output format: a Python function make_prompt(), which takes no arguments and returns a system prompt string. Include a short description of the hypothesis behind the prompt design being tested in the documentation string.\n"
+    "Input format: one or more examples of make_prompt() function, which were tested already and have known ROC-AUC/precision/recall scores."
+    "Hard constraint: LLM-based binary factuality detector must eventually output exactly TRUE or FALSE.\n"
+    "Take a deep breath and reason carefully step-by-step before returning the function make_prompt()."
 )
 
 
