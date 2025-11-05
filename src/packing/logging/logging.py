@@ -185,7 +185,7 @@ def register_programs(
 
             # Register after checking for improvement
             flag_potential_change = programdatabase.register_program(
-                program_to_register, passed_class.score, passed_class.prompt.island_id
+                program_to_register, passed_class.score, passed_class.prompt.island_id, passed_class.extra_metrics
             )
             # Change write_to_txt flag as True if one of write_to_txt or flag_potential_change is True
             flag_writeintxt = flag_writeintxt or flag_potential_change

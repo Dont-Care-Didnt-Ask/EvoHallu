@@ -71,24 +71,25 @@ class ProgramsDatabase:
         """Returns a prompt containing implementations from one chosen island."""
         if island_id == None:
             island_id = np.random.randint(len(self._islands))
-        sorted_implementations, scores, temperature, probabilities = self._islands[
+        sorted_implementations, scores, temperature, probabilities, extra_metrics = self._islands[
             island_id
         ].get_prompt(percentile)
-        return sorted_implementations, scores, island_id, temperature, probabilities
+        return sorted_implementations, scores, island_id, temperature, probabilities, extra_metrics
 
     def _register_program_in_island(
         self,
         program,
         island_id: int,
         score,
+        extra_metrics: dict | None = None,
     ) -> None:
         """Registers `program` in the specified island."""
-        self._islands[island_id].register_program(program, score)
+        flag = self._islands[island_id].register_program(program, score, extra_metrics)
         if score > self._best_score_per_island[island_id]:
             self._best_program_per_island[island_id] = program
             self._best_score_per_island[island_id] = score
             print(f"Best score of island {island_id} increased to {score}")
-            return True
+            return flag
         else:
             return False
 
@@ -97,6 +98,7 @@ class ProgramsDatabase:
         program,
         score,
         island_id: int | None,
+        extra_metrics: dict | None = None,
     ) -> None:
         """Registers `program` in the database."""
         # In an asynchronous implementation we should consider the possibility of
@@ -105,10 +107,10 @@ class ProgramsDatabase:
         if island_id is None:
             # This is a program added at the beginning, so adding it to all islands.
             for island_id in range(len(self._islands)):
-                self._register_program_in_island(program, island_id, score)
+                self._register_program_in_island(program, island_id, score, extra_metrics)
             return False
         else:
-            flag_writetxt = self._register_program_in_island(program, island_id, score)
+            flag_writetxt = self._register_program_in_island(program, island_id, score, extra_metrics)
 
         # Check whether it is time to reset an island.
         # if (time.time() - self._last_reset_time > self._config.reset_period):
@@ -176,13 +178,14 @@ class Island:
         self,
         program,
         score,
+        extra_metrics: dict | None = None,
     ) -> None:
         """Stores a program on this island, in its appropriate cluster."""
         signature = score
         if signature not in list(self._clusters.keys()):
-            self._clusters[signature] = Cluster(score, program)
+            self._clusters[signature] = Cluster(score, program, extra_metrics)
         else:
-            self._clusters[signature].register_program(program)
+            self._clusters[signature].register_program(program, extra_metrics)
         self._num_programs += 1
 
     def get_prompt(self, percentile):
@@ -245,25 +248,30 @@ class Island:
 
         implementations = []
         scores = []
+        extra_metrics_list = []
         for score in chosen_scores:
             cluster = self._clusters[score]
-            implementations.append(cluster.sample_program())
+            prog, em = cluster.sample_program_and_metrics()
+            implementations.append(prog)
             scores.append(cluster.score)
+            extra_metrics_list.append(em)
 
         indices = np.argsort(scores)
         sorted_implementations = [implementations[i] for i in indices]
         sorted_scores = [scores[i] for i in indices]
+        sorted_extra_metrics = [extra_metrics_list[i] for i in indices]
         # version_generated = len(sorted_implementations) + 1
 
-        return sorted_implementations, sorted_scores, self.temp, sampled_probabilities
+        return sorted_implementations, sorted_scores, self.temp, sampled_probabilities, sorted_extra_metrics
 
 
 class Cluster:
     """A cluster of programs on the same island and with the same score."""
 
-    def __init__(self, score, program):
+    def __init__(self, score, program, extra_metrics: dict | None = None):
         self._score = score
         self._programs = [program]
+        self._extra_metrics = [extra_metrics or {}]
         self._lengths = [len(str(program))]
 
     @property
@@ -271,18 +279,19 @@ class Cluster:
         """Reduced score of the signature that this cluster represents."""
         return self._score
 
-    def register_program(self, program) -> None:
+    def register_program(self, program, extra_metrics: dict | None = None) -> None:
         """Adds `program` to the cluster."""
         # Do not store duplicates.
         if program not in self._programs:
             self._programs.append(program)
+            self._extra_metrics.append(extra_metrics or {})
             self._lengths.append(len(str(program)))
 
-    def sample_program(self):
-        """Samples a program, giving higher probability to shorther programs."""
+    def sample_program_and_metrics(self):
+        """Samples a program and its extra_metrics, giving higher probability to shorter programs."""
         normalized_lengths = (np.array(self._lengths) - min(self._lengths)) / (
             max(self._lengths) + 1e-6
         )
         probabilities = _softmax(-normalized_lengths, temperature=1.0)
         chosen_idx = np.random.choice(len(self._programs), p=probabilities)
-        return self._programs[chosen_idx]
+        return self._programs[chosen_idx], self._extra_metrics[chosen_idx]
