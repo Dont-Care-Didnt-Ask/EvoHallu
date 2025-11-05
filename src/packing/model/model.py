@@ -1,6 +1,7 @@
 import requests
 from transformers import AutoTokenizer, AutoModelForCausalLM, GenerationConfig
 import torch
+from types import SimpleNamespace
 
 from datasets import load_dataset, Dataset
 import time
@@ -30,6 +31,7 @@ import subprocess
 import socket
 from huggingface_hub import InferenceClient
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from openai import OpenAI
 
 from packing.utils.vllm import dict_to_namespace
 
@@ -312,6 +314,7 @@ def get_outputs_from_multiple_models(
 
 def make_tgi_request(cfg, chat, port):
     client = InferenceClient(base_url=f"http://localhost:{port}/v1/")
+    
     response = client.chat.completions.create(
         model="tgi",
         messages=chat,
@@ -320,6 +323,16 @@ def make_tgi_request(cfg, chat, port):
         temperature=cfg.model.temperature,
         top_p=cfg.model.topp,
     )
+    
+    if not response.choices or len(response.choices) == 0:
+        logging.error(f"[TGI ERROR] Response has no choices: {response}")
+        raise ValueError("TGI response contains no choices")
+    
+    content = response.choices[0].message.content
+    if content is None:
+        logging.error(f"[TGI ERROR] Response content is None. Full response: {response}")
+        raise ValueError("TGI response content is None")
+    
     return response
 
 
@@ -337,8 +350,9 @@ def make_vllm_request(cfg, chat, load_finetuned, port):
         The JSON response from the vLLM server.
     """
     url = f"http://localhost:{port}/v1/chat/completions"
+    model_name = cfg.full_model_name if not load_finetuned else cfg.model_adapter_dir
     payload = {
-        "model": cfg.full_model_name if not load_finetuned else cfg.model_adapter_dir,
+        "model": model_name,
         "messages": chat,
         "max_tokens": cfg.model.max_tokens,
         "temperature": cfg.model.temperature,
@@ -350,19 +364,104 @@ def make_vllm_request(cfg, chat, load_finetuned, port):
     return dict_to_namespace(response.json())
 
 
+def make_api_request(cfg, chat, load_finetuned):
+    """
+    Send chat request to an OpenAI-compatible API endpoint.
+
+    Args:
+        cfg: A config object that contains API configuration (api_base_url, api_key, api_model_name).
+        chat: A list of message dicts, e.g. [{"role": "user", "content": "Hello!"}, ...]
+        load_finetuned: A boolean specifying whether we are using a fine-tuned model or not (not used for API, but kept for consistency).
+
+    Returns:
+        A SimpleNamespace object with the API response in the same format as vLLM/TGI responses.
+    """
+    # Get API key from config or environment variable
+    api_key = getattr(cfg, "api_key", None)
+    if api_key is None or api_key == "":
+        api_key = os.environ.get("OPENAI_API_KEY", None)
+    
+    logging.info(f"[API DEBUG] Initializing OpenAI client with base_url={cfg.cluster.api_base_url}")
+    client = OpenAI(
+        api_key=cfg.cluster.api_key,
+        base_url=cfg.cluster.api_base_url,
+        project=cfg.cluster.api_project
+    )
+    
+    model_name = cfg.cluster.api_model_name
+    if model_name is None:
+        model_name = cfg.full_model_name
+    
+    logging.info(f"[API DEBUG] Sending request to model={model_name}, max_tokens={cfg.cluster.api_model_params.max_tokens}, temperature={cfg.cluster.api_model_params.temperature}, top_p={cfg.cluster.api_model_params.topp}")
+    logging.info(f"[API DEBUG] Chat messages: {chat}")
+    
+    response = client.chat.completions.create(
+        model=model_name,
+        messages=chat,
+        max_tokens=cfg.cluster.api_model_params.max_tokens,
+        temperature=cfg.cluster.api_model_params.temperature,
+        top_p=cfg.cluster.api_model_params.topp,
+    )
+    
+    logging.info(f"[API DEBUG] Response received successfully")
+    logging.info(f"[API DEBUG] Response object: {response}")
+    logging.info(f"[API DEBUG] Response id: {getattr(response, 'id', 'N/A')}")
+    logging.info(f"[API DEBUG] Response model: {getattr(response, 'model', 'N/A')}")
+    logging.info(f"[API DEBUG] Response usage: {getattr(response, 'usage', 'N/A')}")
+    
+    if not response.choices or len(response.choices) == 0:
+        logging.error(f"[API ERROR] Response has no choices: {response}")
+        raise ValueError("API response contains no choices")
+    
+    content = response.choices[0].message.content
+    logging.info(f"[API DEBUG] Response content (first 200 chars): {content[:200] if content else 'None'}")
+    
+    if content is None:
+        logging.error(f"[API ERROR] Response content is None. Full response: {response}")
+        logging.error(f"[API ERROR] Response choices[0]: {response.choices[0]}")
+        logging.error(f"[API ERROR] Response choices[0].message: {response.choices[0].message}")
+        raise ValueError("API response content is None")
+    
+    # Convert to SimpleNamespace format consistent with vLLM responses
+    result = SimpleNamespace()
+    result.choices = [SimpleNamespace()]
+    result.choices[0].message = SimpleNamespace()
+    result.choices[0].message.content = content
+    
+    logging.info(f"[API DEBUG] Successfully converted response to SimpleNamespace format")
+    return result
+
+
 def generate_from_server(cfg, chat, flag_load_finetuned, server_port, num_outputs_per_prompt):
     outputs = []
+    
+    if cfg.use_api:
+        logging.info(f"[API DEBUG] Starting generation with num_outputs_per_prompt={num_outputs_per_prompt}")
+    
     with ThreadPoolExecutor(max_workers=num_outputs_per_prompt) as executor:
-        futures = [
-            executor.submit(make_tgi_request, cfg, chat, server_port) if cfg.use_tgi else
-            executor.submit(make_vllm_request, cfg, chat, flag_load_finetuned, server_port)
-            for _ in range(num_outputs_per_prompt)
-        ]
+        if cfg.use_api:
+            futures = [
+                executor.submit(make_api_request, cfg, chat, flag_load_finetuned)
+                for _ in range(num_outputs_per_prompt)
+            ]
+        elif cfg.use_tgi:
+            futures = [
+                executor.submit(make_tgi_request, cfg, chat, server_port)
+                for _ in range(num_outputs_per_prompt)
+            ]
+        else:
+            futures = [
+                executor.submit(make_vllm_request, cfg, chat, flag_load_finetuned, server_port)
+                for _ in range(num_outputs_per_prompt)
+            ]
 
         for idx, future in enumerate(as_completed(futures)):
             try:
                 outputs.append(future.result())
             except Exception as e:
+                if cfg.use_api:
+                    logging.error(f"[API ERROR] Request {idx+1}/{num_outputs_per_prompt} failed with exception: {type(e).__name__}: {e}")
+                    logging.error(f"[API ERROR] Full traceback:", exc_info=True)
                 print(f"Request failed: {e}")
 
     outputs = [output.choices[0].message.content for output in outputs]
@@ -395,12 +494,14 @@ def generate_from_server(cfg, chat, flag_load_finetuned, server_port, num_output
 def get_outputs_from_single_model_server(cfg, chat, server_ports, flag_load_finetuned):
     time_start = time.time()
 
+    # For API mode, server_ports is None, so use a dummy port (won't be used)
+    port = server_ports[0] if server_ports is not None else None
     (
         extracted_functions,
         extracted_imports,
         filtered_outputs_text,
     ) = generate_from_server(
-        cfg, chat, flag_load_finetuned, server_ports[0], num_outputs_per_prompt=cfg.num_outputs_per_prompt
+        cfg, chat, flag_load_finetuned, port, num_outputs_per_prompt=cfg.num_outputs_per_prompt
     )
 
     llm_generation_time = int(time.time() - time_start)
@@ -429,11 +530,16 @@ def get_outputs_from_multiple_models_server(cfg, chat, server_ports, flag_load_f
     chats = [chat] * model_count
 
     with ThreadPoolExecutor(max_workers=model_count) as executor:
+        # For API mode, server_ports is None, so use dummy ports (won't be used)
+        if server_ports is None:
+            ports = [None] * model_count
+        else:
+            ports = server_ports
 
         futures = [
             executor.submit(generate_from_server, cfg, chat, flag_load_finetuned, port, num_outputs_per_prompt)
             for chat, port, num_outputs_per_prompt in zip(
-                chats, server_ports, cfg.num_outputs_per_prompt
+                chats, ports, cfg.num_outputs_per_prompt
             )
         ]
 
@@ -488,9 +594,13 @@ def get_outputs(cfg, chat, *args):
     """
 
     server_ports, model, tokenizer, sampling_params, flag_load_finetuned = None, None, None, None, None
-    if cfg.use_tgi or cfg.use_vllm:
-        server_ports = args[0][0]
-        flag_load_finetuned = args[1]
+    if cfg.use_tgi or cfg.use_vllm or cfg.use_api:
+        # For API mode, server_ports might be [None] or None, both are handled
+        if cfg.use_api:
+            server_ports = None  # API doesn't use server ports
+        else:
+            server_ports = args[0][0] if args and len(args) > 0 and args[0] else None
+        flag_load_finetuned = args[1] if len(args) > 1 else False
     else:
         model, tokenizer, sampling_params, flag_load_finetuned = args
 
@@ -501,7 +611,7 @@ def get_outputs(cfg, chat, *args):
             filtered_outputs_text,
             llm_generation_time,
         ) = get_outputs_from_multiple_models_server(cfg, chat, server_ports,
-                                                    flag_load_finetuned) if cfg.use_tgi or cfg.use_vllm \
+                                                    flag_load_finetuned) if cfg.use_tgi or cfg.use_vllm or cfg.use_api \
             else get_outputs_from_multiple_models(cfg, chat, model, tokenizer, sampling_params, flag_load_finetuned)
     else:
         (
@@ -510,7 +620,7 @@ def get_outputs(cfg, chat, *args):
             filtered_outputs_text,
             llm_generation_time,
         ) = get_outputs_from_single_model_server(cfg, chat, server_ports,
-                                                 flag_load_finetuned) if cfg.use_tgi or cfg.use_vllm \
+                                                 flag_load_finetuned) if cfg.use_tgi or cfg.use_vllm or cfg.use_api \
             else get_outputs_from_single_model(cfg, chat, model, tokenizer, sampling_params, flag_load_finetuned)
     return (
         extracted_functions,
@@ -608,6 +718,7 @@ def start_vllm_server(model_id, gpu_num, port):
         "vllm",
         "serve",
         model_id,
+        # "--gpu-memory-utilization", "0.22", # TODO: make this configurable
         "--port", str(port),
         "--disable-log-requests"
     ]

@@ -84,7 +84,7 @@ def generate_functions(
     logging.info(f"Prompt scores: {prompt_scores}")
     logging.info(f"Island id {island_id_prompt}")
     logging.info("\n\n")
-    if cfg.use_tgi or cfg.use_vllm:
+    if cfg.use_tgi or cfg.use_vllm or cfg.use_api:
         args = (server_ports, flag_load_finetuned)
     else:
         args = (model, tokenizer, sampling_params, flag_load_finetuned)
@@ -175,7 +175,7 @@ def Producer(
             probabilities_cont,
             prompt_nums_cont,
         ):
-            if cfg.use_tgi or cfg.use_vllm:
+            if cfg.use_tgi or cfg.use_vllm or cfg.use_api:
                 server_ports = args
                 (
                     function_classes,
