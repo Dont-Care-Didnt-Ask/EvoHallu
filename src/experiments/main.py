@@ -200,7 +200,7 @@ def main(cfg: DictConfig):
             initial_function_str, "import random\nimport numpy as np"
         )
         intial_results = evaluate_func(cfg, copy.deepcopy(input_struct), intial_function_class)
-        programdatabase.register_program(initial_function_str, intial_results.score, None)
+        programdatabase.register_program(initial_function_str, intial_results.score, None, intial_results.extra_metrics)
         save_func_class_to_file(cfg, intial_results)
 
         # For saving
@@ -225,6 +225,9 @@ def main(cfg: DictConfig):
         model_server_alive = False
     elif cfg.use_vllm:
         logging.info("====================== Inference Engine: vLLM ======================")
+        model_server_alive = False
+    elif cfg.use_api:
+        logging.info("====================== Inference Engine: API ======================")
         model_server_alive = False
     else:
         model_initialized = False
@@ -263,6 +266,15 @@ def main(cfg: DictConfig):
             else:
                 logging.info(f"Starting vLLM model server...")
                 server_pids, server_ports = initialize_models_server(cfg, flag_load_finetuned, use_vllm=True)
+                model_server_alive = True
+        elif cfg.use_api:
+            # API mode doesn't require server initialization
+            if model_server_alive:
+                logging.info(f"API mode initialized, continuing...")
+            else:
+                logging.info(f"Initializing API mode...")
+                server_pids = []  # No server PIDs for API mode
+                server_ports = [None]  # Dummy port list for compatibility
                 model_server_alive = True
         else:
             if model_initialized:
@@ -325,7 +337,7 @@ def main(cfg: DictConfig):
         # Start the producer thread
         logging.info("-" * 10)
         logging.info("STARTING THE PRODUCER")
-        if cfg.use_tgi or cfg.use_vllm:
+        if cfg.use_tgi or cfg.use_vllm or cfg.use_api:
             producer_thread = threading.Thread(
                 target=Producer,
                 args=(
@@ -520,6 +532,10 @@ def main(cfg: DictConfig):
                 logging.info("Killing model server, preparing for finetuning...")
                 for server_pid in server_pids:
                     kill_process_with_pid_and_wait(server_pid)
+                model_server_alive = False
+            elif cfg.use_api:
+                # API mode doesn't have a server to kill
+                logging.info("Preparing for finetuning (API mode - no server to kill)...")
                 model_server_alive = False
             else:
                 logging.info("Deleting the sampling model, preparing for finetuning...")
