@@ -5,14 +5,17 @@ import copy
 from packing.evaluate.registry import TASK_REGISTRY
 
 
-def programs_to_prompt_creative(cfg, programs, scores):
+def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
     """
-    Given a list of programs and their scores, construct a prompt that encourages creative solutions.
+    Given a list of programs, their scores, and extra_metrics, construct a prompt that encourages creative solutions.
     """
     main_txt = ""
-    for program, score in zip(programs, scores):
+    for program, score, em in zip(programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
-        main_txt += f"# Score achieved with the function above: {score}\n\n"
+        main_txt += f"# Score achieved with the function above: {score}\n"
+        if em:
+            main_txt += f"# Additional metrics: AUC 95% bootstrapCI: {em.get('auc_ci', 'N/A')}, Precision@0.5: {em.get('precision_at_0_5', 'N/A'):.4f}, Recall@0.5: {em.get('recall_at_0_5', 'N/A'):.4f}\n"
+        main_txt += "\n"
 
     task = TASK_REGISTRY.get(cfg.task.task_name)
     system_prompt = task["system_prompt"]
@@ -28,19 +31,23 @@ def programs_to_prompt_creative(cfg, programs, scores):
     return chat, scores
 
 
-def programs_to_prompt(cfg, programs, scores):
+def programs_to_prompt(cfg, programs, scores, extra_metrics_list):
     """
-    Given a list of programs and their scores, construct a prompt.
+    Given a list of programs, their scores, and extra_metrics, construct a prompt.
     """
 
     if cfg.descending_order:
         programs = programs[::-1]
         scores = scores[::-1]
+        extra_metrics_list = extra_metrics_list[::-1]
 
     main_txt = ""
-    for program, score in zip(programs, scores):
+    for program, score, em in zip(programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
-        main_txt += f"# Score achieved with the function above: {score}\n\n"
+        main_txt += f"# Score achieved with the function above: {score}\n"
+        if em:
+            main_txt += f"# Additional metrics: AUC 95% bootstrap CI: {em.get('auc_ci', 'N/A')}, Precision@0.5: {em.get('precision_at_0_5', 'N/A'):.4f}, Recall@0.5: {em.get('recall_at_0_5', 'N/A'):.4f}\n"
+        main_txt += "\n"
 
     chat = [
         {
@@ -56,14 +63,13 @@ def generate_prompt(cfg, programdatabase, current_percentile):
     Generates a single prompt.
     """
     # Sample from the programbank
-    programs, scores, island_id_prompt, temperature, probabilities = programdatabase.get_prompt(
-        percentile=current_percentile)
+    programs, scores, island_id_prompt, temperature, probabilities, extra_metrics_list = programdatabase.get_prompt(percentile=current_percentile)
 
     # Construct prompt
     if cfg.creative_prompt:
-        chat, prompt_scores = programs_to_prompt_creative(cfg, programs, scores)
+        chat, prompt_scores = programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list)
     else:
-        chat, prompt_scores = programs_to_prompt(cfg, programs, scores)
+        chat, prompt_scores = programs_to_prompt(cfg, programs, scores, extra_metrics_list)
     return chat, prompt_scores, island_id_prompt, temperature, probabilities
 
 
@@ -77,6 +83,7 @@ def generate_batch_prompts(cfg, programdatabase, running_dict, round_num):
     temperatures_batch = []
     probabilities_batch = []
     prompt_nums_batch = []
+    extra_metrics_batch = []
     # Linear decrease in the percentile based on how far we are in the rounds
     initial_percentile = cfg.initial_percentile
     final_percentile = cfg.final_percentile
