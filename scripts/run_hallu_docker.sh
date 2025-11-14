@@ -10,23 +10,36 @@ HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
 HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache}
 DETECTOR_DEVICES=${DETECTOR_DEVICES:-0}
 GENERATOR_DEVICES=${GENERATOR_DEVICES:-1}
+CLUSTER=${CLUSTER:-api}  # Cluster config to use (e.g., 'example', 'api')
 
 cd "${HOST_REPO}"
 
 echo "[run] Launching hallucination task in container..."
 echo "[run] Image: ${IMAGE}"
+echo "[run] Cluster config: ${CLUSTER}"
 echo "[run] Detector GPU: ${DETECTOR_DEVICES}, Generator GPU: ${GENERATOR_DEVICES}"
 
 # Ensure cache directory exists on host
 mkdir -p "${HOST_CACHE}"
 
+# Build docker run command with environment variables
+DOCKER_ENV_ARGS=(
+  -e DETECTOR_DEVICES="${DETECTOR_DEVICES}"
+  -e GENERATOR_DEVICES="${GENERATOR_DEVICES}"
+  -e PROJECT_ROOT_AT="${HOST_REPO}"
+  -e HF_HOME="${HOST_CACHE}"
+  -e CLUSTER="${CLUSTER}"
+)
+
+# Pass through API key if set (for API mode)
+if [ -n "${OPENAI_API_KEY:-}" ]; then
+  echo "[run] Passing OPENAI_API_KEY to container"
+  DOCKER_ENV_ARGS+=( -e OPENAI_API_KEY="${OPENAI_API_KEY}" )
+fi
+
 docker run --rm -it \
   --gpus all \
-  -e DETECTOR_DEVICES="${DETECTOR_DEVICES}" \
-  -e GENERATOR_DEVICES="${GENERATOR_DEVICES}" \
-  -e PROJECT_ROOT_AT="${HOST_REPO}" \
-  -e HF_HOME="${HOST_CACHE}" \
-  -e TRANSFORMERS_CACHE="${HOST_CACHE}/huggingface/hub" \
+  "${DOCKER_ENV_ARGS[@]}" \
   -v "${HOST_REPO}:${HOST_REPO}" \
   -v "${HOST_DATA}:${HOST_DATA}" \
   -v "${HOST_CACHE}:${HOST_CACHE}" \
