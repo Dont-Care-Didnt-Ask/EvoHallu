@@ -28,7 +28,7 @@ flash_attn: 0
 
 # Program database
 programdatabaseConfig:
-  functions_per_prompt: 2
+  functions_per_prompt: 4
   num_islands: 6 #5
   temp_sampling_flag: 1
   temp: ${task.programdatabaseConfig.temp}
@@ -36,10 +36,10 @@ initial_percentile: 0.6
 final_percentile: 0.2
 
 # Timing config
-num_cont_rounds: 10
+num_cont_rounds: 1
 num_outputs_per_prompt: 8
 num_workers: 12
-num_rounds: 10
+num_rounds: 500
 
 # Finetuning
 finetuning_frequency: ${train.finetuning_frequency}
@@ -71,9 +71,15 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 0
-run_identifier_name: ${task.task_name}_${model.model_name}_${train.train_method_name}
+seed: 20
+run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev
 use_tgi: ${cluster.use_tgi}
 use_vllm: ${cluster.use_vllm}
+use_api: ${cluster.use_api}
+
+# API settings (only used when use_api: 1)
+api_base_url: ${cluster.api_base_url}
+api_key: ${cluster.api_key}
+api_model_name: ${cluster.api_model_name}
