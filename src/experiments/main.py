@@ -66,6 +66,92 @@ import subprocess
 import getpass
 
 
+def parse_auc_ci(ci_str: str) -> tuple[float, float]:
+    """Parse AUC confidence interval string into numeric bounds.
+    
+    Args:
+        ci_str: String in format "({lower:.4f}, {upper:.4f})"
+        
+    Returns:
+        Tuple of (lower_bound, upper_bound) as floats, or (nan, nan) if parsing fails
+    """
+    parts = ci_str.strip("()").split(",", 1)
+    try:
+        lower = float(parts[0].strip())
+        upper = float(parts[1].strip()) if len(parts) > 1 else float("nan")
+    except Exception:
+        lower, upper = float("nan"), float("nan")
+    return lower, upper
+
+
+def evaluate_hallu(cfg, generate_input, evaluate_func, function_class, split):
+    """Evaluate a function class on the test set.
+    
+    Args:
+        cfg: Configuration object
+        generate_input: Function to generate the input data
+        evaluate_func: Function to evaluate the function class
+        function_class: FunctionClass instance to evaluate
+        split: Split to evaluate on ("train", "val" or "testset". Test set might be from different source compared to train/val)
+    Returns:
+        Tuple of (test_result, num_test_samples)
+    """
+    test_data = generate_input(cfg.task, split)
+    num_test_samples = len(test_data[0]) if isinstance(test_data, tuple) else -1
+    test_fc = copy.deepcopy(function_class)
+    test_result = evaluate_func(cfg, copy.deepcopy(test_data), test_fc)
+    return test_result, num_test_samples
+
+
+def write_test_metrics_row(cfg, test_result, split, num_test_samples, iteration):
+    """Write a test metrics row to test_metrics.csv.
+    
+    Args:
+        cfg: Configuration object
+        test_result: Result object from evaluate_func with extra_metrics
+        split: split used for evaluation ("train", "val" or "testset". Test set might be from different source compared to train/val)
+        num_test_samples: Number of test samples
+        iteration: Iteration number (use -1 for initial)
+    """
+    em = getattr(test_result, "extra_metrics", {}) or {}
+    lower, upper = parse_auc_ci(em.get("auc_ci", "(nan, nan)"))
+    
+    test_csv_path = os.path.join(cfg.logs_dir, "test_metrics.csv")
+    new_file = not os.path.exists(test_csv_path)
+    
+    with open(test_csv_path, "w" if new_file else "a", newline="") as tf:
+        writer = csv.writer(tf)
+        if new_file:
+            writer.writerow([
+                "iteration",
+                "function_num",
+                "prompt_num",
+                "split",
+                "num_test_samples",
+                "auc",
+                "precision",
+                "recall",
+                "invalid_responses_percentage",
+                "auc_lower_bound",
+                "auc_upper_bound",
+                "prompt_text",
+            ])
+        writer.writerow([
+            iteration,
+            test_result.function_num,
+            test_result.prompt_num,
+            split,
+            num_test_samples,
+            em.get("auc", ""),
+            em.get("precision_at_0_5", ""),
+            em.get("recall_at_0_5", ""),
+            em.get("invalid_responses_percentage", ""),
+            lower,
+            upper,
+            em.get("prompt_text", ""),
+        ])
+
+
 @hydra_main(config_path="../../configs", config_name="config", version_base="1.3")
 def main(cfg: DictConfig):
     OmegaConf.set_struct(cfg, False)  # So we can assign new fields
@@ -197,11 +283,19 @@ def main(cfg: DictConfig):
         # Register the intial function into the programbank
         initial_function_str = function_to_string(initial_function)
         intial_function_class = FunctionClass(
-            initial_function_str, "import random\nimport numpy as np"
+            initial_function_str, ""
         )
         intial_results = evaluate_func(cfg, copy.deepcopy(input_struct), intial_function_class)
         programdatabase.register_program(initial_function_str, intial_results.score, None, intial_results.extra_metrics)
         save_func_class_to_file(cfg, intial_results)
+
+        # Evaluate initial prompt on the test set (only for hallu task)
+        if cfg.task.task_name == "hallu":
+            logging.info("Evaluating initial prompt on test set...")
+            for split in ["val", "testset"]:
+                initial_test_result, num_test_samples = evaluate_hallu(cfg, generate_input, evaluate_func, intial_function_class, split)
+                write_test_metrics_row(cfg, initial_test_result, split, num_test_samples, iteration=-1)
+                logging.info(f"Initial prompt {split} evaluation saved to test_metrics.csv")
 
         # For saving
         os.makedirs(f"{cfg.logs_dir}/chats", exist_ok=True)
@@ -400,36 +494,27 @@ def main(cfg: DictConfig):
         logging.info("###################")
 
         # Log every evaluated candidate's metrics to CSV from the parent process
-        logging.info(f"======== cfg.logs_dir={cfg.logs_dir} =======")
-        csv_file = os.path.join(cfg.logs_dir, "all_metrics.csv")
-        new_file = not os.path.exists(csv_file)
-        with open(csv_file, "a", newline="") as _f:
-            writer = csv.writer(_f)
-            if new_file:
-                writer.writerow(["function_num", "prompt_num", "auc", "precision", "recall", "invalid_responses_percentage", "auc_lower_bound", "auc_upper_bound"])
-            for function_class in passed_function_classes:
-                em = getattr(function_class, "extra_metrics", {}) or {}
-                # Parse bootstrap CI string, expected format "({lower:.4f}, {upper:.4f})"
-                ci_str = em.get("auc_ci", "(nan, nan)")
-                # Remove surrounding parentheses, split on first comma
-                parts = ci_str.strip("()").split(",", 1)
-                lower_str = parts[0].strip()
-                upper_str = parts[1].strip() if len(parts) > 1 else "nan"
-                try:
-                    lower = float(lower_str)
-                    upper = float(upper_str)
-                except ValueError:
-                    lower, upper = float("nan"), float("nan")
-                writer.writerow([
-                    function_class.function_num,
-                    function_class.prompt_num,
-                    em.get("auc", ""),
-                    em.get("precision_at_0_5", ""),
-                    em.get("recall_at_0_5", ""),
-                    em.get("invalid_responses_percentage", ""),
-                    lower,
-                    upper,
-                ])
+        if cfg.task.task_name == "hallu":
+            logging.info(f"======== cfg.logs_dir={cfg.logs_dir} =======")
+            csv_file = os.path.join(cfg.logs_dir, "all_metrics.csv")
+            new_file = not os.path.exists(csv_file)
+            with open(csv_file, "a", newline="") as _f:
+                writer = csv.writer(_f)
+                if new_file:
+                    writer.writerow(["function_num", "prompt_num", "auc", "precision", "recall", "invalid_responses_percentage", "auc_lower_bound", "auc_upper_bound"])
+                for function_class in passed_function_classes:
+                    em = getattr(function_class, "extra_metrics", {}) or {}
+                    lower, upper = parse_auc_ci(em.get("auc_ci", "(nan, nan)"))
+                    writer.writerow([
+                        function_class.function_num,
+                        function_class.prompt_num,
+                        em.get("auc", ""),
+                        em.get("precision_at_0_5", ""),
+                        em.get("recall_at_0_5", ""),
+                        em.get("invalid_responses_percentage", ""),
+                        lower,
+                        upper,
+                    ])
 
         # Evaluate top-1 best prompt on the TEST set for the hallu task after each iteration
         if cfg.task.task_name == "hallu":
@@ -457,52 +542,10 @@ def main(cfg: DictConfig):
                                 break
 
                 if not already_evaluated:
-                    # Load test set and evaluate using the same generation params
-                    test_data = generate_input(cfg.task, "testset")
-                    num_test_samples = len(test_data[0]) if isinstance(test_data, tuple) else -1
-                    test_fc = copy.deepcopy(best_fc)
-                    test_result = evaluate_func(cfg, copy.deepcopy(test_data), test_fc)
-                    em = getattr(test_result, "extra_metrics", {}) or {}
-
-                    # Parse CI into numeric bounds for consistency
-                    ci_str = em.get("auc_ci", "(nan, nan)")
-                    parts = ci_str.strip("()").split(",", 1)
-                    try:
-                        lower = float(parts[0].strip())
-                        upper = float(parts[1].strip()) if len(parts) > 1 else float("nan")
-                    except Exception:
-                        lower, upper = float("nan"), float("nan")
-
-                    new_file_test = not os.path.exists(test_csv_path)
-                    with open(test_csv_path, "a", newline="") as tf:
-                        writer = csv.writer(tf)
-                        if new_file_test:
-                            writer.writerow([
-                                "iteration",
-                                "function_num",
-                                "prompt_num",
-                                "num_test_samples",
-                                "auc",
-                                "precision",
-                                "recall",
-                                "invalid_responses_percentage",
-                                "auc_lower_bound",
-                                "auc_upper_bound",
-                                "prompt_text",
-                            ])
-                        writer.writerow([
-                            round_num,
-                            test_result.function_num,
-                            test_result.prompt_num,
-                            num_test_samples,
-                            em.get("auc", ""),
-                            em.get("precision_at_0_5", ""),
-                            em.get("recall_at_0_5", ""),
-                            em.get("invalid_responses_percentage", ""),
-                            lower,
-                            upper,
-                            em.get("prompt_text", ""),
-                        ])
+                    test_result, num_test_samples = evaluate_hallu(cfg, generate_input, evaluate_func, best_fc, "testset")
+                    for split in ["val", "testset"]:
+                        test_result, num_test_samples = evaluate_hallu(cfg, generate_input, evaluate_func, best_fc, split)
+                        write_test_metrics_row(cfg, test_result, split, num_test_samples, iteration=round_num)
 
         # Clean up
         passed_function_classes_global[:] = []
