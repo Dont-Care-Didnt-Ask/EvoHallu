@@ -10,7 +10,7 @@ ENV_TEXT=$(
 # Which docker and compose binary to use
 # docker and docker compose in general or podman and podman-compose for CSCS todi
 DOCKER=docker
-COMPOSE="docker compose"
+COMPOSE="docker-compose"
 # Use the same USRID and GRPID as on the storage you will be mounting.
 # USR is used in the image name and must be lowercase.
 # It's fine if your username is not lowercase, jut make it lowercase.
