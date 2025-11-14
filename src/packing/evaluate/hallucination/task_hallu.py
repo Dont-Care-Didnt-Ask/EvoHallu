@@ -34,6 +34,7 @@ def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) ->
 
 def get_initial_func(cfg: DictConfig):
     def make_prompt() -> str:
+        """Hypothesis: simple, short baseline prompt."""
         return (
             "You verify atomic claims. Output FALSE if the claim is hallucinated (false), "
             "otherwise output exactly TRUE."
@@ -79,22 +80,25 @@ def _prepare_splits(cfg_task: DictConfig) -> Tuple[Tuple[List[str], List[int]], 
 
     indices = np.arange(len(claims))
     # Stratified sampling of a fixed-size subset
-    _, sample_idx = train_test_split(
-        indices,
-        test_size=sample_size,
-        stratify=labels,
-        random_state=seed,
-    )
+    if sample_size < len(claims):
+        _, sample_idx = train_test_split(
+            indices,
+            test_size=sample_size,
+            stratify=labels,
+            random_state=seed,
+        )
+    else:
+        sample_idx = indices
 
     # Build the sampled arrays
     sample_claims = [claims[i] for i in sample_idx]
     sample_labels = [labels[i] for i in sample_idx]
 
-    # Even 50/50 stratified split into train/val
+    # Stratified split into train/val
     claims_train, claims_val, labels_train, labels_val = train_test_split(
         sample_claims,
         sample_labels,
-        test_size=0.5,
+        test_size=cfg_task.val_size,
         stratify=sample_labels,
         random_state=seed,
     )
@@ -111,6 +115,8 @@ def generate_input(cfg_task: DictConfig, set: str):
     train_split, val_split = _prepare_splits(cfg_task)
     if name == "train":
         return train_split
+    if name == "val":
+        return val_split
     return val_split
 
 
@@ -251,28 +257,60 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
     return function_class
 
 
+append_prompt = ""
 # Encourage formatting that keeps reasoning outside and code inside a fenced block
-append_prompt = (
-    "After any reasoning, provide the function inside a fenced python code block.\n"
-    "Use exactly this format (no extra text inside the fence):\n\n"
-    "```python\n"
-    "def make_prompt() -> str:\n"
-    "    \"\"\"Short description of the hypothesis being tested here ...\"\"\"\n"
-    "    return (\n"
-    "        \"... your system prompt string here ...\"\n"
-    "    )\n"
-    "```\n\n"
-    "Keep auxiliary reasoning and explanations outside the code block."
-)
+# append_prompt = (
+#     "After any reasoning, provide the function inside a fenced python code block.\n"
+#     "Use exactly this format (no extra text inside the fence):\n\n"
+#     "```python\n"
+#     "def make_prompt() -> str:\n"
+#     "    \"\"\"Short description of the hypothesis being tested here ...\"\"\"\n"
+#     "    return (\n"
+#     "        \"... your system prompt string here ...\"\n"
+#     "    )\n"
+#     "```\n\n"
+#     "Keep auxiliary reasoning and explanations outside the code block."
+# )
 
-system_prompt = (
-    "You are an expert in evolutionary optimization for prompt engineering. You are designing a SYSTEM prompt for an LLM-based binary factuality detector.\n"
-    "Your objective: maximize ROC-AUC when classifying atomic factual claims as hallucinated (FALSE) vs truthful (TRUE).\n"
-    "Output format: a Python function make_prompt(), which takes no arguments and returns a system prompt string. Include a short description of the hypothesis behind the prompt design being tested in the documentation string.\n"
-    "Input format: one or more examples of make_prompt() function, which were tested already and have known ROC-AUC/precision/recall scores."
-    "Hard constraint: LLM-based binary factuality detector must eventually output exactly TRUE or FALSE.\n"
-    "Take a deep breath and reason carefully step-by-step before returning the function make_prompt()."
-)
+# system_prompt = (
+#     "You are an expert in evolutionary optimization for prompt engineering. You are designing a SYSTEM prompt for an LLM (Meta-Llama-3.1-8B-Instruct) to build a binary hallucination detector.\n"
+#     "Your objective: maximize ROC-AUC when classifying atomic factual claims as hallucinated (FALSE) vs truthful (TRUE).\n"
+#     "Output format: a Python function make_prompt(), which takes no arguments and returns a system prompt string. Include a short description of the hypothesis behind the prompt design being tested in the documentation string.\n"
+#     "Input format: one or more examples of make_prompt() function, which were tested already and have known ROC-AUC/precision/recall scores."
+#     "Hard constraint: LLM-based binary factuality detector must eventually output exactly TRUE or FALSE.\n"
+#     "After you see the examples, reason carefully step-by-step and return the function make_prompt(). "
+#     "Reminder: you are not here to paraphrase, you are here to **invent** and **improve** reasoning strategies. "
+#     "Feel free to propose alternative frameworks, as long final output format is preserved."
+# )
+
+system_prompt = """
+You are a Prompt Engineering Scientist specializing in few-shot, reasoning-driven hallucination detection for atomic factual claims.
+Your mission is to invent and refine prompts that maximize downstream ROC-AUC for hallucination detection — with full freedom to explore new reasoning frameworks beyond any original algorithm.
+
+⚙️ FUNCTION SIGNATURE (REQUIRED):
+def make_prompt() -> str
+# → Return a full, self-contained few-shot prompt as a single string literal (PROMPT).
+
+🎯 FITNESS OBJECTIVE:
+- Maximize ROC-AUC on the training dataset of factual claims (primary objective).
+- Secondary behavioral signals used by the engine:
+  - prompt_len — shorter prompts are preferred if ROC-AUC is equal
+  - novelty — structural/conceptual originality is encouraged
+
+❗ TECHNICAL CONSTRAINTS:
+- Return a valid Python program only:
+  - implement def entrypoint(context: dict) -> str:
+  - return a single string literal -- the system prompt string
+- No imports, no file I/O, no external dependencies or references.
+- Deterministic output policy: the prompt must enforce that the **last line** of the model’s answer is exactly
+  `TRUE` or `FALSE`.
+- English only. No meta-comments about the datasets or models.
+
+🚫 REMINDER:
+You are not here to paraphrase; you are here to **invent** and **improve** reasoning strategies.
+Feel free to propose alternative analytical frameworks (e.g., scoring/voting, contrastive or hierarchical logic),
+as long as clarity, determinism, and the strict final-output format are preserved.
+"""
 
 
 TASK_REGISTRY.register(
