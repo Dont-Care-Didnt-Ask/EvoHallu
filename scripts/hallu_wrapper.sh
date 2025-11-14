@@ -64,7 +64,13 @@ else:
 PY
 
 echo "[wrapper] Running EvoTune experiment on device=${GENERATOR_DEVICES}..."
-CUDA_VISIBLE_DEVICES="${GENERATOR_DEVICES}" python3 -m src.experiments.main
+# Pass cluster config if specified via environment variable
+if [ -n "${CLUSTER:-}" ]; then
+    echo "[wrapper] Using cluster config: ${CLUSTER}"
+    CUDA_VISIBLE_DEVICES="${GENERATOR_DEVICES}" python3 -m src.experiments.main cluster="${CLUSTER}"
+else
+    CUDA_VISIBLE_DEVICES="${GENERATOR_DEVICES}" python3 -m src.experiments.main
+fi
 
 echo "[wrapper] Experiment finished successfully"
 
