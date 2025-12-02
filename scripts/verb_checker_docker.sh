@@ -7,7 +7,7 @@ set -euo pipefail
 IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
 HOST_REPO=${HOST_REPO:-/mnt/extremessd10tb/seleznev/EvoTune}
 HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
-HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache}
+HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache/huggingface}
 CUDA_DEVICE=${CUDA_DEVICE:-1}
 
 cd "${HOST_REPO}"
@@ -42,7 +42,7 @@ docker run --rm -it \
   --network host \
   --ipc host \
   "${IMAGE}" \
-  python3 verb_checker.py "${HOST_DATA}/longtail-dataset/datasets/popqa/popqa_test_filtered_10shot.csv" verb_checker_repro.csv
+  python3 verb_checker.py "${HOST_DATA}/longtail-dataset/datasets/popqa/popqa_test_filtered_10shot.csv" verb_checker_repro.csv --save-prompts-json verb_prompt.json --num-examples 10
 
 echo "[run] Container exited successfully"
 
