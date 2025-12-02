@@ -27,7 +27,7 @@ safetensors
 tokenizers
 evaluate
 datasets
-transformers
+transformers>=4.53.0
 trl
 
 # Monitoring / configuration
