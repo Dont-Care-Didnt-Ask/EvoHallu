@@ -22,7 +22,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score
 
 
-def setup_environment(cache_dir="/mnt/extremessd10tb/seleznev/.cache"):
+def setup_environment(cache_dir="/mnt/extremessd10tb/seleznev/.cache/huggingface"):
     """Set up environment variables for HuggingFace."""
     os.environ['HF_HOME'] = cache_dir
     # Note: Replace with your own HF token or set via environment variable
@@ -31,7 +31,7 @@ def setup_environment(cache_dir="/mnt/extremessd10tb/seleznev/.cache"):
 
 
 def initialize_model(model_name, tensor_parallel_size=2, gpu_memory_util=0.94, 
-                    max_model_len=2500, max_num_seqs=64, cache_dir="/mnt/extremessd10tb/seleznev/.cache"):
+                    max_model_len=2500, max_num_seqs=64, cache_dir="/mnt/extremessd10tb/seleznev/.cache/huggingface"):
     """Initialize VLLM model with specified parameters."""
     print(f"Initializing model: {model_name}")
     llm = LLM(
@@ -140,10 +140,8 @@ def get_classification_examples():
     return domain_examples
 
 
-def create_prompt(claim, tokenizer, model_name, num_examples=4, domain=None, include_confidence=False):
-    """Create a prompt for fact-checking with configurable number of examples."""
-    
-    # System message
+def get_system_instructions(include_confidence=False):
+    """Return the base fact-checking instructions."""
     system_content = """You are an expert fact-checker with comprehensive knowledge across all domains. Your task is to determine whether claims are factually TRUE or FALSE based on established facts and evidence.\
 Rules:\
 - Evaluate the factual accuracy of each claim based on verifiable information\
@@ -153,9 +151,15 @@ Rules:\
 - Provide a brief explanation (1-2 sentences) of your reasoning\
 - Output exactly in this format: explanation followed by a semicolon and either "TRUE" or "FALSE"\
 """
-
     if include_confidence:
         system_content += "- You may optionally add a confidence level (HIGH/MEDIUM/LOW) after your classification"
+    return system_content
+
+
+def build_prompt_messages(claim=None, model_name="meta-llama/Llama-3.1-8B-Instruct",
+                          num_examples=4, domain=None, include_confidence=False):
+    """Construct chat messages for the fact-checking prompt."""
+    system_content = get_system_instructions(include_confidence)
 
     messages = [
         {
@@ -172,19 +176,50 @@ Rules:\
         if domain and domain in get_classification_examples():
             domain_examples = get_classification_examples()[domain]
             all_examples.extend(domain_examples)
-        
+
         selected_examples = all_examples[:min(num_examples, len(all_examples))]
-        
+
         for example in selected_examples:
             messages.append({"role": "user", "content": example["user"]})
             messages.append({"role": "assistant", "content": example["assistant"]})
     
     # Add the actual claim to validate
-    messages.append({"role": "user", "content": f"Claim: {claim}"})
+    if claim is not None:
+        messages.append({"role": "user", "content": f"Claim: {claim}"})
     
     # Check if model supports thinking mode
     enable_thinking = "Llama-3" in model_name or "llama-3" in model_name
-    
+    return messages, enable_thinking
+
+
+def render_single_message_prompt(num_examples=4, domain=None, include_confidence=False):
+    """Render system + few-shot examples as a single message string."""
+    instructions = get_system_instructions(include_confidence).strip()
+    sections = [instructions]
+
+    if num_examples > 0:
+        all_examples = get_few_shot_examples()
+        if domain and domain in get_classification_examples():
+            domain_examples = get_classification_examples()[domain]
+            all_examples.extend(domain_examples)
+
+        selected_examples = all_examples[:min(num_examples, len(all_examples))]
+        for example in selected_examples:
+            sections.append(f"{example['user']}\n{example['assistant']}")
+
+    return "\n\n".join(sections)
+
+
+def create_prompt(claim, tokenizer, model_name, num_examples=4, domain=None, include_confidence=False):
+    """Create a prompt string for fact-checking with configurable number of examples."""
+    messages, enable_thinking = build_prompt_messages(
+        claim=claim,
+        model_name=model_name,
+        num_examples=num_examples,
+        domain=domain,
+        include_confidence=include_confidence
+    )
+
     prompt = tokenizer.apply_chat_template(
         messages,
         tokenize=False,
@@ -248,7 +283,7 @@ def fact_check(input_file, output_file, claim_column='claim',
                batch_size=None, temperature=0.3, max_tokens=150,
                num_examples=4, domain=None, include_confidence=False,
                tensor_parallel_size=2, gpu_memory_util=0.94, filtered=False,
-               max_model_len=2500, cache_dir="/.cache/"):
+               max_model_len=2500, cache_dir="/.cache/", save_prompts_json=None):
     """Main function to fact-check claims in a CSV file."""
     
     # Setup environment
@@ -286,10 +321,53 @@ def fact_check(input_file, output_file, claim_column='claim',
             print(f"Note: Adjusting max_model_len from {max_model_len} to {suggested_len} for {num_examples} examples")
             max_model_len = suggested_len
     
-    # Initialize model and tokenizer
+    # Initialize tokenizer early for prompt-only export
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+
+    if save_prompts_json:
+        base_messages, enable_thinking = build_prompt_messages(
+            claim=None,
+            model_name=model_name,
+            num_examples=num_examples,
+            domain=domain,
+            include_confidence=include_confidence
+        )
+        base_prompt = tokenizer.apply_chat_template(
+            base_messages,
+            tokenize=False,
+            add_generation_prompt=False,
+            enable_thinking=enable_thinking,
+        )
+
+        single_message_prompt = render_single_message_prompt(
+            num_examples=num_examples,
+            domain=domain,
+            include_confidence=include_confidence
+        )
+
+        payload = {
+            "system_prompt": base_messages[0]["content"],
+            "few_shot_messages": base_messages[1:],
+            "rendered_prompt": base_prompt,
+            "single_message_prompt": single_message_prompt,
+            "metadata": {
+                "num_examples": num_examples,
+                "domain": domain,
+                "include_confidence": include_confidence,
+                "model_name": model_name
+            }
+        }
+
+        output_path = Path(save_prompts_json)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(output_path, "w", encoding="utf-8") as json_file:
+            json.dump(payload, json_file, ensure_ascii=False, indent=2)
+        print(f"Saved base system prompt with few-shots to {output_path}")
+        return
+
+    # Initialize model only when running inference
     llm = initialize_model(model_name, tensor_parallel_size, gpu_memory_util, 
                           max_model_len, 64, cache_dir)
-    tokenizer = AutoTokenizer.from_pretrained(model_name)
     
     # Prepare sampling parameters
     sampling_params = SamplingParams(
@@ -471,12 +549,14 @@ Examples:
                        help="Sampling temperature (default: 0.3)")
     parser.add_argument("--max-tokens", type=int, default=150,
                        help="Maximum tokens to generate (default: 150)")
-    parser.add_argument("--cache-dir", default="/mnt/extremessd10tb/seleznev/.cache",
-                       help="Cache directory for models (default: /mnt/extremessd10tb/seleznev/.cache)")
+    parser.add_argument("--cache-dir", default="/mnt/extremessd10tb/seleznev/.cache/huggingface",
+                       help="Cache directory for models (default: /mnt/extremessd10tb/seleznev/.cache/huggingface)")
     parser.add_argument("--list-examples", action="store_true",
                        help="List all available few-shot examples and exit")
     parser.add_argument("--list-domains", action="store_true",
                        help="List all available domain-specific examples and exit")
+    parser.add_argument("--save-prompts-json",
+                       help="Save generated prompts to JSON and exit without running inference")
     
     args = parser.parse_args()
     
@@ -541,7 +621,8 @@ Examples:
         tensor_parallel_size=args.tensor_parallel,
         gpu_memory_util=args.gpu_memory,
         max_model_len=args.max_model_len,
-        cache_dir=args.cache_dir
+        cache_dir=args.cache_dir,
+        save_prompts_json=args.save_prompts_json
     )
 
 
