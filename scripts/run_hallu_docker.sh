@@ -7,7 +7,7 @@ set -euo pipefail
 IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
 HOST_REPO=${HOST_REPO:-/mnt/extremessd10tb/seleznev/EvoTune}
 HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
-HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache}
+HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache/huggingface}
 DETECTOR_DEVICES=${DETECTOR_DEVICES:-0}
 GENERATOR_DEVICES=${GENERATOR_DEVICES:-1}
 CLUSTER=${CLUSTER:-api}  # Cluster config to use (e.g., 'example', 'api')
