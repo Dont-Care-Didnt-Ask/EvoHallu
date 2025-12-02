@@ -1,0 +1,93 @@
+{
+  "system_prompt": "You are an expert fact-checker with comprehensive knowledge across all domains. Your task is to determine whether claims are factually TRUE or FALSE based on established facts and evidence.Rules:- Evaluate the factual accuracy of each claim based on verifiable information- Consider the claim as written - small errors in dates, numbers, or facts make a claim FALSE- If a claim contains multiple parts, all parts must be true for the claim to be TRUE- If any part of the claim is incorrect, misleading, or inaccurate, classify it as FALSE- Provide a brief explanation (1-2 sentences) of your reasoning- Output exactly in this format: explanation followed by a semicolon and either \"TRUE\" or \"FALSE\"",
+  "few_shot_messages": [
+    {
+      "role": "user",
+      "content": "Claim: Christopher Columbus discovered America in 1592."
+    },
+    {
+      "role": "assistant",
+      "content": "Columbus made his first voyage to the Americas in 1492, not 1592 - this is off by 100 years; FALSE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: Water boils at 100 degrees Celsius at sea level under standard atmospheric pressure."
+    },
+    {
+      "role": "assistant",
+      "content": "This is the correct boiling point of water at standard atmospheric pressure (1 atm) at sea level; TRUE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: Brazil is the largest country in South America and shares borders with every South American country."
+    },
+    {
+      "role": "assistant",
+      "content": "Brazil is the largest country in South America but does not border Chile and Ecuador, so it doesn't share borders with every South American country; FALSE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: The square root of 144 is 12."
+    },
+    {
+      "role": "assistant",
+      "content": "12 × 12 equals 144, so the square root of 144 is indeed 12; TRUE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: Humans have 23 chromosomes in total."
+    },
+    {
+      "role": "assistant",
+      "content": "Humans have 23 pairs of chromosomes for a total of 46 chromosomes, not 23; FALSE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: World War II ended in 1945 with the surrender of Japan."
+    },
+    {
+      "role": "assistant",
+      "content": "Japan formally surrendered on September 2, 1945, ending World War II; TRUE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: The Sun revolves around the Earth once every 24 hours."
+    },
+    {
+      "role": "assistant",
+      "content": "The Earth rotates on its axis every 24 hours and revolves around the Sun, not the other way around - this describes the geocentric model which was disproven; FALSE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: The chemical symbol for gold is Au, derived from its Latin name 'aurum'."
+    },
+    {
+      "role": "assistant",
+      "content": "Au is indeed the chemical symbol for gold, derived from the Latin word 'aurum' meaning gold; TRUE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: The United Nations was founded in 1950 after World War II."
+    },
+    {
+      "role": "assistant",
+      "content": "The United Nations was founded in 1945, not 1950, though it was indeed after World War II; FALSE"
+    },
+    {
+      "role": "user",
+      "content": "Claim: Mount Everest, located on the border between Nepal and Tibet, is the highest mountain above sea level on Earth."
+    },
+    {
+      "role": "assistant",
+      "content": "Mount Everest at 8,848.86 meters (29,031.7 feet) is indeed the highest mountain above sea level and sits on the Nepal-Tibet border; TRUE"
+    }
+  ],
+  "rendered_prompt": "<|begin_of_text|><|start_header_id|>system<|end_header_id|>\n\nYou are an expert fact-checker with comprehensive knowledge across all domains. Your task is to determine whether claims are factually TRUE or FALSE based on established facts and evidence.Rules:- Evaluate the factual accuracy of each claim based on verifiable information- Consider the claim as written - small errors in dates, numbers, or facts make a claim FALSE- If a claim contains multiple parts, all parts must be true for the claim to be TRUE- If any part of the claim is incorrect, misleading, or inaccurate, classify it as FALSE- Provide a brief explanation (1-2 sentences) of your reasoning- Output exactly in this format: explanation followed by a semicolon and either \"TRUE\" or \"FALSE\"<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: Christopher Columbus discovered America in 1592.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nColumbus made his first voyage to the Americas in 1492, not 1592 - this is off by 100 years; FALSE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: Water boils at 100 degrees Celsius at sea level under standard atmospheric pressure.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nThis is the correct boiling point of water at standard atmospheric pressure (1 atm) at sea level; TRUE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: Brazil is the largest country in South America and shares borders with every South American country.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nBrazil is the largest country in South America but does not border Chile and Ecuador, so it doesn't share borders with every South American country; FALSE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: The square root of 144 is 12.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n12 × 12 equals 144, so the square root of 144 is indeed 12; TRUE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: Humans have 23 chromosomes in total.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nHumans have 23 pairs of chromosomes for a total of 46 chromosomes, not 23; FALSE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: World War II ended in 1945 with the surrender of Japan.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nJapan formally surrendered on September 2, 1945, ending World War II; TRUE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: The Sun revolves around the Earth once every 24 hours.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nThe Earth rotates on its axis every 24 hours and revolves around the Sun, not the other way around - this describes the geocentric model which was disproven; FALSE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: The chemical symbol for gold is Au, derived from its Latin name 'aurum'.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nAu is indeed the chemical symbol for gold, derived from the Latin word 'aurum' meaning gold; TRUE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: The United Nations was founded in 1950 after World War II.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nThe United Nations was founded in 1945, not 1950, though it was indeed after World War II; FALSE<|eot_id|><|start_header_id|>user<|end_header_id|>\n\nClaim: Mount Everest, located on the border between Nepal and Tibet, is the highest mountain above sea level on Earth.<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\nMount Everest at 8,848.86 meters (29,031.7 feet) is indeed the highest mountain above sea level and sits on the Nepal-Tibet border; TRUE<|eot_id|><|start_header_id|>assistant<|end_header_id|>\n\n",
+  "single_message_prompt": "You are an expert fact-checker with comprehensive knowledge across all domains. Your task is to determine whether claims are factually TRUE or FALSE based on established facts and evidence.Rules:- Evaluate the factual accuracy of each claim based on verifiable information- Consider the claim as written - small errors in dates, numbers, or facts make a claim FALSE- If a claim contains multiple parts, all parts must be true for the claim to be TRUE- If any part of the claim is incorrect, misleading, or inaccurate, classify it as FALSE- Provide a brief explanation (1-2 sentences) of your reasoning- Output exactly in this format: explanation followed by a semicolon and either \"TRUE\" or \"FALSE\"\n\nClaim: Christopher Columbus discovered America in 1592.\nColumbus made his first voyage to the Americas in 1492, not 1592 - this is off by 100 years; FALSE\n\nClaim: Water boils at 100 degrees Celsius at sea level under standard atmospheric pressure.\nThis is the correct boiling point of water at standard atmospheric pressure (1 atm) at sea level; TRUE\n\nClaim: Brazil is the largest country in South America and shares borders with every South American country.\nBrazil is the largest country in South America but does not border Chile and Ecuador, so it doesn't share borders with every South American country; FALSE\n\nClaim: The square root of 144 is 12.\n12 × 12 equals 144, so the square root of 144 is indeed 12; TRUE\n\nClaim: Humans have 23 chromosomes in total.\nHumans have 23 pairs of chromosomes for a total of 46 chromosomes, not 23; FALSE\n\nClaim: World War II ended in 1945 with the surrender of Japan.\nJapan formally surrendered on September 2, 1945, ending World War II; TRUE\n\nClaim: The Sun revolves around the Earth once every 24 hours.\nThe Earth rotates on its axis every 24 hours and revolves around the Sun, not the other way around - this describes the geocentric model which was disproven; FALSE\n\nClaim: The chemical symbol for gold is Au, derived from its Latin name 'aurum'.\nAu is indeed the chemical symbol for gold, derived from the Latin word 'aurum' meaning gold; TRUE\n\nClaim: The United Nations was founded in 1950 after World War II.\nThe United Nations was founded in 1945, not 1950, though it was indeed after World War II; FALSE\n\nClaim: Mount Everest, located on the border between Nepal and Tibet, is the highest mountain above sea level on Earth.\nMount Everest at 8,848.86 meters (29,031.7 feet) is indeed the highest mountain above sea level and sits on the Nepal-Tibet border; TRUE",
+  "metadata": {
+    "num_examples": 10,
+    "domain": null,
+    "include_confidence": false,
+    "model_name": "VityaVitalich/Llama3.1-8b-instruct"
+  }
+}
