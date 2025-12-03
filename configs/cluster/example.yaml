@@ -1,3 +1,15 @@
 scratch_path: "/path/to/scratch"
 use_tgi: 0
 use_vllm: 1
+use_api: 0
+
+api_base_url: "https://llm.api.cloud.yandex.net/v1"  # or your custom OpenAI-compatible API endpoint
+api_key: ""  # Set to your API key here, or leave null to use OPENAI_API_KEY env var
+api_project: b1gemincl8p7b2uiv5nl
+api_model_short_name: gpt-oss-120b
+# api_model_short_name: qwen3-235b-a22b-fp8
+api_model_name: gpt://b1gemincl8p7b2uiv5nl/${cluster.api_model_short_name}/latest
+api_model_params:
+  max_tokens: 2048
+  temperature: 0.7
+  topp: 0.95

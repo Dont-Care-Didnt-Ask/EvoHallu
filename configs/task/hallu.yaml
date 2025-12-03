@@ -3,22 +3,23 @@ task_name: "hallu"
 function_str_to_extract: "make_prompt"
 
 dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/popqa/popqa_train_filtered_10shot.csv"
+# dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/popqa/popqa_train_filtered_10shot_hardest_examples.csv"
 filter_datasets: true
-val_size: 0.1
+val_size: 0.2
 # test_dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/geometry/common_claim_true_false.csv"
 # test_dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/x-fact/test_filtered_10shot.csv"
 # test_dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv"
 test_dataset_path: "/mnt/extremessd10tb/seleznev/longtail-dataset/datasets/popqa/popqa_test_filtered_10shot.csv"
-sample_size: 5567
+sample_size: 2560
 split_seed: ${seed}
 
 failed_score: -1
-timeout_period: 600
+timeout_period: 2400
 mem_limit_gb: 32
 
 # Detector server settings (you must start vLLM externally)
 detector_vllm_port: 8088  # Must differ from generator vLLM port (8080 + gpu_nums)
-detector_model: "VityaVitalich/Llama3.1-8b-instruct"  # replace with the exact model being served
+detector_model: "Qwen/Qwen2.5-32B-Instruct"  # replace with the exact model being served
 detector_max_concurrent_requests: 16
 detector_max_tokens: 150
 detector_temperature: 0.3

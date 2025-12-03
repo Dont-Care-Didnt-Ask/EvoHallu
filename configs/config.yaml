@@ -15,7 +15,7 @@ hydra:
 defaults:
   - cluster: example
   - task: hallu
-  - model: qwen14b
+  - model: gpt-oss-120b
   - train: none
   - _self_
 
@@ -71,7 +71,7 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 20
+seed: 27
 run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev
