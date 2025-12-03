@@ -1,5 +1,6 @@
 echo $(which python)
 devices=1
+max_samples=100
 
 datasets_source_dir="/mnt/extremessd10tb/seleznev/longtail-dataset/datasets"
 
@@ -14,5 +15,6 @@ do
         --data ${dataset} \
         --text-col claim \
         --label-col is_hallu \
-        --output-path data/uncertainty_quantification/$(basename ${dataset} .csv)_raw_stats.pt
+        --max-samples ${max_samples} \
+        --output-path data/uncertainty_quantification/$(basename ${dataset} .csv)_raw_stats_${max_samples}samples.pt
 done

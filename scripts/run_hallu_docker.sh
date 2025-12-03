@@ -4,7 +4,7 @@ set -euo pipefail
 # Clean single-container launcher for hallucination task
 # Uses existing image, runs wrapper script inside container with trap for cleanup
 
-IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
+IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-d10728c}
 HOST_REPO=${HOST_REPO:-/mnt/extremessd10tb/seleznev/EvoTune}
 HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
 HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache/huggingface}

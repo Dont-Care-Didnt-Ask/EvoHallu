@@ -59,20 +59,7 @@ docker run --rm \
   --network host \
   --ipc host \
   "${IMAGE}" \
-  bash -lc '
-    echo "[run-uq] Inside container. Working directory: $(pwd)"
-    echo "[run-uq] Updating transformers and vllm via pip..."
-    pip install --upgrade transformers vllm
-    echo "[run-uq] Using GPU devices: ${UQ_DEVICES}"
-    if command -v nvidia-smi >/dev/null 2>&1; then
-        echo "[run-uq] ---- nvidia-smi ----"
-        nvidia-smi || true
-        echo "[run-uq] --------------------"
-    fi
-    echo "[run-uq] Starting EvoTune UQ experiment (task=uncertainty_quantification, cluster=${CLUSTER})..."
-    export HF_HOME="${HF_HOME}"
-    CUDA_VISIBLE_DEVICES="${UQ_DEVICES}" python3 -m src.experiments.main --config-name config_uq cluster="${CLUSTER}" task=uncertainty_quantification 
-  '
+  bash "${HOST_REPO}/scripts/uq_wrapper.sh"
 
 echo "[run-uq] Container exited successfully"
 
