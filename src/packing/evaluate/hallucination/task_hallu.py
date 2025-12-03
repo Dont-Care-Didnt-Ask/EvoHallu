@@ -28,7 +28,7 @@ def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) ->
     if bootstrapped_scores:
         lower = float(np.percentile(bootstrapped_scores, 2.5))
         upper = float(np.percentile(bootstrapped_scores, 97.5))
-        return f"({lower:.4f}, {upper:.4f})"
+        return f"({100*lower:.2f}, {100*upper:.2f})"
     return "(nan, nan)"
 
 
@@ -76,7 +76,8 @@ def get_initial_func(cfg: DictConfig):
     
     initial_function = make_prompt
     function_str_to_extract = "make_prompt"
-    return initial_function, function_str_to_extract
+    code_type = "function"
+    return initial_function, function_str_to_extract, code_type
 
 
 def _load_claims_and_labels(csv_path: str, do_filter: bool) -> Tuple[List[str], List[int]]:
@@ -270,14 +271,14 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
                 prec, rec = "unavailable", "unavailable"
             # Save detailed metrics
             function_class.extra_metrics = {
-                "auc": auc,
-                "auc_ci": auc_ci,
-                "precision_at_0_5": prec,
-                "recall_at_0_5": rec,
-                "invalid_responses_percentage": float(invalid_responses_percentage),
-                "num_valid_responses": int(num_valid),
-                "num_total": int(len(scores)),
-                "prompt_text": prompt_text,
+                "AUC": auc,
+                "AUC 95% confidence interval": auc_ci,
+                "Precision at 0.5 threshold": prec,
+                "Recall at 0.5 threshold": rec,
+                "Invalid responses percentage": float(invalid_responses_percentage),
+                "Number of valid responses": int(num_valid),
+                "Number of total responses": int(len(scores)),
+                "Prompt text": prompt_text,
             }
         else:
             score = float(cfg.task.failed_score)

@@ -8,9 +8,21 @@ import time
 from packing.utils.functions import (
     string_to_function,
     extract_functions,
+    extract_class,
     extract_imports,
     function_to_string,
 )
+
+
+def extract_code(output, code_type="function", target_name=None, base_class=None):
+    """Extract function or class from LLM output based on code_type.
+    
+    For classes, if target_name is not found, falls back to finding any class
+    inheriting from base_class (useful when model uses creative class names).
+    """
+    if code_type == "class":
+        return extract_class(output, target_name, base_class=base_class)
+    return extract_functions(output)
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel, get_peft_model, LoraConfig
@@ -48,6 +60,8 @@ def get_full_model_name(cfg):
             model_id = "Qwen/Qwen2.5-0.5B-Instruct"
         elif name == "qwen14b":
             model_id = "Qwen/Qwen2.5-14B-Instruct"
+        elif name == "gpt-oss-120b":
+            model_id = "/mnt/extremessd10tb/seleznev/.cache/huggingface/hub/models--openai--gpt-oss-120b"
         else:
             raise ValueError(f"Invalid model name: {name}")
         return model_id
@@ -168,7 +182,7 @@ def initialize_models(cfg, load_finetuned):
     return output_model, output_tokenizer, output_sampling_params
 
 
-def generate_on_gpu(chat, model, tokenizer, sampling_params, gpu_num, load_finetuned):
+def generate_on_gpu(chat, model, tokenizer, sampling_params, gpu_num, load_finetuned, code_type="function", base_class=None):
     tokenized_chat = tokenizer.apply_chat_template(
         chat, tokenize=True, add_generation_prompt=True, return_tensors="pt"
     ).to(
@@ -190,26 +204,26 @@ def generate_on_gpu(chat, model, tokenizer, sampling_params, gpu_num, load_finet
         for output in outputs
     ]
 
-    extracted_functions_init = [extract_functions(output) for output in outputs_text_init]
+    extracted_code_init = [extract_code(output, code_type, base_class=base_class) for output in outputs_text_init]
     extracted_imports_init = [extract_imports(output) for output in outputs_text_init]
 
-    # Filter out texts, functions, and imports where functions are extracted successfully
-    extracted_functions = [func for func in extracted_functions_init if func]
+    # Filter out texts, code, and imports where extraction was successful
+    extracted_code = [code for code in extracted_code_init if code]
     extracted_imports = [
-        imports for i, imports in enumerate(extracted_imports_init) if extracted_functions_init[i]
+        imports for i, imports in enumerate(extracted_imports_init) if extracted_code_init[i]
     ]
     filtered_outputs_text = [
-        output for i, output in enumerate(outputs_text_init) if extracted_functions_init[i]
+        output for i, output in enumerate(outputs_text_init) if extracted_code_init[i]
     ]
 
     assert (
-            len(extracted_functions)
+            len(extracted_code)
             == len(extracted_imports)
             == len(filtered_outputs_text)
     )
 
     return (
-        extracted_functions,
+        extracted_code,
         extracted_imports,
         filtered_outputs_text,
     )
@@ -217,12 +231,15 @@ def generate_on_gpu(chat, model, tokenizer, sampling_params, gpu_num, load_finet
 
 def get_outputs_from_single_model(cfg, chat, model, tokenizer, sampling_params, load_finetuned):
     time_start = time.time()
+    code_type = getattr(cfg, "code_type", "function")
+    # For class extraction, use Estimator as fallback base class
+    base_class = "Estimator" if code_type == "class" else None
 
     (
         extracted_functions,
         extracted_imports,
         filtered_outputs_text,
-    ) = generate_on_gpu(chat, model, tokenizer, sampling_params, cfg.gpu_nums, load_finetuned)
+    ) = generate_on_gpu(chat, model, tokenizer, sampling_params, cfg.gpu_nums, load_finetuned, code_type, base_class)
 
     llm_generation_time = int(time.time() - time_start)
     logging.info(f"Time taken for LLM generation: {llm_generation_time} seconds")
@@ -434,6 +451,9 @@ def make_api_request(cfg, chat, load_finetuned):
 
 def generate_from_server(cfg, chat, flag_load_finetuned, server_port, num_outputs_per_prompt):
     outputs = []
+    code_type = getattr(cfg, "code_type", "function")
+    # For class extraction, use Estimator as fallback base class
+    base_class = "Estimator" if code_type == "class" else None
     
     if cfg.use_api:
         logging.info(f"[API DEBUG] Starting generation with num_outputs_per_prompt={num_outputs_per_prompt}")
@@ -466,26 +486,26 @@ def generate_from_server(cfg, chat, flag_load_finetuned, server_port, num_output
 
     outputs = [output.choices[0].message.content for output in outputs]
 
-    extracted_functions_init = [extract_functions(output) for output in outputs]
+    extracted_code_init = [extract_code(output, code_type, base_class=base_class) for output in outputs]
     extracted_imports_init = [extract_imports(output) for output in outputs]
 
-    # Filter out texts, functions, and imports where functions are extracted successfully
-    extracted_functions = [func for func in extracted_functions_init if func]
+    # Filter out texts, code, and imports where extraction was successful
+    extracted_code = [code for code in extracted_code_init if code]
     extracted_imports = [
-        imports for i, imports in enumerate(extracted_imports_init) if extracted_functions_init[i]
+        imports for i, imports in enumerate(extracted_imports_init) if extracted_code_init[i]
     ]
     filtered_outputs_text = [
-        output for i, output in enumerate(outputs) if extracted_functions_init[i]
+        output for i, output in enumerate(outputs) if extracted_code_init[i]
     ]
 
     assert (
-            len(extracted_functions)
+            len(extracted_code)
             == len(extracted_imports)
             == len(filtered_outputs_text)
     )
 
     return (
-        extracted_functions,
+        extracted_code,
         extracted_imports,
         filtered_outputs_text,
     )
@@ -694,7 +714,6 @@ def start_tgi_server(model_id, gpu_num, port):
     env_vars = os.environ.copy()
     env_vars["CUDA_VISIBLE_DEVICES"] = str(gpu_num)
     logging.info(f"Starting TGI server for model {model_id} on GPU {gpu_num} at port {port}")
-    # command = ["text-generation-launcher", "--model-id", model_id, "--tokenizer-config-path", tokenizer_path, "--port", str(port)]
     command = ["text-generation-launcher", "--model-id", model_id, "--port", str(port)]
     process = subprocess.Popen(command, env=env_vars)
     pid = process.pid
@@ -718,15 +737,12 @@ def start_vllm_server(model_id, gpu_num, port):
         "vllm",
         "serve",
         model_id,
-        # "--gpu-memory-utilization", "0.22", # TODO: make this configurable
         "--port", str(port),
-        "--disable-log-requests"
     ]
 
-    # If you need additional arguments, append them here. For example:
-    # command += ["--tensor-parallel-size", "1"]
-    # command += ["--max-num-batches", "4"]
-    # etc.
+    if "gpt-oss" in model_id:
+        # Reduce max length to avoid OOM errors due to KV-cache size
+        command.extend(["--max-model-len", "16384"])
 
     process = subprocess.Popen(command, env=env_vars)
     return process.pid

@@ -65,7 +65,6 @@ import pickle
 import subprocess
 import getpass
 
-
 def parse_auc_ci(ci_str: str) -> tuple[float, float]:
     """Parse AUC confidence interval string into numeric bounds.
     
@@ -152,6 +151,70 @@ def write_test_metrics_row(cfg, test_result, split, num_test_samples, iteration)
         ])
 
 
+def evaluate_uq(cfg, generate_input, evaluate_func, function_class, split):
+    """Evaluate a function class on the specified split for uncertainty quantification task.
+    
+    Args:
+        cfg: Configuration object
+        generate_input: Function to generate the input data
+        evaluate_func: Function to evaluate the function class
+        function_class: FunctionClass instance to evaluate
+        split: Split to evaluate on ("train", "val" or "testset")
+    Returns:
+        Tuple of (result, num_samples)
+    """
+    data = generate_input(cfg.task, split)
+    num_samples = len(data.get("eval_raw", {}).get("samples", [])) if isinstance(data, dict) else -1
+    fc = copy.deepcopy(function_class)
+    result = evaluate_func(cfg, copy.deepcopy(data), fc)
+    return result, num_samples
+
+
+def write_uq_metrics_row(cfg, result, split, num_samples, iteration):
+    """Write a UQ metrics row to uq_split_metrics.csv.
+    
+    Args:
+        cfg: Configuration object
+        result: Result object from evaluate_func with extra_metrics
+        split: split used for evaluation ("train", "val" or "testset")
+        num_samples: Number of samples
+        iteration: Iteration number (use -1 for initial)
+    """
+    em = getattr(result, "extra_metrics", {}) or {}
+    lower, upper = parse_auc_ci(em.get("AUC 95% confidence interval", "(nan, nan)"))
+    
+    csv_path = os.path.join(cfg.logs_dir, "uq_split_metrics.csv")
+    new_file = not os.path.exists(csv_path)
+    
+    with open(csv_path, "w" if new_file else "a", newline="") as f:
+        writer = csv.writer(f)
+        if new_file:
+            writer.writerow([
+                "iteration",
+                "function_num",
+                "prompt_num",
+                "split",
+                "num_samples",
+                "auc",
+                "precision_at_median",
+                "recall_at_median",
+                "auc_lower_bound",
+                "auc_upper_bound",
+            ])
+        writer.writerow([
+            iteration,
+            getattr(result, "function_num", ""),
+            getattr(result, "prompt_num", ""),
+            split,
+            num_samples,
+            em.get("AUC", ""),
+            em.get("Precision at median score threshold", ""),
+            em.get("Recall at median score threshold", ""),
+            lower,
+            upper,
+        ])
+
+
 @hydra_main(config_path="../../configs", config_name="config", version_base="1.3")
 def main(cfg: DictConfig):
     OmegaConf.set_struct(cfg, False)  # So we can assign new fields
@@ -231,8 +294,9 @@ def main(cfg: DictConfig):
     evaluate_func = task["evaluate_func"]
     get_initial_func = task["get_initial_func"]
 
-    initial_function, function_str_to_extract = get_initial_func(cfg.task)
+    initial_function, function_str_to_extract, code_type = get_initial_func(cfg.task)
     cfg.function_str_to_extract = function_str_to_extract
+    cfg.code_type = code_type  # "function" or "class"
 
     # Save the config and set up wandb
     logging.info(f"Working directory: {Path.cwd()}")
@@ -296,6 +360,14 @@ def main(cfg: DictConfig):
                 initial_test_result, num_test_samples = evaluate_hallu(cfg, generate_input, evaluate_func, intial_function_class, split)
                 write_test_metrics_row(cfg, initial_test_result, split, num_test_samples, iteration=-1)
                 logging.info(f"Initial prompt {split} evaluation saved to test_metrics.csv")
+
+        # Evaluate initial estimator on train/val/test for uncertainty_quantification task
+        if cfg.task.task_name == "uncertainty_quantification":
+            logging.info("Evaluating initial estimator on train/val/test splits...")
+            for split in ["train", "val", "testset"]:
+                initial_result, num_samples = evaluate_uq(cfg, generate_input, evaluate_func, intial_function_class, split)
+                write_uq_metrics_row(cfg, initial_result, split, num_samples, iteration=-1)
+                logging.info(f"Initial estimator {split} evaluation: AUC={initial_result.extra_metrics.get('AUC', 'N/A')}")
 
         # For saving
         os.makedirs(f"{cfg.logs_dir}/chats", exist_ok=True)
@@ -408,6 +480,17 @@ def main(cfg: DictConfig):
         # Start the consumer processes
         logging.info("-" * 10)
         logging.info("STARTING CONSUMERS")
+        
+        # For tasks with large tensor data (e.g., UQ), use lazy loading to avoid
+        # serializing gigabytes of data over multiprocessing pipes. Subprocesses
+        # will load data from disk instead, which is much faster.
+        use_lazy_load = cfg.task.task_name == "uncertainty_quantification"
+        if use_lazy_load:
+            input_struct_or_spec = {"_lazy_load": True, "split": "train"}
+            logging.info("Using lazy loading for input data (subprocess will load from disk)")
+        else:
+            input_struct_or_spec = input_struct
+        
         consumers = []
         for worker_id in range(cfg.num_workers):
             p = multiprocessing.Process(
@@ -420,7 +503,7 @@ def main(cfg: DictConfig):
                     failed_function_classes_global,
                     worker_id,
                     termination_event,
-                    input_struct,
+                    input_struct_or_spec,
                     round_num,
                     multiprocess_running_dict,
                 ),
@@ -516,6 +599,34 @@ def main(cfg: DictConfig):
                         upper,
                     ])
 
+        # Log every evaluated candidate's metrics to CSV for uncertainty_quantification task
+        if cfg.task.task_name == "uncertainty_quantification":
+            logging.info(f"======== cfg.logs_dir={cfg.logs_dir} =======")
+            csv_file = os.path.join(cfg.logs_dir, "all_metrics_train.csv")
+            new_file = not os.path.exists(csv_file)
+            with open(csv_file, "a", newline="") as _f:
+                writer = csv.writer(_f)
+                if new_file:
+                    writer.writerow([
+                        "round_num", "function_num", "prompt_num",
+                        "auc", "precision_at_median", "recall_at_median",
+                        "num_samples", "auc_lower_bound", "auc_upper_bound"
+                    ])
+                for function_class in passed_function_classes:
+                    em = getattr(function_class, "extra_metrics", {}) or {}
+                    lower, upper = parse_auc_ci(em.get("AUC 95% confidence interval", "(nan, nan)"))
+                    writer.writerow([
+                        round_num,
+                        getattr(function_class, "function_num", ""),
+                        getattr(function_class, "prompt_num", ""),
+                        em.get("AUC", ""),
+                        em.get("Precision at median score threshold", ""),
+                        em.get("Recall at median score threshold", ""),
+                        em.get("Number of samples", ""),
+                        lower,
+                        upper,
+                    ])
+
         # Evaluate top-1 best prompt on the TEST set for the hallu task after each iteration
         if cfg.task.task_name == "hallu":
             # Select candidates with valid AUC and invalid_responses_percentage < 1
@@ -546,6 +657,42 @@ def main(cfg: DictConfig):
                     for split in ["val", "testset"]:
                         test_result, num_test_samples = evaluate_hallu(cfg, generate_input, evaluate_func, best_fc, split)
                         write_test_metrics_row(cfg, test_result, split, num_test_samples, iteration=round_num)
+
+        # Evaluate top-1 best estimator on val/test for uncertainty_quantification task
+        if cfg.task.task_name == "uncertainty_quantification":
+            # Select candidates with valid AUC
+            candidates = [
+                fc for fc in passed_function_classes
+                if isinstance(getattr(fc, "extra_metrics", None), dict)
+                and "AUC" in fc.extra_metrics
+            ]
+
+            if len(candidates) > 0:
+                # Highest ROC-AUC wins
+                best_fc = max(candidates, key=lambda fc: fc.extra_metrics.get("AUC", float("-inf")))
+                best_auc = best_fc.extra_metrics.get("AUC", None)
+
+                csv_path = os.path.join(cfg.logs_dir, "uq_split_metrics.csv")
+                already_evaluated = False
+                if os.path.exists(csv_path):
+                    with open(csv_path, "r", newline="") as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            # Check if same AUC already evaluated at this iteration
+                            try:
+                                if (int(row.get("iteration", -999)) == round_num and
+                                    float(row.get("auc", -1)) == best_auc):
+                                    already_evaluated = True
+                                    break
+                            except (ValueError, TypeError):
+                                pass
+
+                if not already_evaluated:
+                    logging.info(f"Evaluating best estimator (train AUC={best_auc}) on val/test splits...")
+                    for split in ["train", "val", "testset"]:
+                        result, num_samples = evaluate_uq(cfg, generate_input, evaluate_func, best_fc, split)
+                        write_uq_metrics_row(cfg, result, split, num_samples, iteration=round_num)
+                        logging.info(f"UQ {split} evaluation: AUC={result.extra_metrics.get('AUC', 'N/A')}")
 
         # Clean up
         passed_function_classes_global[:] = []
