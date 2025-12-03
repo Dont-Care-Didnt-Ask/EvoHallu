@@ -42,7 +42,8 @@ def get_initial_func(cfg):
 
     # For debugging: check the source code of a function
     # inspect.getsource(dummy_function)
-    return initial_function, function_str_to_extract
+    code_type = "function"
+    return initial_function, function_str_to_extract, code_type
 
 
 def l1_bound(items: tuple[int, ...], capacity: int) -> float:

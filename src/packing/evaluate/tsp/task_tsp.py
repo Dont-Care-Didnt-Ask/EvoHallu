@@ -90,7 +90,8 @@ def get_initial_func(cfg):
         initial_function = heuristics
         function_str_to_extract = "heuristics"
 
-    return initial_function, function_str_to_extract
+    code_type = "function"
+    return initial_function, function_str_to_extract, code_type
 
 
 FloatArray = npt.NDArray[np.float64]
