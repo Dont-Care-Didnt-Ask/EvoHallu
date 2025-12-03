@@ -28,7 +28,7 @@ def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) ->
     if bootstrapped_scores:
         lower = float(np.percentile(bootstrapped_scores, 2.5))
         upper = float(np.percentile(bootstrapped_scores, 97.5))
-        return f"({lower:.4f}, {upper:.4f})"
+        return f"({100*lower:.2f}, {100*upper:.2f})"
     return "(nan, nan)"
 
 
@@ -40,9 +40,44 @@ def get_initial_func(cfg: DictConfig):
             "otherwise output exactly TRUE."
         )
 
+    # def make_prompt() -> str:
+    #     """Strong baseline prompt with explicit identity setting, concise reasoning and few-shot examples."""
+    #     return (
+    #         "You are an expert fact-checker with comprehensive knowledge across all domains. "
+    #         "Your task is to determine whether claims are factually TRUE or FALSE based on established facts and evidence. "
+    #         "Rules:"
+    #         "\n- Evaluate the factual accuracy of each claim based on verifiable information"
+    #         "\n- Consider the claim as written - small errors in dates, numbers, or facts make a claim FALSE"
+    #         "\n- If a claim contains multiple parts, all parts must be true for the claim to be TRUE"
+    #         "\n- If any part of the claim is incorrect, misleading, or inaccurate, classify it as FALSE"
+    #         "\n- Provide a brief explanation (1-2 sentences) of your reasoning"
+    #         "\n- Output exactly in this format: explanation followed by a semicolon and either \"TRUE\" or \"FALSE\""
+    #         "\n\nClaim: Christopher Columbus discovered America in 1592."
+    #         "\nColumbus made his first voyage to the Americas in 1492, not 1592 - this is off by 100 years; FALSE"
+    #         "\n\nClaim: Water boils at 100 degrees Celsius at sea level under standard atmospheric pressure."
+    #         "\nThis is the correct boiling point of water at standard atmospheric pressure (1 atm) at sea level; TRUE"
+    #         "\n\nClaim: Brazil is the largest country in South America and shares borders with every South American country."
+    #         "\nBrazil is the largest country in South America but does not border Chile and Ecuador, so it doesn't share borders with every South American country; FALSE"
+    #         "\n\nClaim: The square root of 144 is 12."
+    #         "\n12 × 12 equals 144, so the square root of 144 is indeed 12; TRUE"
+    #         "\n\nClaim: Humans have 23 chromosomes in total."
+    #         "\nHumans have 23 pairs of chromosomes for a total of 46 chromosomes, not 23; FALSE"
+    #         "\n\nClaim: World War II ended in 1945 with the surrender of Japan."
+    #         "\nJapan formally surrendered on September 2, 1945, ending World War II; TRUE"
+    #         "\n\nClaim: The Sun revolves around the Earth once every 24 hours."
+    #         "\nThe Earth rotates on its axis every 24 hours and revolves around the Sun, not the other way around - this describes the geocentric model which was disproven; FALSE"
+    #         "\n\nClaim: The chemical symbol for gold is Au, derived from its Latin name 'aurum'."
+    #         "\nAu is indeed the chemical symbol for gold, derived from the Latin word 'aurum' meaning gold; TRUE"
+    #         "\n\nClaim: The United Nations was founded in 1950 after World War II."
+    #         "\nThe United Nations was founded in 1945, not 1950, though it was indeed after World War II; FALSE"
+    #         "\n\nClaim: Mount Everest, located on the border between Nepal and Tibet, is the highest mountain above sea level on Earth."
+    #         "\nMount Everest at 8,848.86 meters (29,031.7 feet) is indeed the highest mountain above sea level and sits on the Nepal-Tibet border; TRUE"
+    #     )
+    
     initial_function = make_prompt
     function_str_to_extract = "make_prompt"
-    return initial_function, function_str_to_extract
+    code_type = "function"
+    return initial_function, function_str_to_extract, code_type
 
 
 def _load_claims_and_labels(csv_path: str, do_filter: bool) -> Tuple[List[str], List[int]]:
@@ -236,14 +271,14 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
                 prec, rec = "unavailable", "unavailable"
             # Save detailed metrics
             function_class.extra_metrics = {
-                "auc": auc,
-                "auc_ci": auc_ci,
-                "precision_at_0_5": prec,
-                "recall_at_0_5": rec,
-                "invalid_responses_percentage": float(invalid_responses_percentage),
-                "num_valid_responses": int(num_valid),
-                "num_total": int(len(scores)),
-                "prompt_text": prompt_text,
+                "AUC": auc,
+                "AUC 95% confidence interval": auc_ci,
+                "Precision at 0.5 threshold": prec,
+                "Recall at 0.5 threshold": rec,
+                "Invalid responses percentage": float(invalid_responses_percentage),
+                "Number of valid responses": int(num_valid),
+                "Number of total responses": int(len(scores)),
+                "Prompt text": prompt_text,
             }
         else:
             score = float(cfg.task.failed_score)
@@ -257,20 +292,7 @@ def evaluate_func(cfg: DictConfig, data: Tuple[List[str], List[int]], function_c
     return function_class
 
 
-append_prompt = ""
-# Encourage formatting that keeps reasoning outside and code inside a fenced block
-# append_prompt = (
-#     "After any reasoning, provide the function inside a fenced python code block.\n"
-#     "Use exactly this format (no extra text inside the fence):\n\n"
-#     "```python\n"
-#     "def make_prompt() -> str:\n"
-#     "    \"\"\"Short description of the hypothesis being tested here ...\"\"\"\n"
-#     "    return (\n"
-#     "        \"... your system prompt string here ...\"\n"
-#     "    )\n"
-#     "```\n\n"
-#     "Keep auxiliary reasoning and explanations outside the code block."
-# )
+append_prompt = "Execute the 4-step protocol. ONE mutation only. Output make_prompt() in a fenced Python code block."
 
 # system_prompt = (
 #     "You are an expert in evolutionary optimization for prompt engineering. You are designing a SYSTEM prompt for an LLM (Meta-Llama-3.1-8B-Instruct) to build a binary hallucination detector.\n"
@@ -284,32 +306,83 @@ append_prompt = ""
 # )
 
 system_prompt = """
-You are a Prompt Engineering Scientist specializing in few-shot, reasoning-driven hallucination detection for atomic factual claims.
-Your mission is to invent and refine prompts that maximize downstream ROC-AUC for hallucination detection — with full freedom to explore new reasoning frameworks beyond any original algorithm.
+You are an Evolutionary Prompt Optimizer running a genetic algorithm over prompt space.
+Your task: given a PARENT prompt and its FITNESS score, produce a CHILD prompt with higher expected fitness.
 
-⚙️ FUNCTION SIGNATURE (REQUIRED):
-def make_prompt() -> str
-# → Return a full, self-contained few-shot prompt as a single string literal (PROMPT).
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DOMAIN: Hallucination detection for atomic factual claims.
+METRIC: ROC-AUC (binary classification: TRUE = factual, FALSE = hallucinated).
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎯 FITNESS OBJECTIVE:
-- Maximize ROC-AUC on the training dataset of factual claims (primary objective).
-- Secondary behavioral signals used by the engine:
-  - prompt_len — shorter prompts are preferred if ROC-AUC is equal
-  - novelty — structural/conceptual originality is encouraged
+YOUR EVOLUTION PROTOCOL (follow strictly):
 
-❗ TECHNICAL CONSTRAINTS:
-- Return a valid Python program only:
-  - implement def entrypoint(context: dict) -> str:
-  - return a single string literal -- the system prompt string
-- No imports, no file I/O, no external dependencies or references.
-- Deterministic output policy: the prompt must enforce that the **last line** of the model’s answer is exactly
-  `TRUE` or `FALSE`.
-- English only. No meta-comments about the datasets or models.
+## STEP 1: DIAGNOSE THE PARENT
+Analyze the parent prompt through these lenses:
+- SIGNAL CLARITY: Does it tell the model exactly what evidence to look for?
+- REASONING SCAFFOLD: Does it provide a clear thinking structure (e.g., CoT steps)?
+- EDGE CASE HANDLING: Does it address ambiguous, partial, or subtle hallucinations?
+- CALIBRATION CUES: Does it help the model avoid overconfidence or underconfidence?
+- OUTPUT DISCIPLINE: Is the TRUE/FALSE decision point unambiguous?
 
-🚫 REMINDER:
-You are not here to paraphrase; you are here to **invent** and **improve** reasoning strategies.
-Feel free to propose alternative analytical frameworks (e.g., scoring/voting, contrastive or hierarchical logic),
-as long as clarity, determinism, and the strict final-output format are preserved.
+Identify the WEAKEST dimension — this is your mutation target.
+
+## STEP 2: FORM A HYPOTHESIS
+State a specific, testable hypothesis:
+"If I [specific change], then [expected effect on model behavior], because [mechanistic reason]."
+
+Example hypotheses (for inspiration, not prescription):
+- "If I add contrastive examples of near-miss hallucinations, the model will better calibrate boundary cases."
+- "If I decompose verification into source-check → logic-check → consistency-check, errors will surface earlier."
+- "If I prime the model with a skeptical persona, it will reduce false-positive rate on plausible-sounding claims."
+
+## STEP 3: DESIGN THE MUTATION
+Choose ONE primary mutation strategy from this taxonomy:
+
+├── STRUCTURAL MUTATIONS
+│   ├── Add/remove/reorder reasoning stages
+│   ├── Introduce hierarchical decision trees
+│   └── Add verification checkpoints or self-critique loops
+
+├── EPISTEMIC MUTATIONS  
+│   ├── Adjust prior (skeptical vs. credulous framing)
+│   ├── Add calibration language ("when uncertain, lean toward...")
+│   └── Introduce confidence thresholds or hedging rules
+
+├── EXEMPLAR MUTATIONS
+│   ├── Add few-shot demonstrations (positive/negative/contrastive)
+│   ├── Add edge-case examples that target the weak dimension
+│   └── Rewrite examples for clarity or typicality
+
+├── LINGUISTIC MUTATIONS
+│   ├── Change persona/role framing
+│   ├── Adjust formality, precision, or verbosity
+│   └── Reframe instructions as rules vs. goals vs. constraints
+
+├── ABLATION MUTATIONS
+│   ├── Remove redundant or potentially confusing sections
+│   └── Simplify to test if complexity helps or hurts
+
+Do NOT combine multiple large mutations — isolate variables for cleaner signal.
+
+## STEP 4: OUTPUT THE CHILD
+
+```python
+def make_prompt() -> str:
+    return \"\"\"
+    [YOUR NEW PROMPT HERE]
+    \"\"\"
+```
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+HARD CONSTRAINTS (violating these = fitness = 0):
+- Output must be a valid Python function `def make_prompt() -> str` returning a string literal.
+- The prompt must enforce that the model's FINAL LINE is exactly `TRUE` or `FALSE` (no other tokens).
+- No imports, no I/O, no external dependencies.
+- English only.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Remember: You are not paraphrasing — you are ENGINEERING. Small lexical changes rarely move the needle.
+The winning mutations are those that change HOW the target model THINKS, not just what words it sees.
 """
 
 

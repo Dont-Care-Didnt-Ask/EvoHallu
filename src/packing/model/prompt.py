@@ -4,6 +4,26 @@ import copy
 
 from packing.evaluate.registry import TASK_REGISTRY
 
+# Keys to exclude from the additional metrics display (e.g., long text fields)
+_EXCLUDE_METRIC_KEYS = {"prompt_text"}
+
+
+def _format_metric_value(value):
+    """Format a metric value for display: floats with 4 decimals, others as-is."""
+    if isinstance(value, float):
+        return f"{value:.4f}"
+    return str(value)
+
+
+def _format_extra_metrics(em: dict) -> str:
+    """Format extra_metrics dict into a readable string, excluding certain keys."""
+    parts = [
+        f"{k}: {_format_metric_value(v)}"
+        for k, v in em.items()
+        if k not in _EXCLUDE_METRIC_KEYS
+    ]
+    return ", ".join(parts) if parts else ""
+
 
 def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
     """
@@ -14,7 +34,9 @@ def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
         main_txt += f"# Score achieved with the function above: {score}\n"
         if em:
-            main_txt += f"# Additional metrics: AUC 95% bootstrapCI: {em.get('auc_ci', 'N/A')}, Precision@0.5: {em.get('precision_at_0_5', 'N/A'):.4f}, Recall@0.5: {em.get('recall_at_0_5', 'N/A'):.4f}\n"
+            metrics_str = _format_extra_metrics(em)
+            if metrics_str:
+                main_txt += f"# Additional metrics: {metrics_str}\n"
         main_txt += "\n"
 
     task = TASK_REGISTRY.get(cfg.task.task_name)
@@ -41,18 +63,28 @@ def programs_to_prompt(cfg, programs, scores, extra_metrics_list):
         scores = scores[::-1]
         extra_metrics_list = extra_metrics_list[::-1]
 
+    code_type = getattr(cfg, "code_type", "function")
+    code_desc = "class" if code_type == "class" else "function"
+
     main_txt = ""
     for program, score, em in zip(programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
-        main_txt += f"# Score achieved with the function above: {score}\n"
+        main_txt += f"# Score achieved with the {code_desc} above: {score}\n"
         if em:
-            main_txt += f"# Additional metrics: AUC 95% bootstrap CI: {em.get('auc_ci', 'N/A')}, Precision@0.5: {em.get('precision_at_0_5', 'N/A'):.4f}, Recall@0.5: {em.get('recall_at_0_5', 'N/A'):.4f}\n"
+            metrics_str = _format_extra_metrics(em)
+            if metrics_str:
+                main_txt += f"# Additional metrics: {metrics_str}\n"
         main_txt += "\n"
+
+    if code_type == "class":
+        user_content = f"{main_txt}\nWrite a new class {cfg.function_str_to_extract} that will perform better than the classes above and achieve a higher score."
+    else:
+        user_content = f"{main_txt}\nWrite a new function {cfg.function_str_to_extract}() that will perform better than both functions above and achieve a higher score."
 
     chat = [
         {
             "role": "user",
-            "content": f"{main_txt}\nWrite a new function {cfg.function_str_to_extract}() that will perform better than both functions above and achieve a higher score.",
+            "content": user_content,
         }
     ]
     return chat, scores

@@ -33,21 +33,83 @@ def set_memory_limit():
     resource.setrlimit(resource.RLIMIT_AS, (CSCS_CLUSTER_VMEM_ALLOCATION, CSCS_CLUSTER_VMEM_ALLOCATION))
 
 
+# Global cache for input data loaded in subprocess (avoids re-loading for each function)
+_subprocess_input_cache: dict = {}
+
+
+def _get_or_load_input(cfg, input_struct_or_spec, task_id):
+    """
+    Get input data, either from cache, from passed struct, or by loading from disk.
+    
+    If input_struct_or_spec is a dict with "_lazy_load" key, load data from disk
+    using generate_input(). Otherwise, use the passed struct directly.
+    
+    Caches loaded data per (task_name, split) to avoid re-loading for each function.
+    """
+    global _subprocess_input_cache
+    
+    # Check if this is a lazy-load spec
+    if isinstance(input_struct_or_spec, dict) and input_struct_or_spec.get("_lazy_load"):
+        split = input_struct_or_spec["split"]
+        cache_key = (cfg.task.task_name, split)
+        
+        if cache_key not in _subprocess_input_cache:
+            logging.info(f"[Task {task_id}] Loading input data from disk (split={split})...")
+            load_start = time.time()
+            
+            # Import task registry to get generate_input function
+            from packing.evaluate.registry import TASK_REGISTRY
+            task = TASK_REGISTRY.get(cfg.task.task_name)
+            generate_input = task["generate_input"]
+            
+            _subprocess_input_cache[cache_key] = generate_input(cfg.task, split)
+            load_elapsed = time.time() - load_start
+            logging.info(f"[Task {task_id}] Input data loaded from disk in {load_elapsed:.2f}s")
+        else:
+            logging.info(f"[Task {task_id}] Using cached input data (split={split})")
+        
+        return _subprocess_input_cache[cache_key]
+    else:
+        # Direct input_struct passed (backward compatibility)
+        return input_struct_or_spec
+
+
 # We put this method outside so that it is serializable
-def execute_program(cfg, input_struct, function_class, evaluate_func, result_queue, task_id, memory_limit_bytes):
+def execute_program(cfg, input_struct_or_spec, function_class, evaluate_func, result_queue, task_id, memory_limit_bytes):
     """
     The target function for the subprocess.
     We wrap the user function in a try/except to handle errors.
+    
+    input_struct_or_spec can be either:
+    - A full input_struct dict (backward compatible, but slow for large data)
+    - A lazy-load spec: {"_lazy_load": True, "split": "train"} that triggers
+      loading data from disk in the subprocess (fast, avoids serialization)
     """
+    import time
+    exec_start = time.time()
+    logging.info(f"[Task {task_id}] execute_program START in subprocess PID={os.getpid()}")
+    logging.info(f"[Task {task_id}] Setting memory limit to {memory_limit_bytes / (1024**3):.1f} GB...")
     set_memory_limit()
+    logging.info(f"[Task {task_id}] Memory limit set.")
+    
+    # Get input data (either from cache, disk, or passed directly)
+    input_struct = _get_or_load_input(cfg, input_struct_or_spec, task_id)
+    logging.info(f"[Task {task_id}] Starting evaluate_func...")
 
     try:
+        eval_start = time.time()
         result = evaluate_func(cfg, input_struct, function_class)
+        eval_elapsed = time.time() - eval_start
+        logging.info(f"[Task {task_id}] evaluate_func completed in {eval_elapsed:.2f}s, score={result.true_score}")
+        
         # Return a consistent tuple (task_id, result)
         logging.info(
             f"[Task {task_id}] Putting result in self.results_queue, results score is {result.true_score}")
         result_queue.put((task_id, result))
         logging.info(f"[Task {task_id}] Result was successfully put in the self.results_queue.")
+        
+        total_elapsed = time.time() - exec_start
+        logging.info(f"[Task {task_id}] execute_program COMPLETE, total time={total_elapsed:.2f}s")
 
     except Exception as e:
         tb_str = traceback.format_exc()

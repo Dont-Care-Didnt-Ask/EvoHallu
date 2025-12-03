@@ -17,7 +17,7 @@ from packing.logging.function_class import FunctionClass
 # ---------------------------------------------------------------------------
 # INITIAL FUNCTION SETUP
 # ---------------------------------------------------------------------------
-def get_initial_func(cfg) -> tuple[Callable, str]:
+def get_initial_func(cfg) -> tuple[Callable, str, str]:
     """
     Returns the initial heuristic function and its name based on the configuration.
 
@@ -95,7 +95,8 @@ def get_initial_func(cfg) -> tuple[Callable, str]:
 
             return values
 
-    return priority, "priority"
+    code_type = "function"
+    return priority, "priority", code_type
 
 
 # ---------------------------------------------------------------------------
@@ -309,8 +310,9 @@ if __name__ == "__main__":
     })
 
     # Convert heuristic function to a string
-    initial_function, func_str = get_initial_func(cfg)
+    initial_function, func_str, code_type = get_initial_func(cfg)
     cfg.function_str_to_extract = func_str
+    cfg.code_type = code_type
 
     function_str = function_to_string(initial_function)
     imports_str = "import numpy as np"

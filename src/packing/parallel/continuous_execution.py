@@ -249,12 +249,17 @@ def Consumer(
         failed_function_classes_global,
         worker_id,
         termination_event,
-        input_struct,
+        input_struct_or_spec,
         round_num,
         multiprocess_running_dict,
 ):
     """
-    Consumer process that evaluates functions from thefunction_classes_to_eval queue.
+    Consumer process that evaluates functions from the function_classes_to_eval queue.
+    
+    input_struct_or_spec can be either:
+    - A full input_struct dict (backward compatible, but slow for large tensor data)
+    - A lazy-load spec: {"_lazy_load": True, "split": "train"} that triggers
+      loading data from disk in the subprocess (fast, avoids serialization overhead)
     """
     try:
         while not termination_event.is_set():
@@ -279,27 +284,47 @@ def Consumer(
                     pass
 
                 # Evaluate the function
+                logging.info(f"[Worker {worker_id}] Setting eval.idx_process...")
                 function_class.eval.idx_process = worker_id
+                logging.info(f"[Worker {worker_id}] About to create StoppableTask for function_num={getattr(function_class, 'function_num', 'N/A')}, prompt_num={getattr(function_class, 'prompt_num', 'N/A')}")
+                logging.info(f"[Worker {worker_id}] Function string (first 200 chars): {function_class.function_str[:200] if function_class.function_str else 'EMPTY'}...")
+                logging.info(f"[Worker {worker_id}] Timeout period: {cfg.task.timeout_period}s, mem_limit_gb: {cfg.task.mem_limit_gb}")
 
                 try:
+                    # NOTE: We pass input_struct_or_spec directly WITHOUT deep copy.
+                    # If it's a lazy-load spec ({"_lazy_load": True, "split": "..."}),
+                    # the subprocess will load data from disk instead of receiving
+                    # serialized tensor data over pipes (much faster for large datasets).
+                    # If it's a full input_struct, evaluate_func is READ-ONLY with respect
+                    # to it. See evaluate_func docstring for details.
+                    is_lazy = isinstance(input_struct_or_spec, dict) and input_struct_or_spec.get("_lazy_load")
+                    logging.info(f"[Worker {worker_id}] Creating StoppableTask (lazy_load={is_lazy})...")
+                    
                     with StoppableTask(
                             cfg,
                             evaluate_func,
-                            copy.deepcopy(input_struct),
+                            input_struct_or_spec,
                             function_class,
                             worker_id,
                             timeout=cfg.task.timeout_period,
                     ) as task:
+                        logging.info(f"[Worker {worker_id}] StoppableTask created successfully. Calling task.run()...")
                         task.run()
+                        logging.info(f"[Worker {worker_id}] task.run() returned. Entering wait loop...")
 
+                        wait_iteration = 0
                         while (
                                 task.is_alive()
                         ):  # return self.process is not None and self.process.is_alive()
+                            wait_iteration += 1
+                            if wait_iteration % 30 == 1:  # Log every 30 seconds
+                                logging.info(f"[Worker {worker_id}] Still waiting for task (iteration {wait_iteration}, ~{wait_iteration}s elapsed)...")
                             finished = task.join(1)
                             if finished:
-                                logging.info(f"[Worker {worker_id}] Task finished: {finished}")
+                                logging.info(f"[Worker {worker_id}] Task finished after {wait_iteration}s: {finished}")
                                 break
 
+                        logging.info(f"[Worker {worker_id}] Exited wait loop. is_timed_out={task.is_timed_out()}, is_alive={task.is_alive()}")
                         if not task.is_timed_out():
                             # No timeout kill happened
                             result_tuple = task.get_result()
@@ -421,6 +446,16 @@ def consumers_finish_and_cleanup(
     """
     Wait for all consumers to finish, collect the results, and clean up.
     """
+
+    # Wait for all queued functions to be processed before joining consumers
+    while True:
+        try:
+            if function_classes_to_eval.qsize() == 0:
+                break
+        except NotImplementedError:
+            # qsize may not be implemented
+            break
+        time.sleep(0.2)
 
     # Wait for all consumers to finish
     logging.info("WAITING FOR CONSUMERS TO FINISH")
@@ -606,6 +641,44 @@ def evaluate_on_evalset(
                     em.get("precision_at_0_5", ""),
                     em.get("recall_at_0_5", ""),
                     em.get("invalid_responses_percentage", ""),
+                    lower,
+                    upper,
+                ])
+
+    # Log every evaluated candidate's metrics to CSV for uncertainty_quantification task
+    if cfg.task.task_name == "uncertainty_quantification":
+        logging.info(f"======== {cfg.logs_dir=} =======")
+        csv_file = os.path.join(cfg.logs_dir, f"all_metrics_{evalset}.csv")
+        new_file = not os.path.exists(csv_file)
+        with open(csv_file, "a", newline="") as _f:
+            writer = csv.writer(_f)
+            if new_file:
+                writer.writerow([
+                    "function_num", "prompt_num", "evalset", "original_score",
+                    "auc", "precision_at_median", "recall_at_median",
+                    "num_samples", "auc_lower_bound", "auc_upper_bound"
+                ])
+            for function_class in passed_function_classes:
+                em = function_class.extra_metrics or {}
+                # Parse bootstrap CI string, expected format "({lower:.2f}, {upper:.2f})"
+                ci_str = em.get("AUC 95% confidence interval", "(nan, nan)")
+                parts = ci_str.strip("()").split(",", 1)
+                lower_str = parts[0].strip()
+                upper_str = parts[1].strip() if len(parts) > 1 else "nan"
+                try:
+                    lower = float(lower_str)
+                    upper = float(upper_str)
+                except ValueError:
+                    lower, upper = float("nan"), float("nan")
+                writer.writerow([
+                    getattr(function_class, "function_num", ""),
+                    getattr(function_class, "prompt_num", ""),
+                    evalset,
+                    getattr(function_class, "original_score", ""),
+                    em.get("AUC", ""),
+                    em.get("Precision at median score threshold", ""),
+                    em.get("Recall at median score threshold", ""),
+                    em.get("Number of samples", ""),
                     lower,
                     upper,
                 ])

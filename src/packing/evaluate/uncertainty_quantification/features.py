@@ -1,0 +1,509 @@
+from __future__ import annotations
+
+from typing import Any, Dict, List, Tuple
+
+import numpy as np
+import torch
+
+
+def _get_attention_features(attn_mask: np.ndarray, n_tokens: int, max_n_tokens: int = 10):
+    """
+    Port of HalluDetect.get_attention_features.
+
+    Parameters
+    ----------
+    attn_mask:
+        Attention mask of shape [num_layers * num_heads, n_tokens, n_tokens].
+    n_tokens:
+        Number of claim tokens (without chat template).
+    """
+    current_top_n = min(max_n_tokens, n_tokens)
+    attn_features_seq = []
+    for j in range(1, n_tokens):
+        attn_features_tok = []
+        for k in range(min(j, current_top_n)):
+            attn_features_tok.append(attn_mask[:, j, j - k - 1].tolist())
+        attn_features_seq.append(attn_features_tok)
+    return attn_features_seq
+
+
+def _compute_attentions(
+    attn: torch.Tensor,
+    num_layers: int,
+    num_heads: int,
+    n_tokens: int,
+    orig_n_tokens: int,
+) -> Tuple[np.ndarray, np.ndarray, List[List[List[float]]]]:
+    """
+    Reimplementation of HalluDetect.get_attentions but operating on stored
+    attention tensors instead of live model outputs.
+
+    Parameters
+    ----------
+    attn:
+        Attention tensor for a single sample of shape
+        [num_layers, num_heads, n_tokens, n_tokens].
+    """
+    # Convert to float32 numpy and match the concatenation over layers used in
+    # the original implementation (batch size is 1 here).
+    attn_mask = attn.to(torch.float32).cpu().numpy()  # [num_layers, num_heads, L, L]
+
+    if n_tokens > (orig_n_tokens + 1):
+        # attentions are cropped because of the eos token
+        attn_mask = attn_mask[:, :, :-1, :-1]
+        L_eff = n_tokens - 1
+    else:
+        L_eff = n_tokens
+
+    attn_mask_reshape = attn_mask.reshape(num_layers * num_heads, L_eff, L_eff)
+
+    # use only claim tokens without chat template
+    # shift attention mask by 1 token to align it with the generation format
+    attn_mask_reshape = attn_mask_reshape[:, -orig_n_tokens - 1 : -1, -orig_n_tokens:]
+
+    attn_features_seq = _get_attention_features(attn_mask_reshape, orig_n_tokens)
+    return attn_mask, attn_mask_reshape, attn_features_seq
+
+
+def _get_embeddings(
+    hidden_states: torch.Tensor,
+    num_layers: int,
+    n_tokens: int,
+    orig_n_tokens: int,
+    key_prefix: str = "",
+) -> Dict[str, np.ndarray]:
+    """
+    Reimplementation of HalluDetect.get_embeddings using stored hidden states.
+
+    Parameters
+    ----------
+    hidden_states:
+        Tensor of shape [num_layers + 1, n_tokens, hidden_size].
+    """
+    token_embeddings: Dict[str, np.ndarray] = {}
+    for layer in list(range(num_layers)) + [-1]:
+        layer_name = "" if layer == -1 else f"_{layer}"
+        hs_layer = hidden_states[layer]  # [n_tokens, hidden_size]
+
+        if n_tokens > (orig_n_tokens + 1):
+            # embeddings are cropped because of the eos token
+            hs_np = hs_layer[:-1].to(torch.float32).cpu().numpy()
+        else:
+            hs_np = hs_layer.to(torch.float32).cpu().numpy()
+
+        # use only claim tokens without the chat template and shift left
+        token_embeddings[f"{key_prefix}token_embeddings_decoder{layer_name}"] = (
+            hs_np[-orig_n_tokens - 1 : -1]
+        )
+    return token_embeddings
+
+
+def _compute_probs(
+    logits: torch.Tensor,
+    input_ids: torch.Tensor,
+    orig_input_ids: torch.Tensor,
+    n_tokens: int,
+    orig_n_tokens: int,
+    alternatives: bool = False,
+    n_alternatives: int = 10,
+) -> Tuple[List[float], np.ndarray, List[List[List[Tuple[int, float]]]]]:
+    """
+    Reimplementation of HalluDetect.get_all_probs operating on stored logits.
+
+    Returns
+    -------
+    ll:
+        List of greedy log-likelihoods per token for the claim.
+    log_probs_orig:
+        Array of shape [orig_n_tokens, vocab_size] with log-probs for claim tokens.
+    cut_alternatives:
+        Nested list of alternatives per token as in the original code.
+    """
+    # logits: [n_tokens, vocab_size]
+    log_probs = torch.log_softmax(logits.to(torch.float32), dim=-1).cpu().numpy()
+
+    if n_tokens > (orig_n_tokens + 1):
+        # logits are cropped because of the eos token
+        log_probs = log_probs[:-1]
+
+    # remove the <bos> token in input_ids when computing greedy log-likelihoods
+    input_ids_np = input_ids.cpu().numpy()
+    ll = [float(l[tok]) for tok, l in zip(input_ids_np[1:], log_probs)]
+    if n_tokens > (orig_n_tokens + 1):
+        ll = ll[-orig_n_tokens - 1 : -1]
+
+    # store only the claim tokens without the chat template and shift left
+    log_probs3 = log_probs[None, :, :]  # [1, L_eff, vocab]
+    log_probs_orig = log_probs3[:, -orig_n_tokens - 1 : -1, :]  # [1, orig_n_tokens, vocab]
+
+    cut_alternatives: List[List[List[Tuple[int, float]]]] = []
+    if alternatives:
+        seq = orig_input_ids.cpu().numpy().tolist()
+        length = len(seq)
+        cut_alternatives.append([[] for _ in range(length)])
+        for j in range(length):
+            lt = log_probs_orig[0, j, :]
+            best_tokens = np.argpartition(lt, -n_alternatives)
+            ln = len(best_tokens)
+            best_tokens = best_tokens[ln - n_alternatives : ln]
+            if seq[j] not in best_tokens:
+                cut_alternatives[0][j].append((int(seq[j]), float(lt[seq[j]])))
+                for t in best_tokens[1:]:
+                    cut_alternatives[0][j].append((int(t), float(lt[t])))
+            else:
+                for t in best_tokens:
+                    cut_alternatives[0][j].append((int(t), float(lt[t])))
+            cut_alternatives[0][j].sort(
+                key=lambda x: x[0] == seq[j],
+                reverse=True,
+            )
+
+    return ll, log_probs_orig[0, :], cut_alternatives
+
+
+def _build_train_stats(
+    train_raw: Dict[str, Any],
+    num_layers: int,
+    num_heads: int,
+) -> Dict[str, Any]:
+    train_attention_features = []
+    train_greedy_log_likelihoods = []
+    train_log_probs = []
+    train_greedy_texts = []
+    train_greedy_tokens = []
+    train_metrics = []
+    train_token_embeddings: Dict[str, List[np.ndarray]] = {}
+
+    for sample in train_raw["samples"]:
+        input_ids: torch.Tensor = sample["input_ids"]
+        orig_input_ids: torch.Tensor = sample["orig_input_ids"]
+        hidden_states: torch.Tensor = sample["hidden_states"]
+        attentions: torch.Tensor = sample["attentions"]
+        logits: torch.Tensor = sample["logits"]
+
+        n_tokens = int(input_ids.shape[0])
+        orig_n_tokens = int(orig_input_ids.shape[0])
+
+        _, _, attn_features_seq = _compute_attentions(
+            attentions, num_layers, num_heads, n_tokens, orig_n_tokens
+        )
+        train_attention_features.append(attn_features_seq)
+
+        ll, log_probs, _ = _compute_probs(
+            logits,
+            input_ids,
+            orig_input_ids,
+            n_tokens,
+            orig_n_tokens,
+            alternatives=False,
+        )
+        train_greedy_log_likelihoods.append(ll)
+        train_log_probs.append(log_probs)
+
+        train_greedy_texts.append(sample["claim"])
+        train_greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
+        train_metrics.append(float(sample["label"]))
+
+        token_embs = _get_embeddings(
+            hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix="train_"
+        )
+        for key, arr in token_embs.items():
+            train_token_embeddings.setdefault(key, []).append(arr)
+
+    for key in list(train_token_embeddings.keys()):
+        seq_key = key.replace("token_", "")
+        per_seq_means = [t.mean(axis=0) for t in train_token_embeddings[key]]
+        train_token_embeddings[seq_key] = np.stack(per_seq_means, axis=0)
+        train_token_embeddings[key] = np.concatenate(train_token_embeddings[key], axis=0)
+
+    train_stats = {
+        "train_attention_features": train_attention_features,
+        "train_greedy_log_likelihoods": train_greedy_log_likelihoods,
+        "train_greedy_log_probs": train_log_probs,
+        "train_greedy_texts": train_greedy_texts,
+        "train_greedy_tokens": train_greedy_tokens,
+        "train_metrics": np.asarray(train_metrics, dtype=float),
+    }
+    train_stats.update(train_token_embeddings)
+    return train_stats
+
+
+def _build_background_stats(
+    background_raw: Dict[str, Any],
+    num_layers: int,
+    num_heads: int,
+) -> Dict[str, Any]:
+    background_train_token_embeddings: Dict[str, List[np.ndarray]] = {}
+    for sample in background_raw["samples"]:
+        input_ids: torch.Tensor = sample["input_ids"]
+        hidden_states: torch.Tensor = sample["hidden_states"]
+        n_tokens = int(input_ids.shape[0])
+        token_embs = _get_embeddings(
+            hidden_states,
+            num_layers,
+            n_tokens,
+            n_tokens,
+            key_prefix="background_train_",
+        )
+        for key, arr in token_embs.items():
+            background_train_token_embeddings.setdefault(key, []).append(arr)
+
+    for key in list(background_train_token_embeddings.keys()):
+        background_train_token_embeddings[key] = np.concatenate(
+            background_train_token_embeddings[key], axis=0
+        )
+    return background_train_token_embeddings
+
+
+def make_all_stats(
+    eval_raw: Dict[str, Any],
+    train_raw: Dict[str, Any] | None = None,
+    background_raw: Dict[str, Any] | None = None,
+    supervised: bool = False,
+    train_stats_cache: Dict[str, Any] | None = None,
+    background_stats_cache: Dict[str, Any] | None = None,
+) -> Tuple[
+    Dict[str, Any],
+    np.ndarray,
+    Dict[str, Any] | None,
+    Dict[str, Any] | None,
+]:
+    """
+    Construct an `all_stats` dictionary that mirrors the structure produced
+    by HalluDetect/run_uq_methods.py as closely as possible, using stored
+    raw model outputs instead of live forward passes.
+
+    NLI-based and entropy-calculator-based features are *not* supported
+    for now and are therefore omitted.
+
+    Parameters
+    ----------
+    eval_raw : Dict[str, Any]
+        Raw evaluation data with "samples" list and "meta" dict.
+    train_raw : Dict[str, Any] | None
+        Raw training data (required if supervised=True and no cache).
+    background_raw : Dict[str, Any] | None
+        Raw background data for Mahalanobis-style methods.
+    supervised : bool
+        Whether to compute train statistics for supervised methods.
+    train_stats_cache : Dict[str, Any] | None
+        Cached train stats to avoid recomputation.
+    background_stats_cache : Dict[str, Any] | None
+        Cached background stats to avoid recomputation.
+
+    Returns
+    -------
+    all_stats : Dict[str, Any]
+        Dictionary of statistics. Let N = number of eval samples, L = num_layers,
+        H = num_heads, D = hidden_dim, V = vocab_size. Per-sample token counts
+        vary (denoted n_i for sample i).
+
+        **Sequence-level statistics (shape [N]):**
+        - "sequence_logprob": np.ndarray[float32, [N]] - sum of token log-probs per sequence
+        - "mean_token_entropy": np.ndarray[float32, [N]] - mean entropy per sequence
+
+        **Token-level statistics (lists of length N, variable inner shapes):**
+        - "greedy_log_likelihoods": List[List[float]] - length N, each inner list has n_i floats
+        - "greedy_log_probs": List[np.ndarray[float32, [n_i, V]]] - per-token log-probs
+        - "greedy_tokens": List[List[int]] - length N, each inner list has n_i token IDs
+        - "greedy_texts": List[str] - length N, claim texts
+
+        **Attention statistics (lists of length N):**
+        - "attention_features": List[List[List[List[float]]]] - nested attention features
+        - "attention_all": List[np.ndarray[float32, [L*H, n_i, n_i]]] - reshaped attention
+        - "forwardpass_attention_weights": List[np.ndarray[float32, [L, H, n_i, n_i]]]
+
+        **Embedding statistics:**
+        - "token_embeddings_decoder": np.ndarray[float32, [sum(n_i), D]] - all tokens concatenated
+        - "token_embeddings_decoder_{layer}": np.ndarray[float32, [sum(n_i), D]] - per layer
+        - "embeddings_decoder": np.ndarray[float32, [N, D]] - mean embedding per sequence
+        - "embeddings_decoder_{layer}": np.ndarray[float32, [N, D]] - mean per layer
+
+        **If supervised=True, train statistics (prefixed with "train_"):**
+        - "train_sequence_logprob": np.ndarray[float32, [N_train]]
+        - "train_mean_token_entropy": np.ndarray[float32, [N_train]]
+        - "train_greedy_log_likelihoods": List[List[float]]
+        - "train_greedy_log_probs": List[np.ndarray[float32, [n_i, V]]]
+        - "train_metrics": np.ndarray[float64, [N_train]] - binary labels (1=hallucination)
+        - "train_embeddings_decoder": np.ndarray[float32, [N_train, D]]
+
+        **If background_raw provided:**
+        - "background_train_token_embeddings_decoder": np.ndarray[float32, [sum(n_i), D]]
+
+        **Metadata:**
+        - "eval_meta": dict with "num_layers", "num_attention_heads", etc.
+
+    eval_labels : np.ndarray[float32, [N]]
+        Binary labels for eval samples (1=hallucination, 0=correct).
+    train_stats_cache : Dict[str, Any] | None
+        Cached train stats (pass back to future calls).
+    background_stats_cache : Dict[str, Any] | None
+        Cached background stats (pass back to future calls).
+    """
+    import logging
+    import time
+    start_time = time.time()
+    
+    meta = eval_raw.get("meta", {})
+    num_layers = int(meta.get("num_layers", 0))
+    num_heads = int(meta.get("num_attention_heads", 0))
+    num_eval_samples = len(eval_raw.get("samples", []))
+    logging.info(f"[make_all_stats] START: {num_eval_samples} samples, num_layers={num_layers}, num_heads={num_heads}")
+
+    if supervised:
+        if train_stats_cache is None:
+            if train_raw is None:
+                raise ValueError(
+                    "train_raw must be provided when supervised=True and no cache exists"
+                )
+            logging.info(f"[make_all_stats] Building train stats (supervised mode)...")
+            train_build_start = time.time()
+            train_stats_cache = _build_train_stats(train_raw, num_layers, num_heads)
+            logging.info(f"[make_all_stats] Train stats built in {time.time() - train_build_start:.2f}s")
+    else:
+        train_stats_cache = None
+
+    if background_stats_cache is None and background_raw is not None:
+        logging.info(f"[make_all_stats] Building background stats...")
+        bg_build_start = time.time()
+        background_stats_cache = _build_background_stats(
+            background_raw, num_layers, num_heads
+        )
+        logging.info(f"[make_all_stats] Background stats built in {time.time() - bg_build_start:.2f}s")
+
+    # ------------------------ Evaluation statistics ------------------------
+    eval_samples: List[Dict[str, Any]] = eval_raw["samples"]
+    logging.info(f"[make_all_stats] Processing {len(eval_samples)} eval samples...")
+
+    attention_features: List[Any] = []
+    attention_all: List[np.ndarray] = []
+    forwardpass_attention_weights: List[np.ndarray] = []
+    greedy_log_likelihoods: List[List[float]] = []
+    greedy_tokens_alternatives: List[Any] = []
+    greedy_log_probs: List[np.ndarray] = []
+    greedy_texts: List[str] = []
+    greedy_tokens: List[List[int]] = []
+    eval_labels: List[float] = []
+    eval_token_embeddings: Dict[str, List[np.ndarray]] = {}
+
+    eval_loop_start = time.time()
+    for sample_idx, sample in enumerate(eval_samples):
+        if sample_idx % 50 == 0:
+            logging.info(f"[make_all_stats] Processing eval sample {sample_idx+1}/{len(eval_samples)}...")
+        
+        # NOTE: All tensor access below is READ-ONLY. We only read tensors and create
+        # NEW arrays via .to().cpu().numpy() chains. No in-place modifications (+=, .add_(), etc.)
+        # are performed. This allows callers to skip expensive deep copies of input data.
+        input_ids = sample["input_ids"]
+        orig_input_ids = sample["orig_input_ids"]
+        hidden_states = sample["hidden_states"]
+        attentions = sample["attentions"]
+        logits = sample["logits"]
+
+        n_tokens = int(input_ids.shape[0])
+        orig_n_tokens = int(orig_input_ids.shape[0])
+
+        attn_mask, attn_mask_reshape, attn_features_seq = _compute_attentions(
+            attentions, num_layers, num_heads, n_tokens, orig_n_tokens
+        )
+        attention_features.append(attn_features_seq)
+        attention_all.append(attn_mask_reshape)
+        forwardpass_attention_weights.append(attn_mask)
+
+        ll, log_probs, cut_alternatives = _compute_probs(
+            logits,
+            input_ids,
+            orig_input_ids,
+            n_tokens,
+            orig_n_tokens,
+            alternatives=True,
+        )
+        greedy_log_likelihoods.append(ll)
+        greedy_log_probs.append(log_probs)
+        greedy_tokens_alternatives.append(cut_alternatives)
+
+        greedy_texts.append(sample["claim"])
+        greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
+        eval_labels.append(float(sample["label"]))
+
+        token_embs = _get_embeddings(
+            hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix=""
+        )
+        for key, arr in token_embs.items():
+            eval_token_embeddings.setdefault(key, []).append(arr)
+    
+    eval_loop_elapsed = time.time() - eval_loop_start
+    logging.info(f"[make_all_stats] Eval sample loop completed in {eval_loop_elapsed:.2f}s")
+
+    # ------------------------ Assemble all_stats ------------------------
+    all_stats: Dict[str, Any] = {
+        "attention_features": attention_features,
+        "attention_all": attention_all,
+        "forwardpass_attention_weights": forwardpass_attention_weights,
+        "greedy_log_likelihoods": greedy_log_likelihoods,
+        "greedy_tokens_alternatives": greedy_tokens_alternatives,
+        "greedy_log_probs": greedy_log_probs,
+        "greedy_texts": greedy_texts,
+        "greedy_tokens": greedy_tokens,
+        "eval_meta": meta,
+    }
+
+    for key, seq_list in eval_token_embeddings.items():
+        seq_key = key.replace("token_", "")
+        per_seq_means = [t.mean(axis=0) for t in seq_list]
+        all_stats[key] = np.concatenate(seq_list, axis=0)
+        all_stats[seq_key] = np.stack(per_seq_means, axis=0)
+
+    # ------------------------ Convenience aliases ------------------------
+    # These do not exist in the original HalluDetect implementation but are
+    # cheap to compute from existing statistics and make it easier to write
+    # simple baselines.
+
+    # Sequence log-probability for eval split: sum of token log-likelihoods
+    if greedy_log_likelihoods:
+        all_stats["sequence_logprob"] = np.asarray(
+            [float(sum(ll_i)) for ll_i in greedy_log_likelihoods],
+            dtype=np.float32,
+        )
+
+    # Mean token entropy for eval split, derived from greedy_log_probs
+    if greedy_log_probs:
+        mean_ent_eval: List[float] = []
+        for log_probs_i in greedy_log_probs:
+            lp = log_probs_i.astype(np.float32)
+            p = np.exp(lp)
+            ent_tok = -(p * lp).sum(axis=-1)
+            mean_ent_eval.append(float(ent_tok.mean()))
+        all_stats["mean_token_entropy"] = np.asarray(mean_ent_eval, dtype=np.float32)
+
+    if train_stats_cache is not None:
+        all_stats.update(train_stats_cache)
+        if "train_sequence_logprob" not in train_stats_cache:
+            all_stats["train_sequence_logprob"] = np.asarray(
+                [float(sum(ll_i)) for ll_i in train_stats_cache["train_greedy_log_likelihoods"]],
+                dtype=np.float32,
+            )
+        if "train_mean_token_entropy" not in train_stats_cache:
+            mean_ent_train: List[float] = []
+            for log_probs_i in train_stats_cache["train_greedy_log_probs"]:
+                lp = log_probs_i.astype(np.float32)
+                p = np.exp(lp)
+                ent_tok = -(p * lp).sum(axis=-1)
+                mean_ent_train.append(float(ent_tok.mean()))
+            all_stats["train_mean_token_entropy"] = np.asarray(
+                mean_ent_train, dtype=np.float32
+            )
+
+    if background_stats_cache is not None:
+        all_stats.update(background_stats_cache)
+
+    total_elapsed = time.time() - start_time
+    logging.info(f"[make_all_stats] COMPLETE: {len(all_stats)} stat keys, {len(eval_labels)} labels, total time={total_elapsed:.2f}s")
+    
+    return (
+        all_stats,
+        np.asarray(eval_labels, dtype=np.float32),
+        train_stats_cache,
+        background_stats_cache,
+    )
+
