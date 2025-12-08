@@ -1,6 +1,9 @@
 import os
+import logging
+import time
 from typing import Any, Dict, List, Tuple
 
+import torch
 import numpy as np
 from omegaconf import DictConfig
 from sklearn.metrics import precision_score, recall_score, roc_auc_score
@@ -11,6 +14,113 @@ from packing.evaluate.uncertainty_quantification.estimator_base import Estimator
 from packing.evaluate.uncertainty_quantification.features import make_all_stats
 from packing.logging.function_class import FunctionClass
 
+
+def _delong_roc_variance(y_true, y_score):
+    """
+    Computes the variance of the ROC AUC using DeLong's method.
+    
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        True binary labels (0 or 1).
+    y_score : array-like, shape = [n_samples]
+        Prediction scores (e.g., probabilities).
+
+    Returns
+    -------
+    auc_var : float
+        Variance of the AUC estimate.
+    """
+    y_true = np.asarray(y_true)
+    y_score = np.asarray(y_score)
+    
+    # Ensure binary classification
+    assert set(np.unique(y_true)) <= {0, 1}, "y_true must be binary (0/1)."
+    
+    # Sort by score descending
+    desc_score_indices = np.argsort(y_score)[::-1]
+    y_true_sorted = y_true[desc_score_indices]
+    y_score_sorted = y_score[desc_score_indices]
+
+    # Find thresholds where score changes
+    distinct_value_indices = np.where(np.diff(y_score_sorted))[0]
+    threshold_indices = np.r_[0, distinct_value_indices + 1, y_true.size]
+
+    # Number of positive and negative samples
+    n_pos = np.sum(y_true == 1)
+    n_neg = np.sum(y_true == 0)
+
+    if n_pos == 0 or n_neg == 0:
+        raise ValueError("y_true must contain both positive and negative samples.")
+
+    # Compute tie-adjusted AUC components
+    cum_pos = np.cumsum(y_true_sorted)
+    cum_neg = np.arange(1, len(y_true_sorted) + 1) - cum_pos
+
+    # Sum of positive ranks
+    sum_pos_ranks = np.sum(cum_neg[y_true_sorted == 1])
+    auc = sum_pos_ranks / (n_pos * n_neg)
+
+    # Compute V10 and V01 (covariance terms)
+    # V10: variance component for positive class
+    # V01: variance component for negative class
+
+    # Compute placements for positives and negatives
+    placements_pos = cum_neg[y_true_sorted == 1]
+    placements_neg = cum_pos[y_true_sorted == 0][::-1]  # reverse to align
+
+    # Build the "theta" matrix implicitly via placements
+    # Using the formulation from Sun & Xu (2014): 
+    # var(AUC) = (V10 / n_pos + V01 / n_neg)
+
+    # Compute V10 = Var(E[phi_1(x_1, x_0) | x_1])
+    # phi_1 = P(X_0 < X_1) + 0.5 * P(X_0 = X_1)
+    # We approximate using placements
+    V10 = np.var(placements_pos / n_neg, ddof=0)  # population variance
+
+    # Compute V01 = Var(E[phi_1(x_1, x_0) | x_0])
+    V01 = np.var(placements_neg / n_pos, ddof=0)
+
+    auc_var = V10 / n_pos + V01 / n_neg
+    return auc_var
+
+def _delong_auc_ci(y_true: np.ndarray, y_score: np.ndarray) -> str:
+    """
+    Compute 95% confidence interval for ROC-AUC using DeLong's method.
+    
+    Parameters
+    ----------
+    y_true : np.ndarray, shape = [n_samples]
+        True binary labels (0 or 1).
+    y_score : np.ndarray, shape = [n_samples]
+        Prediction scores (e.g., probabilities).
+    alpha : float, default=0.05
+        Significance level (0.05 → 95% CI).
+
+    Returns
+    -------
+    ci_str : str
+        Formatted confidence interval as "(lower%, upper%)" with 2 decimals,
+        e.g., "(82.45, 91.30)". Returns "(nan, nan)" on failure.
+    """
+    try:
+        auc = roc_auc_score(y_true, y_score)
+        auc_var = _delong_roc_variance(y_true, y_score)
+        auc_std = np.sqrt(auc_var)
+        
+        z = 1.96 # 95% asymtotic normal confidence interval
+        #stats.norm.ppf(1 - alpha / 2)
+        lower = auc - z * auc_std
+        upper = auc + z * auc_std
+        
+        # Clamp to [0, 1]
+        lower = np.clip(lower, 0, 1)
+        upper = np.clip(upper, 0, 1)
+        
+        return f"({100*lower:.2f}, {100*upper:.2f})"
+    
+    except (ValueError, ZeroDivisionError, AssertionError):
+        return "(nan, nan)"
 
 def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) -> str:
     """Compute 95% bootstrap confidence interval for ROC-AUC."""
@@ -28,11 +138,10 @@ def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) ->
 
 
 def _load_raw(path: str) -> Dict[str, Any]:
-    import torch
 
     if not os.path.isfile(path):
         raise FileNotFoundError(f"Raw stats file not found at {path}")
-    return torch.load(path, map_location="cpu")
+    return torch.load(path, map_location="cpu", mmap=True)
 
 
 def _prepare_train_val_indices(
@@ -198,8 +307,6 @@ def evaluate_func(
     operations (+=, .add_(), direct assignment), you MUST update the caller to
     deep-copy or handle data isolation differently.
     """
-    import logging
-    import time
     eval_start_time = time.time()
     
     logging.info(f"[UQ evaluate_func] START - function_num={getattr(function_class, 'function_num', 'N/A')}")
@@ -344,8 +451,9 @@ def evaluate_func(
     logging.info(f"[UQ evaluate_func] Computing bootstrap CI with B={B}...")
     bootstrap_start = time.time()
     auc_ci = _bootstrap_auc_ci(labels, scores, B)
+    delong_auc_ci = _delong_auc_ci(labels, scores)
     bootstrap_elapsed = time.time() - bootstrap_start
-    logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s: {auc_ci}")
+    logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s. Bootstrap CI: {auc_ci}, DeLong CI: {delong_auc_ci}")
 
     # Precision/Recall at median score threshold
     median_score = np.median(scores)
@@ -360,7 +468,8 @@ def evaluate_func(
     function_class.correct_flag = 1
     function_class.extra_metrics = {
         "AUC": round(100.0 * auc, 2),
-        "AUC 95% confidence interval": auc_ci,
+        "AUC 95% confidence interval (bootstrap)": auc_ci,
+        "AUC 95% confidence interval (DeLong)": delong_auc_ci,
         "Precision at median score threshold": round(100.0 * prec, 2),
         "Recall at median score threshold": round(100.0 * rec, 2),
         "Number of samples": int(labels.shape[0]),
@@ -391,7 +500,7 @@ class HallucinationEstimator(Estimator):
 
 ## Available Statistics in `stats` (N = number of samples)
 
-**Sequence-level (already aggregated, shape [N] - use directly):**
+**Sequence-level (already aggregated, shape [N]):**
 - `sequence_logprob`: np.ndarray[float32, [N]] - sum of token log-probs per sequence (more negative = less confident)
 - `mean_token_entropy`: np.ndarray[float32, [N]] - mean entropy per sequence (higher = more uncertain)
 
@@ -409,9 +518,9 @@ class HallucinationEstimator(Estimator):
 - `token_embeddings_decoder`: np.ndarray[float32, [sum(n_i), D]] - all tokens concatenated
 
 ## Expected Estimator Structure
-- Use different feature combinations to create a single score for each sample.
-- Avoid introducing hyperparameters, use simple combinations.
-- Prioritize simple, interpretable combinations based on concrete hypotheses on how hallucination detection can be improved leveraging given statistics.
+- Try single features, their variations and combinations to create a single uncertainty score for each sample.
+- Avoid introducing hyperparameters if possible.
+- When combining, prioritize simplicity and interpretability. Start from a concrete hypotheses on why exactly this mix will perform better than any single feature.
 
 ## Constraints
 - Class MUST be named `HallucinationEstimator`
@@ -422,9 +531,9 @@ class HallucinationEstimator(Estimator):
 
 ## Response Format
 First, write 3-4 sentences reflecting on estimators given below.
-Then, formlate a concrete hypothesis on how hallucination detection can be improved leveraging given statistics.
-Then provide a definition of a new estimator class in a single ```python code block.
-Keep reasoning concise - focus on the code.
+Second, formulate a concrete hypothesis on how hallucination detection can be improved leveraging given statistics.
+Finally, provide a definition of a new estimator class in a single ```python code block.
+Keep reasoning concise - focus on the code. Prioritize diversity and exploration.
 """
 
 # **If context[\"supervised\"]=True:**
