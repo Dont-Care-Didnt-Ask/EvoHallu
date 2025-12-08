@@ -44,26 +44,130 @@ def _compute_attentions(
         Attention tensor for a single sample of shape
         [num_layers, num_heads, n_tokens, n_tokens].
     """
+    # Validate input tensor shape
+    if attn.dim() != 4:
+        logging.error(f"Expected 4D tensor, got shape {attn.shape}")
+        raise ValueError(f"Expected 4D tensor, got shape {attn.shape}")
+    
+    if attn.shape[0] != num_layers:
+        logging.error(f"First dimension should be {num_layers}, got {attn.shape[0]}")
+        raise ValueError(f"First dimension should be {num_layers}, got {attn.shape[0]}")
+    
+    if attn.shape[1] != num_heads:
+        logging.error(f"Second dimension should be {num_heads}, got {attn.shape[1]}")
+        raise ValueError(f"Second dimension should be {num_heads}, got {attn.shape[1]}")
+    
+    if attn.shape[2] != n_tokens:
+        logging.error(f"Third dimension should be {n_tokens}, got {attn.shape[2]}")
+        raise ValueError(f"Third dimension should be {n_tokens}, got {attn.shape[2]}")
+    
+    if attn.shape[3] != n_tokens:
+        logging.error(f"Fourth dimension should be {n_tokens}, got {attn.shape[3]}")
+        raise ValueError(f"Fourth dimension should be {n_tokens}, got {attn.shape[3]}")
+    
     # Convert to float32 numpy and match the concatenation over layers used in
     # the original implementation (batch size is 1 here).
     attn_mask = attn.to(torch.float32).cpu().numpy()  # [num_layers, num_heads, L, L]
+    
+    # Assert shape after conversion
+    if attn_mask.shape != (num_layers, num_heads, n_tokens, n_tokens):
+        logging.error(f"Shape mismatch after conversion: {attn_mask.shape}")
+        raise ValueError(f"Shape mismatch after conversion: {attn_mask.shape}")
 
     if n_tokens > (orig_n_tokens + 1):
         # attentions are cropped because of the eos token
+        # Add check that we have enough tokens to crop
+        if n_tokens < 2:
+            logging.error(f"Cannot crop: n_tokens must be at least 2, got {n_tokens}")
+            raise ValueError(f"Cannot crop: n_tokens must be at least 2, got {n_tokens}")
         attn_mask = attn_mask[:, :, :-1, :-1]
         L_eff = n_tokens - 1
     else:
         L_eff = n_tokens
+    
+    # Validate L_eff calculation
+    if L_eff <= 0:
+        logging.error(f"L_eff must be positive, got {L_eff}")
+        raise ValueError(f"L_eff must be positive, got {L_eff}")
+    
+    if L_eff > n_tokens:
+        logging.error(f"L_eff ({L_eff}) cannot exceed n_tokens ({n_tokens})")
+        raise ValueError(f"L_eff ({L_eff}) cannot exceed n_tokens ({n_tokens})")
+    
+    # Validate shape after potential cropping
+    expected_shape = (num_layers, num_heads, L_eff, L_eff)
+    if attn_mask.shape != expected_shape:
+        logging.error(f"Expected shape {expected_shape} after cropping, got {attn_mask.shape}")
+        raise ValueError(f"Expected shape {expected_shape} after cropping, got {attn_mask.shape}")
+    
+        f"Expected shape {expected_shape} after cropping, got {attn_mask.shape}"
 
     attn_mask_reshape = attn_mask.reshape(num_layers * num_heads, L_eff, L_eff)
+    
+    # Validate reshape
+    if attn_mask_reshape.shape != (num_layers * num_heads, L_eff, L_eff):
+        logging.error(f"Reshape failed: expected {(num_layers * num_heads, L_eff, L_eff)}, got {attn_mask_reshape.shape}")
+        raise ValueError(f"Reshape failed: expected {(num_layers * num_heads, L_eff, L_eff)}, got {attn_mask_reshape.shape}")
+        f"Reshape failed: expected {(num_layers * num_heads, L_eff, L_eff)}, got {attn_mask_reshape.shape}"
 
     # use only claim tokens without chat template
     # shift attention mask by 1 token to align it with the generation format
-    attn_mask_reshape = attn_mask_reshape[:, -orig_n_tokens - 1 : -1, -orig_n_tokens:]
+    
+    # CRITICAL FIX: Validate slice indices to prevent empty or invalid slices
+    # The original slicing could produce empty arrays or out-of-bounds errors
+    
+    start_idx_from = -orig_n_tokens - 1
+    end_idx_from = -1
+    start_idx_to = -orig_n_tokens
+    
+    # Check if indices are within bounds
+    if abs(start_idx_from) > L_eff:
+        logging.error(f"Slice start index {start_idx_from} out of bounds for dimension of size {L_eff}")
+        raise ValueError(f"Slice start index {start_idx_from} out of bounds for dimension of size {L_eff}")
+    
+    if abs(end_idx_from) > L_eff:
+        logging.error(f"Slice end index {end_idx_from} out of bounds for dimension of size {L_eff}")
+        raise ValueError(f"Slice end index {end_idx_from} out of bounds for dimension of size {L_eff}")
+    
+    if start_idx_to > 0:
+        logging.error(f"start_idx_to must be non-positive, got {start_idx_to}")
+        raise ValueError(f"start_idx_to must be non-positive, got {start_idx_to}")
+    
+    # Calculate actual slice sizes
+    slice_from_len = end_idx_from - start_idx_from if end_idx_from != -1 else L_eff + start_idx_from + 1
+    if slice_from_len <= 0:
+        logging.error(f"Source slice would be empty: length {slice_from_len}")
+        raise ValueError(f"Source slice would be empty: length {slice_from_len}")
+    
+    # Apply slice with bounds checking
+    try:
+        attn_mask_reshape = attn_mask_reshape[
+            :, 
+            max(start_idx_from, -L_eff):(end_idx_from if end_idx_from != 0 else None),
+            start_idx_to:
+        ]
+    except IndexError as e:
+        raise IndexError(f"Slice indices out of bounds: L_eff={L_eff}, "
+                        f"orig_n_tokens={orig_n_tokens}, start_idx_from={start_idx_from}, "
+                        f"end_idx_from={end_idx_from}, start_idx_to={start_idx_to}") from e
+    
+    # Validate that the slice produced non-empty results
+    if attn_mask_reshape.shape[1] <= 0:
+        logging.error(f"Resulting attention mask has empty sequence dimension (axis 1)")
+        raise ValueError(f"Resulting attention mask has empty sequence dimension (axis 1)")
+    
+    if attn_mask_reshape.shape[2] <= 0:
+        logging.error(f"Resulting attention mask has empty sequence dimension (axis 2)")
+        raise ValueError(f"Resulting attention mask has empty sequence dimension (axis 2)")
 
     attn_features_seq = _get_attention_features(attn_mask_reshape, orig_n_tokens)
+    
+    # Validate output shape matches expectations
+    if not isinstance(attn_features_seq, list):
+        logging.error(f"Expected list, got {type(attn_features_seq)}")
+        raise ValueError(f"Expected list, got {type(attn_features_seq)}")
+    
     return attn_mask, attn_mask_reshape, attn_features_seq
-
 
 def _get_embeddings(
     hidden_states: torch.Tensor,
@@ -406,6 +510,7 @@ def make_all_stats(
         attn_mask, attn_mask_reshape, attn_features_seq = _compute_attentions(
             attentions, num_layers, num_heads, n_tokens, orig_n_tokens
         )
+
         attention_features.append(attn_features_seq)
         attention_all.append(attn_mask_reshape)
         forwardpass_attention_weights.append(attn_mask)
