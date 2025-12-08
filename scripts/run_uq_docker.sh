@@ -6,9 +6,9 @@ set -euo pipefail
 # optimization loop inside it. No detector vLLM server is required.
 
 IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
-HOST_REPO=${HOST_REPO:-/mnt/extremessd10tb/seleznev/EvoTune}
-HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
-HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache/huggingface}
+HOST_REPO=${HOST_REPO:-/disk/4tb/seleznev/EvoHallu}
+HOST_DATA=${HOST_DATA:-/disk/4tb/seleznev}
+HOST_CACHE=${HOST_CACHE:-/disk/4tb/seleznev/.cache/huggingface}
 if [ ! -d "${HOST_CACHE}" ]; then
   echo "[run-uq][ERROR] Persistent model cache directory does not exist: ${HOST_CACHE}" >&2
   echo "[run-uq][ERROR] Please create it manually and rerun this script." >&2
