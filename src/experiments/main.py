@@ -18,6 +18,10 @@ import csv
 import copy
 import threading
 import multiprocessing
+import faulthandler
+import traceback
+import sys
+faulthandler.enable()
 
 from packing.utils.seeding import seed_everything, generate_random_seed
 from packing.utils.functions import function_to_string
@@ -55,9 +59,11 @@ from packing.logging.log_to_file import (
 from packing.parallel.continuous_execution import (
     Producer,
     Consumer,
+    safe_consumer,
     consumers_finish_and_cleanup,
 )
 import time
+
 
 OmegaConf.register_new_resolver("generate_random_seed", generate_random_seed, use_cache=True)
 OmegaConf.register_new_resolver("eval", eval, use_cache=True)
@@ -181,7 +187,7 @@ def write_uq_metrics_row(cfg, result, split, num_samples, iteration):
         iteration: Iteration number (use -1 for initial)
     """
     em = getattr(result, "extra_metrics", {}) or {}
-    lower, upper = parse_auc_ci(em.get("AUC 95% confidence interval", "(nan, nan)"))
+    lower, upper = parse_auc_ci(em.get("AUC 95% confidence interval (bootstrap)", "(nan, nan)"))
     
     csv_path = os.path.join(cfg.logs_dir, "uq_split_metrics.csv")
     new_file = not os.path.exists(csv_path)
@@ -224,9 +230,10 @@ def main(cfg: DictConfig):
 
     torch.cuda.set_per_process_memory_fraction(0.99, torch.cuda.current_device())
 
-    if cfg.task.task_name in {'flatpack'}:
+    if cfg.task.task_name in {'flatpack', 'uncertainty_quantification'}:
         # Unfortunately, jax doesn't work with forked multithreading since it is multithreaded itself,
         # so we need to spawn the processes instead
+        # uncertainty quantification task uses numpy, which seems to have issues with forked processes also
         multiprocessing.set_start_method('spawn')
 
     # Perform checks on the config to ensure it is valid
@@ -452,7 +459,7 @@ def main(cfg: DictConfig):
 
         # GENERATE FUNCTIONS
         logging.info("-" * 10)
-        logging.info("GENERATING PROMPTS")
+        logging.info("GENERATING CANDIDATES")
         (
             chats_batch,
             island_id_prompt_batch,
@@ -465,6 +472,8 @@ def main(cfg: DictConfig):
 
         # Create a queue for functions, lists for failed and passed functions and a dict for running stats
         function_classes_to_eval = multiprocessing.Queue()
+        # For storing errors from consumers
+        error_queue = multiprocessing.Queue()
         manager = multiprocessing.Manager()
         failed_function_classes_global = manager.list()
         passed_function_classes_global = manager.list()
@@ -709,8 +718,8 @@ def main(cfg: DictConfig):
         del multiprocess_running_dict
         del manager
 
-        if termination_event.is_set():
-            raise RuntimeError("Termination event was set, there was an error.")
+        # if termination_event.is_set():
+        #     raise RuntimeError("Termination event was set, there was an error.")
 
         logging.info(
             f"Finished with continuous sampling and evaluation for {cfg.num_cont_rounds} rounds"
@@ -947,4 +956,9 @@ def main(cfg: DictConfig):
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        traceback.print_exc()
+        sys.exit(1)
