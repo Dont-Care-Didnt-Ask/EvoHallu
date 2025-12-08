@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -51,11 +49,13 @@ def _apply_chat_template(tokenizer, texts: List[str], template: Optional[str]) -
         build_prompt = lambda t: [
             {"role": "assistant", "content": t},
         ]
-    else:
+    elif "generate_true_statement" in template:
         build_prompt = lambda t: [
             {"role": "user", "content": "Generate true statement"},
             {"role": "assistant", "content": t},
         ]
+    else:
+        raise ValueError(f"Unknown value for --chat-template: {template}")
 
     rendered: List[str] = []
     for t in texts:
@@ -229,7 +229,7 @@ def main() -> None:
     )
     ap.add_argument(
         "--cache-dir",
-        default=None,
+        default="../.cache/huggingface/hub",
         help="Optional Hugging Face cache directory.",
     )
     ap.add_argument(
@@ -244,7 +244,7 @@ def main() -> None:
         default=None,
         help=(
             "Optional chat template tag. If provided, texts are rendered via "
-            "tokenizer.apply_chat_template; 'chat' reproduces the pattern used "
+            "tokenizer.apply_chat_template; 'generate_true_statement' reproduces the pattern used "
             "in HalluDetect."
         ),
     )
