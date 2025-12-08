@@ -437,6 +437,47 @@ def Consumer(
         gc.collect()
         logging.info(f"[Worker {worker_id}] cleanup complete.")
 
+import sys, traceback, faulthandler, os
+
+def safe_consumer(
+    cfg,
+    evaluate_func,
+    function_classes_to_eval,
+    passed_function_classes_global,
+    failed_function_classes_global,
+    worker_id,
+    termination_event,
+    input_struct_or_spec,
+    round_num,
+    multiprocess_running_dict,
+    error_queue,
+):
+    log_file = f"worker_{worker_id}.log"
+    with open(log_file, "w") as f:
+        sys.stdout = sys.stderr = f
+        print(f"[{worker_id}] Started")
+        faulthandler.enable()  # prints stack trace on segfault
+        try:
+            Consumer(
+                cfg,
+                evaluate_func,
+                function_classes_to_eval,
+                passed_function_classes_global,
+                failed_function_classes_global,
+                worker_id,
+                termination_event,
+                input_struct_or_spec,
+                round_num,
+                multiprocess_running_dict,
+            )
+        except Exception as e:
+            error_queue.put({
+                'worker_id': worker_id,
+                'error': str(e),
+                'traceback': traceback.format_exc()
+            })
+            raise
+
 
 def consumers_finish_and_cleanup(
         cfg,
@@ -446,16 +487,6 @@ def consumers_finish_and_cleanup(
     """
     Wait for all consumers to finish, collect the results, and clean up.
     """
-
-    # Wait for all queued functions to be processed before joining consumers
-    while True:
-        try:
-            if function_classes_to_eval.qsize() == 0:
-                break
-        except NotImplementedError:
-            # qsize may not be implemented
-            break
-        time.sleep(0.2)
 
     # Wait for all consumers to finish
     logging.info("WAITING FOR CONSUMERS TO FINISH")
