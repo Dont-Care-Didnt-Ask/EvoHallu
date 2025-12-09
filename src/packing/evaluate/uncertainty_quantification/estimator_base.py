@@ -81,16 +81,6 @@ class Estimator(ABC):
         self.stats_dependencies = list(stats_dependencies)
 
     @abstractmethod
-    def __str__(self) -> str:
-        """
-        Return a unique, human-readable name for the estimator.
-
-        All hyperparameters that affect the resulting scores should be part of
-        this string so that different configurations of the same class have
-        distinguishable identifiers.
-        """
-
-    @abstractmethod
     def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
         """
         Compute uncertainty scores given precomputed statistics.

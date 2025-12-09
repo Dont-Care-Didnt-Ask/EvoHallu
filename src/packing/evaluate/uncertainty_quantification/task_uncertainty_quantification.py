@@ -266,9 +266,6 @@ def get_initial_func(cfg: DictConfig):
                 level="sequence",
             )
 
-        def __str__(self) -> str:
-            return "HallucinationEstimator"
-
         def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
             # sequence_logprob: shape [N], already summed per sequence
             seq_logprob = stats["sequence_logprob"]  # [N]
@@ -400,6 +397,7 @@ def evaluate_func(
             supervised=supervised,
             train_stats_cache=train_stats_cache,
             background_stats_cache=background_stats_cache,
+            input_regime=cfg.task.input_regime,
         )
         stats_elapsed = time.time() - stats_start_time
         logging.info(f"[UQ evaluate_func] Chunk {chunk_idx+1}/{num_chunks}: make_all_stats took {stats_elapsed:.2f}s, got {len(all_stats_chunk)} stat keys")
@@ -481,7 +479,7 @@ def evaluate_func(
 
 
 system_prompt = """
-You are an Uncertainty Quantification Scientist. Design an unsupervised Estimator class that detects LLM hallucinations from precomputed statistics.
+You are an Uncertainty Quantification Scientist. Design an unsupervised Estimator class that detects LLM hallucinations using precomputed statistics.
 
 ## Task
 Write a class named `HallucinationEstimator` inheriting from `Estimator` (already provided).
@@ -491,8 +489,6 @@ Your `__call__` method receives `stats` dict and MUST return np.ndarray of shape
 class HallucinationEstimator(Estimator):
     def __init__(self, context: Dict[str, Any]) -> None:
         super().__init__(context, stats_dependencies=[...], level="sequence")
-    def __str__(self) -> str:
-        return "HallucinationEstimator"
     def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
         # MUST return shape [N] where N = number of samples
         ...  # Return uncertainty scores (higher = more likely hallucination)
@@ -500,27 +496,28 @@ class HallucinationEstimator(Estimator):
 
 ## Available Statistics in `stats` (N = number of samples)
 
-**Sequence-level (already aggregated, shape [N]):**
-- `sequence_logprob`: np.ndarray[float32, [N]] - sum of token log-probs per sequence (more negative = less confident)
-- `mean_token_entropy`: np.ndarray[float32, [N]] - mean entropy per sequence (higher = more uncertain)
-
 **Token-level (lists of length N, inner lengths vary per sample):**
-- `greedy_log_likelihoods`: List[List[float]] - length N, inner list[i] has n_i floats (per-token log p(token|prefix))
-- `greedy_log_probs`: List[np.ndarray[float32, [n_i, V]]] - length N, each array is [n_tokens_i, vocab_size]
-- `greedy_tokens`: List[List[int]] - length N, inner list[i] has n_i token IDs
-
-**Attention (lists of length N):**
-- `attention_all`: List[np.ndarray[float32, [L*H, n_i, n_i]]] - L=num_layers, H=num_heads, n_i=tokens in sample i
+- `greedy_logprobs`: List[List[float]] - length N, inner list[i] has n_i floats -- top-1 logits at each step (including for last token)
+- `sequence_logprobs`: List[List[float]] - length N, inner list[i] has n_i - 1 floats -- logits of realized sequence tokens (without last token, may differ due to sampling)
+- `token_entropies`: List[List[float]] - length N, inner list[i] has n_i floats -- entropy of each token (including for last token)
 
 **Embeddings (D = hidden_dim):**
 - `embeddings_decoder`: np.ndarray[float32, [N, D]] - mean embedding per sequence (last layer)
 - `embeddings_decoder_{layer}`: np.ndarray[float32, [N, D]] - mean embedding per sequence (specific layer)
 - `token_embeddings_decoder`: np.ndarray[float32, [sum(n_i), D]] - all tokens concatenated
 
+**Attention (lists of length N):**
+- `attention_all`: List[np.ndarray[float32, [L*H, n_i, n_i]]] - L=num_layers, H=num_heads, n_i=tokens in sample i
+- `claim_only_attention_maps`: for each sample - [num_layers * num_heads, claim_tokens, claim_tokens]]]
+- `full_attention_maps`: for each sample - [num_layers, num_heads, num_tokens, num_tokens]]]
+- `recent_lookback_attention_weights_from_claim_tokens`: for each sample - [claim_tokens, n_recent_lookback_tokens, num_layers * num_heads]
+
 ## Expected Estimator Structure
 - Try single features, their variations and combinations to create a single uncertainty score for each sample.
+- Mix only up to 3 features at a time.
 - Avoid introducing hyperparameters if possible.
-- When combining, prioritize simplicity and interpretability. Start from a concrete hypotheses on why exactly this mix will perform better than any single feature.
+- When combining, prioritize simplicity and interpretability. Start from a concrete hypotheses on why exactly this mix will perform better than any single feature.\
+
 
 ## Constraints
 - Class MUST be named `HallucinationEstimator`
