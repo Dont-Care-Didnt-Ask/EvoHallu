@@ -4,6 +4,8 @@ from typing import Any, Dict, List, Tuple
 
 import numpy as np
 import torch
+import logging
+import time
 
 
 def _get_attention_features(attn_mask: np.ndarray, n_tokens: int, max_n_tokens: int = 10):
@@ -366,6 +368,7 @@ def make_all_stats(
     supervised: bool = False,
     train_stats_cache: Dict[str, Any] | None = None,
     background_stats_cache: Dict[str, Any] | None = None,
+    input_regime: str = "full",
 ) -> Tuple[
     Dict[str, Any],
     np.ndarray,
@@ -444,8 +447,8 @@ def make_all_stats(
     background_stats_cache : Dict[str, Any] | None
         Cached background stats (pass back to future calls).
     """
-    import logging
-    import time
+    assert input_regime in ["full", "logits", "hidden_states", "attentions"]
+
     start_time = time.time()
     
     meta = eval_raw.get("meta", {})
@@ -455,6 +458,9 @@ def make_all_stats(
     logging.info(f"[make_all_stats] START: {num_eval_samples} samples, num_layers={num_layers}, num_heads={num_heads}")
 
     if supervised:
+        if input_regime != "full":
+            raise ValueError(f"Input regime {input_regime} not supported for supervised mode")
+
         if train_stats_cache is None:
             if train_raw is None:
                 raise ValueError(
@@ -468,6 +474,9 @@ def make_all_stats(
         train_stats_cache = None
 
     if background_stats_cache is None and background_raw is not None:
+        if input_regime != "full":
+            raise ValueError(f"Input regime {input_regime} not supported for background mode")
+
         logging.info(f"[make_all_stats] Building background stats...")
         bg_build_start = time.time()
         background_stats_cache = _build_background_stats(
@@ -489,6 +498,9 @@ def make_all_stats(
     greedy_tokens: List[List[int]] = []
     eval_labels: List[float] = []
     eval_token_embeddings: Dict[str, List[np.ndarray]] = {}
+    sequence_logprobs: List[float] = []
+    greedy_logprobs: List[float] = []
+    token_entropies: List[float] = []
 
     eval_loop_start = time.time()
     for sample_idx, sample in enumerate(eval_samples):
@@ -498,59 +510,69 @@ def make_all_stats(
         # NOTE: All tensor access below is READ-ONLY. We only read tensors and create
         # NEW arrays via .to().cpu().numpy() chains. No in-place modifications (+=, .add_(), etc.)
         # are performed. This allows callers to skip expensive deep copies of input data.
-        input_ids = sample["input_ids"]
+        input_ids = sample["input_ids"] # length
         orig_input_ids = sample["orig_input_ids"]
-        hidden_states = sample["hidden_states"]
-        attentions = sample["attentions"]
-        logits = sample["logits"]
+        sequence_logprobs.append(sample["sequence_logprobs"]) # length - 1
+        greedy_logprobs.append(sample["greedy_logprobs"]) # length
+        token_entropies.append(sample["token_entropies"]) # length
 
         n_tokens = int(input_ids.shape[0])
         orig_n_tokens = int(orig_input_ids.shape[0])
 
-        attn_mask, attn_mask_reshape, attn_features_seq = _compute_attentions(
-            attentions, num_layers, num_heads, n_tokens, orig_n_tokens
-        )
+        if input_regime == "attentions" or input_regime == "full":
+            attentions = sample["attentions"]
+            attn_mask, attn_mask_reshape, attn_features_seq = _compute_attentions(
+                attentions, num_layers, num_heads, n_tokens, orig_n_tokens
+            )
 
-        attention_features.append(attn_features_seq)
-        attention_all.append(attn_mask_reshape)
-        forwardpass_attention_weights.append(attn_mask)
+            attention_features.append(attn_features_seq)
+            attention_all.append(attn_mask_reshape)
+            forwardpass_attention_weights.append(attn_mask)
 
-        ll, log_probs, cut_alternatives = _compute_probs(
-            logits,
-            input_ids,
-            orig_input_ids,
-            n_tokens,
-            orig_n_tokens,
-            alternatives=True,
-        )
-        greedy_log_likelihoods.append(ll)
-        greedy_log_probs.append(log_probs)
-        greedy_tokens_alternatives.append(cut_alternatives)
+        if input_regime == "logits" or input_regime == "full":
+            logits = sample["logits"]
+            ll, log_probs, cut_alternatives = _compute_probs(
+                logits,
+                input_ids,
+                orig_input_ids,
+                n_tokens,
+                orig_n_tokens,
+                alternatives=True,
+            )
+            greedy_log_likelihoods.append(ll)
+            greedy_log_probs.append(log_probs)
+            greedy_tokens_alternatives.append(cut_alternatives)
 
-        greedy_texts.append(sample["claim"])
-        greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
-        eval_labels.append(float(sample["label"]))
+            greedy_texts.append(sample["claim"])
+            greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
+            eval_labels.append(float(sample["label"]))
 
-        token_embs = _get_embeddings(
-            hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix=""
-        )
-        for key, arr in token_embs.items():
-            eval_token_embeddings.setdefault(key, []).append(arr)
+        if input_regime == "hidden_states" or input_regime == "full":
+            hidden_states = sample["hidden_states"]
+
+            token_embs = _get_embeddings(
+                hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix=""
+            )
+            for key, arr in token_embs.items():
+                eval_token_embeddings.setdefault(key, []).append(arr)
     
     eval_loop_elapsed = time.time() - eval_loop_start
     logging.info(f"[make_all_stats] Eval sample loop completed in {eval_loop_elapsed:.2f}s")
 
     # ------------------------ Assemble all_stats ------------------------
     all_stats: Dict[str, Any] = {
-        "attention_features": attention_features,
-        "attention_all": attention_all,
-        "forwardpass_attention_weights": forwardpass_attention_weights,
+        "recent_lookback_attention_weights_from_claim_tokens": attention_features,
+        "claim_only_attention_maps": attention_all,
+        "full_attention_maps": forwardpass_attention_weights,
         "greedy_log_likelihoods": greedy_log_likelihoods,
         "greedy_tokens_alternatives": greedy_tokens_alternatives,
         "greedy_log_probs": greedy_log_probs,
         "greedy_texts": greedy_texts,
         "greedy_tokens": greedy_tokens,
         "eval_meta": meta,
+        "sequence_logprobs": sequence_logprobs,
+        "greedy_logprobs": greedy_logprobs,
+        "token_entropies": token_entropies,
     }
 
     for key, seq_list in eval_token_embeddings.items():
