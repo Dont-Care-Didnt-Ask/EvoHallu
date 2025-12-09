@@ -17,9 +17,11 @@ chunk_size: 256       # number of eval samples per chunk when building features
 # Supervision mode: when true, training statistics and labels are exposed
 # to candidate estimators via the context dict.
 supervised: false
+# Available input features: "logits", "hidden_states", "attentions" or "full"
+input_regime: "full"
 
 failed_score: -1
-timeout_period: 120
+timeout_period: 240
 mem_limit_gb: 32
 
 programdatabaseConfig:
