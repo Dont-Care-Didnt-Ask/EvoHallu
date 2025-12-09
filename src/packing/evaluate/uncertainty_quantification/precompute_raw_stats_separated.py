@@ -6,6 +6,7 @@ import os
 import numpy as np
 import pandas as pd
 import torch
+from torch.nn.functional import log_softmax, softmax
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from tqdm import tqdm
@@ -163,7 +164,16 @@ def _precompute_split(
                 )
             attn_i = torch.stack(attn_layers, dim=0)
 
-            logits_i = logits[i, :length]  # already on CPU, float16
+            raw_logits_i = logits[i, :length]  # already on CPU, float16
+            logits_i = log_softmax(raw_logits_i, dim=-1)
+            probs_i = softmax(raw_logits_i, dim=-1)
+
+            # Log probabilities of each token in the sequence (excluding the first token)
+            sequence_logprobs_i = logits_i[:-1][torch.arange(length - 1), input_ids_i[1:]]
+            # Top-1 logit for each token in the sequence
+            greedy_logprobs_i = logits_i.max(dim=-1).values
+            # Entropy of probability distribution at each token
+            token_entropies_i = -probs_i.mul(logits_i).sum(dim=-1)
 
             # Common fields for all outputs
             common_fields = {
@@ -173,6 +183,9 @@ def _precompute_split(
                 "input_ids": input_ids_i,
                 "attention_mask": attention_mask_i,
                 "orig_input_ids": orig_input_ids_i,
+                "sequence_logprobs": sequence_logprobs_i, # length - 1
+                "greedy_logprobs": greedy_logprobs_i, # length
+                "token_entropies": token_entropies_i, # length
             }
 
             # Create separate samples for each output type
