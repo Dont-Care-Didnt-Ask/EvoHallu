@@ -2,6 +2,7 @@ import argparse
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import os
+import gc
 
 import numpy as np
 import pandas as pd
@@ -80,6 +81,7 @@ def _precompute_split(
     id_col: Optional[str],
     batch_size: int,
     chat_template: Optional[str],
+    top_k: int,
 ) -> Dict[str, Any]:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -140,13 +142,13 @@ def _precompute_split(
                 continue
 
             # Input IDs and attention mask (chat form)
-            input_ids_i = chat_inputs["input_ids"][i, :length].to("cpu")
-            attention_mask_i = attn_mask[i, :length].to("cpu")
+            input_ids_i = chat_inputs["input_ids"][i, :length].to("cpu", dtype=torch.int32)
+            attention_mask_i = attn_mask[i, :length].to("cpu", dtype=torch.int8)
 
             # Raw (non-chat) input IDs for the original claim
             raw_attn_mask_i = raw_inputs["attention_mask"][i]
             raw_length = int(raw_attn_mask_i.sum().item())
-            orig_input_ids_i = raw_inputs["input_ids"][i, :raw_length].to("cpu")
+            orig_input_ids_i = raw_inputs["input_ids"][i, :raw_length].to("cpu", dtype=torch.int32)
 
             # Stack hidden states into [num_layers + 1, length, hidden_size]
             hs_layers: List[torch.Tensor] = []
@@ -165,15 +167,17 @@ def _precompute_split(
             attn_i = torch.stack(attn_layers, dim=0)
 
             raw_logits_i = logits[i, :length]  # already on CPU, float16
+            top_k_vals, top_k_inds = torch.topk(raw_logits_i, k=top_k, dim=-1)
             logits_i = log_softmax(raw_logits_i, dim=-1)
             probs_i = softmax(raw_logits_i, dim=-1)
+            del raw_logits_i
 
             # Log probabilities of each token in the sequence (excluding the first token)
             sequence_logprobs_i = logits_i[:-1][torch.arange(length - 1), input_ids_i[1:]]
             # Top-1 logit for each token in the sequence
             greedy_logprobs_i = logits_i.max(dim=-1).values
             # Entropy of probability distribution at each token
-            token_entropies_i = -probs_i.mul(logits_i).sum(dim=-1)
+            token_entropies_i = -probs_i.mul(logits_i).sum(dim=-1).to(dtype=torch.float16)
 
             # Common fields for all outputs
             common_fields = {
@@ -183,9 +187,9 @@ def _precompute_split(
                 "input_ids": input_ids_i,
                 "attention_mask": attention_mask_i,
                 "orig_input_ids": orig_input_ids_i,
-                "sequence_logprobs": sequence_logprobs_i, # length - 1
-                "greedy_logprobs": greedy_logprobs_i, # length
-                "token_entropies": token_entropies_i, # length
+                "sequence_logprobs": sequence_logprobs_i.numpy(), # length - 1
+                "greedy_logprobs": greedy_logprobs_i.numpy(), # length
+                "token_entropies": token_entropies_i.numpy(), # length
             }
 
             # Create separate samples for each output type
@@ -198,12 +202,14 @@ def _precompute_split(
             attentions_samples.append(attentions_sample)
 
             logits_sample = common_fields.copy()
-            logits_sample["logits"] = logits_i
+            logits_sample["top_k_logits"] = top_k_vals
+            logits_sample["top_k_indices"] = top_k_inds
             logits_samples.append(logits_sample)
 
         # Free CUDA memory between batches
         del outputs
         torch.cuda.empty_cache()
+        gc.collect()
 
     config = model.config
     meta = {
@@ -292,7 +298,7 @@ def main() -> None:
     ap.add_argument(
         "--batch-size",
         type=int,
-        default=1,
+        default=128,
         help="Batch size for model forward passes (default: 1).",
     )
     ap.add_argument(
@@ -310,6 +316,12 @@ def main() -> None:
         type=int,
         default=None,
         help="Optional maximum number of samples to precompute (default: None).",
+    )
+    ap.add_argument(
+        "--top-k",
+        type=int,
+        default=512,
+        help="Number of top logits to keep for each token (default: 512).",
     )
 
     args = ap.parse_args()
@@ -329,7 +341,7 @@ def main() -> None:
     model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
         cache_dir=args.cache_dir,
-        torch_dtype=torch.bfloat16,
+        torch_dtype=torch.float32,
     ).eval().to("cuda" if torch.cuda.is_available() else "cpu")
 
     output_structs = _precompute_split(
@@ -341,6 +353,7 @@ def main() -> None:
         id_col=args.id_col,
         batch_size=args.batch_size,
         chat_template=args.chat_template,
+        top_k=args.top_k,
     )
 
     output_path = Path(args.output_path)
