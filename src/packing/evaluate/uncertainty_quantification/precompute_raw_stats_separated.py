@@ -299,7 +299,7 @@ def main() -> None:
         "--batch-size",
         type=int,
         default=128,
-        help="Batch size for model forward passes (default: 1).",
+        help="Batch size for model forward passes.",
     )
     ap.add_argument(
         "--chat-template",
