@@ -37,7 +37,7 @@ final_percentile: 0.2
 
 # Timing config
 num_cont_rounds: 1
-num_outputs_per_prompt: 8
+num_outputs_per_prompt: 2
 num_workers: 2
 num_rounds: 500
 
@@ -71,7 +71,7 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 1035
+seed: 1036
 run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev

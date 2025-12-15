@@ -4,8 +4,8 @@ task_name: "uncertainty_quantification"
 function_str_to_extract: "make_estimator"
 
 # Paths to raw statistics produced by the precompute script
-train_raw_path: "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_attentions.pt"
-test_raw_path: "data/uncertainty_quantification/popqa_test_filtered_10shot_raw_stats_attentions.pt"
+train_raw_path: "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_hidden_states.pt"
+test_raw_path: "data/uncertainty_quantification/popqa_test_filtered_10shot_raw_stats_hidden_states.pt"
 background_raw_path: ""
 
 # Train/val splitting for the raw train set
@@ -18,7 +18,7 @@ chunk_size: 1024      # number of eval samples per chunk when building features
 # to candidate estimators via the context dict.
 supervised: false
 # Available input features: "logits", "hidden_states", "attentions" or "full"
-input_regime: "attentions"
+input_regime: "hidden_states"
 
 failed_score: -1
 timeout_period: 240
