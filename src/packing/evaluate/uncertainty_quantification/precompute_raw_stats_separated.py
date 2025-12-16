@@ -82,6 +82,7 @@ def _precompute_split(
     batch_size: int,
     chat_template: Optional[str],
     top_k: int,
+    layer_stride: int,
 ) -> Dict[str, Any]:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -152,7 +153,11 @@ def _precompute_split(
 
             # Stack hidden states into [num_layers + 1, length, hidden_size]
             hs_layers: List[torch.Tensor] = []
-            for h in hidden_states:
+            for j, h in enumerate(hidden_states):
+                if j % layer_stride != 0:
+                    continue
+
+                print("Adding hidden state layer", j)
                 hs_layers.append(
                     h[i, :length].to(dtype=torch.float16, device="cpu")
                 )
@@ -323,6 +328,12 @@ def main() -> None:
         default=512,
         help="Number of top logits to keep for each token (default: 512).",
     )
+    ap.add_argument(
+        "--layer-stride",
+        type=int,
+        default=1,
+        help="Stride for sampling layers. Larger stride means less layers are sampled.",
+    )
 
     args = ap.parse_args()
 
@@ -354,6 +365,7 @@ def main() -> None:
         batch_size=args.batch_size,
         chat_template=args.chat_template,
         top_k=args.top_k,
+        layer_stride=args.layer_stride,
     )
 
     output_path = Path(args.output_path)

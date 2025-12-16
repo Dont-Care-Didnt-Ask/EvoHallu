@@ -186,6 +186,10 @@ def _get_embeddings(
     hidden_states:
         Tensor of shape [num_layers + 1, n_tokens, hidden_size].
     """
+    if num_layers + 1 != len(hidden_states):
+        logging.warning(f"Expected {num_layers + 1} hidden states, got {len(hidden_states)}. This is okay if stride > 1 is used.")
+        num_layers = len(hidden_states) - 1
+
     token_embeddings: Dict[str, np.ndarray] = {}
     for layer in list(range(num_layers)) + [-1]:
         layer_name = "" if layer == -1 else f"_{layer}"
