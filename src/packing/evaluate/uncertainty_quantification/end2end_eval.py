@@ -21,12 +21,25 @@ from src.packing.evaluate.uncertainty_quantification.task_uncertainty_quantifica
 from src.packing.evaluate.uncertainty_quantification.estimator_base import Estimator
 
 from src.packing.evaluate.uncertainty_quantification.found_formulas import (
-    HallucinationEstimator,
+    SequenceLogProb,
+    SequenceLogProbBottom,
+    MinimalLogProb,
+    MeanTokenEntropy,
+    Perplexity,
+    StdTokenEntropy,
+    MeanStdTokenEntropy,
     QuartileEntropyDiff,
     QuartileEntropyDiffNormalized,
     PositionWeightedGap,
     PositionWeightedGapNormalized,
     Gap,
+    EntropySlope,
+    QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay,
+    QuartileEntropyDiff_PositionWeightedGap,
+    PositionWeightedGap_EntropySlope_TopKMassInv,
+    LogProbSlope,
+    ExpWeightedNegLogProb,
+    ExpWeightedNegLogProbWithTop1,
 )
 
 def _normalize_dataframe(
@@ -43,6 +56,8 @@ def _normalize_dataframe(
         )
 
     df[text_col] = df[text_col].astype(str).str.strip()
+    # Truncate text to 300 characters to avoid long sequences that might cause OOMs
+    df[text_col] = df[text_col].str.slice(start=0, stop=300)
     df = df[df[text_col] != ""]
 
     # Raise an error if there are any non-numeric labels
@@ -465,12 +480,25 @@ def main() -> None:
     }
 
     estimators = [
-        HallucinationEstimator(context=context),
+        SequenceLogProb(context=context),
+        SequenceLogProbBottom(context=context),
+        MinimalLogProb(context=context),
+        MeanTokenEntropy(context=context),
+        Perplexity(context=context),
+        StdTokenEntropy(context=context),
+        MeanStdTokenEntropy(context=context),
         QuartileEntropyDiff(context=context),
         QuartileEntropyDiffNormalized(context=context),
         PositionWeightedGap(context=context),
         PositionWeightedGapNormalized(context=context),
         Gap(context=context),
+        EntropySlope(context=context),
+        QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay(context=context),
+        QuartileEntropyDiff_PositionWeightedGap(context=context),
+        PositionWeightedGap_EntropySlope_TopKMassInv(context=context),
+        LogProbSlope(context=context),
+        ExpWeightedNegLogProb(context=context),
+        ExpWeightedNegLogProbWithTop1(context=context),
     ]
 
     # Set logging level to INFO
