@@ -44,7 +44,7 @@ def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
     append_prompt = task["append_prompt"]
 
     chat = [
-        {"role": "system", "content": system_prompt},
+        {"role": "system", "content": system_prompt if isinstance(system_prompt, str) else system_prompt()},
         {
             "role": "user",
             "content": f"{main_txt}\n{append_prompt}",
