@@ -380,6 +380,7 @@ def main(cfg: DictConfig):
         os.makedirs(f"{cfg.logs_dir}/chats", exist_ok=True)
         os.makedirs(f"{cfg.logs_dir}/failed_chats", exist_ok=True)
         os.makedirs(f"{cfg.logs_dir}/programbank", exist_ok=True)
+        os.makedirs(f"{cfg.logs_dir}/candidates", exist_ok=True)
 
         # Log the initial statistics from the programdatabase
         running_dict = get_pd_statistics(cfg, programdatabase, running_dict, -1)
@@ -698,10 +699,23 @@ def main(cfg: DictConfig):
 
                 if not already_evaluated:
                     logging.info(f"Evaluating best estimator (train AUC={best_auc}) on val/test splits...")
+                    split2result = {}
                     for split in ["train", "val", "testset"]:
                         result, num_samples = evaluate_uq(cfg, generate_input, evaluate_func, best_fc, split)
                         write_uq_metrics_row(cfg, result, split, num_samples, iteration=round_num)
+                        split2result[split] = result
                         logging.info(f"UQ {split} evaluation: AUC={result.extra_metrics.get('AUC', 'N/A')}")
+                    
+                    with open(f"{cfg.logs_dir}/candidates/candidate_round_{round_num}_function_{getattr(best_fc, 'function_num', 0)}.txt", "w") as f:
+                        f.write(f"# Iteration: {round_num}\n")
+                        f.write(f"# Test AUC: {split2result['testset'].score}, n_samples: {split2result['testset'].extra_metrics.get('Number of samples', 'N/A')}\n")
+                        f.write(f"# Test AUC 95% confidence interval (bootstrap): {split2result['testset'].extra_metrics.get('AUC 95% confidence interval (bootstrap)', 'N/A')}\n")
+                        f.write(f"# Val AUC: {split2result['val'].score}, n_samples: {split2result['val'].extra_metrics.get('Number of samples', 'N/A')}\n")
+                        f.write(f"# Val AUC 95% confidence interval (bootstrap): {split2result['val'].extra_metrics.get('AUC 95% confidence interval (bootstrap)', 'N/A')}\n")
+                        f.write(f"# Train AUC: {split2result['train'].score}, n_samples: {split2result['train'].extra_metrics.get('Number of samples', 'N/A')}\n")
+                        f.write(f"# Train AUC 95% confidence interval (bootstrap): {split2result['train'].extra_metrics.get('AUC 95% confidence interval (bootstrap)', 'N/A')}\n")
+                        f.write(f"{split2result['testset'].imports_str}\n")
+                        f.write(f"{split2result['testset'].function_str}\n")
 
         # Clean up
         passed_function_classes_global[:] = []
