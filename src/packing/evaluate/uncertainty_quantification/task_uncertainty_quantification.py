@@ -124,19 +124,61 @@ def _delong_auc_ci(y_true: np.ndarray, y_score: np.ndarray) -> str:
     except (ValueError, ZeroDivisionError, AssertionError):
         return "(nan, nan)"
 
-def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) -> str:
-    """Compute 95% bootstrap confidence interval for ROC-AUC."""
-    bootstrapped_scores = []
+def _bootstrap_auc_ci(
+    y_true: np.ndarray,
+    y_score: np.ndarray,
+    B: int = 1000,
+    bootstrap_indices: np.ndarray = None,
+) -> Tuple[str, List[float]]:
+    """
+    Compute 95% bootstrap confidence interval for ROC-AUC.
+
+    Parameters
+    ----------
+    y_true : np.ndarray
+        True binary labels.
+    y_score : np.ndarray
+        Prediction scores.
+    B : int
+        Number of bootstrap iterations (used only if bootstrap_indices is None).
+    bootstrap_indices : np.ndarray, optional
+        Pre-generated bootstrap indices of shape (B, n). If provided, these are
+        used instead of generating new random indices. This allows aligned
+        bootstrap samples across multiple methods for pairwise comparisons.
+
+    Returns
+    -------
+    ci_str : str
+        Formatted confidence interval string "(lower, upper)".
+    bootstrapped_scores : List[float]
+        List of bootstrapped AUC values for each iteration.
+    """
     n = len(y_true)
-    for _ in range(B):
-        idxs = np.random.choice(np.arange(n), size=n, replace=True)
+
+    if bootstrap_indices is None:
+        # Fallback: generate indices on the fly (non-reproducible)
+        bootstrap_indices = np.array([
+            np.random.choice(np.arange(n), size=n, replace=True)
+            for _ in range(B)
+        ])
+
+    bootstrapped_scores = []
+    for idxs in bootstrap_indices:
         if (y_true[idxs] == 1).any() and (y_true[idxs] == 0).any():
-            bootstrapped_scores.append(roc_auc_score(y_true[idxs], y_score[idxs]))
-    if bootstrapped_scores:
-        lower = float(np.percentile(bootstrapped_scores, 2.5))
-        upper = float(np.percentile(bootstrapped_scores, 97.5))
-        return f"({100*lower:.2f}, {100*upper:.2f})"
-    return "(nan, nan)"
+            bootstrapped_scores.append(float(roc_auc_score(y_true[idxs], y_score[idxs])))
+        else:
+            # Keep NaN to preserve alignment across methods
+            bootstrapped_scores.append(float('nan'))
+
+    valid_scores = [s for s in bootstrapped_scores if not np.isnan(s)]
+    if valid_scores:
+        lower = float(np.percentile(valid_scores, 2.5))
+        upper = float(np.percentile(valid_scores, 97.5))
+        ci_str = f"({100*lower:.2f}, {100*upper:.2f})"
+    else:
+        ci_str = "(nan, nan)"
+
+    return ci_str, bootstrapped_scores
 
 
 def _load_raw(path: str) -> Dict[str, Any]:
@@ -481,11 +523,11 @@ def evaluate_func(
 
 def system_prompt_fabric() -> str:
     strong_baselines = [
-        "LogProb (sum of negative log-probabilities over sequence)",
-        "LogProbSlope (negative pearson correlation between token position and log-probability; negative correlation -> increasing uncertainty -> higher chance of hallucination)",
-        "PositionWeightedGap (for each token t compute (greedy_logprob[t] - sequence_logprob[t-1]) and weight it by t / length (later tokens get larger weight))",
+        "LogProb: sum of negative log-probabilities over sequence",
+        "LogProbSlope: negative pearson correlation between token position and log-probability",
+        "PositionWeightedGap: for each token t compute (top1_logprob[t] - sequence_logprob[t-1]) and weight it by t / length, so that later tokens get larger weight",
     ]
-    baseline = random.choices(population=strong_baselines, weights=[0.4, 0.5, 0.1])
+    baseline = random.choices(population=strong_baselines, weights=[0.4, 0.5, 0.1], k=1)[0]
 
     ideas = [
         "anomaly detection",
@@ -496,9 +538,9 @@ def system_prompt_fabric() -> str:
         "aggregation of top or bottom 20% of something instead of all values",
         "tail behavior (note you don't have access to all logits, so you must approximate using available 512 logits, e.g. by contrasting top-N tokens vs the rest)",
         "consecutive runs — streaks of low-confidence tokens",
-        "second derivative — acceleration of confidence changes",
-        "exponential weighted average of logits",
-        "something over sliding window average of logits",
+        "approximation of second derivative",
+        "exponential weighted average",
+        "sliding window average",
         "difference between some aggregate over first and last quarter of sequence",
     ]
     idea = random.choice(ideas)
@@ -506,31 +548,29 @@ def system_prompt_fabric() -> str:
     system_prompt = ("""You are designing unsupervised hallucination detectors for atomic claims (typically 10-25 tokens), evaluated by ROC-AUC.
 
 ## Inputs (per sample)
-- "sequence_logprobs": List[np.ndarray], shape (n_i-1,) — log-probs of generated tokens
-- "top_k_logits": List[np.ndarray], shape (n_i, k) — top-k logits per position
-- "top_k_indices": List[np.ndarray], shape (n_i, k) — corresponding token indices
+- "sequence_logprobs": List[np.ndarray], shape (n_i-1,) — logits of tokens actually generated by the model, excluding the first generated token.
+- "top_k_logits": List[np.ndarray], shape (n_i, k) — top-k logits per token
+- "top_k_indices": List[np.ndarray], shape (n_i, k) — corresponding top-k token indices
 
 k equals 512 here.
 
 ## Critical Instructions
-
-**DIVERSITY IS PARAMOUNT.** You will see up to 4 example detectors below. Your job is to try something QUALITATIVELY DIFFERENT, not a minor variation. Ask yourself: "Is my approach fundamentally different from all examples shown?" If not, redesign.
-
-**SIMPLICITY PREFERRED.** Try 1-feature or 2-feature detectors.
 
 **EXPECTED STRUCTURE**
 - Build off a strong baseline: {}
 - For additional signal, use {}
 
 ## Code Requirements
-- Class named `HallucinationDetector`, output shape [N]
+- Class named `HallucinationDetector`, subclass of `Estimator` (assume Estimator is provided)
+- Output shape [N]
 - Pure numpy/scipy, deterministic
 - Brief docstring: describe approach, note ONE specific hypothesis for future (no speculation about this detector's performance)
 
 ## Response Format
 1. Analyze shown detectors — what approaches have been tried?
-2. Identify a DIFFERENT direction not yet explored
+2. Ideate a novel detector, based on EXPECTED STRUCTURE and insights from your analysis above.
 3. Provide ```python code block with your detector
+Don't write explanations after the code block.
 """.format(baseline, idea))
     return system_prompt
 
