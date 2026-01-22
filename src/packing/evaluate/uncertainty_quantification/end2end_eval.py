@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 import os
 import gc
 import time
@@ -193,7 +193,7 @@ def eval_estimators_on_split(
     top_k: int,
     layer_stride: int,
     estimators: List[Estimator],
-) -> Dict[str, Any]:
+) -> Tuple[Dict[str, Any], Dict[str, List[float]]]:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     texts = df[text_col].astype(str).tolist()
@@ -344,28 +344,39 @@ def eval_estimators_on_split(
         logging.info(f"{key}: {scores.shape}")
 
     estimators_to_metrics: Dict[str, Dict[str, Any]] = {key: {} for key in estimators_to_scores.keys()}
+    estimators_to_bootstrap_aucs: Dict[str, List[float]] = {}
 
     # ROC-AUC objective; higher scores should mean higher hallucination prob.
     logging.info(f"[UQ evaluate_func] Computing ROC-AUC...")
+
+    # Pre-generate bootstrap indices with fixed seed for reproducibility
+    # This ensures aligned samples across all methods for pairwise comparisons
+    B = 1000
+    BOOTSTRAP_SEED = 31
+    rng = np.random.default_rng(BOOTSTRAP_SEED)
+    n_samples = len(labels)
+    bootstrap_indices = rng.choice(n_samples, size=(B, n_samples), replace=True)
+    logging.info(f"[UQ evaluate_func] Generated {B} bootstrap samples with seed {BOOTSTRAP_SEED}")
+
     for key, scores in estimators_to_scores.items():
         auc = float(roc_auc_score(labels, scores))
         score = round(100.0 * auc, 2)
         estimators_to_metrics[key]["ROC-AUC"] = score
         logging.info(f"[UQ evaluate_func] {key}: ROC-AUC = {auc:.2f}")
 
-        # Bootstrap confidence interval for AUC
-        B = 1000
+        # Bootstrap confidence interval for AUC (using pre-generated indices)
         bootstrap_start = time.time()
-        auc_ci = _bootstrap_auc_ci(labels, scores, B)
+        auc_ci, bootstrap_aucs = _bootstrap_auc_ci(labels, scores, B, bootstrap_indices)
         delong_auc_ci = _delong_auc_ci(labels, scores)
         bootstrap_elapsed = time.time() - bootstrap_start
         logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s. Bootstrap CI: {auc_ci}, DeLong CI: {delong_auc_ci}")
         estimators_to_metrics[key]["Bootstrap CI"] = auc_ci
         estimators_to_metrics[key]["DeLong CI"] = delong_auc_ci
+        estimators_to_bootstrap_aucs[key] = bootstrap_aucs
         print("-" * 100)
 
 
-    return estimators_to_metrics
+    return estimators_to_metrics, estimators_to_bootstrap_aucs
 
 def save_json(output_path, data):
     with open(output_path, "w") as f:
@@ -504,7 +515,7 @@ def main() -> None:
     # Set logging level to INFO
     logging.basicConfig(level=logging.INFO)
 
-    estimators_to_metrics = eval_estimators_on_split(
+    estimators_to_metrics, estimators_to_bootstrap_aucs = eval_estimators_on_split(
         df=df,
         tokenizer=tokenizer,
         model=model,
@@ -523,6 +534,11 @@ def main() -> None:
     output_path = Path(args.output_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     save_json(output_path, estimators_to_metrics)
+
+    # Save bootstrapped AUC values to a separate file for pairwise comparisons
+    bootstrap_output_path = output_path.with_stem(output_path.stem + "_bootstrap_aucs")
+    save_json(bootstrap_output_path, estimators_to_bootstrap_aucs)
+    logging.info(f"[UQ evaluate_func] Saved bootstrap AUCs to {bootstrap_output_path}")
 
 
 if __name__ == "__main__":
