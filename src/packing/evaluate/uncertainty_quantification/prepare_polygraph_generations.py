@@ -77,7 +77,7 @@ def load_model_and_tokenizer(
 
     model = transformers.AutoModelForCausalLM.from_pretrained(
         model_name,
-        torch_dtype=dtype,
+        dtype=dtype,
         device_map="cuda:0",
         trust_remote_code=True,
     )
@@ -155,14 +155,15 @@ def process_dataset(
     to output_path when complete to ensure data integrity.
     """
     logger.info(f"Loading dataset: {dataset_name} (config: {config})")
-    # Bypass verification for triviaqa due to deprecated 'List' feature type in metadata
-    if "triviaqa" in dataset_name.lower():
+    # Bypass verification for triviaqa/truthfulqa due to deprecated 'List' feature type in metadata
+    # Use force_redownload to bypass corrupted cache from older datasets library versions
+    if "triviaqa" in dataset_name.lower() or "truthfulqa" in dataset_name.lower():
         dataset = datasets.load_dataset(
             dataset_name,
             config,
             split="test",
-            trust_remote_code=True,
-            verification_mode="no_checks"
+            verification_mode="no_checks",
+            download_mode="force_redownload"
         )
     else:
         dataset = datasets.load_dataset(dataset_name, config, split="test")
@@ -200,6 +201,9 @@ def process_dataset(
         )
         df_batch.to_csv(partial_output_path, index=False, mode='a', header=False)
         total_saved += len(df_batch)
+
+        # Clear GPU cache to prevent memory fragmentation
+        torch.cuda.empty_cache()
 
     # Atomically rename partial file to final file (ensures complete dataset or nothing)
     partial_output_path.rename(output_path)
@@ -302,7 +306,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dtype",
         type=str,
-        default="bfloat16",
+        default="float32",
         choices=["float16", "bfloat16", "float32"],
         help="Model dtype (default: bfloat16).",
     )
