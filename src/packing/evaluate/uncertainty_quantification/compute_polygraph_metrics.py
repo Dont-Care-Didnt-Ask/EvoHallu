@@ -9,13 +9,21 @@ import ast
 import logging
 import re
 import string
+import sys
 from pathlib import Path
+
+# Add the current directory to sys.path for alignscore imports
+_current_dir = Path(__file__).parent
+if str(_current_dir) not in sys.path:
+    sys.path.insert(0, str(_current_dir))
 
 import numpy as np
 import pandas as pd
 from rouge_score import rouge_scorer
 from sacrebleu.metrics import BLEU
 from tqdm import tqdm
+from alignscore import AlignScore
+from typing import List
 
 logging.basicConfig(
     level=logging.INFO,
@@ -42,6 +50,35 @@ DATASET_CONFIGS = {
 }
 
 
+def detect_dataset_type(filename: str) -> str | None:
+    """
+    Detect dataset type from filename by matching against known dataset prefixes.
+
+    Handles files with patterns:
+    - {dataset_name}.csv
+    - {dataset_name}_limit_{n}.csv
+    - PARTIAL_{dataset_name}.csv
+    - PARTIAL_{dataset_name}_limit_{n}.csv
+
+    Returns:
+        metric_type if dataset is recognized, None otherwise
+    """
+    # Remove PARTIAL_ prefix if present
+    base_name = filename
+    if base_name.startswith("PARTIAL_"):
+        base_name = base_name[8:]  # len("PARTIAL_") = 8
+
+    # Remove .csv extension
+    if base_name.endswith(".csv"):
+        base_name = base_name[:-4]
+
+    # Remove _limit_{number} suffix if present
+    base_name = re.sub(r"_limit_\d+$", "", base_name)
+
+    # Look up in DATASET_CONFIGS
+    return DATASET_CONFIGS.get(base_name)
+
+
 # =============================================================================
 # Text Normalization
 # =============================================================================
@@ -56,6 +93,17 @@ def normalize_answer(s: str) -> str:
     # Normalize whitespace
     s = " ".join(s.split())
     return s
+
+# =============================================================================
+# AlignScore (general)
+# =============================================================================
+
+_align_scorer = AlignScore()
+
+def compute_alignscore(generations: List[str], references: List[str]) -> np.ndarray:
+    """Compute AlignScore metric (https://aclanthology.org/2023.acl-long.634/)."""
+    scores = _align_scorer(stats={"greedy_texts": generations}, target_texts=references)
+    return scores
 
 
 # =============================================================================
@@ -263,6 +311,8 @@ def compute_metrics_for_dataset(
     generations = df["model_generation"].fillna("").astype(str)
     references = df["output"].fillna("").astype(str)
 
+    df["alignscore"] = compute_alignscore(generations.tolist(), references.tolist())
+
     if metric_type == "translation":
         df["bleu"] = [
             compute_bleu(gen, ref)
@@ -412,12 +462,23 @@ def parse_args() -> argparse.Namespace:
         "--output-dir",
         type=str,
         default=None,
-        help="Directory to save CSV files with metrics. If not specified, overwrites input files.",
+        help="Directory to save CSV files with metrics. If not specified, saves to input-dir with '_metrics' suffix.",
+    )
+    parser.add_argument(
+        "--pattern",
+        type=str,
+        default="*.csv",
+        help="Glob pattern to filter CSV files (e.g., '*_limit_5.csv', 'PARTIAL_*.csv'). Default: '*.csv'",
     )
     parser.add_argument(
         "--print-summary",
         action="store_true",
         help="Print summary statistics with bootstrap CIs.",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show which files would be processed without actually processing them.",
     )
     return parser.parse_args()
 
@@ -426,30 +487,79 @@ def main() -> None:
     args = parse_args()
 
     input_dir = Path(args.input_dir)
-    output_dir = Path(args.output_dir) if args.output_dir else input_dir
+    if not input_dir.exists():
+        logger.error(f"Input directory not found: {input_dir}")
+        return
+
+    # Set output directory
+    if args.output_dir:
+        output_dir = Path(args.output_dir)
+    else:
+        # Add _metrics suffix to preserve original files
+        output_dir = input_dir.parent / f"{input_dir.name}_metrics"
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    for dataset_name, metric_type in DATASET_CONFIGS.items():
-        input_path = input_dir / f"{dataset_name}.csv"
+    # Find all CSV files matching the pattern
+    csv_files = sorted(input_dir.glob(args.pattern))
 
-        if not input_path.exists():
-            logger.warning(f"Skipping {dataset_name}: file not found at {input_path}")
+    if not csv_files:
+        logger.warning(f"No CSV files found matching pattern '{args.pattern}' in {input_dir}")
+        return
+
+    logger.info(f"Found {len(csv_files)} CSV files matching pattern '{args.pattern}'")
+
+    processed_count = 0
+    skipped_count = 0
+
+    for input_path in csv_files:
+        filename = input_path.name
+
+        # Detect dataset type from filename
+        metric_type = detect_dataset_type(filename)
+
+        if metric_type is None:
+            logger.warning(f"Skipping {filename}: unknown dataset type")
+            skipped_count += 1
             continue
 
-        logger.info(f"Processing {dataset_name} with {metric_type} metrics")
+        # Check if file has required columns
+        if args.dry_run:
+            logger.info(f"[DRY RUN] Would process {filename} with {metric_type} metrics")
+            processed_count += 1
+            continue
 
-        df = pd.read_csv(input_path)
-        df = compute_metrics_for_dataset(df, metric_type)
+        try:
+            df = pd.read_csv(input_path)
 
-        output_path = output_dir / f"{dataset_name}.csv"
-        df.to_csv(output_path, index=False)
-        logger.info(f"Saved metrics to {output_path}")
+            # Verify required columns exist
+            required_cols = ["model_generation", "output"]
+            missing_cols = [col for col in required_cols if col not in df.columns]
+            if missing_cols:
+                logger.warning(f"Skipping {filename}: missing required columns {missing_cols}")
+                skipped_count += 1
+                continue
 
-        if args.print_summary:
-            print_metrics_summary(df, dataset_name)
+            logger.info(f"Processing {filename} ({len(df)} rows) with {metric_type} metrics")
 
-    logger.info("All datasets processed.")
+            df = compute_metrics_for_dataset(df, metric_type)
+
+            # Preserve original filename in output
+            output_path = output_dir / filename
+            df.to_csv(output_path, index=False)
+            logger.info(f"Saved metrics to {output_path}")
+
+            if args.print_summary:
+                print_metrics_summary(df, filename)
+
+            processed_count += 1
+
+        except Exception as e:
+            logger.error(f"Error processing {filename}: {e}")
+            skipped_count += 1
+            continue
+
+    logger.info(f"Processing complete: {processed_count} files processed, {skipped_count} files skipped")
 
 
 if __name__ == "__main__":
