@@ -10,15 +10,20 @@ import json
 import numpy as np
 import pandas as pd
 import torch
-from torch.nn.functional import log_softmax, softmax
-from transformers import AutoModelForCausalLM, AutoTokenizer
 from sklearn.metrics import roc_auc_score
 
 from tqdm import tqdm
 
 from src.packing.evaluate.uncertainty_quantification.features import make_all_stats
-from src.packing.evaluate.uncertainty_quantification.task_uncertainty_quantification import _bootstrap_auc_ci, _delong_auc_ci
 from src.packing.evaluate.uncertainty_quantification.estimator_base import Estimator
+from src.packing.evaluate.uncertainty_quantification.utils import (
+    normalize_dataframe_classification,
+    apply_chat_template,
+    pack_single_sample_raw_states,
+    bootstrap_auc_ci,
+    delong_auc_ci,
+    generate_bootstrap_indices,
+)
 
 from src.packing.evaluate.uncertainty_quantification.found_formulas import (
     SequenceLogProb,
@@ -42,142 +47,6 @@ from src.packing.evaluate.uncertainty_quantification.found_formulas import (
     ExpWeightedNegLogProbWithTop1,
 )
 
-def _normalize_dataframe(
-    csv_path: str,
-    text_col: str = "claim",
-    label_col: str = "is_hallu",
-) -> pd.DataFrame:
-    df = pd.read_csv(csv_path)
-
-    if text_col not in df.columns or label_col not in df.columns:
-        raise ValueError(
-            f"CSV at {csv_path} must contain '{text_col}' and '{label_col}' columns. "
-            f"Found columns: {list(df.columns)}"
-        )
-
-    df[text_col] = df[text_col].astype(str).str.strip()
-    # Truncate text to 300 characters to avoid long sequences that might cause OOMs
-    df[text_col] = df[text_col].str.slice(start=0, stop=300)
-    df = df[df[text_col] != ""]
-
-    # Raise an error if there are any non-numeric labels
-    non_numeric_rows = ~pd.to_numeric(df[label_col], errors="coerce").notnull()
-    if non_numeric_rows.any():
-        raise ValueError(
-            f"CSV at {csv_path} contains non-numeric values in '{label_col}' column at rows: {df[non_numeric_rows].index.tolist()}."
-        )
-    df[label_col] = df[label_col].astype(float)
-
-    if len(df) == 0:
-        raise ValueError(f"No valid rows left after cleaning CSV at {csv_path}")
-
-    return df.reset_index(drop=True)
-
-
-def _apply_chat_template(tokenizer, texts: List[str], template: Optional[str]) -> List[str]:
-    if not template:
-        return texts
-
-    if template == "assistant-only":
-        # Simple assistant-only wrapper by default
-        build_prompt = lambda t: [
-            {"role": "assistant", "content": t},
-        ]
-    elif "generate_true_statement" in template:
-        build_prompt = lambda t: [
-            {"role": "user", "content": "Generate true statement"},
-            {"role": "assistant", "content": t},
-        ]
-    else:
-        raise ValueError(f"Unknown value for --chat-template: {template}")
-
-    rendered: List[str] = []
-    for t in texts:
-        rendered.append(
-            tokenizer.apply_chat_template(
-                build_prompt(t),
-                tokenize=False,
-                add_generation_prompt=False,
-            )
-        )
-    return rendered
-
-def pack_single_sample_raw_states(
-    i: int,
-    batch_raw: List[str],
-    batch_labels: List[float],
-    batch_ids: List[str],
-    chat_inputs: Dict[str, Any],
-    raw_inputs: Dict[str, Any],
-    hidden_states: List[torch.Tensor],
-    attentions: List[torch.Tensor],
-    attn_mask: torch.Tensor,
-    logits: torch.Tensor,
-    layer_stride: int,
-    top_k: int,
-) -> Dict[str, Any]:
-    length = int(attn_mask[i].sum().item())
-    if length <= 0:
-        raise ValueError("Empty attention mask")
-
-    # Input IDs and attention mask (chat form)
-    input_ids_i = chat_inputs["input_ids"][i, :length].to("cpu", dtype=torch.int32)
-    attention_mask_i = attn_mask[i, :length].to("cpu", dtype=torch.int8)
-
-    # Raw (non-chat) input IDs for the original claim
-    raw_attn_mask_i = raw_inputs["attention_mask"][i]
-    raw_length = int(raw_attn_mask_i.sum().item())
-    orig_input_ids_i = raw_inputs["input_ids"][i, :raw_length].to("cpu", dtype=torch.int32)
-
-    # Stack hidden states into [num_layers + 1, length, hidden_size]
-    hs_layers: List[torch.Tensor] = []
-    for j, h in enumerate(hidden_states):
-        if j % layer_stride != 0:
-            continue
-
-        hs_layers.append(
-            h[i, :length].to(dtype=torch.float16, device="cpu")
-        )
-    hidden_i = torch.stack(hs_layers, dim=0)
-
-    # Stack attentions into [num_layers, num_heads, length, length]
-    attn_layers: List[torch.Tensor] = []
-    for a in attentions:
-        attn_layers.append(
-            a[i, :, :length, :length].to(dtype=torch.float16, device="cpu")
-        )
-    attn_i = torch.stack(attn_layers, dim=0)
-
-    raw_logits_i = logits[i, :length]  # already on CPU, float16
-    top_k_vals, top_k_inds = torch.topk(raw_logits_i, k=top_k, dim=-1)
-    logits_i = log_softmax(raw_logits_i, dim=-1)
-    probs_i = softmax(raw_logits_i, dim=-1)
-    del raw_logits_i
-
-    # Log probabilities of each token in the sequence (excluding the first token)
-    sequence_logprobs_i = logits_i[:-1][torch.arange(length - 1), input_ids_i[1:]]
-    # Top-1 logit for each token in the sequence
-    greedy_logprobs_i = logits_i.max(dim=-1).values
-    # Entropy of probability distribution at each token
-    token_entropies_i = -probs_i.mul(logits_i).sum(dim=-1).to(dtype=torch.float16)
-
-    # Common fields for all outputs
-    raw_internal_states = {
-        "claim": batch_raw[i],
-        "label": float(batch_labels[i]),
-        "id": batch_ids[i],
-        "input_ids": input_ids_i,
-        "attention_mask": attention_mask_i,
-        "orig_input_ids": orig_input_ids_i,
-        "sequence_logprobs": sequence_logprobs_i.numpy(), # length - 1
-        "greedy_logprobs": greedy_logprobs_i.numpy(), # length
-        "token_entropies": token_entropies_i.numpy(), # length
-        "hidden_states": hidden_i,
-        "attentions": attn_i,
-        "top_k_logits": top_k_vals,
-        "top_k_indices": top_k_inds,
-    }
-    return raw_internal_states
 
 def eval_estimators_on_split(
     df: pd.DataFrame,
@@ -201,7 +70,7 @@ def eval_estimators_on_split(
     ids = df[id_col].tolist() if id_col and id_col in df.columns else [None] * len(df)
 
     # Chat-form texts (may be identical to raw texts if template is not used)
-    rendered_texts = _apply_chat_template(tokenizer, texts, chat_template)
+    rendered_texts = apply_chat_template(tokenizer, texts, chat_template)
     
     estimators_to_scores: Dict[str, List[np.ndarray]] = {str(estimator): [] for estimator in estimators}
     labels_list: List[np.ndarray] = []
@@ -353,9 +222,8 @@ def eval_estimators_on_split(
     # This ensures aligned samples across all methods for pairwise comparisons
     B = 1000
     BOOTSTRAP_SEED = 31
-    rng = np.random.default_rng(BOOTSTRAP_SEED)
     n_samples = len(labels)
-    bootstrap_indices = rng.choice(n_samples, size=(B, n_samples), replace=True)
+    bootstrap_indices = generate_bootstrap_indices(n_samples, n_bootstrap=B, seed=BOOTSTRAP_SEED)
     logging.info(f"[UQ evaluate_func] Generated {B} bootstrap samples with seed {BOOTSTRAP_SEED}")
 
     for key, scores in estimators_to_scores.items():
@@ -366,12 +234,12 @@ def eval_estimators_on_split(
 
         # Bootstrap confidence interval for AUC (using pre-generated indices)
         bootstrap_start = time.time()
-        auc_ci, bootstrap_aucs = _bootstrap_auc_ci(labels, scores, B, bootstrap_indices)
-        delong_auc_ci = _delong_auc_ci(labels, scores)
+        auc_ci, bootstrap_aucs = bootstrap_auc_ci(labels, scores, B, bootstrap_indices)
+        delong_ci = delong_auc_ci(labels, scores)
         bootstrap_elapsed = time.time() - bootstrap_start
-        logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s. Bootstrap CI: {auc_ci}, DeLong CI: {delong_auc_ci}")
+        logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s. Bootstrap CI: {auc_ci}, DeLong CI: {delong_ci}")
         estimators_to_metrics[key]["Bootstrap CI"] = auc_ci
-        estimators_to_metrics[key]["DeLong CI"] = delong_auc_ci
+        estimators_to_metrics[key]["DeLong CI"] = delong_ci
         estimators_to_bootstrap_aucs[key] = bootstrap_aucs
         print("-" * 100)
 
@@ -458,32 +326,17 @@ def main() -> None:
 
     args = ap.parse_args()
 
-    df = _normalize_dataframe(args.data, text_col=args.text_col, label_col=args.label_col)
+    df = normalize_dataframe_classification(args.data, text_col=args.text_col, label_col=args.label_col)
     if args.max_samples is not None:
         # Take first `max_samples` samples
         df = df.head(args.max_samples)
 
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.model_id,
-        cache_dir=args.cache_dir,
-    )
-    if tokenizer.pad_token is None and tokenizer.eos_token is not None:
-        tokenizer.pad_token = tokenizer.eos_token
-
-    model = AutoModelForCausalLM.from_pretrained(
-        args.model_id,
+    model, tokenizer, model_metadata = load_model_and_tokenizer(
+        model_id=args.model_id,
         cache_dir=args.cache_dir,
         torch_dtype=torch.float32,
-    ).eval().to("cuda" if torch.cuda.is_available() else "cpu")
-
-    config = model.config
-    model_metadata = {
-        "model_id": getattr(config, "_name_or_path", None),
-        "hidden_size": int(getattr(config, "hidden_size", 0)),
-        "num_layers": int(getattr(config, "num_hidden_layers", 0)),
-        "num_attention_heads": int(getattr(config, "num_attention_heads", 0)),
-        "vocab_size": int(getattr(config, "vocab_size", 0)),
-    }
+        device="auto",
+    )
 
     context = {
         "supervised": False,
