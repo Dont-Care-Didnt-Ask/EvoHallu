@@ -421,28 +421,31 @@ def bootstrap_ci(
     return float(np.mean(values)), float(ci_lower), float(ci_upper)
 
 
-def print_metrics_summary(df: pd.DataFrame, dataset_name: str) -> None:
+def print_metrics_summary(df: pd.DataFrame, dataset_name: str, output_filename: str) -> None:
     """Print summary statistics with bootstrap CIs for all metric columns."""
     metric_columns = [
         col for col in df.columns
-        if col in ["bleu", "rouge1", "rouge2", "rougeL", "exact_match", "f1",
+        if col in ["alignscore", "bleu", "rouge1", "rouge2", "rougeL", "exact_match", "f1",
                    "contains_match", "best_rouge1", "best_rouge2", "best_rougeL"]
     ]
 
     if not metric_columns:
         return
 
-    print(f"\n{'='*60}")
-    print(f"Dataset: {dataset_name} (n={len(df)})")
-    print(f"{'='*60}")
-    print(f"{'Metric':<20} {'Mean':>10} {'95% CI':>20}")
-    print("-" * 60)
+    with open(output_filename, "a") as f:        
+        print(f"\n{'='*60}", file=f)
+        print(f"Dataset: {dataset_name} (n={len(df)})", file=f)
+        print(f"{'='*60}", file=f)
+        print(f"{'Metric':<20} {'Mean':>10} {'95% CI':>20}", file=f)
+        print("-" * 60, file=f)
 
-    for col in metric_columns:
-        values = df[col].values
-        mean, ci_lower, ci_upper = bootstrap_ci(values)
-        print(f"{col:<20} {mean:>10.4f} [{ci_lower:.4f}, {ci_upper:.4f}]")
+        for col in metric_columns:
+            values = df[col].values
+            mean, ci_lower, ci_upper = bootstrap_ci(values)
+            filler = " " * 15
+            print(f"{col:<20} {mean:>10.3f}{filler}({ci_lower:.3f}, {ci_upper:.3f})", file=f)
 
+        print("\n", file=f)
 
 # =============================================================================
 # Main
@@ -550,7 +553,7 @@ def main() -> None:
             logger.info(f"Saved metrics to {output_path}")
 
             if args.print_summary:
-                print_metrics_summary(df, filename)
+                print_metrics_summary(df, filename, "polygraph_summary_metrics.txt")
 
             processed_count += 1
 
