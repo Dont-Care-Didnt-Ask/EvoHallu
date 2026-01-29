@@ -149,6 +149,11 @@ def compute_stats_for_existing_generation(
         gen_tokens_list = full_enc["input_ids"][0, prompt_len:].tolist()
         greedy_tokens.append(gen_tokens_list)
 
+        # NOTE: lm-polygraph's generation includes EOS token in greedy_tokens but not
+        # in decoded text. When scoring pre-existing text, we cannot know if generation
+        # ended with EOS (natural termination) or without (hit max_tokens). This may cause
+        # length mismatches. Uncertainty estimators handle variable-length sequences.
+
         # Forward pass (single sample, no padding)
         with torch.no_grad():
             outputs = model.model(
@@ -162,7 +167,7 @@ def compute_stats_for_existing_generation(
 
         # Extract log probs for generation tokens
         # Logit at position (prompt_len - 1 + j) predicts gen token j
-        gen_log_probs = log_probs[0, prompt_len - 1 : prompt_len - 1 + gen_len].cpu().numpy()
+        gen_log_probs = log_probs[0, prompt_len - 1 : prompt_len - 1 + gen_len].float().cpu().numpy()
         greedy_log_probs.append(gen_log_probs)
 
         # Extract log likelihood for each generated token
@@ -172,25 +177,43 @@ def compute_stats_for_existing_generation(
         greedy_log_likelihoods.append(ll)
 
         # Extract attention within generation tokens
+        # Key insight: shift query positions by -1 to align with generation format
+        # During generation at step j: query attends to positions [0..j-1] (no self-attention)
+        # During scoring at position j: query attends to positions [0..j] (includes self-attention)
+        # Solution: use scoring attention from position j-1 to mimic generation at step j
+        #
+        # Implementation follows HalluDetect/run_uq_methods.py:get_attentions (lines 62-82)
         if output_attentions:
             attentions = outputs.attentions
-            # Shape: (num_layers * num_heads, gen_len, gen_len)
-            attn_mask = np.zeros((num_layers * num_heads, gen_len, gen_len), dtype=np.float32)
+            # Concatenate attentions: tuple of (batch, heads, seq, seq) -> (layers, heads, seq, seq)
+            attn_mask = tuple(attention.cpu() for attention in attentions)
+            attn_mask = torch.cat(attn_mask).float().numpy()  # (layers, heads, seq, seq)
 
-            for j in range(1, gen_len):
-                # Attention from gen position j to gen positions 0..j-1
-                # In sequence: from position (prompt_len + j) to positions (prompt_len : prompt_len + j)
-                attn_row = []
-                for layer_idx in range(num_layers):
-                    layer_attn = attentions[layer_idx][0]  # (num_heads, seq_len, seq_len)
-                    for head_idx in range(num_heads):
-                        attn_values = layer_attn[head_idx, prompt_len + j, prompt_len : prompt_len + j]
-                        attn_row.append(attn_values.cpu().numpy())
+            # Reshape to (layers * heads, seq, seq)
+            attn_mask_reshape = attn_mask.reshape(num_layers * num_heads, full_len, full_len)
 
-                stacked = np.stack(attn_row, axis=0)  # (num_layers * num_heads, j)
-                attn_mask[:, j, :j] = stacked
+            # Shift query positions by -1 and extract generation token attention
+            # Query positions: [prompt_len-1, ..., prompt_len+gen_len-2] (shifted by -1)
+            # Key positions: [prompt_len, ..., prompt_len+gen_len-1] (generation tokens)
+            # This gives us shape (num_layers * num_heads, gen_len, gen_len)
+            if prompt_len > 0:
+                attn_mask_shifted = attn_mask_reshape[:, prompt_len - 1 : prompt_len + gen_len - 1, prompt_len : prompt_len + gen_len]
+            else:
+                # Edge case: if there's no prompt, we can't shift by -1
+                # Use the first gen_len-1 queries attending to first gen_len keys
+                attn_mask_shifted = attn_mask_reshape[:, : gen_len - 1, :gen_len]
 
-            attention_all.append(attn_mask)
+            # Apply causal masking (zero out attention to future tokens)
+            # After shifting: query at index j (absolute position prompt_len+j-1)
+            # attends to keys at indices [0..gen_len-1] (absolute positions [prompt_len..prompt_len+gen_len-1])
+            # Due to causal mask, query at prompt_len+j-1 can only attend to positions up to prompt_len+j-1
+            # In key indices, this means up to index j-1 (since key index k = absolute position prompt_len+k)
+            # So we need to zero out key indices j and onwards for query j
+            for j in range(attn_mask_shifted.shape[1]):
+                # Zero out attention to keys at indices j and onwards
+                attn_mask_shifted[:, j, j:] = 0.0
+
+            attention_all.append(attn_mask_shifted)
 
     result = {
         "greedy_log_likelihoods": greedy_log_likelihoods,
