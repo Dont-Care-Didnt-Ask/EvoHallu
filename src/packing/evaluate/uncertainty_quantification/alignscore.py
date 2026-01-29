@@ -30,7 +30,7 @@ class AlignScore:
         source_as_target=False,
     ):
         # super().__init__(["greedy_texts", "input_texts"], "sequence")
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         self.target_is_claims = target_is_claims
         self.batch_size = batch_size
         self.scorer = AlignScorer(
