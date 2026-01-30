@@ -45,7 +45,19 @@ from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # lm-polygraph imports
-from lm_polygraph.estimators import MaximumSequenceProbability, Perplexity
+from lm_polygraph.estimators import (
+    MaximumSequenceProbability, Perplexity,
+    # Ported estimators from found_formulas.py
+    SequenceLogProb, SequenceLogProbBottom, MinimalLogProb,
+    StdTokenEntropy, MeanStdTokenEntropy,
+    QuartileEntropyDiffNormalized, QuartileEntropyDiff,
+    PositionWeightedGap, PositionWeightedGapNormalized, Gap,
+    QuartileEntropyDiff_PositionWeightedGap,
+    QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay,
+    EntropySlope, LogProbSlope,
+    ExpWeightedNegLogProbWithTop1, ExpWeightedNegLogProb,
+    PositionWeightedGap_EntropySlope_TopKMassInv,
+)
 from lm_polygraph.estimators.rauq import RAUQ
 from lm_polygraph.ue_metrics.pred_rej_area import PredictionRejectionArea
 from lm_polygraph.utils.model import WhiteboxModel
@@ -107,6 +119,12 @@ def compute_stats_for_existing_generation(
     greedy_log_probs = []
     greedy_tokens = []
     attention_all = []
+
+    # New stats for ported estimators
+    sequence_logprobs_list = []
+    greedy_logprobs_list = []
+    token_entropies_list = []
+    top_k_logits_list = []
 
     num_layers = model.model.config.num_hidden_layers
     num_heads = model.model.config.num_attention_heads
@@ -176,6 +194,35 @@ def compute_stats_for_existing_generation(
             ll.append(gen_log_probs[j, token_id].item())
         greedy_log_likelihoods.append(ll)
 
+        # ============================================================================
+        # Compute additional stats for ported estimators
+        # ============================================================================
+
+        # 1. sequence_logprobs - log probs of ACTUALLY generated tokens
+        # Note: Has shape [gen_len-1] (excludes first token) to match original convention
+        # The first generated token doesn't have a "previous token" to compute sequence prob from
+        sequence_logprobs_item = np.array(ll[1:], dtype=np.float32) if len(ll) > 1 else np.array([], dtype=np.float32)
+        sequence_logprobs_list.append(sequence_logprobs_item)
+
+        # 2. greedy_logprobs - log probs of TOP-1 (most likely) token at each position
+        # Has shape [gen_len] (includes all positions)
+        greedy_logprobs_item = np.max(gen_log_probs, axis=1).astype(np.float32)
+        greedy_logprobs_list.append(greedy_logprobs_item)
+
+        # 3. token_entropies - Shannon entropy over full vocabulary: -sum(p * log(p))
+        probs = np.exp(gen_log_probs)  # shape [gen_len, vocab_size]
+        # Shannon entropy: -sum(p * log(p)) over vocab dimension
+        entropies = -np.sum(probs * gen_log_probs, axis=1).astype(np.float32)  # shape [gen_len]
+        token_entropies_list.append(entropies)
+
+        # 4. top_k_logits - top-512 logits per position (captures almost all probability mass)
+        # Use logits BEFORE softmax from the same positions as gen_log_probs
+        # logits shape: (1, full_seq_len, vocab_size)
+        # We need logits at positions [prompt_len-1 : prompt_len-1+gen_len]
+        gen_logits = logits[0, prompt_len - 1 : prompt_len - 1 + gen_len].float().cpu()
+        top_k_logits = torch.topk(gen_logits, k=min(512, gen_logits.shape[1]), dim=1).values.numpy().astype(np.float32)
+        top_k_logits_list.append(top_k_logits)
+
         # Extract attention within generation tokens
         # Key insight: shift query positions by -1 to align with generation format
         # During generation at step j: query attends to positions [0..j-1] (no self-attention)
@@ -221,6 +268,11 @@ def compute_stats_for_existing_generation(
         "greedy_texts": generation_texts,
         "greedy_log_probs": greedy_log_probs,
         "model": model,
+        # New stats for ported estimators
+        "sequence_logprobs": sequence_logprobs_list,
+        "greedy_logprobs": greedy_logprobs_list,
+        "token_entropies": token_entropies_list,
+        "top_k_logits": top_k_logits_list,
     }
 
     if output_attentions:
@@ -396,7 +448,13 @@ def main():
         "--batch-size",
         type=int,
         default=8,
-        help="Batch size for inference"
+        help="Batch size for inference (within each chunk)"
+    )
+    parser.add_argument(
+        "--chunk-size",
+        type=int,
+        default=64,
+        help="Number of samples per chunk for memory-efficient processing"
     )
     parser.add_argument(
         "--max-samples",
@@ -418,6 +476,38 @@ def main():
     )
 
     args = parser.parse_args()
+
+    # ============================================================================
+    # CRITICAL WARNING: batch_size > 1 causes divergence from lm-polygraph
+    # ============================================================================
+    if args.batch_size > 1:
+        warning_msg = """
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║                          ⚠️  CRITICAL WARNING  ⚠️                          ║
+║                                                                           ║
+║  batch_size > 1 WILL CAUSE DIVERGENCE FROM LM-POLYGRAPH GENERATION!     ║
+║                                                                           ║
+║  Batched processing introduces left-padding artifacts that cause         ║
+║  attention values to differ significantly from autoregressive            ║
+║  generation (verified: 0.9+ difference with batching vs 1e-6 without).  ║
+║                                                                           ║
+║  For accurate PRR evaluation matching lm-polygraph:                      ║
+║    --> USE --batch-size 1 <--                                            ║
+║                                                                           ║
+║  Current setting: batch_size = {batch_size}                              ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+        """.format(batch_size=args.batch_size)
+
+        logging.warning(warning_msg)
+
+        # Create warning file in output directory
+        output_dir = Path(args.output_path).parent
+        output_dir.mkdir(parents=True, exist_ok=True)
+        warning_file = output_dir / "BATCH_SIZE_GREATER_THAN_1_RESULTS_MAY_DIVERGE_WITH_LM_POLYGRAPH"
+        warning_file.touch()
+        logging.warning(f"Created warning file: {warning_file}")
 
     # Auto-detect dataset type
     if args.dataset_type is None:
@@ -503,8 +593,27 @@ def main():
 
     # Setup estimators
     estimators = [
+        # Existing LM-Polygraph estimators
         MaximumSequenceProbability(),
         Perplexity(),
+        # Ported estimators from found_formulas.py
+        SequenceLogProb(),
+        SequenceLogProbBottom(),
+        MinimalLogProb(),
+        StdTokenEntropy(),
+        MeanStdTokenEntropy(),
+        QuartileEntropyDiffNormalized(),
+        QuartileEntropyDiff(),
+        PositionWeightedGap(),
+        PositionWeightedGapNormalized(),
+        Gap(),
+        QuartileEntropyDiff_PositionWeightedGap(),
+        QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay(),
+        EntropySlope(),
+        LogProbSlope(),
+        ExpWeightedNegLogProbWithTop1(),
+        ExpWeightedNegLogProb(),
+        PositionWeightedGap_EntropySlope_TopKMassInv(),
     ]
 
     output_attentions = not args.disable_rauq
@@ -513,53 +622,126 @@ def main():
 
     logging.info(f"Evaluating {len(estimators)} estimators: {[str(e) for e in estimators]}")
 
-    # Process in batches
-    all_stats = {
-        "greedy_log_likelihoods": [],
-        "greedy_tokens": [],
-        "greedy_texts": [],
-        "greedy_log_probs": [],
-        "model": model,
-    }
-    if output_attentions:
-        all_stats["attention_all"] = []
-
     input_texts = df[args.input_col].astype(str).tolist()
     generation_texts = df[args.text_col].astype(str).tolist()
-    quality_scores = df[args.metric_col].tolist()
+    quality_scores = np.array(df[args.metric_col].tolist())
 
-    for start in tqdm(range(0, len(df), args.batch_size), desc="Computing stats"):
-        end = min(start + args.batch_size, len(df))
-        batch_inputs = input_texts[start:end]
-        batch_generations = generation_texts[start:end]
+    # Process in chunks to avoid OOM
+    # Accumulate only scores (small), not stats (huge)
+    chunk_size = args.chunk_size
+    num_samples = len(df)
+    num_chunks = (num_samples + chunk_size - 1) // chunk_size
 
-        batch_stats = compute_stats_for_existing_generation(
-            model=model,
-            input_texts=batch_inputs,
-            generation_texts=batch_generations,
-            output_attentions=output_attentions,
-        )
+    logging.info(f"Processing {num_samples} samples in {num_chunks} chunks of size {chunk_size}")
 
-        # Accumulate stats
-        all_stats["greedy_log_likelihoods"].extend(batch_stats["greedy_log_likelihoods"])
-        all_stats["greedy_tokens"].extend(batch_stats["greedy_tokens"])
-        all_stats["greedy_texts"].extend(batch_stats["greedy_texts"])
-        all_stats["greedy_log_probs"].extend(batch_stats["greedy_log_probs"])
+    # Accumulate uncertainty scores for each estimator
+    all_uncertainty_scores = {str(estimator): [] for estimator in estimators}
+
+    for chunk_idx in tqdm(range(num_chunks), desc="Processing chunks"):
+        start = chunk_idx * chunk_size
+        end = min(start + chunk_size, num_samples)
+        chunk_size_actual = end - start
+
+        logging.info(f"Chunk {chunk_idx + 1}/{num_chunks}: samples {start}-{end}")
+
+        # Compute stats for this chunk only
+        chunk_stats = {
+            "greedy_log_likelihoods": [],
+            "greedy_tokens": [],
+            "greedy_texts": [],
+            "greedy_log_probs": [],
+            "model": model,
+            # New stats for ported estimators
+            "sequence_logprobs": [],
+            "greedy_logprobs": [],
+            "token_entropies": [],
+            "top_k_logits": [],
+        }
         if output_attentions:
-            all_stats["attention_all"].extend(batch_stats["attention_all"])
+            chunk_stats["attention_all"] = []
 
-        # Free memory
-        del batch_stats
+        # Process samples in this chunk (with mini-batches)
+        for mini_start in range(start, end, args.batch_size):
+            mini_end = min(mini_start + args.batch_size, end)
+            batch_inputs = input_texts[mini_start:mini_end]
+            batch_generations = generation_texts[mini_start:mini_end]
+
+            batch_stats = compute_stats_for_existing_generation(
+                model=model,
+                input_texts=batch_inputs,
+                generation_texts=batch_generations,
+                output_attentions=output_attentions,
+            )
+
+            # Accumulate in chunk_stats
+            chunk_stats["greedy_log_likelihoods"].extend(batch_stats["greedy_log_likelihoods"])
+            chunk_stats["greedy_tokens"].extend(batch_stats["greedy_tokens"])
+            chunk_stats["greedy_texts"].extend(batch_stats["greedy_texts"])
+            chunk_stats["greedy_log_probs"].extend(batch_stats["greedy_log_probs"])
+            chunk_stats["sequence_logprobs"].extend(batch_stats["sequence_logprobs"])
+            chunk_stats["greedy_logprobs"].extend(batch_stats["greedy_logprobs"])
+            chunk_stats["token_entropies"].extend(batch_stats["token_entropies"])
+            chunk_stats["top_k_logits"].extend(batch_stats["top_k_logits"])
+            if output_attentions:
+                chunk_stats["attention_all"].extend(batch_stats["attention_all"])
+
+            del batch_stats
+
+        # Extract uncertainty scores from this chunk
+        for estimator in estimators:
+            estimator_name = str(estimator)
+            try:
+                chunk_scores = estimator(chunk_stats)
+                if not isinstance(chunk_scores, np.ndarray):
+                    chunk_scores = np.array(chunk_scores)
+                all_uncertainty_scores[estimator_name].extend(chunk_scores.tolist())
+            except Exception as e:
+                logging.warning(f"Chunk {chunk_idx + 1}: {estimator_name} failed - {e}")
+                # Append NaN for failed samples
+                all_uncertainty_scores[estimator_name].extend([np.nan] * chunk_size_actual)
+
+        # Discard chunk stats to free memory
+        del chunk_stats
         torch.cuda.empty_cache()
         gc.collect()
 
-    # Evaluate PRR
+    # Compute PRR with accumulated scores
     logging.info("Computing PRR metrics...")
-    estimator_results = evaluate_prr(
-        stats=all_stats,
-        quality_scores=quality_scores,
-        estimators=estimators,
-    )
+    prr_metric = PredictionRejectionArea(max_rejection=0.95)
+    estimator_results = {}
+
+    for estimator in estimators:
+        estimator_name = str(estimator)
+        try:
+            uncertainty_scores = np.array(all_uncertainty_scores[estimator_name])
+
+            # Remove NaN values if any
+            total_samples = len(uncertainty_scores)
+            valid_mask = ~np.isnan(uncertainty_scores)
+            num_valid = valid_mask.sum()
+            num_failed = total_samples - num_valid
+
+            if not valid_mask.all():
+                logging.warning(f"{estimator_name}: {num_failed} samples failed, excluding from PRR")
+                uncertainty_scores = uncertainty_scores[valid_mask]
+                valid_quality_scores = quality_scores[valid_mask]
+            else:
+                valid_quality_scores = quality_scores
+
+            prr = prr_metric(uncertainty_scores, valid_quality_scores)
+            prr_pct = round(100.0 * prr, 2)
+
+            estimator_results[estimator_name] = {
+                "PRR": prr_pct,
+                "num_samples": int(num_valid),
+                "num_failed": int(num_failed),
+                "total_samples": int(total_samples),
+            }
+            logging.info(f"  {estimator_name}: PRR = {prr_pct}% ({num_valid}/{total_samples} samples)")
+
+        except Exception as e:
+            logging.warning(f"  {estimator_name}: FAILED - {e}")
+            estimator_results[estimator_name] = {"PRR": None, "error": str(e)}
 
     # Save results
     results = {
