@@ -491,7 +491,7 @@ def evaluate_func(
     B = int(getattr(cfg.task, "bootstrap_samples", 1000))
     logging.info(f"[UQ evaluate_func] Computing bootstrap CI with B={B}...")
     bootstrap_start = time.time()
-    auc_ci = _bootstrap_auc_ci(labels, scores, B)
+    auc_ci, _ = _bootstrap_auc_ci(labels, scores, B)
     delong_auc_ci = _delong_auc_ci(labels, scores)
     bootstrap_elapsed = time.time() - bootstrap_start
     logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s. Bootstrap CI: {auc_ci}, DeLong CI: {delong_auc_ci}")
