@@ -4,7 +4,8 @@ devices=1
 datasets_source_dir="../longtail-dataset/datasets"
 
 DATASETS=(
-    ${datasets_source_dir}/train_mix_no_wildhall.csv
+    # ${datasets_source_dir}/train_mix_no_wildhall.csv
+    ${datasets_source_dir}/test_mix_no_wildhall.csv
     # ${datasets_source_dir}/popqa/popqa_train_filtered_10shot.csv
     # ${datasets_source_dir}/popqa/popqa_test_filtered_10shot.csv
 )
