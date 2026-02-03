@@ -1,7 +1,7 @@
 echo $(which python)
 
 devices=1
-output_dir=Jan29
+output_dir=Feb2
 
 mkdir -p out/logs/example/EVALS_polygraph/${output_dir}
 
@@ -37,7 +37,7 @@ for dataset_info in "${datasets[@]}"; do
     echo "=========================================="
 
     # Process with chunked approach to avoid OOM
-    # - chunk_size=64: Process 64 samples at a time, extract scores, discard stats
+    # - chunk_size=C: Process C samples at a time, extract scores, discard stats
     # - batch_size=1: Individual processing within chunk to avoid padding artifacts
     CUDA_VISIBLE_DEVICES=$devices PYTHONPATH=/mnt/extremessd10tb/seleznev/EvoTune python src/packing/evaluate/uncertainty_quantification/eval_prr_polygraph.py \
         --data "$dataset_path" \
@@ -46,7 +46,7 @@ for dataset_info in "${datasets[@]}"; do
         --metric-col "$metric" \
         --output-path "out/logs/example/EVALS_polygraph/${output_dir}/${name}.json" \
         --cache-dir /mnt/extremessd10tb/seleznev/.cache \
-        --chunk-size 64 \
+        --chunk-size 16 \
         --batch-size 1 \
         --instruct
 
