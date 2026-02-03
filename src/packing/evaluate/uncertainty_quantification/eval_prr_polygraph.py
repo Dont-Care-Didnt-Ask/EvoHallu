@@ -58,6 +58,19 @@ from lm_polygraph.estimators import (
     ExpWeightedNegLogProbWithTop1, ExpWeightedNegLogProb,
     PositionWeightedGap_EntropySlope_TopKMassInv,
 )
+# Evolved estimators from EvoTune rounds 289, 144, 177
+from lm_polygraph.estimators.outlier_score import (
+    LogProbSlope_OutlierScore,
+    SequenceLogProb_OutlierScore,
+)
+from lm_polygraph.estimators.top_bottom_ratio import (
+    LogProbSlope_TopBottomRatio,
+    SequenceLogProb_TopBottomRatio,
+)
+from lm_polygraph.estimators.bottom_mass_avg import (
+    LogProbSlope_BottomMassAvg,
+    SequenceLogProb_BottomMassAvg,
+)
 from lm_polygraph.estimators.rauq import RAUQ
 from lm_polygraph.ue_metrics.pred_rej_area import PredictionRejectionArea
 from lm_polygraph.utils.model import WhiteboxModel
@@ -199,9 +212,9 @@ def compute_stats_for_existing_generation(
         # ============================================================================
 
         # 1. sequence_logprobs - log probs of ACTUALLY generated tokens
-        # Note: Has shape [gen_len-1] (excludes first token) to match original convention
-        # The first generated token doesn't have a "previous token" to compute sequence prob from
-        sequence_logprobs_item = np.array(ll[1:], dtype=np.float32) if len(ll) > 1 else np.array([], dtype=np.float32)
+        # Note: Has shape [gen_len] (includes all generated tokens) to match original convention
+        # Original design excludes only the first token of the FULL sequence (prompt+gen), not first gen token
+        sequence_logprobs_item = np.array(ll, dtype=np.float32)
         sequence_logprobs_list.append(sequence_logprobs_item)
 
         # 2. greedy_logprobs - log probs of TOP-1 (most likely) token at each position
@@ -614,6 +627,16 @@ def main():
         ExpWeightedNegLogProbWithTop1(),
         ExpWeightedNegLogProb(),
         PositionWeightedGap_EntropySlope_TopKMassInv(),
+        # Evolved estimators from EvoTune (Rounds 289, 144, 177)
+        # Round 289: Best performer (Test AUC: 74.35%)
+        LogProbSlope_OutlierScore(),
+        SequenceLogProb_OutlierScore(),
+        # Round 144: Top-bottom ratio (Test AUC: 73.20%)
+        LogProbSlope_TopBottomRatio(),
+        SequenceLogProb_TopBottomRatio(),
+        # Round 177: Bottom-mass average (Test AUC: 73.19%)
+        LogProbSlope_BottomMassAvg(),
+        SequenceLogProb_BottomMassAvg(),
     ]
 
     output_attentions = not args.disable_rauq
