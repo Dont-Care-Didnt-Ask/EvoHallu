@@ -40,6 +40,13 @@ from src.packing.evaluate.uncertainty_quantification.found_formulas import (
     LogProbSlope,
     ExpWeightedNegLogProb,
     ExpWeightedNegLogProbWithTop1,
+    # Evolved estimators from EvoTune (Rounds 289, 144, 177)
+    LogProbSlope_OutlierScore,
+    SequenceLogProb_OutlierScore,
+    LogProbSlope_TopBottomRatio,
+    SequenceLogProb_TopBottomRatio,
+    LogProbSlope_BottomMassAvg,
+    SequenceLogProb_BottomMassAvg,
 )
 
 def _normalize_dataframe(
@@ -510,6 +517,16 @@ def main() -> None:
         LogProbSlope(context=context),
         ExpWeightedNegLogProb(context=context),
         ExpWeightedNegLogProbWithTop1(context=context),
+        # Evolved estimators from EvoTune (Rounds 289, 144, 177)
+        # Round 289: Best performer (Test AUC: 74.35%)
+        LogProbSlope_OutlierScore(context=context),
+        SequenceLogProb_OutlierScore(context=context),
+        # Round 144: Top-bottom ratio (Test AUC: 73.20%)
+        LogProbSlope_TopBottomRatio(context=context),
+        SequenceLogProb_TopBottomRatio(context=context),
+        # Round 177: Bottom-mass average (Test AUC: 73.19%)
+        LogProbSlope_BottomMassAvg(context=context),
+        SequenceLogProb_BottomMassAvg(context=context),
     ]
 
     # Set logging level to INFO

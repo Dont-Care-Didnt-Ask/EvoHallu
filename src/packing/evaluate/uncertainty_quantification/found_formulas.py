@@ -1067,3 +1067,482 @@ class PositionWeightedGap_EntropySlope_TopKMassInv(Estimator):
         # 4️⃣ Map to (0, 1) via sigmoid and return
         scores = self._sigmoid(combined).astype(np.float32)
         return scores
+
+
+# =============================================================================
+# Evolved estimators from EvoTune rounds 289, 144, 177
+# =============================================================================
+
+class LogProbSlope_OutlierScore(Estimator):
+    """
+    Hallucination detection combining LogProbSlope baseline with outlier statistics.
+
+    Approach:
+    - Baseline: LogProbSlope (negative Pearson correlation between token position
+      and log-probability)
+    - Auxiliary features:
+      * min_logprob: smallest log-probability across the sequence (captures
+        extremely uncertain tokens)
+      * max_gap: largest absolute drop between consecutive log-probabilities
+        (captures abrupt confidence drops)
+
+    Based on Round 289 (Test AUC: 74.35%).
+    """
+    def __init__(self, context: Dict[str, Any], w_slope: float = 1.0, w_min: float = 0.05, w_max_gap: float = 0.05) -> None:
+        super().__init__(
+            context,
+            stats_dependencies=["sequence_logprobs"],
+            level="sequence",
+        )
+        self.w_slope = w_slope
+        self.w_min = w_min
+        self.w_max_gap = w_max_gap
+
+    def __str__(self) -> str:
+        return "LogProbSlope_OutlierScore"
+
+    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:
+        """
+        Compute hallucination scores combining slope and outlier features.
+
+        Returns:
+            np.ndarray: Uncertainty scores (higher = more uncertain/hallucinated).
+        """
+        scores: List[float] = []
+
+        for logp in stats["sequence_logprobs"]:
+            if logp.size == 0:
+                scores.append(0.0)
+                continue
+
+            # 1. LogProbSlope baseline
+            positions = np.arange(logp.shape[0], dtype=np.float64)
+            if np.allclose(logp, logp[0]):
+                slope_score = 0.0
+            else:
+                corr = np.corrcoef(positions, logp)[0, 1]
+                slope_score = -corr
+
+            # 2. Minimum log-probability (outlier token)
+            min_logprob = float(logp.min())
+
+            # 3. Maximum gap between consecutive log-probabilities
+            if logp.size > 1:
+                gaps = np.abs(np.diff(logp))
+                max_gap = float(gaps.max())
+            else:
+                max_gap = 0.0
+
+            # Combine all components
+            total_score = (
+                self.w_slope * slope_score +
+                self.w_min * min_logprob +
+                self.w_max_gap * max_gap
+            )
+            scores.append(total_score)
+
+        return np.array(scores, dtype=np.float32)
+
+
+class SequenceLogProb_OutlierScore(Estimator):
+    """
+    Hallucination detection combining SequenceLogProb baseline with outlier statistics.
+
+    Approach:
+    - Baseline: SequenceLogProb (negative sum of log-probabilities)
+    - Auxiliary features:
+      * min_logprob: smallest log-probability across the sequence
+      * max_gap: largest absolute drop between consecutive log-probabilities
+
+    This variant replaces LogProbSlope with SequenceLogProb to test how auxiliary
+    features perform with a different baseline signal.
+    """
+    def __init__(self, context: Dict[str, Any], w_baseline: float = 1.0, w_min: float = 0.05, w_max_gap: float = 0.05) -> None:
+        super().__init__(
+            context,
+            stats_dependencies=["sequence_logprobs"],
+            level="sequence",
+        )
+        self.w_baseline = w_baseline
+        self.w_min = w_min
+        self.w_max_gap = w_max_gap
+
+    def __str__(self) -> str:
+        return "SequenceLogProb_OutlierScore"
+
+    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:
+        """
+        Compute hallucination scores combining SequenceLogProb and outlier features.
+
+        Returns:
+            np.ndarray: Uncertainty scores (higher = more uncertain/hallucinated).
+        """
+        scores: List[float] = []
+
+        for logp in stats["sequence_logprobs"]:
+            if logp.size == 0:
+                scores.append(0.0)
+                continue
+
+            # 1. SequenceLogProb baseline (negative sum)
+            baseline_score = -np.sum(logp)
+
+            # 2. Minimum log-probability (outlier token)
+            min_logprob = float(logp.min())
+
+            # 3. Maximum gap between consecutive log-probabilities
+            if logp.size > 1:
+                gaps = np.abs(np.diff(logp))
+                max_gap = float(gaps.max())
+            else:
+                max_gap = 0.0
+
+            # Combine all components
+            total_score = (
+                self.w_baseline * baseline_score +
+                self.w_min * min_logprob +
+                self.w_max_gap * max_gap
+            )
+            scores.append(total_score)
+
+        return np.array(scores, dtype=np.float32)
+
+
+class LogProbSlope_TopBottomRatio(Estimator):
+    """
+    Hallucination detection combining LogProbSlope baseline with top-bottom mass ratio.
+
+    Approach:
+    - Baseline: LogProbSlope (negative Pearson correlation between token position
+      and log-probability)
+    - Auxiliary feature: Bottom-Mass Ratio
+      * For each token, compute softmax over top-k logits (k=512)
+      * Compute ratio of bottom-p% probability mass to top-p% probability mass
+      * Average this ratio across the sequence
+      * Higher ratios indicate flatter distributions (more uncertainty)
+
+    Based on Round 144 (Test AUC: 73.20%).
+    """
+    def __init__(self, context: Dict[str, Any], w_slope: float = 1.0, w_ratio: float = 1.0, bottom_percent: float = 0.10) -> None:
+        super().__init__(
+            context,
+            stats_dependencies=["sequence_logprobs", "top_k_logits"],
+            level="sequence",
+        )
+        self.w_slope = w_slope
+        self.w_ratio = w_ratio
+        self.bottom_percent = bottom_percent
+
+    def __str__(self) -> str:
+        return "LogProbSlope_TopBottomRatio"
+
+    @staticmethod
+    def _softmax(logits: np.ndarray) -> np.ndarray:
+        """Numerically stable softmax for a 1-D array."""
+        shift = logits - np.max(logits)
+        exp_shift = np.exp(shift)
+        return exp_shift / np.sum(exp_shift)
+
+    def _tail_mass_ratio(self, logits_seq: np.ndarray) -> float:
+        """
+        Average over tokens of (bottom-p% mass) / (top-p% mass) computed from
+        the softmax of the top-k logits.
+        """
+        k = logits_seq.shape[1]
+        cnt = max(1, int(self.bottom_percent * k))
+
+        ratios = []
+        for logits in logits_seq:
+            probs = self._softmax(logits)
+            # Partition to obtain top-cnt and bottom-cnt efficiently
+            top_vals = np.partition(probs, -cnt)[-cnt:]  # largest cnt values
+            bottom_vals = np.partition(probs, cnt)[:cnt]  # smallest cnt values
+            top_sum = np.sum(top_vals)
+            bottom_sum = np.sum(bottom_vals)
+            # Guard against division by zero
+            ratio = bottom_sum / top_sum if top_sum > 0 else 0.0
+            ratios.append(ratio)
+        return float(np.mean(ratios))
+
+    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:
+        """
+        Compute hallucination scores combining slope and top-bottom ratio.
+
+        Returns:
+            np.ndarray: Uncertainty scores (higher = more uncertain/hallucinated).
+        """
+        seq_logprobs: List[np.ndarray] = stats["sequence_logprobs"]
+        topk_logits: List[np.ndarray] = stats["top_k_logits"]
+
+        scores: List[float] = []
+
+        for logp, logits_seq in zip(seq_logprobs, topk_logits):
+            if logp.size == 0:
+                scores.append(0.0)
+                continue
+
+            # 1. LogProbSlope baseline
+            positions = np.arange(logp.shape[0], dtype=np.float64)
+            if np.allclose(logp, logp[0]):
+                slope_score = 0.0
+            else:
+                corr = np.corrcoef(positions, logp)[0, 1]
+                slope_score = -corr
+
+            # 2. Tail-mass ratio
+            ratio_score = self._tail_mass_ratio(logits_seq.astype(np.float32))
+
+            # Combine
+            final_score = self.w_slope * slope_score + self.w_ratio * ratio_score
+            scores.append(final_score)
+
+        return np.array(scores, dtype=np.float32)
+
+
+class SequenceLogProb_TopBottomRatio(Estimator):
+    """
+    Hallucination detection combining SequenceLogProb baseline with top-bottom mass ratio.
+
+    Approach:
+    - Baseline: SequenceLogProb (negative sum of log-probabilities)
+    - Auxiliary feature: Bottom-Mass Ratio
+      * For each token, compute softmax over top-k logits
+      * Compute ratio of bottom-10% to top-10% probability mass
+      * Average this ratio across the sequence
+
+    This variant replaces LogProbSlope with SequenceLogProb to test how the
+    auxiliary feature performs with a different baseline signal.
+    """
+    def __init__(self, context: Dict[str, Any], w_baseline: float = 1.0, w_ratio: float = 1.0, bottom_percent: float = 0.10) -> None:
+        super().__init__(
+            context,
+            stats_dependencies=["sequence_logprobs", "top_k_logits"],
+            level="sequence",
+        )
+        self.w_baseline = w_baseline
+        self.w_ratio = w_ratio
+        self.bottom_percent = bottom_percent
+
+    def __str__(self) -> str:
+        return "SequenceLogProb_TopBottomRatio"
+
+    @staticmethod
+    def _softmax(logits: np.ndarray) -> np.ndarray:
+        """Numerically stable softmax for a 1-D array."""
+        shift = logits - np.max(logits)
+        exp_shift = np.exp(shift)
+        return exp_shift / np.sum(exp_shift)
+
+    def _tail_mass_ratio(self, logits_seq: np.ndarray) -> float:
+        """
+        Average over tokens of (bottom-p% mass) / (top-p% mass) computed from
+        the softmax of the top-k logits.
+        """
+        k = logits_seq.shape[1]
+        cnt = max(1, int(self.bottom_percent * k))
+
+        ratios = []
+        for logits in logits_seq:
+            probs = self._softmax(logits)
+            top_vals = np.partition(probs, -cnt)[-cnt:]
+            bottom_vals = np.partition(probs, cnt)[:cnt]
+            top_sum = np.sum(top_vals)
+            bottom_sum = np.sum(bottom_vals)
+            ratio = bottom_sum / top_sum if top_sum > 0 else 0.0
+            ratios.append(ratio)
+        return float(np.mean(ratios))
+
+    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:
+        """
+        Compute hallucination scores combining SequenceLogProb and top-bottom ratio.
+
+        Returns:
+            np.ndarray: Uncertainty scores (higher = more uncertain/hallucinated).
+        """
+        seq_logprobs: List[np.ndarray] = stats["sequence_logprobs"]
+        topk_logits: List[np.ndarray] = stats["top_k_logits"]
+
+        scores: List[float] = []
+
+        for logp, logits_seq in zip(seq_logprobs, topk_logits):
+            if logp.size == 0:
+                scores.append(0.0)
+                continue
+
+            # 1. SequenceLogProb baseline
+            baseline_score = -np.sum(logp)
+
+            # 2. Tail-mass ratio
+            ratio_score = self._tail_mass_ratio(logits_seq.astype(np.float32))
+
+            # Combine
+            final_score = self.w_baseline * baseline_score + self.w_ratio * ratio_score
+            scores.append(final_score)
+
+        return np.array(scores, dtype=np.float32)
+
+
+class LogProbSlope_BottomMassAvg(Estimator):
+    """
+    Hallucination detection combining LogProbSlope baseline with bottom-mass average.
+
+    Approach:
+    - Baseline: LogProbSlope (negative Pearson correlation between token position
+      and log-probability)
+    - Auxiliary feature: Bottom-Mass Average
+      * For each token, compute softmax over top-k logits (k=512)
+      * Sum the probabilities of the lowest p% of that distribution
+      * Average this bottom-mass across the whole sequence
+      * Higher average bottom-mass reflects a flatter probability landscape,
+        hypothesized to be associated with hallucination
+
+    Based on Round 177 (Test AUC: 73.19%).
+    """
+    def __init__(self, context: Dict[str, Any], w_slope: float = 1.0, w_bottom: float = 1.0, bottom_percent: float = 0.20) -> None:
+        super().__init__(
+            context,
+            stats_dependencies=["sequence_logprobs", "top_k_logits"],
+            level="sequence",
+        )
+        self.w_slope = w_slope
+        self.w_bottom = w_bottom
+        self.bottom_percent = bottom_percent
+
+    def __str__(self) -> str:
+        return "LogProbSlope_BottomMassAvg"
+
+    @staticmethod
+    def _softmax(logits: np.ndarray) -> np.ndarray:
+        """Stable softmax for a 1-D array of logits."""
+        shift = logits - np.max(logits)
+        exp_shift = np.exp(shift)
+        return exp_shift / np.sum(exp_shift)
+
+    def _bottom_mass_avg(self, logits_seq: np.ndarray) -> float:
+        """
+        Average over tokens of the total probability mass residing in the
+        lowest `bottom_percent` of the top-k softmax distribution.
+        """
+        k = logits_seq.shape[1]
+        cnt = max(1, int(self.bottom_percent * k))
+
+        masses = []
+        for logits in logits_seq:
+            probs = self._softmax(logits.astype(np.float64))
+            # Get the sum of the smallest `cnt` probabilities
+            bottom_vals = np.partition(probs, cnt)[:cnt]
+            masses.append(np.sum(bottom_vals))
+        return float(np.mean(masses))
+
+    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:
+        """
+        Compute hallucination scores combining slope and bottom-mass average.
+
+        Returns:
+            np.ndarray: Uncertainty scores (higher = more uncertain/hallucinated).
+        """
+        seq_logprobs: List[np.ndarray] = stats["sequence_logprobs"]
+        topk_logits: List[np.ndarray] = stats["top_k_logits"]
+
+        scores: List[float] = []
+
+        for logp, logits_seq in zip(seq_logprobs, topk_logits):
+            if logp.size == 0:
+                scores.append(0.0)
+                continue
+
+            # 1. LogProbSlope baseline
+            positions = np.arange(logp.shape[0], dtype=np.float64)
+            if np.allclose(logp, logp[0]):
+                slope_score = 0.0
+            else:
+                corr = np.corrcoef(positions, logp)[0, 1]
+                slope_score = -corr
+
+            # 2. Bottom-mass average
+            bottom_score = self._bottom_mass_avg(logits_seq)
+
+            # Combine
+            final_score = self.w_slope * slope_score + self.w_bottom * bottom_score
+            scores.append(final_score)
+
+        return np.array(scores, dtype=np.float32)
+
+
+class SequenceLogProb_BottomMassAvg(Estimator):
+    """
+    Hallucination detection combining SequenceLogProb baseline with bottom-mass average.
+
+    Approach:
+    - Baseline: SequenceLogProb (negative sum of log-probabilities)
+    - Auxiliary feature: Bottom-Mass Average
+      * For each token, compute softmax over top-k logits
+      * Sum the probabilities of the lowest 20% of that distribution
+      * Average this bottom-mass across the sequence
+
+    This variant replaces LogProbSlope with SequenceLogProb to test how the
+    auxiliary feature performs with a different baseline signal.
+    """
+    def __init__(self, context: Dict[str, Any], w_baseline: float = 1.0, w_bottom: float = 1.0, bottom_percent: float = 0.20) -> None:
+        super().__init__(
+            context,
+            stats_dependencies=["sequence_logprobs", "top_k_logits"],
+            level="sequence",
+        )
+        self.w_baseline = w_baseline
+        self.w_bottom = w_bottom
+        self.bottom_percent = bottom_percent
+
+    def __str__(self) -> str:
+        return "SequenceLogProb_BottomMassAvg"
+
+    @staticmethod
+    def _softmax(logits: np.ndarray) -> np.ndarray:
+        """Stable softmax for a 1-D array of logits."""
+        shift = logits - np.max(logits)
+        exp_shift = np.exp(shift)
+        return exp_shift / np.sum(exp_shift)
+
+    def _bottom_mass_avg(self, logits_seq: np.ndarray) -> float:
+        """
+        Average over tokens of the total probability mass residing in the
+        lowest `bottom_percent` of the top-k softmax distribution.
+        """
+        k = logits_seq.shape[1]
+        cnt = max(1, int(self.bottom_percent * k))
+
+        masses = []
+        for logits in logits_seq:
+            probs = self._softmax(logits.astype(np.float64))
+            bottom_vals = np.partition(probs, cnt)[:cnt]
+            masses.append(np.sum(bottom_vals))
+        return float(np.mean(masses))
+
+    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:
+        """
+        Compute hallucination scores combining SequenceLogProb and bottom-mass average.
+
+        Returns:
+            np.ndarray: Uncertainty scores (higher = more uncertain/hallucinated).
+        """
+        seq_logprobs: List[np.ndarray] = stats["sequence_logprobs"]
+        topk_logits: List[np.ndarray] = stats["top_k_logits"]
+
+        scores: List[float] = []
+
+        for logp, logits_seq in zip(seq_logprobs, topk_logits):
+            if logp.size == 0:
+                scores.append(0.0)
+                continue
+
+            # 1. SequenceLogProb baseline
+            baseline_score = -np.sum(logp)
+
+            # 2. Bottom-mass average
+            bottom_score = self._bottom_mass_avg(logits_seq)
+
+            # Combine
+            final_score = self.w_baseline * baseline_score + self.w_bottom * bottom_score
+            scores.append(final_score)
+
+        return np.array(scores, dtype=np.float32)

@@ -1,7 +1,7 @@
 echo $(which python)
 
-devices=0
-output_dir=Jan19_llama8b_base
+devices=1
+output_dir=Feb03
 
 mkdir out/logs/example/EVALS/${output_dir}
 
@@ -33,14 +33,12 @@ for dataset_path in ${datasets[@]}; do
     fi
 
     echo "Using batch_size=$batch_size for $second_tail_name"
-    CUDA_VISIBLE_DEVICES=$devices PYTHONPATH=/mnt/extremessd10tb/seleznev/EvoTune python src/packing/evaluate/uncertainty_quantification/end2end_eval.py \
+    CUDA_VISIBLE_DEVICES=$devices PYTHONPATH=/mnt/extremessd10tb/seleznev/EvoTune python src/packing/evaluate/uncertainty_quantification/end2end_eval_original.py \
         --data $dataset_path \
         --text-col claim \
         --label-col is_hallu \
-        --model-id unsloth/Meta-Llama-3.1-8B \
+        --chat-template generate_true_statement \
         --output-path out/logs/example/EVALS/${output_dir}/${name}_eval.json \
-        --chat-template "" \
         --batch-size $batch_size
-        # --chat-template generate_true_statement \
         # --model-id unsloth/Llama-3.2-1B-Instruct \
 done
