@@ -35,6 +35,7 @@ import argparse
 import gc
 import json
 import logging
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -338,6 +339,69 @@ def compute_stats_via_generation(
 
     stats["model"] = model
     return stats
+
+
+def _bootstrap_prr_ci(
+    uncertainty_scores: np.ndarray,
+    quality_scores: np.ndarray,
+    max_rejection: float,
+    B: int = 1000,
+    bootstrap_indices: Optional[np.ndarray] = None,
+) -> Tuple[str, List[float]]:
+    """
+    Compute 95% bootstrap confidence interval for PRR.
+
+    Parameters
+    ----------
+    uncertainty_scores : np.ndarray
+        Uncertainty scores for each sample.
+    quality_scores : np.ndarray
+        Quality scores for each sample.
+    max_rejection : float
+        Maximum rejection fraction for PRR.
+    B : int
+        Number of bootstrap iterations (used only if bootstrap_indices is None).
+    bootstrap_indices : np.ndarray, optional
+        Pre-generated bootstrap indices of shape (B, n). If provided, these are
+        used instead of generating new random indices. This allows aligned
+        bootstrap samples across multiple methods for pairwise comparisons.
+
+    Returns
+    -------
+    ci_str : str
+        Formatted confidence interval string "(lower, upper)".
+    bootstrapped_scores : List[float]
+        List of bootstrapped PRR values for each iteration.
+    """
+    n = len(uncertainty_scores)
+    prr_metric = PredictionRejectionArea(max_rejection=max_rejection)
+
+    if bootstrap_indices is None:
+        # Fallback: generate indices on the fly (non-reproducible)
+        bootstrap_indices = np.array([
+            np.random.choice(np.arange(n), size=n, replace=True)
+            for _ in range(B)
+        ])
+
+    bootstrapped_scores = []
+    for idxs in bootstrap_indices:
+        try:
+            # Resample both uncertainty and quality scores together
+            prr_bootstrap = prr_metric(uncertainty_scores[idxs], quality_scores[idxs])
+            bootstrapped_scores.append(float(prr_bootstrap))
+        except Exception:
+            # Keep NaN to preserve alignment across methods
+            bootstrapped_scores.append(float('nan'))
+
+    valid_scores = [s for s in bootstrapped_scores if not np.isnan(s)]
+    if valid_scores:
+        lower = float(np.percentile(valid_scores, 2.5))
+        upper = float(np.percentile(valid_scores, 97.5))
+        ci_str = f"({100*lower:.2f}, {100*upper:.2f})"
+    else:
+        ci_str = "(nan, nan)"
+
+    return ci_str, bootstrapped_scores
 
 
 def evaluate_prr(
@@ -732,34 +796,70 @@ def main():
     logging.info("Computing PRR metrics...")
     prr_metric = PredictionRejectionArea(max_rejection=0.95)
     estimator_results = {}
+    
+    # Pre-generate bootstrap indices with fixed seed for reproducibility
+    # This ensures aligned samples across all methods for pairwise comparisons
+    B = 1000
+    BOOTSTRAP_SEED = 31
+    rng = np.random.default_rng(BOOTSTRAP_SEED)
+    n_samples = len(quality_scores)
+    bootstrap_indices = rng.choice(n_samples, size=(B, n_samples), replace=True)
+    logging.info(f"Generated {B} bootstrap samples with seed {BOOTSTRAP_SEED}")
+    
+    # Store bootstrap PRR values for each estimator
+    estimator_bootstrap_prrs = {}
 
     for estimator in estimators:
         estimator_name = str(estimator)
         try:
             uncertainty_scores = np.array(all_uncertainty_scores[estimator_name])
 
-            # Remove NaN values if any
+            # Check for NaN values
             total_samples = len(uncertainty_scores)
             valid_mask = ~np.isnan(uncertainty_scores)
             num_valid = valid_mask.sum()
             num_failed = total_samples - num_valid
 
             if not valid_mask.all():
-                logging.warning(f"{estimator_name}: {num_failed} samples failed, excluding from PRR")
-                uncertainty_scores = uncertainty_scores[valid_mask]
-                valid_quality_scores = quality_scores[valid_mask]
-            else:
-                valid_quality_scores = quality_scores
+                # Skip estimator entirely to maintain aligned bootstrap indices
+                logging.warning(
+                    f"{estimator_name}: {num_failed}/{total_samples} samples failed. "
+                    f"Skipping estimator to maintain aligned bootstrap indices for pairwise tests."
+                )
+                estimator_results[estimator_name] = {
+                    "PRR": None,
+                    "Bootstrap CI": None,
+                    "num_samples": int(num_valid),
+                    "num_failed": int(num_failed),
+                    "total_samples": int(total_samples),
+                    "error": f"Skipped due to {num_failed} NaN values (alignment required for pairwise tests)",
+                }
+                continue
 
-            prr = prr_metric(uncertainty_scores, valid_quality_scores)
+            # All samples are valid, proceed with PRR computation
+            prr = prr_metric(uncertainty_scores, quality_scores)
             prr_pct = round(100.0 * prr, 2)
+            
+            # Bootstrap confidence interval for PRR
+            bootstrap_start = time.perf_counter()
+            prr_ci, bootstrap_prrs = _bootstrap_prr_ci(
+                uncertainty_scores,
+                quality_scores,
+                max_rejection=0.95,
+                B=B,
+                bootstrap_indices=bootstrap_indices,
+            )
+            bootstrap_elapsed = time.perf_counter() - bootstrap_start
+            logging.info(f"Bootstrap CI for {estimator_name} took {bootstrap_elapsed:.2f}s. CI: {prr_ci}")
 
             estimator_results[estimator_name] = {
                 "PRR": prr_pct,
+                "Bootstrap CI": prr_ci,
                 "num_samples": int(num_valid),
                 "num_failed": int(num_failed),
                 "total_samples": int(total_samples),
             }
+            estimator_bootstrap_prrs[estimator_name] = bootstrap_prrs
             logging.info(f"  {estimator_name}: PRR = {prr_pct}% ({num_valid}/{total_samples} samples)")
 
         except Exception as e:
@@ -775,14 +875,24 @@ def main():
         "instruct": args.instruct,
         "num_samples": len(df),
         "estimators": {
-            name: {"PRR": data["PRR"]}
+            name: {
+                "PRR": data["PRR"],
+                "Bootstrap CI": data.get("Bootstrap CI", None),
+            }
             for name, data in estimator_results.items()
         },
     }
 
-    with open(args.output_path, "w") as f:
+    output_path = Path(args.output_path)
+    with open(output_path, "w") as f:
         json.dump(results, f, indent=2)
-    logging.info(f"Saved results to {args.output_path}")
+    logging.info(f"Saved results to {output_path}")
+    
+    # Save bootstrapped PRR values to a separate file for pairwise comparisons
+    bootstrap_output_path = output_path.with_stem(output_path.stem + "_bootstrap_prrs")
+    with open(bootstrap_output_path, "w") as f:
+        json.dump(estimator_bootstrap_prrs, f, indent=2)
+    logging.info(f"Saved bootstrap PRRs to {bootstrap_output_path}")
 
     # Print summary
     print("\n" + "=" * 80)
@@ -790,7 +900,8 @@ def main():
     print("=" * 80)
     for name, data in estimator_results.items():
         prr = data.get("PRR", "FAILED")
-        print(f"{name:40s} | PRR: {prr}")
+        bootstrap_ci = data.get("Bootstrap CI", "N/A")
+        print(f"{name:40s} | PRR: {prr} | Bootstrap CI: {bootstrap_ci}")
     print("=" * 80)
 
 
