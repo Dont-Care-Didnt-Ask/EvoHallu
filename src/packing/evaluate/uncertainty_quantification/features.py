@@ -557,7 +557,8 @@ def make_all_stats(
         if input_regime == "hidden_states" or input_regime == "full":
             hidden_states = sample["hidden_states"]
 
-            token_embs = _get_embeddings(
+            # key -> [n_i, hidden_dim]
+            token_embs: Dict[str, np.ndarray] = _get_embeddings(
                 hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix=""
             )
             for key, arr in token_embs.items():

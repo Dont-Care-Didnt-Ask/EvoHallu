@@ -5,3 +5,6 @@ configs/cluster/api.yaml
 out
 
 data/uncertainty_quantification
+*.tex
+*.csv
+*.log

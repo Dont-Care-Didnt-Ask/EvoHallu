@@ -4,15 +4,15 @@ task_name: "uncertainty_quantification"
 function_str_to_extract: "make_estimator"
 
 # Paths to raw statistics produced by the precompute script
-train_raw_path: "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt"
-test_raw_path: "data/uncertainty_quantification/popqa_test_filtered_10shot_raw_stats_logits.pt"
+train_raw_path: "data/uncertainty_quantification/train_mix_no_wildhall_raw_stats_logits.pt"
+test_raw_path: "data/uncertainty_quantification/test_mix_no_wildhall_raw_stats_logits.pt"
 background_raw_path: ""
 
 # Train/val splitting for the raw train set
 sample_size: 0        # 0 means use all available train samples
 val_size: 0.2         # fraction of (sampled) train data used for validation
 split_seed: 441
-chunk_size: 1024      # number of eval samples per chunk when building features
+chunk_size: 512      # number of eval samples per chunk when building features
 
 # Supervision mode: when true, training statistics and labels are exposed
 # to candidate estimators via the context dict.

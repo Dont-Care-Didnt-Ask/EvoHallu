@@ -84,7 +84,9 @@ def _precompute_split(
     top_k: int,
     layer_stride: int,
 ) -> Dict[str, Any]:
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"{torch.cuda.is_available()=}")
+    print(f"{torch.cuda.device_count()}")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     hidden_states_samples: List[Dict[str, Any]] = []
     attentions_samples: List[Dict[str, Any]] = []
@@ -157,7 +159,6 @@ def _precompute_split(
                 if j % layer_stride != 0:
                     continue
 
-                print("Adding hidden state layer", j)
                 hs_layers.append(
                     h[i, :length].to(dtype=torch.float16, device="cpu")
                 )
@@ -353,7 +354,7 @@ def main() -> None:
         args.model_id,
         cache_dir=args.cache_dir,
         torch_dtype=torch.float32,
-    ).eval().to("cuda" if torch.cuda.is_available() else "cpu")
+    ).eval().to("cuda:0" if torch.cuda.is_available() else "cpu")
 
     output_structs = _precompute_split(
         df=df,

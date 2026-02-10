@@ -28,8 +28,8 @@ flash_attn: 0
 
 # Program database
 programdatabaseConfig:
-  functions_per_prompt: 4
-  num_islands: 6 #5
+  functions_per_prompt: 2
+  num_islands: 2 #5
   temp_sampling_flag: 1
   temp: ${task.programdatabaseConfig.temp}
 initial_percentile: 0.6
@@ -38,7 +38,7 @@ final_percentile: 0.2
 # Timing config
 num_cont_rounds: 1
 num_outputs_per_prompt: 2
-num_workers: 2
+num_workers: 1
 num_rounds: 500
 
 # Finetuning
@@ -71,7 +71,7 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 1038
+seed: 1046
 run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev

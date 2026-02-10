@@ -1,10 +1,12 @@
 import os
 import logging
 import time
+import random
 from typing import Any, Dict, List, Tuple
 
 import torch
 import numpy as np
+import scipy
 from omegaconf import DictConfig
 from sklearn.metrics import precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import train_test_split
@@ -122,19 +124,61 @@ def _delong_auc_ci(y_true: np.ndarray, y_score: np.ndarray) -> str:
     except (ValueError, ZeroDivisionError, AssertionError):
         return "(nan, nan)"
 
-def _bootstrap_auc_ci(y_true: np.ndarray, y_score: np.ndarray, B: int = 1000) -> str:
-    """Compute 95% bootstrap confidence interval for ROC-AUC."""
-    bootstrapped_scores = []
+def _bootstrap_auc_ci(
+    y_true: np.ndarray,
+    y_score: np.ndarray,
+    B: int = 1000,
+    bootstrap_indices: np.ndarray = None,
+) -> Tuple[str, List[float]]:
+    """
+    Compute 95% bootstrap confidence interval for ROC-AUC.
+
+    Parameters
+    ----------
+    y_true : np.ndarray
+        True binary labels.
+    y_score : np.ndarray
+        Prediction scores.
+    B : int
+        Number of bootstrap iterations (used only if bootstrap_indices is None).
+    bootstrap_indices : np.ndarray, optional
+        Pre-generated bootstrap indices of shape (B, n). If provided, these are
+        used instead of generating new random indices. This allows aligned
+        bootstrap samples across multiple methods for pairwise comparisons.
+
+    Returns
+    -------
+    ci_str : str
+        Formatted confidence interval string "(lower, upper)".
+    bootstrapped_scores : List[float]
+        List of bootstrapped AUC values for each iteration.
+    """
     n = len(y_true)
-    for _ in range(B):
-        idxs = np.random.choice(np.arange(n), size=n, replace=True)
+
+    if bootstrap_indices is None:
+        # Fallback: generate indices on the fly (non-reproducible)
+        bootstrap_indices = np.array([
+            np.random.choice(np.arange(n), size=n, replace=True)
+            for _ in range(B)
+        ])
+
+    bootstrapped_scores = []
+    for idxs in bootstrap_indices:
         if (y_true[idxs] == 1).any() and (y_true[idxs] == 0).any():
-            bootstrapped_scores.append(roc_auc_score(y_true[idxs], y_score[idxs]))
-    if bootstrapped_scores:
-        lower = float(np.percentile(bootstrapped_scores, 2.5))
-        upper = float(np.percentile(bootstrapped_scores, 97.5))
-        return f"({100*lower:.2f}, {100*upper:.2f})"
-    return "(nan, nan)"
+            bootstrapped_scores.append(float(roc_auc_score(y_true[idxs], y_score[idxs])))
+        else:
+            # Keep NaN to preserve alignment across methods
+            bootstrapped_scores.append(float('nan'))
+
+    valid_scores = [s for s in bootstrapped_scores if not np.isnan(s)]
+    if valid_scores:
+        lower = float(np.percentile(valid_scores, 2.5))
+        upper = float(np.percentile(valid_scores, 97.5))
+        ci_str = f"({100*lower:.2f}, {100*upper:.2f})"
+    else:
+        ci_str = "(nan, nan)"
+
+    return ci_str, bootstrapped_scores
 
 
 def _load_raw(path: str) -> Dict[str, Any]:
@@ -256,7 +300,7 @@ def get_initial_func(cfg: DictConfig):
     The optimizer will see the source of this class and try to improve upon it.
     """
 
-    class HallucinationEstimator(Estimator):
+    class HallucinationDetector(Estimator):
         def __init__(self, context: Dict[str, Any]) -> None:
             super().__init__(
                 context,
@@ -268,11 +312,12 @@ def get_initial_func(cfg: DictConfig):
 
         def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
             # "sequence_logprobs": List[np.ndarray] of length N, inner 1d array has length n_i - 1.
+            # MUST return shape [N] where N = number of samples
             total_neg_logprob = np.array([-np.sum(sequence_logprobs) for sequence_logprobs in stats["sequence_logprobs"]], dtype=np.float32)
             return total_neg_logprob
 
-    initial_class = HallucinationEstimator
-    class_str_to_extract = "HallucinationEstimator"
+    initial_class = HallucinationDetector
+    class_str_to_extract = "HallucinationDetector"
     code_type = "class"
     return initial_class, class_str_to_extract, code_type
 
@@ -322,6 +367,7 @@ def evaluate_func(
     globals_dict: Dict[str, Any] = {
         "Estimator": Estimator,
         "np": np,
+        "scipy": scipy,
         "Dict": Dict,
         "Any": Any,
         "Tuple": Tuple,
@@ -445,7 +491,7 @@ def evaluate_func(
     B = int(getattr(cfg.task, "bootstrap_samples", 1000))
     logging.info(f"[UQ evaluate_func] Computing bootstrap CI with B={B}...")
     bootstrap_start = time.time()
-    auc_ci = _bootstrap_auc_ci(labels, scores, B)
+    auc_ci, _ = _bootstrap_auc_ci(labels, scores, B)
     delong_auc_ci = _delong_auc_ci(labels, scores)
     bootstrap_elapsed = time.time() - bootstrap_start
     logging.info(f"[UQ evaluate_func] Bootstrap CI took {bootstrap_elapsed:.2f}s. Bootstrap CI: {auc_ci}, DeLong CI: {delong_auc_ci}")
@@ -475,61 +521,142 @@ def evaluate_func(
     return function_class
 
 
-system_prompt = """Take the role of a world-class NLP researcher with specialization in uncertainty quantification. 
-Design an unsupervised Estimator class that detects LLM hallucinations using internal states of an LLM.
+def system_prompt_fabric() -> str:
+    strong_baselines = [
+        "LogProb: sum of negative log-probabilities over sequence",
+        "LogProbSlope: negative pearson correlation between token position and log-probability",
+        "PositionWeightedGap: for each token t compute (top1_logprob[t] - sequence_logprob[t-1]) and weight it by t / length, so that later tokens get larger weight",
+    ]
+    baseline = random.choices(population=strong_baselines, weights=[0.4, 0.5, 0.1], k=1)[0]
 
-## Task
-Write a class named `HallucinationEstimator` inheriting from `Estimator` (already provided).
-Your `__call__` method receives `stats` dict and MUST return np.ndarray of shape [N] (one score per sample).
+    ideas = [
+        "anomaly detection",
+        "position-based weighting (early vs late tokens)",
+        "std of some metric across positions",
+        "min/max statistics (most likely with low weight to avoid outlier dependece)",
+        "scipy stats — skewness, kurtosis, or normality tests (shapiro, jarque_bera) on logprob distribution",
+        "aggregation of top or bottom 20% of something instead of all values",
+        "tail behavior (note you don't have access to all logits, so you must approximate using available 512 logits, e.g. by contrasting top-N tokens vs the rest)",
+        "consecutive runs — streaks of low-confidence tokens",
+        "approximation of second derivative",
+        "exponential weighted average",
+        "sliding window average",
+        "difference between some aggregate over first and last quarter of sequence",
+    ]
+    idea = random.choice(ideas)
 
-```python
-class HallucinationEstimator(Estimator):
-    def __init__(self, context: Dict[str, Any]) -> None:
-        super().__init__(context, stats_dependencies=[...], level="sequence")
-    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
-        # MUST return shape [N] where N = number of samples
-        ...  # Return uncertainty scores (higher = more likely hallucination)
-```
+    system_prompt = ("""You are designing unsupervised hallucination detectors for atomic claims (typically 10-25 tokens), evaluated by ROC-AUC.
 
-## Available Statistics in `stats` (N = number of samples)
+## Inputs (per sample)
+- "sequence_logprobs": List[np.ndarray], shape (n_i-1,) — logits of tokens actually generated by the model, excluding the first generated token.
+- "top_k_logits": List[np.ndarray], shape (n_i, k) — top-k logits per token
+- "top_k_indices": List[np.ndarray], shape (n_i, k) — corresponding top-k token indices
 
-**Token-level statistics:**
-- "sequence_logprobs": List[np.ndarray] of length N, inner 1d array has length n_i - 1. Contains logits of tokens which were actually generated by the model, excluding the first generated token.
-- "greedy_logprobs": List[np.ndarray] of length N, inner 1d array has length n_i. Contains logits of the most likely token at each position.
-- "token_entropies": List[np.ndarray] of length N, inner 1d array has length n_i. Contains entropy values of the probability distribution at each position.
-- "top_k_logits": List[np.ndarray] of length N - each array shape [n_i, k]
-- "top_k_indices": List[np.ndarray] of length N - each array shape [n_i, k]
-- "greedy_texts": List[str] of length N - claim texts
-- "greedy_tokens": List[List[int]] of length N - token IDs per claim
+k equals 512 here.
 
-## Guidelines
-- Use at most 3 features. You MUST explore estimators based on a single feature and two features as well, don't get fixed on 3-feature estimators.
-- Start from a concrete hypothesis on why this design might work.
-- You MUST go beyond generic features like "entropy over top-k logits", "gap between greedy and sequence logprobs". Make steps further to design deeper, more complex, semantically informed features.
+## Critical Instructions
 
-## Constraints
-- Class MUST be named `HallucinationEstimator`
-- Output MUST be np.ndarray of shape [N] (one scalar per sample)
-- Pure Python + numpy only
-- Deterministic
-- Do NOT redefine Estimator base class
+**EXPECTED STRUCTURE**
+- Build off a strong baseline: {}
+- For additional signal, use {}
+
+## Code Requirements
+- Class named `HallucinationDetector`, subclass of `Estimator` (assume Estimator is provided)
+- Output shape [N]
+- Pure numpy/scipy, deterministic
+- Brief docstring: describe approach, note ONE specific hypothesis for future (no speculation about this detector's performance)
 
 ## Response Format
-First, write 3-4 sentences reflecting on estimators given below.
-Second, formulate a concrete hypothesis on how hallucination detection can be improved leveraging given statistics.
-Finally, provide a definition of a new estimator class in a single ```python code block.
-"""
+1. Analyze shown detectors — what approaches have been tried?
+2. Ideate a novel detector, based on EXPECTED STRUCTURE and insights from your analysis above.
+3. Provide ```python code block with your detector
+Don't write explanations after the code block.
+""".format(baseline, idea))
+    return system_prompt
+
+system_prompt = system_prompt_fabric
+
+# system_prompt = """Take the role of a world-class NLP researcher with specialization in Uncertainty Quantification. The overall goal is to design and implement an unsupervised hallucination detector. 
+# You are doing an evolutionary search for the best detector, so it is the following loop:
+# - You review the results of existing best performing detectors
+# - You design a new candidate detector
+# - It is evaluated on a test set. If it performs well, it will be shown to you in the next iteration.
+
+# ## Task description
+# The goal is to design and implement HallucinationDetector class that detects LLM hallucinations in atomic claims. Inputs for the detector are statistics computed from internal states of Llama-3.1-8B-Instruct model.
+
+# Atomic claims: for clarity, here are examples of atomic claims (might be either true or false): "Made in Chelsea is a reality TV", "The father of Sybilla of Normandy is Rollo of Normandy", "Virginia Woolf is the author of The Unicorn in the Garden". We don't know claim's origin -- they might be generated by the same model, by different models, or by a human.
+# For each claim, we use the following chat template: [{"role": "user", "content": "Generate true statement"}, {"role": "assistant", "content": claim_text}], where `claim_text` is the text of the claim, e.g. "Made in Chelsea is a reality TV".
+
+# Inputs: we obtain hidden states, attention maps and logits during a single forward pass through the model. Thus, the model is used in scoring mode.
+
+# Performance metric: ROC-AUC.
+
+# ## HallucinationDetector inputs
+
+# (N = number of samples, n_i = full length of the i-th sequence, k = amount of top-k logits available)
+
+# - "sequence_logprobs": List[np.ndarray] of length N, inner 1d array has length n_i - 1. Log probabilities (after log_softmax) of tokens which were actually generated by the model, excluding the first generated token.
+# - "top_k_logits": List[np.ndarray] of length N - each array shape [n_i, k]. Top-k logits (before log_softmax) for each token. [:, 0] slice contains logits of the most likely token.
+# - "top_k_indices": List[np.ndarray] of length N - each array shape [n_i, k]. Top-k indices for respective tokens.
+
+# Note that you don't have access to logits beyond top-k, so you can't estimate what share of probability mass top-k tokens cover.
+
+# ## Design constraints
+# - Use up to 3 features. You MUST explore one-feature and two-feature detectors as well, don't get fixated on three-feature detectors.
+# - Use class doc string to 1) concisely describe the detector, 2) leave notes for future iterations.
+# - In notes, NEVER make up facts. Either summarize some observations about previous detectors as a preliminary conclusion, or formulate a concrete actionable hypothesis for the next iteration.
+# - In notes, NEVER make statements about performance of proposed candidate detector -- you don't know it yet, it will be evaluated on a test set in the next iteration.
+# - In notes, NEVER assume new types of inputs will be available in the next iteration -- it won't happen, inputs are restricted by design, the goal is to find the best detector given the inputs.
+# - In notes, avoid generic hypotheses. When uncertain, err towards not making a note at all.
+
+# ## Code constraints
+# - Class MUST be named `HallucinationDetector`
+# - Output MUST be np.ndarray of shape [N] (one scalar per sample)
+# - Pure Python + numpy + scipy only
+# - Deterministic
+# - Do NOT redefine Estimator base class
+
+# ## Response Format
+# First, think step by step about the detectors given below and their results.
+# Second, formulate a concrete hypothesis on how hallucination detection can be improved given the analysis.
+# Finally, provide a definition of a new candidate detector class in a single ```python code block.
+# """
+
+
+# - "greedy_logprobs": List[np.ndarray] of length N, inner 1d array has length n_i. Contains log probabilities of the most likely token at each position.
+# - "token_entropies": List[np.ndarray] of length N, inner 1d array has length n_i. Contains entropy values of the probability distribution at each position.
+# - "greedy_texts": List[str] of length N - claim texts
+# - "greedy_tokens": List[List[int]] of length N - token IDs per claim
+# (N = number of samples, L = number of layers, H = number of heads, n_i = full length of the i-th sequence)
+
+# TODO: elaborate on task (forward pass, maybe on outputs of other model, non-native attention maps).
+# TODO: add examples of real methods -- MaxProb, RAUQ (~same as Mean token entropy, see note about attention maps), AttentionScore (sum of eigenvalues (= diagonal) of attention maps, works badly but non-randomly), <something hidden-based>. (without CCP)
+# TODO: entropy works better for instruction-following models (as a measure of general factuality of the model), but max prob works better for base models.
+# TODO: remove embedding_decoder since it's simply a mean and can be dedduced from other features. Maybe give a tip on projections / downsampling / preprocessing.
+# TODO: add all features.
+# TODO: swap definition of statistics and python class -- to check.
+# TODO: less restrictive on feature count (e.g. prioritize less features)
+# TODO: hypothesis versioning
+
+# NOTE: embeddings don't contain easy-to-extract signal (high-dimension).
+# NOTE: attention maps are not realistic due to INTRA-setting -- supervised attention-based methods failed in INTRA-setting. Maybe explain the procedure for attention maps generation.
+# NOTE: attention maps work if you take them from the concrete model and concrete context used to generate the claim.
+# NOTE: mahalanobis distances? need train set.
+
+# ## Known facts
+# - Negative sequence log-probability (sum of negated logits from "sequence_logprobs") is a strong baseline with respect to ROC-AUC.
+# - Mean token entropy performs significantly worse.
+# - Perplexity (mean of negated logits from "sequence_logprobs") is worse than negative sequence log-probability, but better than mean token entropy.
 
 # **Embedding statistics:**
-# - "token_embeddings_decoder": np.ndarray[float32, [sum(n_i), D]] - concatenated token embeddings
-# - "token_embeddings_decoder_{layer}": np.ndarray[float32, [sum(n_i), D]] per layer (if stored)
-# - "embeddings_decoder": np.ndarray[float32, [N, D]] - mean token embedding per sequence
-# - "embeddings_decoder_{layer}": np.ndarray[float32, [N, D]] per layer (if stored)
+# - "token_embeddings_decoder": List[np.ndarray[n_i, D]] - token embeddings right after embedding layer, before any other transformer blocks.
+# - "token_embeddings_decoder_{layer}": List[np.ndarray[n_i, D]] - token embeddings right after the 'layer'-th transformer block, where 'layer' is an integer.
 
 # **Attention statistics:**
-# - "recent_lookback_attention_weights_from_claim_tokens": List[Any] of length N. For each sample: List[List[List[float]]] with shape [n_claim_tokens, n_recent_lookback_tokens, num_layers * num_heads]
-# - "claim_only_attention_maps": List[np.ndarray] of length N - each array shape [L*H, n_i, n_i]
 # - "full_attention_maps": List[np.ndarray] of length N - each array shape [L, H, n_i, n_i]
+# - "claim_only_attention_maps": List[np.ndarray] of length N - each array shape [L*H, n_claim_tokens, n_claim_tokens]
+# - "recent_lookback_attention_weights_from_claim_tokens": List[Any] of length N. For each sample: List[List[List[float]]] with shape [n_claim_tokens, n_recent_lookback_tokens, L * H]
 
 # **Supervised train statistics (if supervised=True):**
 # - Cached train stats (from train_stats_cache) prefixed with "train_"

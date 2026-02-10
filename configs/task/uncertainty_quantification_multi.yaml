@@ -1,0 +1,45 @@
+# Task: Multi-Dataset Uncertainty Quantification optimization
+# Evaluates a single UQ estimator across multiple tasks (QA, summarization, machine translation, math)
+# using Prediction-Rejection Area (PRR) as the quality metric.
+
+task_name: "uncertainty_quantification_multi"
+function_str_to_extract: "HallucinationDetector"
+
+# List of datasets to evaluate on, each with:
+#   - name: unique identifier for the dataset
+#   - test_raw_path: path to precomputed raw statistics (.pt file)
+#   - metric_name: label for the base evaluation metric (accuracy, rouge_l, bleu, etc.)
+#
+# IMPORTANT: Each dataset's raw .pt file must have a "ground_truth_score" field
+# in each sample, containing the pre-computed evaluation metric score (0-1 range recommended).
+datasets:
+  - name: "triviaqa"
+    test_raw_path: "data/uncertainty_quantification/triviaqa_test_raw_stats_logits.pt"
+    metric_name: "accuracy"
+
+  - name: "xsum"
+    test_raw_path: "data/uncertainty_quantification/xsum_test_raw_stats_logits.pt"
+    metric_name: "rouge_l"
+
+  - name: "wmt14_en_de"
+    test_raw_path: "data/uncertainty_quantification/wmt14_en_de_test_raw_stats_logits.pt"
+    metric_name: "bleu"
+
+  - name: "gsm8k"
+    test_raw_path: "data/uncertainty_quantification/gsm8k_test_raw_stats_logits.pt"
+    metric_name: "accuracy"
+
+# Processing parameters
+chunk_size: 1024      # number of eval samples per chunk when building features
+input_regime: "logits"  # Available: "logits", "hidden_states", "attentions", "full"
+
+# NOT YET SUPPORTED for multi-dataset mode
+supervised: false
+
+# Optimization parameters
+failed_score: -1
+timeout_period: 240
+mem_limit_gb: 64
+
+programdatabaseConfig:
+  temp: 40.0
