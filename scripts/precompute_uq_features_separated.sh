@@ -1,5 +1,5 @@
 echo $(which python)
-devices=1
+# devices=1
 
 datasets_source_dir="../longtail-dataset/datasets"
 
