@@ -33,6 +33,7 @@ import pandas as pd
 import torch
 from matplotlib import pyplot as plt
 from scipy.stats import rankdata, spearmanr
+from joblib import Parallel, delayed
 
 from packing.evaluate.uncertainty_quantification.estimator_base import Estimator
 from packing.evaluate.uncertainty_quantification.features import make_all_stats
@@ -269,6 +270,24 @@ def _plot_adjacent_round_spearman(rows: Sequence[Mapping[str, Any]], *, output_p
     plt.savefig(output_path, dpi=200)
     plt.close()
 
+def _process_program(args_tuple: Tuple) -> Tuple[Any, Any, Any]:
+    """Worker function to process a single program."""
+    program, idx, total, class_name, eval_raw, input_regime, chunk_size = args_tuple
+    logging.info(f"[{idx+1}/{total}] Scoring {program.candidate_id}")
+    
+    scores = _score_candidate_on_eval_raw(
+        program,
+        class_name=class_name,
+        eval_raw=eval_raw,
+        input_regime=input_regime,
+        chunk_size=chunk_size,
+        supervised=False,
+    )
+    
+    if not np.isfinite(scores).all():
+        return None, None, {"candidate_id": program.candidate_id, "path": str(program.path), "reason": "non_finite_scores"}
+    
+    return program, scores, None
 
 def main() -> None:
     _setup_logging()
@@ -278,7 +297,7 @@ def main() -> None:
     ap.add_argument("--candidates-dir", type=str, required=True, help="Directory with candidate_round_*_function_*.txt files.")
     ap.add_argument("--output-dir", type=str, required=True, help="Directory to write CSV/JSON/PNG outputs.")
     ap.add_argument("--class-name", type=str, default="HallucinationDetector", help="Estimator class name to instantiate from each candidate program.")
-    ap.add_argument("--input-regime", type=str, default="full", choices=["full", "logits", "hidden_states", "attentions"])
+    ap.add_argument("--input-regime", type=str, default="logits", choices=["full", "logits", "hidden_states", "attentions"])
     ap.add_argument("--chunk-size", type=int, default=128, help="Number of samples per chunk for make_all_stats + estimator call.")
     ap.add_argument("--max-candidates", type=int, default=None, help="Optional cap on number of candidates loaded (debugging).")
     ap.add_argument("--max-samples", type=int, default=None, help="Optional cap on number of eval samples used (debugging).")
@@ -308,25 +327,29 @@ def main() -> None:
 
     programs_all = [_load_candidate_program(p, class_name=args.class_name, base_class="Estimator") for p in candidate_paths]
 
+    # Prepare arguments for parallel processing
+    args_list = [
+        (program, i, len(programs_all), args.class_name, eval_raw, 
+        str(args.input_regime), int(args.chunk_size))
+        for i, program in enumerate(programs_all)
+    ]
+
+    # Process in parallel with configurable n_jobs
+    # Use n_jobs=-1 to use all available cores, or set specific number
+    results = Parallel(n_jobs=8, verbose=10, backend="loky")(
+        delayed(_process_program)(arg) for arg in args_list
+    )
+
     kept_programs: List[CandidateProgram] = []
     kept_scores: List[np.ndarray] = []
     skipped: List[Dict[str, Any]] = []
 
-    for i, program in enumerate(programs_all):
-        logging.info(f"[{i+1}/{len(programs_all)}] Scoring {program.candidate_id}")
-        scores = _score_candidate_on_eval_raw(
-            program,
-            class_name=args.class_name,
-            eval_raw=eval_raw,
-            input_regime=str(args.input_regime),
-            chunk_size=int(args.chunk_size),
-            supervised=False,
-        )
-        if not np.isfinite(scores).all():
-            skipped.append({"candidate_id": program.candidate_id, "path": str(program.path), "reason": "non_finite_scores"})
-            continue
-        kept_programs.append(program)
-        kept_scores.append(scores)
+    for program, scores, skip_info in results:
+        if skip_info is not None:
+            skipped.append(skip_info)
+        else:
+            kept_programs.append(program)
+            kept_scores.append(scores)
 
     assert kept_programs, "All candidates were skipped; no finite score vectors to analyze."
 
