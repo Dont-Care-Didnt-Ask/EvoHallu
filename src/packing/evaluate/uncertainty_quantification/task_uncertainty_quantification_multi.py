@@ -21,6 +21,73 @@ def _load_raw(path: str) -> Dict[str, Any]:
     return torch.load(path, map_location="cpu", mmap=True, weights_only=False)
 
 
+def _expected_suffix_for_input_regime(input_regime: str) -> str | None:
+    suffix_by_regime = {
+        "logits": "_logits.pt",
+        "hidden_states": "_hidden_states.pt",
+        "attentions": "_attentions.pt",
+        "full": None,
+    }
+    if input_regime not in suffix_by_regime:
+        raise ValueError(
+            f"Unsupported input_regime='{input_regime}'. "
+            "Expected one of: logits, hidden_states, attentions, full."
+        )
+    return suffix_by_regime[input_regime]
+
+
+def _required_sample_keys_for_input_regime(input_regime: str) -> set[str]:
+    required_by_regime = {
+        "logits": {"sequence_logprobs", "top_k_logits", "top_k_indices"},
+        "hidden_states": {"sequence_logprobs", "hidden_states"},
+        "attentions": {"sequence_logprobs", "attentions"},
+        "full": {"sequence_logprobs", "top_k_logits", "top_k_indices", "hidden_states", "attentions"},
+    }
+    return required_by_regime[input_regime]
+
+
+def _validate_dataset_startup(
+    dataset_name: str,
+    dataset_path: str,
+    raw_data: Dict[str, Any],
+    input_regime: str,
+    min_samples_per_dataset: int,
+) -> None:
+    samples = raw_data.get("samples", [])
+    if not isinstance(samples, list):
+        raise ValueError(f"Dataset '{dataset_name}' has invalid 'samples' type: {type(samples)}")
+    if not samples:
+        raise ValueError(f"Dataset '{dataset_name}' has no samples")
+    if len(samples) < min_samples_per_dataset:
+        raise ValueError(
+            f"Dataset '{dataset_name}' has {len(samples)} samples, "
+            f"which is below min_samples_per_dataset={min_samples_per_dataset}"
+        )
+
+    expected_suffix = _expected_suffix_for_input_regime(input_regime)
+    if expected_suffix is not None and not dataset_path.endswith(expected_suffix):
+        raise ValueError(
+            f"Dataset '{dataset_name}' path mismatch for input_regime='{input_regime}'. "
+            f"Expected suffix '{expected_suffix}', got path '{dataset_path}'."
+        )
+
+    missing_ground_truth = [idx for idx, sample in enumerate(samples) if "ground_truth_score" not in sample]
+    if missing_ground_truth:
+        raise ValueError(
+            f"Dataset '{dataset_name}' is missing 'ground_truth_score' for {len(missing_ground_truth)} samples. "
+            f"First missing index: {missing_ground_truth[0]}."
+        )
+
+    required_sample_keys = _required_sample_keys_for_input_regime(input_regime)
+    first_sample_keys = set(samples[0].keys())
+    missing_keys = sorted(required_sample_keys - first_sample_keys)
+    if missing_keys:
+        raise ValueError(
+            f"Dataset '{dataset_name}' is incompatible with input_regime='{input_regime}'. "
+            f"First sample missing keys: {missing_keys}."
+        )
+
+
 def generate_input(cfg_task: DictConfig, split: str):
     """
     Load raw statistics for multiple datasets.
@@ -31,11 +98,17 @@ def generate_input(cfg_task: DictConfig, split: str):
       - metric_name: str (label for the metric, e.g., "accuracy", "rouge_l")
     """
     datasets_cfg = getattr(cfg_task, "datasets", None)
+    input_regime = str(getattr(cfg_task, "input_regime", "logits"))
+    min_samples_per_dataset = int(getattr(cfg_task, "min_samples_per_dataset", 1))
 
     if datasets_cfg is None:
         raise ValueError(
             "cfg.task.datasets must be provided for multi-dataset UQ task. "
             "Expected a list of dataset configs with 'name', 'test_raw_path', and 'metric_name'."
+        )
+    if min_samples_per_dataset < 1:
+        raise ValueError(
+            f"cfg.task.min_samples_per_dataset must be >= 1, got {min_samples_per_dataset}"
         )
 
     supervised = bool(getattr(cfg_task, "supervised", False))
@@ -57,6 +130,13 @@ def generate_input(cfg_task: DictConfig, split: str):
 
         logging.info(f"[UQ Multi] Loading dataset '{name}' from {test_raw_path}")
         raw_data = _load_raw(test_raw_path)
+        _validate_dataset_startup(
+            dataset_name=name,
+            dataset_path=test_raw_path,
+            raw_data=raw_data,
+            input_regime=input_regime,
+            min_samples_per_dataset=min_samples_per_dataset,
+        )
 
         datasets.append({
             "name": name,
@@ -173,12 +253,10 @@ def _evaluate_single_dataset(
 
         expected_len = end - start
         if chunk_scores.ndim != 1 or chunk_scores.shape[0] != expected_len:
-            return {
-                "PRR": None,
-                "metric_name": metric_name,
-                "n_samples": num_samples,
-                "error": f"Shape mismatch: got {chunk_scores.shape}, expected ({expected_len},)",
-            }
+            raise ValueError(
+                f"Dataset '{name}': estimator returned shape {chunk_scores.shape}, "
+                f"expected ({expected_len},)"
+            )
 
         scores_list.append(chunk_scores)
 
@@ -258,50 +336,28 @@ def evaluate_func(
 
     input_regime = cfg.task.input_regime
 
-    # Evaluate on each dataset
+    # Evaluate on each dataset; fail the whole candidate on first dataset error.
     results: Dict[str, Dict[str, Any]] = {}
     all_prr_values: List[float] = []
-    any_error = False
 
     for dataset_info in datasets:
         name = dataset_info["name"]
+        dataset_result = _evaluate_single_dataset(
+            cfg=cfg,
+            dataset_info=dataset_info,
+            EstimatorClass=EstimatorClass,
+            input_regime=input_regime,
+        )
+        results[name] = dataset_result
+        all_prr_values.append(dataset_result["PRR"])
 
-        try:
-            dataset_result = _evaluate_single_dataset(
-                cfg=cfg,
-                dataset_info=dataset_info,
-                EstimatorClass=EstimatorClass,
-                input_regime=input_regime,
-            )
-            results[name] = dataset_result
-
-            if dataset_result.get("PRR") is not None:
-                all_prr_values.append(dataset_result["PRR"])
-            else:
-                any_error = True
-
-        except Exception as e:
-            logging.error(f"[UQ Multi] Error evaluating dataset '{name}': {e}")
-            results[name] = {
-                "PRR": None,
-                "metric_name": dataset_info.get("metric_name", "unknown"),
-                "n_samples": len(dataset_info["raw_data"].get("samples", [])),
-                "error": str(e),
-            }
-            any_error = True
-
-    # Compute mean PRR for score (used by optimizer)
-    if all_prr_values:
-        mean_prr = float(np.mean(all_prr_values))
-        score = round(100.0 * mean_prr, 4)
-    else:
-        mean_prr = 0.0
-        score = 0.0
+    mean_prr = float(np.mean(all_prr_values))
+    score = round(100.0 * mean_prr, 4)
 
     function_class.score = score
     function_class.true_score = score
-    function_class.fail_flag = 1 if any_error else 0
-    function_class.correct_flag = 0 if any_error else 1
+    function_class.fail_flag = 0
+    function_class.correct_flag = 1
     function_class.extra_metrics = results
 
     total_elapsed = time.time() - eval_start_time

@@ -1,0 +1,38 @@
+# Task: Multi-Dataset Uncertainty Quantification on train_mix_generations logits
+# Evaluates one UQ estimator across several generation tasks using PRR.
+
+task_name: "uncertainty_quantification_multi"
+function_str_to_extract: "HallucinationDetector"
+
+# Each file must be a raw stats .pt with per-sample `ground_truth_score`.
+datasets:
+  - name: "coqa"
+    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/train_mix_generations/coqa_simple_instruct_raw_stats_logits.pt"
+    metric_name: "f1"
+
+  - name: "samsum"
+    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/train_mix_generations/samsum_simple_instruct_raw_stats_logits.pt"
+    metric_name: "rougeL"
+
+  - name: "triviaqa"
+    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/train_mix_generations/triviaqa_simple_instruct_raw_stats_logits.pt"
+    metric_name: "f1"
+
+  - name: "wmt14_deen"
+    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/train_mix_generations/wmt14_deen_raw_stats_logits.pt"
+    metric_name: "bleu"
+
+# Chunking for make_all_stats in evaluate_func
+chunk_size: 512
+input_regime: "logits"  # Available: "logits", "hidden_states", "attentions", "full"
+min_samples_per_dataset: 100
+
+# Multi-dataset supervised mode is intentionally unsupported in task code.
+supervised: false
+
+failed_score: -1
+timeout_period: 240
+mem_limit_gb: 64
+
+programdatabaseConfig:
+  temp: 40.0
