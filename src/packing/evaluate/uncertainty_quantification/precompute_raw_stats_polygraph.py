@@ -20,7 +20,7 @@ from torch.nn.functional import log_softmax
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from tqdm import tqdm
 
-from src.packing.evaluate.uncertainty_quantification.utils import (
+from packing.evaluate.uncertainty_quantification.utils import (
     detect_dataset_type_from_filename,
     get_metric_for_dataset_type,
     select_best_available_metric,
@@ -50,6 +50,7 @@ def _precompute_file(
     instruct: bool,
     top_k: int,
     layer_stride: int,
+    max_rows: Optional[int],
 ) -> Dict[str, Any]:
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     num_layers = model.config.num_hidden_layers
@@ -58,6 +59,10 @@ def _precompute_file(
     inputs = df["input"].fillna("").astype(str).tolist()
     generations = df["model_generation"].fillna("").astype(str).tolist()
     ground_truth_scores = pd.to_numeric(df[metric_col], errors="coerce").fillna(0.0).tolist()
+    if max_rows is not None:
+        inputs = inputs[:max_rows]
+        generations = generations[:max_rows]
+        ground_truth_scores = ground_truth_scores[:max_rows]
 
     hidden_states_samples: List[Dict[str, Any]] = []
     attentions_samples: List[Dict[str, Any]] = []
@@ -227,13 +232,13 @@ def _parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--model-id",
         type=str,
-        default="meta-llama/Llama-2-7b-chat-hf",
+        default="VityaVitalich/Llama3.1-8b-instruct",
         help="HF model ID or local path (must match generation model).",
     )
     parser.add_argument(
         "--cache-dir",
         type=str,
-        default=None,
+        default="/mnt/extremessd10tb/seleznev/.cache/huggingface/hub",
         help="Hugging Face cache directory.",
     )
     parser.add_argument(
@@ -257,6 +262,12 @@ def _parse_args() -> argparse.Namespace:
         "--dry-run",
         action="store_true",
         help="List files that would be processed without processing.",
+    )
+    parser.add_argument(
+        "--max-rows-per-dataset",
+        type=int,
+        default=None,
+        help="Maximum number of rows per dataset to process (default: None).",
     )
     return parser.parse_args()
 
@@ -314,6 +325,7 @@ def main() -> None:
         df = pd.read_csv(csv_path)
         required = ["input", "model_generation", "output"]
         missing = [c for c in required if c not in df.columns]
+
         if missing:
             logger.warning(f"Skipping {filename}: missing columns {missing}")
             skipped += 1
@@ -321,6 +333,7 @@ def main() -> None:
 
         metric_col = select_best_available_metric(df, [preferred_metric])
         if metric_col is None:
+
             logger.warning(
                 f"Skipping {filename}: required metric '{preferred_metric}' not found. "
                 f"Run compute_polygraph_metrics first. Columns: {list(df.columns)}"
@@ -352,6 +365,7 @@ def main() -> None:
             instruct=args.instruct,
             top_k=args.top_k,
             layer_stride=args.layer_stride,
+            max_rows=args.max_rows_per_dataset,
         )
 
         base_name = csv_path.stem + "_raw_stats"
