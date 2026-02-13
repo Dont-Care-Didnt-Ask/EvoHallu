@@ -5,7 +5,12 @@ import copy
 from packing.evaluate.registry import TASK_REGISTRY
 
 # Keys to exclude from the additional metrics display (e.g., long text fields)
-_EXCLUDE_METRIC_KEYS = {"prompt_text"}
+_EXCLUDE_METRIC_KEYS = {
+    "prompt_text",
+    "AUC 95% confidence interval (DeLong)",
+    "Precision at median score threshold",
+    "Recall at median score threshold",
+}
 
 
 def _format_metric_value(value):
