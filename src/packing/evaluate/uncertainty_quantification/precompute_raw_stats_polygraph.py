@@ -146,25 +146,57 @@ def _precompute_file(
         hidden_i = torch.stack(hs_layers, dim=0)
 
         attentions = outputs.attentions
-        attn_stack = torch.stack(
-            [a[0, :, :full_len, :full_len].cpu().float() for a in attentions],
-            dim=0,
-        )
-        attn_reshape = attn_stack.reshape(num_layers * num_heads, full_len, full_len)
 
-        if prompt_len > 0:
-            attn_shifted = attn_reshape[
-                :, prompt_len - 1 : prompt_len + gen_len - 1, prompt_len : prompt_len + gen_len
-            ].clone()
-        else:
-            attn_shifted = attn_reshape[:, : gen_len - 1, :gen_len].clone()
+        attn_layers_cpu = []
+        for layer_idx, attn in enumerate(outputs.attentions):
+            # Extract ONLY required slice directly on GPU (avoid full tensor copy)
+            if prompt_len > 0:
+                slice_start_q = prompt_len - 1
+                slice_end_q = prompt_len + gen_len - 1
+                slice_start_k = prompt_len
+                slice_end_k = prompt_len + gen_len
+            else:
+                slice_start_q = 0
+                slice_end_q = gen_len - 1
+                slice_start_k = 0
+                slice_end_k = gen_len
+            
+            # Critical: Slice BEFORE moving to CPU
+            attn_slice = attn[0, :, slice_start_q:slice_end_q, slice_start_k:slice_end_k]
+            
+            # Zero out future tokens (causal mask)
+            for j in range(attn_slice.shape[1]):
+                attn_slice[:, j, j:] = 0.0
+            
+            # Move to CPU immediately + free GPU tensor
+            attn_layers_cpu.append(attn_slice.cpu().float())
+            del attn_slice  # Explicitly delete GPU tensor
+            torch.cuda.empty_cache()  # Optional but helpful for long sequences
 
-        for j in range(attn_shifted.shape[1]):
-            attn_shifted[:, j, j:] = 0.0
+        # Stack on CPU only
+        attn_final = torch.stack(attn_layers_cpu, dim=0).reshape(
+            num_layers, num_heads, attn_layers_cpu[0].shape[1], attn_layers_cpu[0].shape[2]
+        ).to(dtype=torch.float16)
 
-        attn_final = attn_shifted.reshape(
-            num_layers, num_heads, attn_shifted.shape[1], attn_shifted.shape[2]
-        ).to(dtype=torch.float16)  # (num_layers, num_heads, gen_len-1, gen_len)
+        # attn_stack = torch.stack(
+        #     [a[0, :, :full_len, :full_len].cpu().float() for a in attentions],
+        #     dim=0,
+        # )
+        # attn_reshape = attn_stack.reshape(num_layers * num_heads, full_len, full_len)
+
+        # if prompt_len > 0:
+        #     attn_shifted = attn_reshape[
+        #         :, prompt_len - 1 : prompt_len + gen_len - 1, prompt_len : prompt_len + gen_len
+        #     ].clone()
+        # else:
+        #     attn_shifted = attn_reshape[:, : gen_len - 1, :gen_len].clone()
+
+        # for j in range(attn_shifted.shape[1]):
+        #     attn_shifted[:, j, j:] = 0.0
+
+        # attn_final = attn_shifted.reshape(
+        #     num_layers, num_heads, attn_shifted.shape[1], attn_shifted.shape[2]
+        # ).to(dtype=torch.float16)  # (num_layers, num_heads, gen_len-1, gen_len)
 
         hidden_states_sample = common_fields.copy()
         hidden_states_sample["hidden_states"] = hidden_i
@@ -206,6 +238,12 @@ def _save_outputs(output_dir: Path, base_name: str, output_structs: Dict[str, An
     torch.save(output_structs["logits_struct"], f"{base_path}_logits.pt")
     logger.info(f"Saved to {base_path}_*.pt")
 
+def _check_if_outputs_exist(output_dir: Path, base_name: str) -> bool:
+    base_path = output_dir / base_name
+    hidden_states_path = Path(f"{base_path}_hidden_states.pt")
+    attentions_path = Path(f"{base_path}_attentions.pt")
+    logits_path = Path(f"{base_path}_logits.pt")
+    return hidden_states_path.exists() and attentions_path.exists() and logits_path.exists()
 
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -309,7 +347,13 @@ def main() -> None:
 
     for csv_path in csv_files:
         filename = csv_path.name
+        base_name = csv_path.stem + "_raw_stats"
         dataset_type = detect_dataset_type_from_filename(filename)
+
+        if _check_if_outputs_exist(output_dir, base_name):
+            logger.warning(f"Skipping {filename}: outputs already exist")
+            skipped += 1
+            continue
 
         if dataset_type is None:
             logger.warning(f"Skipping {filename}: unknown dataset type")
@@ -368,7 +412,6 @@ def main() -> None:
             max_rows=args.max_rows_per_dataset,
         )
 
-        base_name = csv_path.stem + "_raw_stats"
         _save_outputs(output_dir, base_name, output_structs)
         processed += 1
 
