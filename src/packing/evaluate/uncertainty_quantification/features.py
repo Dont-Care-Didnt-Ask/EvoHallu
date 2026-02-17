@@ -548,8 +548,8 @@ def make_all_stats(
             # greedy_log_likelihoods.append(ll)
             # greedy_log_probs.append(log_probs)
             # greedy_tokens_alternatives.append(cut_alternatives)
-            top_k_logits.append(sample["top_k_logits"].cpu().numpy())
-            top_k_indices.append(sample["top_k_indices"].cpu().numpy())
+            top_k_logits.append(sample["top_k_logits"].cpu().numpy() if isinstance(sample["top_k_logits"], torch.Tensor) else sample["top_k_logits"])
+            top_k_indices.append(sample["top_k_indices"].cpu().numpy() if isinstance(sample["top_k_indices"], torch.Tensor) else sample["top_k_indices"])
 
             greedy_texts.append(sample["claim"])
             greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
