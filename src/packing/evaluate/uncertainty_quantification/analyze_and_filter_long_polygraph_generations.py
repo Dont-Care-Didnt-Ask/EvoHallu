@@ -22,7 +22,6 @@ LENGTH_THRESHOLD = 1536
 FILTER_THRESHOLD = 2040
 REQUIRED_COLUMNS = ("input", "model_generation")
 
-
 def _parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Analyze long model generations across polygraph CSV datasets."
@@ -275,19 +274,26 @@ def _analyze_directory(
 def main() -> None:
     args = _parse_args()
     assert args.base_model_id.strip(), "base_model_id must be non-empty"
-    assert args.qwen_model_id.strip(), "qwen_model_id must be non-empty"
     assert args.batch_size > 0, "batch_size must be positive"
     assert args.output.strip(), "output path must be non-empty"
     assert args.filter_threshold > 0, "filter_threshold must be positive"
 
+    qwen_dir_arg = args.qwen_dir.strip()
+    analyze_qwen = bool(qwen_dir_arg)
+    filter_qwen_dir_arg = args.filter_qwen_dir.strip()
+    filter_qwen = bool(filter_qwen_dir_arg)
+    if analyze_qwen or filter_qwen:
+        assert args.qwen_model_id.strip(), "qwen_model_id must be non-empty"
+
     base_dir = Path(args.base_dir)
-    qwen_dir = Path(args.qwen_dir)
+    qwen_dir = Path(qwen_dir_arg) if analyze_qwen else None
     output_path = Path(args.output)
 
     tokenizers: Dict[str, object] = {
         "base": AutoTokenizer.from_pretrained(args.base_model_id),
-        "qwen3_8b": AutoTokenizer.from_pretrained(args.qwen_model_id),
     }
+    if analyze_qwen or filter_qwen:
+        tokenizers["qwen3_8b"] = AutoTokenizer.from_pretrained(args.qwen_model_id)
 
     if args.do_filtering:
         base_output_dir = Path(args.filter_base_output_dir)
@@ -300,14 +306,16 @@ def main() -> None:
             threshold=args.filter_threshold,
             tag="base_metrics",
         )
-        qwen_filter_summary = _filter_directory(
-            source_dir=Path(args.filter_qwen_dir),
-            destination_dir=qwen_output_dir,
-            tokenizer=tokenizers["qwen3_8b"],
-            batch_size=args.batch_size,
-            threshold=args.filter_threshold,
-            tag="qwen_metrics",
-        )
+        qwen_filter_summary = None
+        if filter_qwen:
+            qwen_filter_summary = _filter_directory(
+                source_dir=Path(filter_qwen_dir_arg),
+                destination_dir=qwen_output_dir,
+                tokenizer=tokenizers["qwen3_8b"],
+                batch_size=args.batch_size,
+                threshold=args.filter_threshold,
+                tag="qwen_metrics",
+            )
         _write_filtering_note(
             base_output_dir,
             args.filter_threshold,
@@ -315,19 +323,25 @@ def main() -> None:
             args.base_model_id,
             base_filter_summary["dropped_per_dataset"],
         )
-        _write_filtering_note(
-            qwen_output_dir,
-            args.filter_threshold,
-            "Qwen",
-            args.qwen_model_id,
-            qwen_filter_summary["dropped_per_dataset"],
-        )
-        print(
-            "Filtering summary: "
-            f"base_dropped={base_filter_summary['rows_dropped']} "
-            f"qwen_dropped={qwen_filter_summary['rows_dropped']} "
-            f"total_dropped={base_filter_summary['rows_dropped'] + qwen_filter_summary['rows_dropped']}"
-        )
+        if qwen_filter_summary:
+            _write_filtering_note(
+                qwen_output_dir,
+                args.filter_threshold,
+                "Qwen",
+                args.qwen_model_id,
+                qwen_filter_summary["dropped_per_dataset"],
+            )
+        summary_parts = [
+            f"base_dropped={base_filter_summary['rows_dropped']}",
+        ]
+        if qwen_filter_summary:
+            summary_parts.append(f"qwen_dropped={qwen_filter_summary['rows_dropped']}")
+        else:
+            summary_parts.append("qwen_dropped=skipped")
+        total_dropped = base_filter_summary["rows_dropped"]
+        if qwen_filter_summary:
+            total_dropped += qwen_filter_summary["rows_dropped"]
+        print("Filtering summary: " + " ".join(summary_parts) + f" total_dropped={total_dropped}")
         return
 
     base_sections, base_count = _analyze_directory(
@@ -336,12 +350,15 @@ def main() -> None:
         batch_size=args.batch_size,
         dataset_tag="polygraph_generations",
     )
-    qwen_sections, qwen_count = _analyze_directory(
-        directory=qwen_dir,
-        tokenizer=tokenizers["qwen3_8b"],
-        batch_size=args.batch_size,
-        dataset_tag="polygraph_generations_qwen3_8b",
-    )
+    if analyze_qwen and qwen_dir is not None:
+        qwen_sections, qwen_count = _analyze_directory(
+            directory=qwen_dir,
+            tokenizer=tokenizers["qwen3_8b"],
+            batch_size=args.batch_size,
+            dataset_tag="polygraph_generations_qwen3_8b",
+        )
+    else:
+        qwen_sections, qwen_count = [], 0
 
     all_sections = base_sections + qwen_sections
     report_lines: List[str] = [
@@ -349,7 +366,11 @@ def main() -> None:
         f"criterion: dataset is anomalous if any model_generation length > {LENGTH_THRESHOLD}",
         "",
         f"anomalous_datasets_in_polygraph_generations: {base_count}",
-        f"anomalous_datasets_in_polygraph_generations_qwen3_8b: {qwen_count}",
+        (
+            f"anomalous_datasets_in_polygraph_generations_qwen3_8b: {qwen_count}"
+            if analyze_qwen
+            else "anomalous_datasets_in_polygraph_generations_qwen3_8b: skipped (qwen-dir empty)"
+        ),
         f"anomalous_datasets_total: {base_count + qwen_count}",
         "",
     ]
