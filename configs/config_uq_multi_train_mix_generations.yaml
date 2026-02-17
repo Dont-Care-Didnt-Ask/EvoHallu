@@ -70,7 +70,7 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 1046
+seed: 2001
 run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev
