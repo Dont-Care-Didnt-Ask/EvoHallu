@@ -30,7 +30,7 @@ sample_size: 1392     # 0 means use all available train samples. 1392x4 approxim
 val_size: 0.2         # fraction of (sampled) train data used for validation
 split_seed: 441
 # Chunking for make_all_stats in evaluate_func
-chunk_size: 512
+chunk_size: 128
 input_regime: "logits"  # Available: "logits", "hidden_states", "attentions", "full"
 min_samples_per_dataset: 100
 

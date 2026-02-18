@@ -28,7 +28,7 @@ flash_attn: 0
 
 # Program database
 programdatabaseConfig:
-  functions_per_prompt: 2
+  functions_per_prompt: 4
   num_islands: 2
   temp_sampling_flag: 1
   temp: ${task.programdatabaseConfig.temp}
@@ -70,8 +70,9 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 2001
-run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
+seed: 2003
+# run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
+run_identifier_name: ${model.model_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev
 use_tgi: ${cluster.use_tgi}
