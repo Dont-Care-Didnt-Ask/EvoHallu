@@ -23,17 +23,17 @@ def _format_metric_value(value):
 def _format_extra_metrics(em: dict) -> str:
     """Format extra_metrics dict into a readable string, excluding certain keys."""
     
-    if em["task_variant"] == "multi-criteria optimization":
-        dataset_names = [key for key in em.keys() if key != "task_variant"]
+    # Multi-criteria optimization task variant
+    if "datasets" in em:
         dataset_info = []
-        for dataset_name in dataset_names:
-            results = em[dataset_name]
+        for dataset_name in em["datasets"].keys():
+            results = em["datasets"][dataset_name]
             prr = f"{100 * results["prediction_rejection_ratio"]:.1f}"
-            n_samples = results["n_samples"]
             dataset_info.append(f"# Dataset: {dataset_name}\tPRR: {prr}")
         
         return "# === Per-dataset metrics ===\n" + "\n".join(dataset_info) + "\n# ======\n"
-        
+    
+    # Single-criteria optimization task variant
     parts = [
         f"{k}: {_format_metric_value(v)}"
         for k, v in em.items()
@@ -51,9 +51,11 @@ def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
     for program, score, em in zip(programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
     
-        if "task_variant" not in em or em["task_variant"] != "multi-criteria optimization":
+        if "task_variant" in em and em["task_variant"] == "multi-criteria optimization":
+            main_txt += f"# Score achieved with the function above (mean + min PRR / 2): {score}\n"
+        else:
             main_txt += f"# Score achieved with the function above: {score}\n"
-    
+
         if em:
             main_txt += _format_extra_metrics(em)
         main_txt += "\n"
