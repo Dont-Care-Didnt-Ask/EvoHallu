@@ -21,6 +21,7 @@ import multiprocessing
 import faulthandler
 import traceback
 import sys
+import time
 faulthandler.enable()
 
 from packing.utils.seeding import seed_everything, generate_random_seed
@@ -62,7 +63,9 @@ from packing.parallel.continuous_execution import (
     safe_consumer,
     consumers_finish_and_cleanup,
 )
-import time
+
+from experiments.hallu_utils import evaluate_hallu, write_test_metrics_row
+from experiments.uq_utils import evaluate_uq, write_uq_metrics_row, evaluate_uq_multi, write_uq_multi_metrics_row
 
 
 OmegaConf.register_new_resolver("generate_random_seed", generate_random_seed, use_cache=True)
@@ -71,154 +74,6 @@ import pickle
 import subprocess
 import getpass
 
-def parse_auc_ci(ci_str: str) -> tuple[float, float]:
-    """Parse AUC confidence interval string into numeric bounds.
-    
-    Args:
-        ci_str: String in format "({lower:.4f}, {upper:.4f})"
-        
-    Returns:
-        Tuple of (lower_bound, upper_bound) as floats, or (nan, nan) if parsing fails
-    """
-    parts = ci_str.strip("()").split(",", 1)
-    try:
-        lower = float(parts[0].strip())
-        upper = float(parts[1].strip()) if len(parts) > 1 else float("nan")
-    except Exception:
-        lower, upper = float("nan"), float("nan")
-    return lower, upper
-
-
-def evaluate_hallu(cfg, generate_input, evaluate_func, function_class, split):
-    """Evaluate a function class on the test set.
-    
-    Args:
-        cfg: Configuration object
-        generate_input: Function to generate the input data
-        evaluate_func: Function to evaluate the function class
-        function_class: FunctionClass instance to evaluate
-        split: Split to evaluate on ("train", "val" or "testset". Test set might be from different source compared to train/val)
-    Returns:
-        Tuple of (test_result, num_test_samples)
-    """
-    test_data = generate_input(cfg.task, split)
-    num_test_samples = len(test_data[0]) if isinstance(test_data, tuple) else -1
-    test_fc = copy.deepcopy(function_class)
-    test_result = evaluate_func(cfg, copy.deepcopy(test_data), test_fc)
-    return test_result, num_test_samples
-
-
-def write_test_metrics_row(cfg, test_result, split, num_test_samples, iteration):
-    """Write a test metrics row to test_metrics.csv.
-    
-    Args:
-        cfg: Configuration object
-        test_result: Result object from evaluate_func with extra_metrics
-        split: split used for evaluation ("train", "val" or "testset". Test set might be from different source compared to train/val)
-        num_test_samples: Number of test samples
-        iteration: Iteration number (use -1 for initial)
-    """
-    em = getattr(test_result, "extra_metrics", {}) or {}
-    lower, upper = parse_auc_ci(em.get("auc_ci", "(nan, nan)"))
-    
-    test_csv_path = os.path.join(cfg.logs_dir, "test_metrics.csv")
-    new_file = not os.path.exists(test_csv_path)
-    
-    with open(test_csv_path, "w" if new_file else "a", newline="") as tf:
-        writer = csv.writer(tf)
-        if new_file:
-            writer.writerow([
-                "iteration",
-                "function_num",
-                "prompt_num",
-                "split",
-                "num_test_samples",
-                "auc",
-                "precision",
-                "recall",
-                "invalid_responses_percentage",
-                "auc_lower_bound",
-                "auc_upper_bound",
-                "prompt_text",
-            ])
-        writer.writerow([
-            iteration,
-            test_result.function_num,
-            test_result.prompt_num,
-            split,
-            num_test_samples,
-            em.get("auc", ""),
-            em.get("precision_at_0_5", ""),
-            em.get("recall_at_0_5", ""),
-            em.get("invalid_responses_percentage", ""),
-            lower,
-            upper,
-            em.get("prompt_text", ""),
-        ])
-
-
-def evaluate_uq(cfg, generate_input, evaluate_func, function_class, split):
-    """Evaluate a function class on the specified split for uncertainty quantification task.
-    
-    Args:
-        cfg: Configuration object
-        generate_input: Function to generate the input data
-        evaluate_func: Function to evaluate the function class
-        function_class: FunctionClass instance to evaluate
-        split: Split to evaluate on ("train", "val" or "testset")
-    Returns:
-        Tuple of (result, num_samples)
-    """
-    data = generate_input(cfg.task, split)
-    num_samples = len(data.get("eval_raw", {}).get("samples", [])) if isinstance(data, dict) else -1
-    fc = copy.deepcopy(function_class)
-    result = evaluate_func(cfg, copy.deepcopy(data), fc)
-    return result, num_samples
-
-
-def write_uq_metrics_row(cfg, result, split, num_samples, iteration):
-    """Write a UQ metrics row to uq_split_metrics.csv.
-    
-    Args:
-        cfg: Configuration object
-        result: Result object from evaluate_func with extra_metrics
-        split: split used for evaluation ("train", "val" or "testset")
-        num_samples: Number of samples
-        iteration: Iteration number (use -1 for initial)
-    """
-    em = getattr(result, "extra_metrics", {}) or {}
-    lower, upper = parse_auc_ci(em.get("AUC 95% confidence interval (bootstrap)", "(nan, nan)"))
-    
-    csv_path = os.path.join(cfg.logs_dir, "uq_split_metrics.csv")
-    new_file = not os.path.exists(csv_path)
-    
-    with open(csv_path, "w" if new_file else "a", newline="") as f:
-        writer = csv.writer(f)
-        if new_file:
-            writer.writerow([
-                "iteration",
-                "function_num",
-                "prompt_num",
-                "split",
-                "num_samples",
-                "auc",
-                "precision_at_median",
-                "recall_at_median",
-                "auc_lower_bound",
-                "auc_upper_bound",
-            ])
-        writer.writerow([
-            iteration,
-            getattr(result, "function_num", ""),
-            getattr(result, "prompt_num", ""),
-            split,
-            num_samples,
-            em.get("AUC", ""),
-            em.get("Precision at median score threshold", ""),
-            em.get("Recall at median score threshold", ""),
-            lower,
-            upper,
-        ])
 
 
 @hydra_main(config_path="../../configs", config_name="config", version_base="1.3")
@@ -717,6 +572,57 @@ def main(cfg: DictConfig):
                         f.write(f"{split2result['testset'].imports_str}\n")
                         f.write(f"{split2result['testset'].function_str}\n")
 
+        # Evaluate top-1 best estimator on val/test for uncertainty_quantification_multi task
+        if cfg.task.task_name == "uncertainty_quantification_multi":
+            # Select candidates with valid AUC
+            candidates = [
+                fc for fc in passed_function_classes
+                if isinstance(getattr(fc, "extra_metrics", None), dict)
+                and "datasets" in fc.extra_metrics
+            ]
+
+            if len(candidates) > 0:
+                # Highest (mean_prr + min_prr) / 2 score wins
+                best_fc = max(candidates, key=lambda fc: fc.score)
+                best_score = best_fc.score
+
+                csv_path = os.path.join(cfg.logs_dir, "uq_multi_split_metrics.csv")
+                already_evaluated = False
+                if os.path.exists(csv_path):
+                    with open(csv_path, "r", newline="") as f:
+                        reader = csv.DictReader(f)
+                        for row in reader:
+                            # Check if same score already evaluated at this iteration
+                            try:
+                                if (int(row.get("iteration", -999)) == round_num and
+                                    float(row.get("score", -1)) == best_score):
+                                    already_evaluated = True
+                                    break
+                            except (ValueError, TypeError):
+                                pass
+
+                if not already_evaluated:
+                    logging.info(f"Evaluating best estimator (train (mean_prr + min_prr) / 2 score={best_score}) on val/test splits...")
+                    split2result = {}
+                    for split in ["train", "val", "testset"]:
+                        result = evaluate_uq_multi(cfg, generate_input, evaluate_func, best_fc, split)
+                        write_uq_multi_metrics_row(cfg, result, split, iteration=round_num)
+                        split2result[split] = result
+                        logging.info(f"UQ {split} evaluation: (mean_prr + min_prr) / 2 score={result.score}")
+                    
+                    program_text = f"{split2result['testset'].imports_str}\n{split2result['testset'].function_str}\n"
+
+                    with open(f"{cfg.logs_dir}/candidates/candidate_round_{round_num}_function_{getattr(best_fc, 'function_num', 0)}.txt", "w") as f:
+                        f.write(f"# Iteration: {round_num}\n")
+                        for split in ["testset", "val", "train"]:
+                            f.write(f"# {split.title()} per-dataset PRR: ")
+                            split_dataset_results = split2result[split].extra_metrics['datasets']
+                            for dataset in split_dataset_results.keys():
+                                f.write(f"{dataset}: {100*split_dataset_results[dataset]['prediction_rejection_ratio']:.1f}, ")
+                            f.write(f"\n")
+                        f.write(program_text)
+
+
         # Clean up
         passed_function_classes_global[:] = []
         failed_function_classes_global[:] = []
@@ -739,169 +645,8 @@ def main(cfg: DictConfig):
             f"Finished with continuous sampling and evaluation for {cfg.num_cont_rounds} rounds"
         )
 
-        # Are we finetuning the model in this round?
-        if round_num % cfg.finetuning_frequency == 0 and round_num != 0:
-            if cfg.use_tgi or cfg.use_vllm:
-                logging.info("Killing model server, preparing for finetuning...")
-                for server_pid in server_pids:
-                    kill_process_with_pid_and_wait(server_pid)
-                model_server_alive = False
-            elif cfg.use_api:
-                # API mode doesn't have a server to kill
-                logging.info("Preparing for finetuning (API mode - no server to kill)...")
-                model_server_alive = False
-            else:
-                logging.info("Deleting the sampling model, preparing for finetuning...")
-                delete_sampling_model(cfg, model, tokenizer, sampling_params)
-                model_initialized = False
-
-            logging.info("-" * 10)
-            logging.info(f"TRAINING MODEL AT ROUND NUM: {round_num}")
-
-            # Prepare the data for training, calculate thresholds
-            dpo_chats, running_dict, dpo_threshold = prepare_dpo_chats(cfg, dpo_chats, running_dict)
-
-            # Save dpo_chats, dpo_threshold to file, such that the train_model script can directly load them
-
-            # Save the dpo_data_chats
-            with open(f"{cfg.logs_dir}/dpo_chats_train.pkl", "wb") as f:
-                assert dpo_chats is not None
-                pickle.dump(dpo_chats, f)
-
-            if cfg.wandb:
-                default_run.finish()
-
-            def launch_accelerate(
-                    cfg,
-                    running_dict,
-                    model_name,
-                    full_model_name,
-                    model_adapter_dir,
-                    round_num,
-                    dpo_threshold,
-            ):
-
-                # Save the running_dict to the logs_dir
-                with open(f"{cfg.logs_dir}/running_dict.pkl", "wb") as f:
-                    assert running_dict is not None
-                    pickle.dump(running_dict, f)
-
-                command = [
-                    "accelerate",
-                    "launch",
-                    "--config_file",
-                    cfg.full_accelerate_config,
-                    f"./src/packing/train/train.py",
-                    "--logs_dir",
-                    cfg.logs_dir,
-                    "--model_name",
-                    model_name,
-                    "--full_model_name",
-                    full_model_name,
-                    "--model_adapter_dir",
-                    model_adapter_dir,
-                    "--round_num",
-                    str(round_num),
-                    "--dpo_threshold",
-                    str(dpo_threshold),
-                ]
-
-                # If we are training on a single GPU, we need to set the visible GPUs to 1, since otherwise
-                # accelerate will start complaining when launching multiple distributed processes
-                new_env = os.environ.copy()
-                if isinstance(cfg.gpu_nums, int):
-                    new_env["WORLD_SIZE"] = "1"
-                    new_env["RANK"] = "0"
-                    new_env["MASTER_ADDR"] = "127.0.0.1"
-                    new_env["MASTER_PORT"] = str(12345 + cfg.gpu_nums)
-                    new_env["CUDA_VISIBLE_DEVICES"] = str(cfg.gpu_nums)
-
-                # Launch the accelerate command
-                logging.info(f"Running command: {command}")
-                result = subprocess.run(command, capture_output=True, text=True, env=new_env)
-
-                if result.returncode == 0:
-                    logging.info(f"Training of model {model_name} completed successfully")
-                    logging.info(result.stdout)
-                else:
-                    logging.error("Training failed")
-                    logging.error(result.stderr)
-                    raise Exception("Training failed")
-
-                # Read the running_dict from the logs_dir
-                with open(f"{cfg.logs_dir}/running_dict.pkl", "rb") as f:
-                    running_dict = pickle.load(f)
-                    assert running_dict is not None
-
-                return running_dict
-
-            if cfg.multiple_models:
-                # In case the same model is used multiple times on multiple gpus, we only want to train it once
-                # Deduplicate models names and adapter dirs
-                deduped = []
-                seen_models = set()
-                for mn, fmn, mad in zip(cfg.model.model_name, cfg.full_model_name, cfg.model_adapter_dir):
-                    if mn not in seen_models:
-                        seen_models.add(mn)
-                        deduped.append((mn, fmn, mad))
-
-                for model_name, full_model_name, model_adapter_dir in deduped:
-                    running_dict = launch_accelerate(
-                        cfg,
-                        running_dict,
-                        model_name,
-                        full_model_name,
-                        model_adapter_dir,
-                        round_num,
-                        dpo_threshold,
-                    )
-            else:
-                running_dict = launch_accelerate(
-                    cfg,
-                    running_dict,
-                    cfg.model.model_name,
-                    cfg.full_model_name,
-                    cfg.model_adapter_dir,
-                    round_num,
-                    dpo_threshold,
-                )
-
-            logging.info(
-                f"  --> Memory after training the model: {torch.cuda.max_memory_allocated() // 1024 // 1024}MB"
-            )
-
-            # Create a flag to indicate the model has been trained
-            running_dict["flag_load_finetuned"] = 1
-            flag_load_finetuned = True
-
-            if not (cfg.use_tgi or cfg.use_vllm):
-                if not model_initialized:
-                    model, tokenizer, sampling_params = initialize_models(cfg, load_finetuned=True)
-                    logging.info(
-                        f"  --> Memory after initializing the sampling model: {torch.cuda.max_memory_allocated() // 1024 // 1024}MB"
-                    )
-                    model_initialized = True
-                else:
-                    logging.info("Sampling model already initialized")
-
-            if cfg.wandb:
-                default_run = wandb.init(
-                    resume="must",
-                    id=cfg.default_wandb_name,
-                    project=cfg.project,
-                    config=OmegaConf.to_container(cfg, resolve=True, throw_on_missing=True),
-                    name=cfg.wandb_name,
-                    group=cfg.group_name,
-                    reinit=True,
-                    entity=cfg.entity,
-                )
-
-                running_dict = log_train_keys_containing_loop(cfg, running_dict)
-
-            running_dict["training_flag_round"] = 1
-
-        else:
-            running_dict["training_flag_round"] = 0
+        # No finetuning in this project
+        running_dict["training_flag_round"] = 0
 
         logging.info("-" * 10)
         logging.info("REGISTERING PROGRAMS")
@@ -912,9 +657,6 @@ def main(cfg: DictConfig):
         )
         # Log the average score of only passed functions in this batch
         running_dict = calculate_avg_passed_score(running_dict, passed_function_classes)
-
-        # Add the chats to the finetuning data
-        dpo_chats.add_batch_data(cfg, passed_function_classes, failed_function_classes)
 
         # Register the sampled functions in the programdatabase
         programdatabase, running_dict, _ = register_programs(
