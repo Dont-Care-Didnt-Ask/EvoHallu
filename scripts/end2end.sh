@@ -1,7 +1,7 @@
 echo $(which python)
 
-devices=0
-output_dir=Feb06
+devices=2
+output_dir=Feb18
 
 mkdir -p out/logs/example/EVALS/${output_dir}
 
@@ -9,12 +9,12 @@ base_dir="/home/m.seleznyov/longtail-dataset"
 datasets=(
     ${base_dir}/datasets/popqa/popqa_test_filtered_10shot.csv \
     ${base_dir}/datasets/AVeriTeC/dev_filtered_10shot.csv \
-    ${base_dir}/datasets/x-fact/test_filtered_10shot.csv \
     ${base_dir}/datasets/UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv
     ${base_dir}/datasets/geometry/cities.csv \
     ${base_dir}/datasets/geometry/companies_true_false.csv \
     ${base_dir}/datasets/geometry/common_claim_true_false.csv \
     ${base_dir}/datasets/geometry/counterfact_true_false.csv \
+    ${base_dir}/datasets/x-fact/test_filtered_10shot.csv \
     ${base_dir}/datasets/WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv \
 )
 
