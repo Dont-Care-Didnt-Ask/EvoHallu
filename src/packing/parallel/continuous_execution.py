@@ -350,17 +350,31 @@ def Consumer(
                                     logging.error(
                                         f"[Worker {task_id}] Evaluate function raised an exception: {result_class}"
                                     )
-                                    raise ValueError(
-                                        f"[Worker {task_id}] Evaluate function exception: {result_class}"
-                                    )
+                                    # Mark as failed explicitly
+                                    function_class.fail_flag = 1
+                                    function_class.score = cfg.task.failed_score
+                                    function_class.true_score = cfg.task.failed_score
+                                    
+                                    # Save to failed list so it gets written to /failed_chats
+                                    failed_function_classes_global.append(function_class)
+                                    
+                                    # Continue to next function (do not crash worker)
+                                    continue 
                                 else:
                                     # Unexpected data type
                                     logging.error(
                                         f"[Worker {task_id}] Returned an unexpected result: {result_class}"
                                     )
-                                    raise ValueError(
-                                        f"[Worker {task_id}] Unexpected result: {result_class}"
-                                    )
+                                    # Mark as failed explicitly
+                                    function_class.fail_flag = 1
+                                    function_class.score = cfg.task.failed_score
+                                    function_class.true_score = cfg.task.failed_score
+                                    
+                                    # Save to failed list so it gets written to /failed_chats
+                                    failed_function_classes_global.append(function_class)
+                                    
+                                    # Continue to next function (do not crash worker)
+                                    continue 
                             else:
                                 # Result queue empty
                                 with task._process_lock:
