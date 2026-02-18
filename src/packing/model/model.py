@@ -60,8 +60,10 @@ def get_full_model_name(cfg):
             model_id = "Qwen/Qwen2.5-0.5B-Instruct"
         elif name == "qwen14b":
             model_id = "Qwen/Qwen2.5-14B-Instruct"
+        elif name == "qwen3coder30b":
+            model_id = "Qwen/Qwen3-Coder-30B-A3B-Instruct"
         elif name == "gpt-oss-120b":
-            model_id = "/disk/4tb/seleznev/.cache/huggingface/hub/models--openai--gpt-oss-120b"
+            model_id = "/mnt/extremessd10tb/seleznev/.cache/huggingface/hub/models--openai--gpt-oss-120b"
         else:
             raise ValueError(f"Invalid model name: {name}")
         return model_id
@@ -92,10 +94,14 @@ def initialize_single_model(
 
     if not train:
         init_args = {
-            "torch_dtype": torch_dtype,
-            "trust_remote_code": True,
             "device_map": {"": gpu_num},
+            "trust_remote_code": True,
         }
+        if cfg.model.load_in_8_bit:
+            init_args["load_in_8_bit"] = True
+        else:
+            init_args["torch_dtype"] = torch_dtype
+        
     else:
         init_args = {}
 
@@ -130,6 +136,7 @@ def initialize_single_model(
         top_p=cfg.model.topp,
         pad_token_id=tokenizer.eos_token_id,
         do_sample=True,
+        repetition_penalty=1.0 if not "repetition_penalty" in cfg.model else cfg.model.repetition_penalty,
     )  # , penalty=1.0, repetition_penalty=1.0)
 
     return model, tokenizer, sampling_params
@@ -731,6 +738,14 @@ def start_vllm_server(model_id, gpu_num, port):
     env_vars["CUDA_VISIBLE_DEVICES"] = str(gpu_num)
 
     logging.info(f"Starting vLLM server for model {model_id} on GPU {gpu_num} at port {port}")
+    logging.info("=== GPU INFO ===")
+    logging.info(f"CUDA_VISIBLE_DEVICES: {env_vars['CUDA_VISIBLE_DEVICES']}")
+    logging.info(f"GPU memory allocated: {torch.cuda.memory_allocated() // 1024 // 1024}MB")
+    
+    # If model_id is a path starting from .., print the contents of the directory to the log
+    if model_id.startswith(".."):    
+        logging.info(f"=== Contents of {model_id} ===")
+        logging.info(f"Contents of {model_id}: {os.listdir(model_id)}")
 
     # Basic command: serve the model on the given port and host
     command = [
@@ -740,7 +755,7 @@ def start_vllm_server(model_id, gpu_num, port):
         "--port", str(port),
     ]
 
-    if "gpt-oss" in model_id:
+    if "gpt-oss" or "qwen3coder30b" in model_id:
         # Reduce max length to avoid OOM errors due to KV-cache size
         command.extend(["--max-model-len", "16384"])
 

@@ -26,7 +26,6 @@ DATASETS = [
     ("LM-Polygraph/wmt14", "fren"),
     ("LM-Polygraph/wmt19", "deen_simple_instruct"),
     ("LM-Polygraph/wmt19", "ruen_simple_instruct"),
-    # ("LM-Polygraph/aeslc", "continuation"),
     ("LM-Polygraph/coqa", "simple_instruct"),
     ("LM-Polygraph/babi_qa", "continuation"),
     ("LM-Polygraph/gsm8k", "simple_instruct"),
@@ -35,6 +34,13 @@ DATASETS = [
     ("LM-Polygraph/mmlu", "simple_instruct"),
     ("LM-Polygraph/samsum", "simple_instruct"),
     ("LM-Polygraph/xsum", "simple_instruct"),
+]
+
+TRAIN_DATASETS = [
+    ("LM-Polygraph/wmt14", "deen"),
+    ("LM-Polygraph/coqa", "simple_instruct"),
+    ("LM-Polygraph/triviaqa", "simple_instruct"),
+    ("LM-Polygraph/samsum", "simple_instruct"),
 ]
 
 def get_output_path(output_dir: Path, dataset_name: str, config: str, limit: int | None = None) -> Path:
@@ -77,7 +83,7 @@ def load_model_and_tokenizer(
 
     model = transformers.AutoModelForCausalLM.from_pretrained(
         model_name,
-        dtype=dtype,
+        torch_dtype=dtype,
         device_map="cuda:0",
         trust_remote_code=True,
     )
@@ -148,6 +154,7 @@ def process_dataset(
     max_new_tokens: int,
     apply_chat_template: bool,
     limit: int | None,
+    split: str,
 ) -> None:
     """Process a single dataset and save generations to CSV.
 
@@ -161,12 +168,12 @@ def process_dataset(
         dataset = datasets.load_dataset(
             dataset_name,
             config,
-            split="test",
+            split=split,
             verification_mode="no_checks",
-            download_mode="force_redownload"
+            download_mode="force_redownload",
         )
     else:
-        dataset = datasets.load_dataset(dataset_name, config, split="test")
+        dataset = datasets.load_dataset(dataset_name, config, split=split)
 
     if limit is not None:
         dataset = dataset.select(range(min(limit, len(dataset))))
@@ -229,7 +236,10 @@ def main() -> None:
     model, tokenizer = load_model_and_tokenizer(args.model_name, dtype)
 
     # Process each dataset
-    for dataset_name, config in DATASETS:
+    datasets_to_process = TRAIN_DATASETS if args.use_train_datasets else DATASETS
+    split = "train" if args.use_train_datasets else "test"
+
+    for dataset_name, config in datasets_to_process:
         output_path = get_output_path(output_dir, dataset_name, config, limit=args.limit)
         partial_output_path = get_partial_output_path(output_dir, dataset_name, config, limit=args.limit)
 
@@ -254,6 +264,7 @@ def main() -> None:
             max_new_tokens=args.max_new_tokens,
             apply_chat_template=not args.no_chat_template,
             limit=args.limit,
+            split=split,
         )
 
     logger.info("All datasets processed.")
@@ -309,6 +320,11 @@ def parse_args() -> argparse.Namespace:
         default="float32",
         choices=["float16", "bfloat16", "float32"],
         help="Model dtype (default: bfloat16).",
+    )
+    parser.add_argument(
+        "--use-train-datasets",
+        action="store_true",
+        help="Use TRAIN_DATASETS (and the train split) instead of the default test datasets.",
     )
     return parser.parse_args()
 
