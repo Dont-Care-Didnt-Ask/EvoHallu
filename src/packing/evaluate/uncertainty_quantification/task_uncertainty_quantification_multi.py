@@ -433,8 +433,10 @@ def evaluate_func(
     input_regime = cfg.task.input_regime
 
     # Evaluate on each dataset; fail the whole candidate on first dataset error.
-    results: Dict[str, Dict[str, Any] | str] = {}
-    results["task_variant"] = "multi-criteria optimization"
+    results = {
+        "task_variant": "multi-criteria optimization",
+        "datasets": {},
+    }
     all_prr_values: List[float] = []
 
     for dataset_info in datasets:
@@ -445,11 +447,14 @@ def evaluate_func(
             EstimatorClass=EstimatorClass,
             input_regime=input_regime,
         )
-        results[name] = dataset_result
+        results["datasets"][name] = dataset_result
         all_prr_values.append(dataset_result["prediction_rejection_ratio"])
 
+    results["all_prr_values"] = all_prr_values
+
     mean_prr = float(np.mean(all_prr_values))
-    score = round(100.0 * mean_prr, 4)
+    min_prr = float(np.min(all_prr_values))
+    score = round(100.0 * (mean_prr + min_prr) / 2, 2)
 
     function_class.score = score
     function_class.true_score = score
@@ -459,7 +464,7 @@ def evaluate_func(
 
     total_elapsed = time.time() - eval_start_time
     logging.info(
-        f"[UQ Multi evaluate_func] COMPLETE - mean_PRR={mean_prr:.4f}, "
+        f"[UQ Multi evaluate_func] COMPLETE - mean_PRR={mean_prr:.4f}, all PRR values={all_prr_values}, "
         f"score={score}, datasets={len(datasets)}, time={total_elapsed:.2f}s"
     )
 
@@ -538,7 +543,12 @@ Inputs for the detector are per-token logits for atomic claims from Llama-3.1-8B
 
 ## Performance metric
 We use Prediction-Rejection Ratio (PRR) as the performance metric. It measures how well the uncertainty estimator ranks incorrect predictions higher than correct ones. Higher PRR values indicate better uncertainty estimation.
-**Important**: we evaluate PRR on the test sets for 4 datasets. Since our goal is to develop a general-purpose uncertainty estimator, we want to avoid situations where the mean PRR is high, but on some datasets PRR is low. Ideally we want consistent improvements across all datasets, or at least no significant drops in PRR.
+Reference values for PRR on our 4 datasets:
+- Coqa: 76.6
+- Samsum: 32.8
+- Triviaqa: 63.4
+- Wmt14_deen: 23.1
+**Important**: we evaluate PRR on the test sets for 4 datasets. We want to avoid situations where the mean PRR is high, but on some datasets PRR is low. Ideally we want consistent improvements across all datasets, or at least no significant drops compared to the reference values.
 
 ## HallucinationDetector inputs
 
@@ -552,6 +562,7 @@ Note that you don't have access to logits beyond top-k, so you can't estimate wh
 
 ## Design constraints
 - Use up to 3 features. You MUST explore one-feature and two-feature detectors as well, don't get fixated on three-feature detectors.
+- Strongly prioritize exploring NOVEL ideas, distinct from existing detectors.
 - Use class doc string to 1) concisely describe the detector, 2) leave notes for future iterations.
 - In notes, NEVER make up facts. Either summarize some observations about previous detectors as a preliminary conclusion, or formulate a concrete actionable hypothesis for the next iteration.
 - In notes, NEVER make statements about performance of proposed candidate detector -- you don't know it yet, it will be evaluated on a test set in the next iteration.
