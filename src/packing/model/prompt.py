@@ -30,9 +30,9 @@ def _format_extra_metrics(em: dict) -> str:
             results = em[dataset_name]
             prr = f"{100 * results["prediction_rejection_ratio"]:.1f}"
             n_samples = results["n_samples"]
-            dataset_info.append(f"# Dataset: {dataset_name}\tPRR: {prr}\tDataset size:{n_samples}")
+            dataset_info.append(f"# Dataset: {dataset_name}\tPRR: {prr}")
         
-        return "# === Per-dataset metrics ===\n" + "\n".join(dataset_info) + "# ======\n"
+        return "# === Per-dataset metrics ===\n" + "\n".join(dataset_info) + "\n# ======\n"
         
     parts = [
         f"{k}: {_format_metric_value(v)}"
@@ -50,7 +50,10 @@ def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
     main_txt = ""
     for program, score, em in zip(programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
-        main_txt += f"# Score achieved with the function above: {score}\n"
+    
+        if "task_variant" not in em or em["task_variant"] != "multi-criteria optimization":
+            main_txt += f"# Score achieved with the function above: {score}\n"
+    
         if em:
             main_txt += _format_extra_metrics(em)
         main_txt += "\n"
