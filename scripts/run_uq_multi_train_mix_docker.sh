@@ -5,7 +5,7 @@ IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
 HOST_REPO=${HOST_REPO:-/mnt/extremessd10tb/seleznev/EvoTune}
 HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
 HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache/huggingface}
-UQ_DEVICES=${UQ_DEVICES:-0}
+UQ_DEVICES=${UQ_DEVICES:-1}
 CLUSTER=${CLUSTER:-example}
 
 if [ ! -d "${HOST_CACHE}" ]; then
