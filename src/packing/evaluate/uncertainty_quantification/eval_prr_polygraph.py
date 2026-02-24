@@ -58,6 +58,8 @@ from lm_polygraph.estimators import (
     EntropySlope, LogProbSlope,
     ExpWeightedNegLogProbWithTop1, ExpWeightedNegLogProb,
     PositionWeightedGap_EntropySlope_TopKMassInv,
+    SequenceLogProb_MeanEnt_MeanGap,
+    SequenceLogProb_MeanEnt_RatioGap,
 )
 # Evolved estimators from EvoTune rounds 289, 144, 177
 from lm_polygraph.estimators.outlier_score import (
@@ -701,6 +703,9 @@ def main():
         # Round 177: Bottom-mass average (Test AUC: 73.19%)
         LogProbSlope_BottomMassAvg(),
         SequenceLogProb_BottomMassAvg(),
+        # Multi-criteria optimized estimators
+        SequenceLogProb_MeanEnt_MeanGap(),
+        SequenceLogProb_MeanEnt_RatioGap(),
     ]
 
     output_attentions = not args.disable_rauq
@@ -794,7 +799,7 @@ def main():
 
     # Compute PRR with accumulated scores
     logging.info("Computing PRR metrics...")
-    prr_metric = PredictionRejectionArea(max_rejection=0.95)
+    prr_metric = PredictionRejectionArea(max_rejection=0.5)
     estimator_results = {}
     
     # Pre-generate bootstrap indices with fixed seed for reproducibility
