@@ -94,12 +94,17 @@ def _extract_polygraph_sample(
         add_special_tokens=not instruct,
     ).to(device)
     total_tokens = int(full_enc["input_ids"].shape[1])
-    assert total_tokens > n_orig_tokens, "Total amount of tokens (chat template + input + generation +special tokens) must be greater than amount of generation tokens"
+    assert total_tokens > n_orig_tokens, "Total amount of tokens (chat template + input + generation + special tokens) must be greater than amount of generation tokens"
+    n_tokens = n_orig_tokens + 5  # +1 for eot and +4 assistant header tokens in Llama-3 instruct template
+    assert total_tokens >= n_tokens, f"Expected at least {n_tokens} tokens in formatted input, got {total_tokens}"
 
-    # Trims eos/eot token from the end of the input
-    gen_tokens_list = full_enc["input_ids"][0, -n_orig_tokens-1:-1].tolist()
-    orig_input_ids = torch.tensor(gen_tokens_list, dtype=torch.int32)
+    gen_tokens_list = full_enc["input_ids"][0, -n_tokens:].tolist()
+    formatted_generation_ids = torch.tensor(gen_tokens_list, dtype=torch.int32)
     attention_mask = torch.ones(n_orig_tokens, dtype=torch.int8)
+    orig_input_ids = raw_generation_ids["input_ids"][0].to(dtype=torch.int32, device="cpu")
+    assert orig_input_ids.ndim == 1, f"orig_input_ids must be 1d, got shape {tuple(orig_input_ids.shape)}"
+    assert int(formatted_generation_ids.shape[0]) == n_tokens, "formatted_generation_ids length mismatch"
+    assert int(orig_input_ids.shape[0]) == n_orig_tokens, "orig_input_ids length mismatch"
 
     outputs = model(
         **full_enc,
@@ -111,12 +116,12 @@ def _extract_polygraph_sample(
     log_probs = torch.log_softmax(logits, dim=-1)
 
     gen_log_probs = (
-        log_probs[0, -n_orig_tokens - 1 : - 1].float().numpy()
+        log_probs[0, -n_tokens:].float().numpy()
     )
-    gen_logits = logits[0, -n_orig_tokens - 1 : - 1].float()
+    gen_logits = logits[0, -n_tokens:].float()
 
     sequence_logprobs = np.array(
-        [float(gen_log_probs[j, gen_tokens_list[j]]) for j in range(n_orig_tokens)],
+        [float(gen_log_probs[j - 1, gen_tokens_list[j]]) for j in range(1, n_tokens)],
         dtype=np.float32,
     )
     greedy_logprobs = np.max(gen_log_probs, axis=1).astype(np.float32)
@@ -132,17 +137,18 @@ def _extract_polygraph_sample(
     for layer_idx, hs in enumerate(outputs.hidden_states):
         if layer_idx % layer_stride != 0:
             continue
-        gen_hs = hs[0, -n_orig_tokens - 1 : - 1].to(
+        gen_hs = hs[0, -n_tokens:].to(
             dtype=torch.float16, device="cpu"
         )
         hs_layers.append(gen_hs)
     hidden_i = torch.stack(hs_layers, dim=0)
+    assert int(hidden_i.shape[1]) == n_tokens, f"hidden_states token dimension mismatch: expected {n_tokens}, got {int(hidden_i.shape[1])}"
 
     attn_layers: List[torch.Tensor] = []
     for attn in outputs.attentions:
-        slice_start_q = -n_orig_tokens - 1
-        slice_end_q = -1
-        slice_start_k = -n_orig_tokens - 1
+        slice_start_q = -n_tokens
+        slice_end_q = total_tokens
+        slice_start_k = -n_tokens
         slice_end_k = total_tokens
 
         attn_slice = attn[0, :, slice_start_q:slice_end_q, slice_start_k:slice_end_k]
@@ -150,12 +156,15 @@ def _extract_polygraph_sample(
         del attn_slice
 
     attn_final = torch.stack(attn_layers, dim=0).cpu()
+    assert int(attn_final.shape[2]) == n_tokens and int(attn_final.shape[3]) == n_tokens, (
+        f"attention shape mismatch: expected (..., {n_tokens}, {n_tokens}), got {tuple(attn_final.shape)}"
+    )
 
     sample = {
         "claim": gen_text,
         "input": inp,
         "ground_truth_score": float(gt_score),
-        "input_ids": orig_input_ids,
+        "input_ids": formatted_generation_ids,
         "attention_mask": attention_mask,
         "orig_input_ids": orig_input_ids,
         "sequence_logprobs": sequence_logprobs,
@@ -289,6 +298,12 @@ def _parse_args() -> argparse.Namespace:
         help="HF model ID or local path (must match generation model).",
     )
     parser.add_argument(
+        "--tokenizer-id",
+        type=str,
+        default="unsloth/Meta-Llama-3.1-8B-Instruct",
+        help="HF tokenizer ID. We use a different tokenizer since the tokenizer for our default model does not handle `add_generation_prompt` correctly.",
+    )
+    parser.add_argument(
         "--cache-dir",
         type=str,
         default="/mnt/extremessd10tb/seleznev/.cache/huggingface/hub",
@@ -357,8 +372,11 @@ def main() -> None:
     tokenizer = None
     model = None
     if not args.dry_run:
+        if args.tokenizer_id != args.model_id:
+            logger.warning("ATTENTION: Using different tokenizer (%s) for model (%s)", args.tokenizer_id, args.model_id)
+
         tokenizer = AutoTokenizer.from_pretrained(
-            args.model_id,
+            args.tokenizer_id,
             cache_dir=args.cache_dir,
         )
         if tokenizer.pad_token is None and tokenizer.eos_token is not None:
