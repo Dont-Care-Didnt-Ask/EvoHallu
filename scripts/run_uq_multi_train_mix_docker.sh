@@ -2,9 +2,9 @@
 set -euo pipefail
 
 IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
-HOST_REPO=${HOST_REPO:-/mnt/extremessd10tb/seleznev/EvoTune}
-HOST_DATA=${HOST_DATA:-/mnt/extremessd10tb/seleznev}
-HOST_CACHE=${HOST_CACHE:-/mnt/extremessd10tb/seleznev/.cache/huggingface}
+HOST_REPO=${HOST_REPO:-/home/m.seleznyov/EvoHallu}
+HOST_DATA=${HOST_DATA:-/home/m.seleznyov}
+HOST_CACHE=${HOST_CACHE:-/home/m.seleznyov/.cache/huggingface}
 UQ_DEVICES=${UQ_DEVICES:-0}
 CLUSTER=${CLUSTER:-example}
 
@@ -16,21 +16,32 @@ fi
 
 cd "${HOST_REPO}"
 
+HF_HOME_DIR="${HOST_CACHE}"
+while [ "$(basename "${HF_HOME_DIR}")" = "hub" ]; do
+  HF_HOME_DIR="$(dirname "${HF_HOME_DIR}")"
+done
+HUGGINGFACE_HUB_CACHE_DIR="${HF_HOME_DIR}/hub"
+[ -d "${HUGGINGFACE_HUB_CACHE_DIR}" ] || mkdir -p "${HUGGINGFACE_HUB_CACHE_DIR}"
+
 echo "[run-uq-multi] Launching containerized UQ multi train-mix run..."
 echo "[run-uq-multi] Image: ${IMAGE}"
 echo "[run-uq-multi] Cluster config: ${CLUSTER}"
 echo "[run-uq-multi] UQ GPU device(s): ${UQ_DEVICES}"
+echo "[run-uq-multi] HF_HOME: ${HF_HOME_DIR}"
+echo "[run-uq-multi] HUGGINGFACE_HUB_CACHE: ${HUGGINGFACE_HUB_CACHE_DIR}"
 
-HOST_VLLM_CACHE=${HOST_VLLM_CACHE:-${HOST_CACHE}/vllm_cache}
+HOST_VLLM_CACHE=${HOST_VLLM_CACHE:-${HF_HOME_DIR}/vllm_cache}
 mkdir -p "${HOST_VLLM_CACHE}"
 
 DOCKER_ENV_ARGS=(
   -e UQ_DEVICES="${UQ_DEVICES}"
   -e PROJECT_ROOT_AT="${HOST_REPO}"
-  -e HF_HOME="${HOST_CACHE}"
+  -e HF_HOME="${HF_HOME_DIR}"
+  -e HUGGINGFACE_HUB_CACHE="${HUGGINGFACE_HUB_CACHE_DIR}"
   -e CLUSTER="${CLUSTER}"
   -e VLLM_CACHE_ROOT="${HOST_VLLM_CACHE}"
   -e TORCH_EXTENSIONS_DIR="${HOST_VLLM_CACHE}/torch_extensions"
+  -e HF_HUB_DOWNLOAD_TIMEOUT=120
   -e CUDA_MODULE_LOADING=LAZY
 )
 
@@ -40,11 +51,11 @@ if [ -n "${OPENAI_API_KEY:-}" ]; then
 fi
 
 docker run --rm \
-  --gpus all \
+  --gpus "device=${UQ_DEVICES}" \
   "${DOCKER_ENV_ARGS[@]}" \
   -v "${HOST_REPO}:${HOST_REPO}" \
   -v "${HOST_DATA}:${HOST_DATA}" \
-  -v "${HOST_CACHE}:${HOST_CACHE}" \
+  -v "${HF_HOME_DIR}:${HF_HOME_DIR}" \
   -v "${HOST_VLLM_CACHE}:${HOST_VLLM_CACHE}" \
   -w "${HOST_REPO}" \
   --network host \
