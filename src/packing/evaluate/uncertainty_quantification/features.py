@@ -28,6 +28,22 @@ def _get_attention_features(attn_mask: np.ndarray, n_tokens: int, max_n_tokens: 
         attn_features_seq.append(attn_features_tok)
     return attn_features_seq
 
+def get_attentions(attn_mask: torch.Tensor, num_layers: int, num_heads: int, n_tokens: int, orig_n_tokens: int, max_n_tokens: int = 10):
+    attn_mask = attn_mask.to(torch.float16).cpu().numpy()
+    if n_tokens > (orig_n_tokens + 1):
+        # attentions are cropped because of the eos token
+        attn_mask = attn_mask[:, :, :-1, :-1]
+        attn_mask_reshape = attn_mask.reshape(num_layers * num_heads, n_tokens - 1, n_tokens - 1)
+    else:
+        attn_mask_reshape = attn_mask.reshape(num_layers * num_heads, n_tokens, n_tokens)
+        
+    # use only claim tokens without chat template
+    # shift attention mask by 1 token to align it with the generation format from lm-polygraph
+    attn_mask_reshape = attn_mask_reshape[:, -orig_n_tokens-1:-1, -orig_n_tokens:]
+
+    attn_features_seq = _get_attention_features(attn_mask_reshape, orig_n_tokens)
+    return attn_mask, attn_mask_reshape, attn_features_seq
+
 
 def _compute_attentions(
     attn: torch.Tensor,
@@ -46,6 +62,7 @@ def _compute_attentions(
         Attention tensor for a single sample of shape
         [num_layers, num_heads, n_tokens, n_tokens].
     """
+    print(f"DEBUG _compute_attentions: attn.shape = {attn.shape}, num_layers = {num_layers}, num_heads = {num_heads}, n_tokens = {n_tokens}, orig_n_tokens = {orig_n_tokens}")
     # Validate input tensor shape
     if attn.dim() != 4:
         logging.error(f"Expected 4D tensor, got shape {attn.shape}")
@@ -123,10 +140,6 @@ def _compute_attentions(
     start_idx_to = -orig_n_tokens
     
     # Check if indices are within bounds
-    if abs(start_idx_from) > L_eff:
-        logging.error(f"Slice start index {start_idx_from} out of bounds for dimension of size {L_eff}")
-        raise ValueError(f"Slice start index {start_idx_from} out of bounds for dimension of size {L_eff}")
-    
     if abs(end_idx_from) > L_eff:
         logging.error(f"Slice end index {end_idx_from} out of bounds for dimension of size {L_eff}")
         raise ValueError(f"Slice end index {end_idx_from} out of bounds for dimension of size {L_eff}")
@@ -206,6 +219,121 @@ def _get_embeddings(
             hs_np[-orig_n_tokens - 1 : -1]
         )
     return token_embeddings
+
+
+def _resolve_hidden_states_device(hidden_states_device: str) -> torch.device:
+    assert isinstance(hidden_states_device, str), "hidden_states_device must be a string"
+    assert hidden_states_device, "hidden_states_device must be non-empty"
+    device = torch.device(hidden_states_device)
+    if device.type == "cuda:0" and not torch.cuda.is_available():
+        raise ValueError("use_gpu_hidden_states=True requires CUDA, but CUDA is not available")
+    return device
+
+
+def _get_embeddings_gpu(
+    hidden_states: torch.Tensor,
+    num_layers: int,
+    n_tokens: int,
+    orig_n_tokens: int,
+    device: torch.device,
+    key_prefix: str = "",
+) -> Dict[str, np.ndarray]:
+    assert hidden_states.dim() == 3, f"hidden_states must be 3D, got shape {tuple(hidden_states.shape)}"
+    assert n_tokens > 0, f"n_tokens must be positive, got {n_tokens}"
+    assert orig_n_tokens > 0, f"orig_n_tokens must be positive, got {orig_n_tokens}"
+    if num_layers + 1 != len(hidden_states):
+        logging.warning(
+            f"Expected {num_layers + 1} hidden states, got {len(hidden_states)}. "
+            "This is okay if stride > 1 is used."
+        )
+        num_layers = len(hidden_states) - 1
+
+    # Move once to target device and crop there to minimize host<->device traffic.
+    hs = hidden_states.to(device=device, dtype=torch.float32, non_blocking=True)
+    if n_tokens > (orig_n_tokens + 1):
+        hs = hs[:, :-1, :]
+
+    hs_claim = hs[:, -orig_n_tokens - 1 : -1, :]
+    assert hs_claim.shape[1] > 0, "Claim-token slice is empty; check n_tokens/orig_n_tokens alignment"
+
+    token_embeddings: Dict[str, np.ndarray] = {}
+    for layer in list(range(num_layers)) + [-1]:
+        layer_name = "" if layer == -1 else f"_{layer}"
+        token_embeddings[f"{key_prefix}token_embeddings_decoder{layer_name}"] = (
+            hs_claim[layer].detach().cpu().numpy()
+        )
+    return token_embeddings
+
+
+_LOGITS_STATS = {
+    "top_k_logits",
+    "top_k_indices",
+    "greedy_texts",
+    "greedy_tokens",
+}
+_ATTENTION_STATS = {
+    "recent_lookback_attention_weights_from_claim_tokens",
+    "claim_only_attention_maps",
+    "full_attention_maps",
+    "train_attention_features",
+}
+_ALWAYS_AVAILABLE_STATS = {
+    "sequence_logprobs",
+    "greedy_logprobs",
+    "token_entropies",
+    "eval_meta",
+}
+
+
+def _requires_hidden_state_features(stats_dependencies: set[str]) -> bool:
+    prefixes = (
+        "token_embeddings_decoder",
+        "embeddings_decoder",
+        "train_token_embeddings_decoder",
+        "train_embeddings_decoder",
+        "background_train_token_embeddings_decoder",
+    )
+    return any(dep.startswith(prefixes) for dep in stats_dependencies)
+
+
+def _resolve_feature_gates(
+    input_regime: str,
+    required_stats: List[str] | None,
+) -> Tuple[bool, bool, bool]:
+    assert input_regime in ["full", "logits", "hidden_states", "attentions", "chunked"]
+    if input_regime == "full":
+        return True, True, True
+    if input_regime == "logits":
+        return True, False, False
+    if input_regime == "hidden_states":
+        return False, True, False
+    if input_regime == "attentions":
+        return False, False, True
+
+    # input_regime == "chunked"
+    if required_stats is None:
+        return True, True, True
+    assert isinstance(required_stats, list), "required_stats must be a list of stat names or None"
+    if len(required_stats) == 0:
+        logging.warning("[make_all_stats] Empty required_stats in chunked mode; falling back to full feature computation")
+        return True, True, True
+    if not all(isinstance(s, str) and s for s in required_stats):
+        raise ValueError("required_stats must contain non-empty strings")
+
+    required = set(required_stats)
+    known = set(_ALWAYS_AVAILABLE_STATS) | set(_LOGITS_STATS) | set(_ATTENTION_STATS)
+    unknown = [s for s in required if s not in known and not _requires_hidden_state_features({s})]
+    if unknown:
+        logging.warning(
+            "[make_all_stats] Unknown required_stats in chunked mode: %s. Falling back to full feature computation.",
+            sorted(unknown),
+        )
+        return True, True, True
+
+    need_logits = any(s in _LOGITS_STATS for s in required)
+    need_attentions = any(s in _ATTENTION_STATS for s in required)
+    need_hidden_states = _requires_hidden_state_features(required)
+    return need_logits, need_hidden_states, need_attentions
 
 
 def _compute_probs(
@@ -294,7 +422,7 @@ def _build_train_stats(
         n_tokens = int(input_ids.shape[0])
         orig_n_tokens = int(orig_input_ids.shape[0])
 
-        _, _, attn_features_seq = _compute_attentions(
+        _, _, attn_features_seq = get_attentions(
             attentions, num_layers, num_heads, n_tokens, orig_n_tokens
         )
         train_attention_features.append(attn_features_seq)
@@ -373,6 +501,9 @@ def make_all_stats(
     train_stats_cache: Dict[str, Any] | None = None,
     background_stats_cache: Dict[str, Any] | None = None,
     input_regime: str = "full",
+    use_gpu_hidden_states: bool = False,
+    hidden_states_device: str = "cuda:0",
+    required_stats: List[str] | None = None,
 ) -> Tuple[
     Dict[str, Any],
     np.ndarray,
@@ -450,7 +581,15 @@ def make_all_stats(
     background_stats_cache : Dict[str, Any] | None
         Cached background stats (pass back to future calls). None if no background provided.
     """
-    assert input_regime in ["full", "logits", "hidden_states", "attentions"]
+    assert input_regime in ["full", "logits", "hidden_states", "attentions", "chunked"]
+    assert isinstance(use_gpu_hidden_states, bool), "use_gpu_hidden_states must be bool"
+    need_logits, need_hidden_states, need_attentions = _resolve_feature_gates(
+        input_regime=input_regime,
+        required_stats=required_stats,
+    )
+    hs_device = None
+    if use_gpu_hidden_states and need_hidden_states:
+        hs_device = _resolve_hidden_states_device(hidden_states_device)
 
     start_time = time.time()
     
@@ -501,7 +640,8 @@ def make_all_stats(
     top_k_indices: List[np.ndarray] = []
     greedy_texts: List[str] = []
     greedy_tokens: List[List[int]] = []
-    eval_labels: List[float] = []
+    eval_labels: List[float] = []                   # binary labels for hallucination detection
+    ground_truth_scores: List[float] = []           # continuous scores from 0 to 1, measuring output quality
     eval_token_embeddings: Dict[str, List[np.ndarray]] = {}
     sequence_logprobs: List[float] = []
     greedy_logprobs: List[float] = []
@@ -520,14 +660,24 @@ def make_all_stats(
         sequence_logprobs.append(sample["sequence_logprobs"]) # length - 1
         greedy_logprobs.append(sample["greedy_logprobs"]) # length
         token_entropies.append(sample["token_entropies"]) # length
-        eval_labels.append(float(sample["label"]))
+        if "label" in sample:
+            eval_labels.append(float(sample["label"]))
+        elif "ground_truth_score" in sample:
+            ground_truth_scores.append(float(sample["ground_truth_score"]))
+        else:
+            raise ValueError(f"Sample {sample_idx} has no label or ground_truth_score")
+
+        if isinstance(input_ids, list):
+            input_ids = torch.tensor(input_ids)
+        if isinstance(orig_input_ids, list):
+            orig_input_ids = torch.tensor(orig_input_ids)
 
         n_tokens = int(input_ids.shape[0])
         orig_n_tokens = int(orig_input_ids.shape[0])
 
-        if input_regime == "attentions" or input_regime == "full":
+        if need_attentions:
             attentions = sample["attentions"]
-            attn_mask, attn_mask_reshape, attn_features_seq = _compute_attentions(
+            attn_mask, attn_mask_reshape, attn_features_seq = get_attentions(
                 attentions, num_layers, num_heads, n_tokens, orig_n_tokens
             )
 
@@ -535,7 +685,7 @@ def make_all_stats(
             attention_all.append(attn_mask_reshape)
             forwardpass_attention_weights.append(attn_mask)
 
-        if input_regime == "logits" or input_regime == "full":
+        if need_logits:
             # logits = sample["logits"]
             # ll, log_probs, cut_alternatives = _compute_probs(
             #     logits,
@@ -554,13 +704,24 @@ def make_all_stats(
             greedy_texts.append(sample["claim"])
             greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
 
-        if input_regime == "hidden_states" or input_regime == "full":
+        if need_hidden_states:
             hidden_states = sample["hidden_states"]
 
             # key -> [n_i, hidden_dim]
-            token_embs: Dict[str, np.ndarray] = _get_embeddings(
-                hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix=""
-            )
+            if use_gpu_hidden_states:
+                assert hs_device is not None, "Internal error: hs_device must be initialized"
+                token_embs = _get_embeddings_gpu(
+                    hidden_states,
+                    num_layers,
+                    n_tokens,
+                    orig_n_tokens,
+                    device=hs_device,
+                    key_prefix="",
+                )
+            else:
+                token_embs = _get_embeddings(
+                    hidden_states, num_layers, n_tokens, orig_n_tokens, key_prefix=""
+                )
             for key, arr in token_embs.items():
                 eval_token_embeddings.setdefault(key, []).append(arr)
     
@@ -569,27 +730,27 @@ def make_all_stats(
 
     # ------------------------ Assemble all_stats ------------------------
     all_stats: Dict[str, Any] = {
-        "recent_lookback_attention_weights_from_claim_tokens": attention_features,
-        "claim_only_attention_maps": attention_all,
-        "full_attention_maps": forwardpass_attention_weights,
-        # "greedy_log_likelihoods": greedy_log_likelihoods,
-        # "greedy_tokens_alternatives": greedy_tokens_alternatives,
-        # "greedy_log_probs": greedy_log_probs,
-        "top_k_logits": top_k_logits,
-        "top_k_indices": top_k_indices,
-        "greedy_texts": greedy_texts,
-        "greedy_tokens": greedy_tokens,
         "eval_meta": meta,
         "sequence_logprobs": sequence_logprobs,
         "greedy_logprobs": greedy_logprobs,
         "token_entropies": token_entropies,
     }
+    if need_attentions:
+        all_stats["recent_lookback_attention_weights_from_claim_tokens"] = attention_features
+        all_stats["claim_only_attention_maps"] = attention_all
+        all_stats["full_attention_maps"] = forwardpass_attention_weights
+    if need_logits:
+        all_stats["top_k_logits"] = top_k_logits
+        all_stats["top_k_indices"] = top_k_indices
+        all_stats["greedy_texts"] = greedy_texts
+        all_stats["greedy_tokens"] = greedy_tokens
 
-    for key, seq_list in eval_token_embeddings.items():
-        seq_key = key.replace("token_", "")
-        per_seq_means = [t.mean(axis=0) for t in seq_list]
-        all_stats[key] = np.concatenate(seq_list, axis=0)
-        all_stats[seq_key] = np.stack(per_seq_means, axis=0)
+    if need_hidden_states:
+        for key, seq_list in eval_token_embeddings.items():
+            seq_key = key.replace("token_", "")
+            per_seq_means = [t.mean(axis=0) for t in seq_list]
+            all_stats[key] = np.concatenate(seq_list, axis=0)
+            all_stats[seq_key] = np.stack(per_seq_means, axis=0)
 
     # ------------------------ Convenience aliases ------------------------
     # These do not exist in the original HalluDetect implementation but are
@@ -637,6 +798,8 @@ def make_all_stats(
     total_elapsed = time.time() - start_time
     logging.info(f"[make_all_stats] COMPLETE: {len(all_stats)} stat keys, {len(eval_labels)} labels, total time={total_elapsed:.2f}s")
     
+    assert len(eval_labels) == 0 or len(ground_truth_scores) == 0, "eval_labels and ground_truth_scores cannot both be present"
+    eval_labels = eval_labels if len(eval_labels) > 0 else ground_truth_scores
     assert len(all_stats["sequence_logprobs"]) == len(eval_labels), f"{len(all_stats['sequence_logprobs'])=}, {len(eval_labels)=}"
     assert len(all_stats["greedy_logprobs"]) == len(eval_labels), f"{len(all_stats['greedy_logprobs'])=}, {len(eval_labels)=}"
     assert len(all_stats["token_entropies"]) == len(eval_labels), f"{len(all_stats['token_entropies'])=}, {len(eval_labels)=}"

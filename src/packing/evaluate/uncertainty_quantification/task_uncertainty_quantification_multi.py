@@ -1,7 +1,9 @@
 import os
 import logging
 import time
-from typing import Any, Dict, List, Tuple
+import itertools
+from pathlib import Path
+from typing import Any, Dict, List, Tuple, Generator, Optional
 
 import torch
 import numpy as np
@@ -16,6 +18,8 @@ from packing.evaluate.uncertainty_quantification.pred_rej_area import Prediction
 from packing.logging.function_class import FunctionClass
 
 
+MAX_REJECTION_RATIO = 0.5
+
 def _load_raw(path: str) -> Dict[str, Any]:
     if not os.path.isfile(path):
         raise FileNotFoundError(f"Raw stats file not found at {path}")
@@ -28,11 +32,12 @@ def _expected_suffix_for_input_regime(input_regime: str) -> str | None:
         "hidden_states": "_hidden_states.pt",
         "attentions": "_attentions.pt",
         "full": None,
+        "chunked": None,
     }
     if input_regime not in suffix_by_regime:
         raise ValueError(
             f"Unsupported input_regime='{input_regime}'. "
-            "Expected one of: logits, hidden_states, attentions, full."
+            "Expected one of: logits, hidden_states, attentions, full, chunked."
         )
     return suffix_by_regime[input_regime]
 
@@ -43,72 +48,186 @@ def _required_sample_keys_for_input_regime(input_regime: str) -> set[str]:
         "hidden_states": {"sequence_logprobs", "hidden_states"},
         "attentions": {"sequence_logprobs", "attentions"},
         "full": {"sequence_logprobs", "top_k_logits", "top_k_indices", "hidden_states", "attentions"},
+        "chunked": {"sequence_logprobs", "top_k_logits", "top_k_indices", "hidden_states", "attentions"},
     }
     return required_by_regime[input_regime]
+
+
+def _validate_sample_keys(sample: Dict[str, Any], input_regime: str) -> None:
+    """Validate that a single sample has all required keys for the input regime."""
+    required_keys = _required_sample_keys_for_input_regime(input_regime)
+    sample_keys = set(sample.keys())
+    missing_keys = sorted(required_keys - sample_keys)
+    if missing_keys:
+        raise ValueError(f"Sample missing required keys for input_regime='{input_regime}': {missing_keys}")
+
+
+def _discover_chunk_files(base_path: str) -> List[str]:
+    """
+    Discover chunk files for a given base path.
+    
+    If base_path is 'train_raw.pt', looks for:
+    - 'train_raw_chunk_0.pt', 'train_raw_chunk_1.pt', ... (if any exist)
+    - Falls back to ['train_raw.pt'] if no chunks found
+    
+    Returns list of chunk file paths in order.
+    """
+    base = Path(base_path)
+    stem = base.stem
+    suffix = base.suffix
+    parent = base.parent
+    
+    chunk_files = []
+    for idx in itertools.count():
+        chunk_path = parent / f"{stem}_chunk_{idx}{suffix}"
+        if chunk_path.exists():
+            chunk_files.append(str(chunk_path))
+        else:
+            break
+    
+    if not chunk_files:
+        if base.exists():
+            return [str(base)]
+        else:
+            raise FileNotFoundError(f"No chunk files or base file found for {base_path}")
+    
+    expected = list(range(len(chunk_files)))
+    actual = []
+    for f in chunk_files:
+        idx = int(Path(f).stem.split("_chunk_")[-1])
+        actual.append(idx)
+
+    if actual != expected:
+        raise ValueError("Chunk files must be contiguous starting at 0.")
+
+    return chunk_files
+
+
+def _stream_samples_from_chunks(
+    chunk_files: List[str],
+    indices: Optional[np.ndarray] = None,
+    input_regime: str = "chunked",
+) -> Generator[Dict[str, Any], None, None]:
+    """
+    Generator that yields samples from chunk files one by one.
+    
+    Args:
+        chunk_files: List of chunk file paths in order
+        indices: Optional array of indices to select (for train/val splits). 
+                If None, yields all samples in order.
+        input_regime: Input regime for validation
+    
+    Yields:
+        Individual sample dictionaries
+    """
+    if indices is not None:
+        indices_set = set(int(i) for i in indices)
+    
+    global_idx = 0
+    for chunk_path in chunk_files:
+        chunk_data = _load_raw(chunk_path)
+        chunk_samples = chunk_data.get("samples", [])
+        
+        for sample in chunk_samples:
+            if indices is None or global_idx in indices_set:
+                _validate_sample_keys(sample, input_regime)
+                yield sample
+            global_idx += 1
+        
+        del chunk_data
+
+
+def _count_samples_in_chunks(chunk_files: List[str]) -> int:
+    """Count total number of samples across all chunk files."""
+    total = 0
+    for chunk_path in chunk_files:
+        chunk_data = _load_raw(chunk_path)
+        total += len(chunk_data.get("samples", []))
+        del chunk_data
+    return total
+
+
+def _get_meta_from_chunks(chunk_files: List[str]) -> Dict[str, Any]:
+    """Get metadata from the first chunk file."""
+    if not chunk_files:
+        return {}
+    chunk_data = _load_raw(chunk_files[0])
+    meta = chunk_data.get("meta", {})
+    del chunk_data
+    return meta
 
 
 def _validate_dataset_startup(
     dataset_name: str,
     dataset_path: str,
-    raw_data: Dict[str, Any],
     input_regime: str,
     min_samples_per_dataset: int,
+    chunk_files: Optional[List[str]] = None,
 ) -> None:
-    samples = raw_data.get("samples", [])
-    if not isinstance(samples, list):
-        raise ValueError(f"Dataset '{dataset_name}' has invalid 'samples' type: {type(samples)}")
-    if not samples:
-        raise ValueError(f"Dataset '{dataset_name}' has no samples")
-    if len(samples) < min_samples_per_dataset:
+    """Validate dataset startup parameters."""
+    expected_suffix = _expected_suffix_for_input_regime(input_regime)
+    
+    if input_regime != "chunked" and expected_suffix is not None:
+        if not dataset_path.endswith(expected_suffix):
+            raise ValueError(
+                f"Dataset '{dataset_name}' path mismatch for input_regime='{input_regime}'. "
+                f"Expected suffix '{expected_suffix}', got path '{dataset_path}'."
+            )
+    
+    files_to_check = chunk_files if chunk_files else [dataset_path]
+    
+    # Get first sample for validation
+    if input_regime == "chunked":
+        first_chunk = _load_raw(files_to_check[0])
+        samples = first_chunk.get("samples", [])
+        if not samples:
+            raise ValueError(f"Dataset '{dataset_name}' first chunk has no samples")
+        first_sample = samples[0]
+        del first_chunk
+    else:
+        raw_data = _load_raw(dataset_path)
+        samples = raw_data.get("samples", [])
+        if not samples:
+            raise ValueError(f"Dataset '{dataset_name}' has no samples")
+        first_sample = samples[0]
+        del raw_data
+    
+    if "ground_truth_score" not in first_sample:
         raise ValueError(
-            f"Dataset '{dataset_name}' has {len(samples)} samples, "
+            f"Dataset '{dataset_name}' first sample is missing 'ground_truth_score' field."
+        )
+    
+    _validate_sample_keys(first_sample, input_regime)
+    
+    # Count total samples for min check
+    if input_regime == "chunked":
+        total_samples = _count_samples_in_chunks(files_to_check)
+    else:
+        raw_data = _load_raw(dataset_path)
+        total_samples = len(raw_data.get("samples", []))
+        del raw_data
+    
+    if total_samples < min_samples_per_dataset:
+        raise ValueError(
+            f"Dataset '{dataset_name}' has {total_samples} samples, "
             f"which is below min_samples_per_dataset={min_samples_per_dataset}"
         )
 
-    expected_suffix = _expected_suffix_for_input_regime(input_regime)
-    if expected_suffix is not None and not dataset_path.endswith(expected_suffix):
-        raise ValueError(
-            f"Dataset '{dataset_name}' path mismatch for input_regime='{input_regime}'. "
-            f"Expected suffix '{expected_suffix}', got path '{dataset_path}'."
-        )
 
-    missing_ground_truth = [idx for idx, sample in enumerate(samples) if "ground_truth_score" not in sample]
-    if missing_ground_truth:
-        raise ValueError(
-            f"Dataset '{dataset_name}' is missing 'ground_truth_score' for {len(missing_ground_truth)} samples. "
-            f"First missing index: {missing_ground_truth[0]}."
-        )
-
-    required_sample_keys = _required_sample_keys_for_input_regime(input_regime)
-    first_sample_keys = set(samples[0].keys())
-    missing_keys = sorted(required_sample_keys - first_sample_keys)
-    if missing_keys:
-        raise ValueError(
-            f"Dataset '{dataset_name}' is incompatible with input_regime='{input_regime}'. "
-            f"First sample missing keys: {missing_keys}."
-        )
-
-
-def _prepare_train_val_indices(
-    raw_data: Dict[str, Any],
+def _prepare_train_val_indices_chunked(
+    chunk_files: List[str],
     sample_size: int,
     val_size: float,
     split_seed: int,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """
-    Deterministically split the raw train set into train/val subsets.
-
-    The splitting logic mirrors the hallucination task: first optionally
-    subsample to `sample_size`, then perform a train/val split.
-    """
+    """Prepare train/val indices for chunked data."""
     if not (0.0 < val_size < 1.0):
         raise ValueError(f"val_size must be in (0, 1), got {val_size}")
-
-    samples = raw_data["samples"]
-    n = len(samples)
-    indices = np.arange(n)
-    # Preliminary subsample to `sample_size`
-    if sample_size > 0 and sample_size < n:
+    
+    total_samples = _count_samples_in_chunks(chunk_files)
+    indices = np.arange(total_samples)
+    
+    if sample_size > 0 and sample_size < total_samples:
         _, sampled_indices = train_test_split(
             indices,
             test_size=sample_size,
@@ -123,7 +242,6 @@ def _prepare_train_val_indices(
             f"sample_size leaves too few rows for splitting: {len(sampled_indices)}"
         )
 
-    # Train/val split
     train_idx, val_idx = train_test_split(
         sampled_indices,
         test_size=val_size,
@@ -138,7 +256,46 @@ def _prepare_train_val_indices(
     return train_idx, val_idx
 
 
+def _create_chunked_dataset_struct(
+    chunk_files: List[str],
+    indices: Optional[np.ndarray] = None,
+    input_regime: str = "chunked",
+) -> Dict[str, Any]:
+    """Create a lightweight dataset structure for chunked data."""
+    return {
+        "chunk_files": chunk_files,
+        "indices": indices,
+        "input_regime": input_regime,
+        "meta": _get_meta_from_chunks(chunk_files),
+    }
+
+
+def _load_samples_for_evaluation(dataset_struct: Dict[str, Any]) -> Generator[Dict[str, Any], None, None]:
+    """Generator that yields samples for evaluation from a dataset struct."""
+    if "samples" in dataset_struct and "chunk_files" in dataset_struct:
+        raise ValueError("Dataset struct cannot contain both 'samples' and 'chunk_files'.")
+
+    if "samples" not in dataset_struct and "chunk_files" not in dataset_struct:
+        raise ValueError("Dataset struct must contain either 'samples' or 'chunk_files'.")
+
+    if "samples" in dataset_struct:
+        for sample in dataset_struct["samples"]:
+            yield sample
+        return
+    
+    if "chunk_files" in dataset_struct:
+        yield from _stream_samples_from_chunks(
+            chunk_files=dataset_struct["chunk_files"],
+            indices=dataset_struct.get("indices"),
+            input_regime=dataset_struct.get("input_regime", "chunked"),
+        )
+        return
+    
+    raise ValueError("Dataset struct missing required fields for sample loading")
+
+
 def _subset_raw(raw_all: Dict[str, Any], indices: np.ndarray) -> Dict[str, Any]:
+    """Subset raw data by indices (for non-chunked regime)."""
     return {
         "samples": [raw_all["samples"][int(i)] for i in indices],
         "meta": raw_all.get("meta", {}),
@@ -146,15 +303,7 @@ def _subset_raw(raw_all: Dict[str, Any], indices: np.ndarray) -> Dict[str, Any]:
 
 
 def generate_input(cfg_task: DictConfig, split: str):
-    """
-    Load raw statistics for multiple datasets.
-
-    Expects cfg_task.datasets to be a list of dataset configs, each with:
-      - name: str (identifier for the dataset)
-      - train_raw_path: str (path to train raw .pt file, required for train/val)
-      - test_raw_path: str (path to test raw .pt file, required for testset)
-      - metric_name: str (label for the metric, e.g., "accuracy", "rouge_l")
-    """
+    """Load raw statistics for multiple datasets with chunked input support."""
     split_name = (split or "").lower()
     datasets_cfg = getattr(cfg_task, "datasets", None)
     input_regime = str(getattr(cfg_task, "input_regime", "logits"))
@@ -189,6 +338,7 @@ def generate_input(cfg_task: DictConfig, split: str):
 
         if not dataset_name:
             raise ValueError("Each dataset config must have a 'name' field")
+        
         if split_name == "testset":
             if not test_raw_path:
                 raise ValueError(
@@ -197,14 +347,32 @@ def generate_input(cfg_task: DictConfig, split: str):
             logging.info(
                 f"[UQ Multi] Loading dataset '{dataset_name}' test split from {test_raw_path}"
             )
-            eval_raw = _load_raw(test_raw_path)
-            _validate_dataset_startup(
-                dataset_name=dataset_name,
-                dataset_path=test_raw_path,
-                raw_data=eval_raw,
-                input_regime=input_regime,
-                min_samples_per_dataset=min_samples_per_dataset,
-            )
+            
+            if input_regime == "chunked":
+                chunk_files = _discover_chunk_files(test_raw_path)
+                _validate_dataset_startup(
+                    dataset_name=dataset_name,
+                    dataset_path=test_raw_path,
+                    input_regime=input_regime,
+                    min_samples_per_dataset=min_samples_per_dataset,
+                    chunk_files=chunk_files,
+                )
+                eval_struct = _create_chunked_dataset_struct(
+                    chunk_files=chunk_files,
+                    indices=None,
+                    input_regime=input_regime,
+                )
+            else:
+                eval_raw = _load_raw(test_raw_path)
+                _validate_dataset_startup(
+                    dataset_name=dataset_name,
+                    dataset_path=test_raw_path,
+                    raw_data=eval_raw,
+                    input_regime=input_regime,
+                    min_samples_per_dataset=min_samples_per_dataset,
+                )
+                eval_struct = eval_raw
+                
         else:
             if not train_raw_path:
                 raise ValueError(
@@ -214,29 +382,49 @@ def generate_input(cfg_task: DictConfig, split: str):
             logging.info(
                 f"[UQ Multi] Loading dataset '{dataset_name}' train split source from {train_raw_path}"
             )
-            train_raw_all = _load_raw(train_raw_path)
-            _validate_dataset_startup(
-                dataset_name=dataset_name,
-                dataset_path=train_raw_path,
-                raw_data=train_raw_all,
-                input_regime=input_regime,
-                min_samples_per_dataset=min_samples_per_dataset,
-            )
-            train_idx, val_idx = _prepare_train_val_indices(
-                raw_data=train_raw_all,
-                sample_size=sample_size,
-                val_size=val_size,
-                split_seed=split_seed,
-            )
-            if split_name == "train":
-                eval_raw = _subset_raw(train_raw_all, train_idx)
+            
+            if input_regime == "chunked":
+                chunk_files = _discover_chunk_files(train_raw_path)
+                _validate_dataset_startup(
+                    dataset_name=dataset_name,
+                    dataset_path=train_raw_path,
+                    input_regime=input_regime,
+                    min_samples_per_dataset=min_samples_per_dataset,
+                    chunk_files=chunk_files,
+                )
+                train_idx, val_idx = _prepare_train_val_indices_chunked(
+                    chunk_files=chunk_files,
+                    sample_size=sample_size,
+                    val_size=val_size,
+                    split_seed=split_seed,
+                )
+                indices = train_idx if split_name == "train" else val_idx
+                eval_struct = _create_chunked_dataset_struct(
+                    chunk_files=chunk_files,
+                    indices=indices,
+                    input_regime=input_regime,
+                )
             else:
-                # Default to validation semantics (mirrors single-dataset UQ task).
-                eval_raw = _subset_raw(train_raw_all, val_idx)
+                train_raw_all = _load_raw(train_raw_path)
+                _validate_dataset_startup(
+                    dataset_name=dataset_name,
+                    dataset_path=train_raw_path,
+                    raw_data=train_raw_all,
+                    input_regime=input_regime,
+                    min_samples_per_dataset=min_samples_per_dataset,
+                )
+                train_idx, val_idx = _prepare_train_val_indices(
+                    raw_data=train_raw_all,
+                    sample_size=sample_size,
+                    val_size=val_size,
+                    split_seed=split_seed,
+                )
+                subset_indices = train_idx if split_name == "train" else val_idx
+                eval_struct = _subset_raw(train_raw_all, subset_indices)
 
         datasets.append({
             "name": dataset_name,
-            "raw_data": eval_raw,
+            "raw_data": eval_struct,
             "metric_name": metric_name,
         })
 
@@ -247,17 +435,13 @@ def generate_input(cfg_task: DictConfig, split: str):
 
 
 def get_initial_func(cfg: DictConfig):
-    """
-    Provide an initial baseline estimator implementation.
-    """
+    """Provide an initial baseline estimator implementation."""
 
     class HallucinationDetector(Estimator):
         def __init__(self, context: Dict[str, Any]) -> None:
             super().__init__(
                 context,
-                stats_dependencies=[
-                    "sequence_logprobs",
-                ],
+                stats_dependencies=["sequence_logprobs"],
                 level="sequence",
             )
 
@@ -268,10 +452,7 @@ def get_initial_func(cfg: DictConfig):
             )
             return total_neg_logprob
 
-    initial_class = HallucinationDetector
-    class_str_to_extract = "HallucinationDetector"
-    code_type = "class"
-    return initial_class, class_str_to_extract, code_type
+    return HallucinationDetector, "HallucinationDetector", "class"
 
 
 def _evaluate_single_dataset(
@@ -279,61 +460,83 @@ def _evaluate_single_dataset(
     dataset_info: Dict[str, Any],
     EstimatorClass: type,
     input_regime: str,
+    use_gpu_hidden_states: bool,
+    hidden_states_device: str,
+    use_dependency_gated_stats: bool,
 ) -> Dict[str, Any]:
-    """
-    Evaluate the estimator on a single dataset and return PRR metrics.
-    """
+    """Evaluate the estimator on a single dataset and return PRR metrics."""
     name = dataset_info["name"]
-    raw_data = dataset_info["raw_data"]
+    raw_struct = dataset_info["raw_data"]
     metric_name = dataset_info["metric_name"]
 
-    eval_samples = raw_data["samples"]
-    num_samples = len(eval_samples)
-
-    logging.info(f"[UQ Multi] Evaluating dataset '{name}': {num_samples} samples, metric={metric_name}")
-
-    # Extract ground truth scores
-    ground_truth_scores = []
-    for sample in eval_samples:
-        if "ground_truth_score" not in sample:
-            raise ValueError(
-                f"Dataset '{name}': sample missing 'ground_truth_score' field. "
-                "Ensure all samples have pre-computed ground truth scores."
-            )
-        ground_truth_scores.append(float(sample["ground_truth_score"]))
-
-    ground_truth_scores = np.array(ground_truth_scores, dtype=np.float32)
+    logging.info(f"[UQ Multi] Evaluating dataset '{name}' (streaming mode)")
 
     # Create estimator context
+    meta = raw_struct.get("meta", {}) if isinstance(raw_struct, dict) else {}
     context = {
         "supervised": False,
-        "meta": {
-            "eval_meta": raw_data.get("meta", {}),
-        },
+        "meta": {"eval_meta": meta},
     }
 
     estimator: Estimator = EstimatorClass(context)
-
     if not isinstance(estimator, Estimator):
         raise TypeError(
             f"EstimatorClass must produce an Estimator subclass, got {type(estimator)}"
         )
-
-    # Process in chunks
-    chunk_size = max(
-        1, int(getattr(cfg.task, "chunk_size", num_samples) or num_samples)
+    estimator_stats_dependencies = (
+        list(estimator.stats_dependencies) if use_dependency_gated_stats else None
     )
 
+    # Determine chunk size
+    chunk_size_cfg = getattr(cfg.task, "chunk_size", None)
+    chunk_size = int(chunk_size_cfg) if chunk_size_cfg else None
+
     scores_list: List[np.ndarray] = []
+    ground_truth_scores: List[float] = []
+    sample_buffer: List[Dict[str, Any]] = []
 
-    for start in range(0, num_samples, chunk_size):
-        end = min(start + chunk_size, num_samples)
-        chunk_raw = {
-            "samples": eval_samples[start:end],
-            "meta": raw_data.get("meta", {}),
-        }
+    total_samples = 0
 
-        # make_all_stats for the chunk (unsupervised mode)
+    for sample in _load_samples_for_evaluation(raw_struct):
+        if "ground_truth_score" not in sample:
+            raise ValueError(
+                f"Dataset '{name}': sample missing 'ground_truth_score' field."
+            )
+
+        ground_truth_scores.append(float(sample["ground_truth_score"]))
+        sample_buffer.append(sample)
+        total_samples += 1
+
+        # Process chunk
+        if chunk_size is not None and len(sample_buffer) >= chunk_size:
+            chunk_raw = {"samples": sample_buffer, "meta": meta}
+            all_stats_chunk, _, _, _ = make_all_stats(
+                eval_raw=chunk_raw,
+                train_raw=None,
+                background_raw=None,
+                supervised=False,
+                train_stats_cache=None,
+                background_stats_cache=None,
+                input_regime=input_regime,
+                use_gpu_hidden_states=use_gpu_hidden_states,
+                hidden_states_device=hidden_states_device,
+                required_stats=estimator_stats_dependencies,
+            )
+
+            chunk_scores = np.asarray(estimator(all_stats_chunk), dtype=np.float32)
+
+            if chunk_scores.ndim != 1 or chunk_scores.shape[0] != len(sample_buffer):
+                raise ValueError(
+                    f"Dataset '{name}': estimator returned shape {chunk_scores.shape}, "
+                    f"expected ({len(sample_buffer)},)"
+                )
+
+            scores_list.append(chunk_scores)
+            sample_buffer = []
+
+    # Process remaining samples
+    if sample_buffer:
+        chunk_raw = {"samples": sample_buffer, "meta": meta}
         all_stats_chunk, _, _, _ = make_all_stats(
             eval_raw=chunk_raw,
             train_raw=None,
@@ -342,110 +545,104 @@ def _evaluate_single_dataset(
             train_stats_cache=None,
             background_stats_cache=None,
             input_regime=input_regime,
+            use_gpu_hidden_states=use_gpu_hidden_states,
+            hidden_states_device=hidden_states_device,
+            required_stats=estimator_stats_dependencies,
         )
 
-        chunk_scores = estimator(all_stats_chunk)
-        chunk_scores = np.asarray(chunk_scores, dtype=np.float32)
+        chunk_scores = np.asarray(estimator(all_stats_chunk), dtype=np.float32)
 
-        expected_len = end - start
-        if chunk_scores.ndim != 1 or chunk_scores.shape[0] != expected_len:
+        if chunk_scores.ndim != 1 or chunk_scores.shape[0] != len(sample_buffer):
             raise ValueError(
                 f"Dataset '{name}': estimator returned shape {chunk_scores.shape}, "
-                f"expected ({expected_len},)"
+                f"expected ({len(sample_buffer)},)"
             )
 
         scores_list.append(chunk_scores)
 
+    if total_samples == 0:
+        raise ValueError(f"Dataset '{name}' has no samples to evaluate")
+
+    ground_truth_scores_np = np.asarray(ground_truth_scores, dtype=np.float32)
     uncertainty_scores = np.concatenate(scores_list)
 
-    # Compute PRR
-    # PredictionRejectionArea expects:
-    #   - estimator: higher = more uncertain
-    #   - target: higher = better quality (less uncertainty)
-    # ground_truth_score is already "higher = better", so use directly as target
-    prr_metric = PredictionRejectionArea(max_rejection=0.5)
-    prr_value = float(prr_metric(uncertainty_scores.tolist(), ground_truth_scores.tolist()))
+    # Safety check (prevents silent misalignment bugs)
+    if len(uncertainty_scores) != len(ground_truth_scores_np):
+        raise ValueError(
+            f"Dataset '{name}': mismatch between scores ({len(uncertainty_scores)}) "
+            f"and ground truth ({len(ground_truth_scores_np)})."
+        )
+
+    logging.info(
+        f"[UQ Multi] Dataset '{name}': {len(ground_truth_scores_np)} samples, "
+        f"metric={metric_name}"
+    )
+
+    prr_metric = PredictionRejectionArea(max_rejection=MAX_REJECTION_RATIO)
+    prr_value = float(
+        prr_metric(
+            uncertainty_scores.tolist(),
+            ground_truth_scores_np.tolist(),
+        )
+    )
 
     return {
         "prediction_rejection_ratio": round(prr_value, 4),
         "original_dataset_metric_name": metric_name,
-        "n_samples": num_samples,
+        "n_samples": len(ground_truth_scores_np),
     }
-
 
 def evaluate_func(
     cfg: DictConfig,
     data: Dict[str, Any],
     function_class: FunctionClass,
 ) -> FunctionClass:
-    """
-    Evaluate a candidate estimator class on multiple datasets.
-
-    Returns a nested dictionary with PRR metrics for each dataset:
-    {
-        "dataset_name": {
-            "PRR": float,
-            "metric_name": str,
-            "n_samples": int,
-        },
-        ...
-    }
-    """
+    """Evaluate a candidate estimator class on multiple datasets."""
     eval_start_time = time.time()
-
     logging.info(f"[UQ Multi evaluate_func] START - function_num={getattr(function_class, 'function_num', 'N/A')}")
 
     datasets = data["datasets"]
     supervised = data.get("supervised", False)
-
     if supervised:
-        raise NotImplementedError(
-            "Supervised mode is not implemented for multi-dataset UQ evaluation."
-        )
+        raise NotImplementedError("Supervised mode is not implemented for multi-dataset UQ evaluation.")
 
     logging.info(f"[UQ Multi evaluate_func] Evaluating on {len(datasets)} datasets")
 
     # Parse and instantiate the estimator class
     function_str = function_class.function_str
     imports = function_class.imports_str
-
     globals_dict: Dict[str, Any] = {
-        "Estimator": Estimator,
-        "np": np,
-        "scipy": scipy,
-        "Dict": Dict,
-        "Any": Any,
-        "Tuple": Tuple,
+        "Estimator": Estimator, "np": np, "scipy": scipy,
+        "Dict": Dict, "Any": Any, "Tuple": Tuple,
     }
-
     if imports:
         exec(imports, globals_dict)
-
     local_dict: Dict[str, Any] = {}
     exec(function_str, globals_dict, local_dict)
 
     class_name = cfg.function_str_to_extract
     if class_name not in local_dict:
         raise ValueError(f"Class {class_name} not found in candidate program")
-
     EstimatorClass = local_dict[class_name]
-
     input_regime = cfg.task.input_regime
+    use_gpu_hidden_states = bool(getattr(cfg.task, "use_gpu_hidden_states", False))
+    hidden_states_device = str(getattr(cfg.task, "hidden_states_device", "cuda"))
+    use_dependency_gated_stats = bool(getattr(cfg.task, "use_dependency_gated_stats", True))
 
-    # Evaluate on each dataset; fail the whole candidate on first dataset error.
-    results: Dict[str, Dict[str, Any] | str] = {}
-    results["task_variant"] = "multi-criteria optimization"
+    # Evaluate on each dataset
+    results: Dict[str, Dict[str, Any] | str] = {"task_variant": "multi-criteria optimization"}
     all_prr_values: List[float] = []
 
     for dataset_info in datasets:
-        name = dataset_info["name"]
         dataset_result = _evaluate_single_dataset(
-            cfg=cfg,
-            dataset_info=dataset_info,
+            cfg=cfg, dataset_info=dataset_info,
             EstimatorClass=EstimatorClass,
             input_regime=input_regime,
+            use_gpu_hidden_states=use_gpu_hidden_states,
+            hidden_states_device=hidden_states_device,
+            use_dependency_gated_stats=use_dependency_gated_stats,
         )
-        results[name] = dataset_result
+        results[dataset_info["name"]] = dataset_result
         all_prr_values.append(dataset_result["prediction_rejection_ratio"])
 
     mean_prr = float(np.mean(all_prr_values))
@@ -466,63 +663,6 @@ def evaluate_func(
     return function_class
 
 
-# def system_prompt_fabric() -> str:
-#     """
-#     System prompt for multi-dataset UQ evaluation.
-#     Reuses the same prompt structure as single-dataset mode.
-#     """
-#     import random
-
-#     strong_baselines = [
-#         "LogProb: sum of negative log-probabilities over sequence",
-#         "LogProbSlope: negative pearson correlation between token position and log-probability",
-#         "PositionWeightedGap: for each token t compute (top1_logprob[t] - sequence_logprob[t-1]) and weight it by t / length",
-#     ]
-#     baseline = random.choices(population=strong_baselines, weights=[0.4, 0.5, 0.1], k=1)[0]
-
-#     ideas = [
-#         "anomaly detection",
-#         "position-based weighting (early vs late tokens)",
-#         "std of some metric across positions",
-#         "min/max statistics (most likely with low weight to avoid outlier dependence)",
-#         "scipy stats — skewness, kurtosis, or normality tests (shapiro, jarque_bera) on logprob distribution",
-#         "aggregation of top or bottom 20% of something instead of all values",
-#         "tail behavior (approximate using available 512 logits)",
-#         "consecutive runs — streaks of low-confidence tokens",
-#         "approximation of second derivative",
-#         "exponential weighted average",
-#         "sliding window average",
-#         "difference between some aggregate over first and last quarter of sequence",
-#     ]
-#     idea = random.choice(ideas)
-
-#     system_prompt = f"""You are designing general-purpose uncertainty quantification methods for LLM outputs, evaluated by Prediction-Rejection Area (PRR) across multiple tasks (QA, summarization, machine translation, math).
-# Prediction-Rejection Ratio (PRR) measures the ability of an uncertainty estimator to rank incorrect predictions higher than correct ones. Higher PRR values indicate better uncertainty estimation.
-
-# ## Inputs (per sample)
-# - "sequence_logprobs": List[np.ndarray], shape (n_i-1,) — log probabilities of generated tokens
-# - "top_k_logits": List[np.ndarray], shape (n_i, k) — top-k logits per token (k=512)
-# - "top_k_indices": List[np.ndarray], shape (n_i, k) — corresponding token indices
-
-# ## Design Guidelines
-# - Build off a strong baseline: {baseline}
-# - For additional signal, consider incorporating {idea}
-
-# ## Code Requirements
-# - Class named `HallucinationDetector`, subclass of `Estimator`
-# - Output shape [N] — higher values = more uncertain
-# - Pure numpy/scipy, deterministic
-# - Brief docstring describing approach
-
-# ## Response Format
-# 1. Analyze shown detectors
-# 2. Ideate a novel detector based on Design Guidelines and your analysis of previous detectors.
-# 3. Provide ```python code block with your novel detector
-# """
-#     return system_prompt
-
-
-# system_prompt = system_prompt_fabric
 system_prompt = """Take the role of a world-class NLP researcher with specialization in Uncertainty Quantification. The overall goal is to design and implement an unsupervised hallucination detector. 
 You are doing an evolutionary search for the best detector, so it is the following loop:
 - You review the results of existing best performing detectors
@@ -534,7 +674,7 @@ The goal is to design and implement HallucinationDetector class that detects LLM
 
 Here are examples of atomic claims (might be either true or false): "Made in Chelsea is a reality TV", "The father of Sybilla of Normandy is Rollo of Normandy", "Virginia Woolf is the author of The Unicorn in the Garden". We don't know claim's origin -- they might be generated by the same model, by different models, or by a human. For each claim, we use the following chat template: [{"role": "user", "content": "Generate true statement"}, {"role": "assistant", "content": claim_text}], where `claim_text` is the text of the claim, e.g. "Made in Chelsea is a reality TV".
 
-Inputs for the detector are per-token logits for atomic claims from Llama-3.1-8B-Instruct model. We obtain these logits during a single forward pass through the model. In other words, the model is used in scoring mode.
+Inputs for the detector are extracted from model forward outputs and include logits, hidden states, and attention maps.
 
 ## Performance metric
 We use Prediction-Rejection Ratio (PRR) as the performance metric. It measures how well the uncertainty estimator ranks incorrect predictions higher than correct ones. Higher PRR values indicate better uncertainty estimation.
@@ -542,13 +682,24 @@ We use Prediction-Rejection Ratio (PRR) as the performance metric. It measures h
 
 ## HallucinationDetector inputs
 
-(N = number of samples, n_i = full length of the i-th sequence, k = amount of top-k logits available)
+(N = number of samples, n_i = claim-token length for sample i, L = number of layers, H = number of attention heads, D = hidden size, k = top-k width)
 
-- "sequence_logprobs": List[np.ndarray] of length N, inner 1d array has length n_i - 1. Log probabilities (after log_softmax) of tokens which were actually generated by the model, excluding the first generated token.
-- "top_k_logits": List[np.ndarray] of length N - each array shape [n_i, k]. Top-k logits (before log_softmax) for each token. [:, 0] slice contains logits of the most likely token.
-- "top_k_indices": List[np.ndarray] of length N - each array shape [n_i, k]. Top-k indices for respective tokens.
+- "sequence_logprobs": List[np.ndarray] of length N, each array shape [n_i - 1]. Log probabilities (after log_softmax) of generated claim tokens, excluding the first generated token.
+- "greedy_logprobs": List[np.ndarray] of length N, each array shape [n_i]. Log probability of the top-1 token at each position.
+- "token_entropies": List[np.ndarray] of length N, each array shape [n_i]. Token-level entropy values.
+- "greedy_texts": List[str] of length N. Claim texts.
+- "greedy_tokens": List[List[int]] of length N. Token IDs for each claim.
+- "top_k_logits": List[np.ndarray] of length N, each array shape [n_i, k]. Top-k logits (before log_softmax) for each token; [:, 0] is the top-1 logit.
+- "top_k_indices": List[np.ndarray] of length N, each array shape [n_i, k]. Token IDs corresponding to top_k_logits.
+- "recent_lookback_attention_weights_from_claim_tokens": List of length N. For sample i: nested list with shape [n_i, min(position, max_lookback), L*H], containing recent lookback attention weights from claim tokens.
+- "claim_only_attention_maps": List[np.ndarray] of length N, each array shape [L*H, n_i, n_i]. Attention maps restricted to claim-token region.
+- "full_attention_maps": List[np.ndarray] of length N, each array shape [L, H, n_i_full, n_i_full]. Full per-layer, per-head attention maps from forward pass.
+- "token_embeddings_decoder": np.ndarray with shape [sum_i n_i, D]. Concatenated last-layer token embeddings over all samples.
+- "token_embeddings_decoder_{layer}": np.ndarray with shape [sum_i n_i, D]. Concatenated token embeddings for a specific layer.
+- "embeddings_decoder": np.ndarray with shape [N, D]. Mean-pooled last-layer token embedding per sample.
+- "embeddings_decoder_{layer}": np.ndarray with shape [N, D]. Mean-pooled token embedding per sample for a specific layer.
 
-Note that you don't have access to logits beyond top-k, so you can't estimate what share of probability mass top-k tokens cover.
+You do not have access to logits beyond top-k, so you cannot estimate the missing tail probability mass.
 
 ## Design constraints
 - Use up to 3 features. You MUST explore one-feature and two-feature detectors as well, don't get fixated on three-feature detectors.
