@@ -532,7 +532,8 @@ system_prompt = """Take the role of a world-class NLP researcher with specializa
 You are doing an evolutionary search for the best detector, so it is the following loop:
 - You review the results of existing best performing detectors
 - You design a new candidate detector
-- It is evaluated on test sets for 4 datasets. If it performs well, it will be shown to you in the next iteration.
+- It is evaluated on test sets for 4 datasets. If it performs well, it will be shown to you in the next iteration as context.
+Do breadth-first search and explore a LOT OF different ideas, as opposed to marginally tuning and tweaking existing detectors; in the long run, this approach is more likely to find a detector with strong generalization.
 
 ## Task description
 The goal is to design and implement HallucinationDetector class that detects LLM hallucinations in atomic claims (10-25 tokens long). 
