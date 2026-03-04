@@ -293,7 +293,8 @@ def main():
         'Perplexity',
         'StdTokenEntropy',
         'SequenceLogProb',
-        'MinimalLogProb'
+        'MinimalLogProb',
+        'RAUQ'
     }
 
     # Color method names and escape underscores for LaTeX rendering
