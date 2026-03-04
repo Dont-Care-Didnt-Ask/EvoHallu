@@ -50,7 +50,7 @@ from lm_polygraph.estimators import (
     MaximumSequenceProbability, Perplexity,
     # Ported estimators from found_formulas.py
     SequenceLogProb, SequenceLogProbBottom, MinimalLogProb,
-    StdTokenEntropy, MeanStdTokenEntropy,
+    StdTokenEntropy, MeanStdTokenEntropy, MeanTokenEntropy,
     QuartileEntropyDiffNormalized, QuartileEntropyDiff,
     PositionWeightedGap, PositionWeightedGapNormalized, Gap,
     QuartileEntropyDiff_PositionWeightedGap,
@@ -58,6 +58,7 @@ from lm_polygraph.estimators import (
     EntropySlope, LogProbSlope,
     ExpWeightedNegLogProbWithTop1, ExpWeightedNegLogProb,
     PositionWeightedGap_EntropySlope_TopKMassInv,
+    # Multi-criteria-optimized methods
     SequenceLogProb_MeanEnt_MeanGap,
     SequenceLogProb_MeanEnt_RatioGap,
 )
@@ -74,7 +75,31 @@ from lm_polygraph.estimators.bottom_mass_avg import (
     LogProbSlope_BottomMassAvg,
     SequenceLogProb_BottomMassAvg,
 )
-from lm_polygraph.estimators.rauq import RAUQ
+# From 3000-round run
+from lm_polygraph.estimators.entropy_logprobvolatility import (
+    Entropy_LogProbVolatility,
+)
+from lm_polygraph.estimators.logvar_negtop1 import (
+    LogVar_NegMeanTop1,
+)
+from lm_polygraph.estimators.seqlogprob_fraclow import (
+    MeanSeqLogProb_FracLow,
+)
+# From another 3000-round run
+from lm_polygraph.estimators.sequencelogprob_times_expectedrank import (
+    SequenceLogProbTimesExpectedRank,
+)
+from lm_polygraph.estimators.sequencelogprob_times_meanentropy import (
+    SequenceLogProbTimesMeanEntropy,
+)
+from lm_polygraph.estimators.sequencelogprob_meanentropy import (
+    SequenceLogProb_MeanEntropy,
+)
+# Attention-based estimators
+from lm_polygraph.estimators import (
+    RAUQ,
+    AttentionScore
+)
 from lm_polygraph.ue_metrics.pred_rej_area import PredictionRejectionArea
 from lm_polygraph.utils.model import WhiteboxModel
 from lm_polygraph.utils.generation_parameters import GenerationParameters
@@ -87,6 +112,7 @@ from src.packing.evaluate.uncertainty_quantification.utils import (
     select_best_available_metric,
 )
 
+MAX_REJECTION_RATIO = 0.5
 
 def compute_stats_for_existing_generation(
     model: WhiteboxModel,
@@ -135,6 +161,7 @@ def compute_stats_for_existing_generation(
     greedy_log_probs = []
     greedy_tokens = []
     attention_all = []
+    forwardpass_attention_weights = []
 
     # New stats for ported estimators
     sequence_logprobs_list = []
@@ -277,6 +304,7 @@ def compute_stats_for_existing_generation(
                 attn_mask_shifted[:, j, j:] = 0.0
 
             attention_all.append(attn_mask_shifted)
+            forwardpass_attention_weights.append(attn_mask)
 
     result = {
         "greedy_log_likelihoods": greedy_log_likelihoods,
@@ -293,6 +321,7 @@ def compute_stats_for_existing_generation(
 
     if output_attentions:
         result["attention_all"] = attention_all
+        result["forwardpass_attention_weights"] = forwardpass_attention_weights
 
     return result
 
@@ -681,6 +710,7 @@ def main():
         MinimalLogProb(),
         StdTokenEntropy(),
         MeanStdTokenEntropy(),
+        MeanTokenEntropy(),
         QuartileEntropyDiffNormalized(),
         QuartileEntropyDiff(),
         PositionWeightedGap(),
@@ -703,14 +733,23 @@ def main():
         # Round 177: Bottom-mass average (Test AUC: 73.19%)
         LogProbSlope_BottomMassAvg(),
         SequenceLogProb_BottomMassAvg(),
+        # From 3000-round run
+        Entropy_LogProbVolatility(),
+        LogVar_NegMeanTop1(),
+        MeanSeqLogProb_FracLow(),
         # Multi-criteria optimized estimators
         SequenceLogProb_MeanEnt_MeanGap(),
         SequenceLogProb_MeanEnt_RatioGap(),
+        # From another 3000-round run
+        SequenceLogProbTimesExpectedRank(),
+        SequenceLogProbTimesMeanEntropy(),
+        SequenceLogProb_MeanEntropy(),
     ]
 
     output_attentions = not args.disable_rauq
     if not args.disable_rauq:
         estimators.append(RAUQ(instruct=args.instruct))
+        estimators.append(AttentionScore(layer=16))
 
     logging.info(f"Evaluating {len(estimators)} estimators: {[str(e) for e in estimators]}")
 
@@ -747,10 +786,12 @@ def main():
             "sequence_logprobs": [],
             "greedy_logprobs": [],
             "token_entropies": [],
+            "entropy": [],          # an alias for token_entropies for MeanTokenEntropy estimator
             "top_k_logits": [],
         }
         if output_attentions:
             chunk_stats["attention_all"] = []
+            chunk_stats["forwardpass_attention_weights"] = []
 
         # Process samples in this chunk (with mini-batches)
         for mini_start in range(start, end, args.batch_size):
@@ -773,9 +814,11 @@ def main():
             chunk_stats["sequence_logprobs"].extend(batch_stats["sequence_logprobs"])
             chunk_stats["greedy_logprobs"].extend(batch_stats["greedy_logprobs"])
             chunk_stats["token_entropies"].extend(batch_stats["token_entropies"])
+            chunk_stats["entropy"].extend(batch_stats["token_entropies"]) # an alias for MeanTokenEntropy estimator
             chunk_stats["top_k_logits"].extend(batch_stats["top_k_logits"])
             if output_attentions:
                 chunk_stats["attention_all"].extend(batch_stats["attention_all"])
+                chunk_stats["forwardpass_attention_weights"].extend(batch_stats["forwardpass_attention_weights"])
 
             del batch_stats
 
@@ -799,7 +842,7 @@ def main():
 
     # Compute PRR with accumulated scores
     logging.info("Computing PRR metrics...")
-    prr_metric = PredictionRejectionArea(max_rejection=0.5)
+    prr_metric = PredictionRejectionArea(max_rejection=MAX_REJECTION_RATIO)
     estimator_results = {}
     
     # Pre-generate bootstrap indices with fixed seed for reproducibility
@@ -850,7 +893,7 @@ def main():
             prr_ci, bootstrap_prrs = _bootstrap_prr_ci(
                 uncertainty_scores,
                 quality_scores,
-                max_rejection=0.95,
+                max_rejection=MAX_REJECTION_RATIO,
                 B=B,
                 bootstrap_indices=bootstrap_indices,
             )
