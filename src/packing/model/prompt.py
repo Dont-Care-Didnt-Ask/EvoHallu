@@ -52,7 +52,8 @@ def programs_to_prompt_creative(cfg, programs, scores, extra_metrics_list):
         main_txt += f"{program}\n"
     
         if "task_variant" in em and em["task_variant"] == "multi-criteria optimization":
-            main_txt += f"# Score achieved with the function above (mean + min PRR / 2): {score}\n"
+            # main_txt += f"# Score achieved with the function above: (mean PRR + min PRR) / 2 = {score}\n"
+            pass
         else:
             main_txt += f"# Score achieved with the function above: {score}\n"
 
