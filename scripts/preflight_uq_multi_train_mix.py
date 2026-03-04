@@ -14,11 +14,12 @@ def _expected_suffix(input_regime: str) -> str | None:
         "logits": "_logits.pt",
         "hidden_states": "_hidden_states.pt",
         "attentions": "_attentions.pt",
+        "chunked": None,
         "full": None,
     }
     assert input_regime in mapping, (
         f"Unsupported input_regime='{input_regime}'. "
-        "Expected one of: logits, hidden_states, attentions, full."
+        "Expected one of: logits, hidden_states, attentions, chunked, full."
     )
     return mapping[input_regime]
 
@@ -29,6 +30,7 @@ def _required_keys(input_regime: str) -> set[str]:
         "hidden_states": {"sequence_logprobs", "hidden_states"},
         "attentions": {"sequence_logprobs", "attentions"},
         "full": {"sequence_logprobs", "top_k_logits", "top_k_indices", "hidden_states", "attentions"},
+        "chunked": {"sequence_logprobs", "top_k_logits", "top_k_indices", "hidden_states", "attentions"},
     }
     return mapping[input_regime]
 
@@ -61,7 +63,7 @@ def main() -> None:
     assert min_samples_per_dataset >= 1, (
         f"min_samples_per_dataset must be >= 1, got {min_samples_per_dataset}"
     )
-    assert len(datasets) == 4, f"Expected exactly 4 datasets, got {len(datasets)}"
+    assert len(datasets) == 4 or len(datasets) == 2, f"Expected exactly 4 or 2 datasets, got {len(datasets)}"
 
     suffix = _expected_suffix(input_regime)
     required_keys = _required_keys(input_regime)
@@ -76,7 +78,9 @@ def main() -> None:
         path = Path(str(ds_cfg.test_raw_path))
         metric_name = str(ds_cfg.metric_name)
 
-        assert path.exists(), f"Dataset '{name}' path does not exist: {path}"
+        chunked_path = Path(ds_cfg.test_raw_path.replace(".pt", "_chunk_0.pt"))
+
+        assert path.exists() or chunked_path.exists(), f"Dataset '{name}' path does not exist: both {path} and {chunked_path} are missing"
         file_suffixes.add(path.suffix)
 
         if suffix is not None:
@@ -84,7 +88,7 @@ def main() -> None:
                 f"Dataset '{name}' path must end with '{suffix}' for regime '{input_regime}', got '{path}'."
             )
 
-        raw = torch.load(path, map_location="cpu", mmap=True, weights_only=False)
+        raw = torch.load(path if path.exists() else chunked_path, map_location="cpu", mmap=True, weights_only=False)
         samples = raw.get("samples", [])
         assert isinstance(samples, list), f"Dataset '{name}' has non-list samples: {type(samples)}"
         assert len(samples) >= min_samples_per_dataset, (
