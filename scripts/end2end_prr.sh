@@ -1,14 +1,16 @@
 echo $(which python)
 
-devices=1
-output_dir=Feb2
+devices=0
+output_dir=Feb25_all_prr_050_length_filtered
 
 mkdir -p out/logs/example/EVALS_polygraph/${output_dir}
 
-base_dir="/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/polygraph_generations_metrics"
+# base_dir="/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/polygraph_generations_metrics"
+base_dir=/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_polygraph_generations_metrics
 
 # Dataset paths ordered by size (smallest first) for quick feedback
 # Format: "filename:metric"
+# 4 datasets might be excluded since they were used during training
 datasets=(
     "truthfulqa_simple_instruct.csv:best_rougeL"
     "samsum_simple_instruct.csv:rougeL"
@@ -36,6 +38,12 @@ for dataset_info in "${datasets[@]}"; do
     echo "Metric: $metric"
     echo "=========================================="
 
+    if [ "$name" == "xsum_simple_instruct" ]; then
+        chunk_size=2
+    else
+        chunk_size=16
+    fi
+
     # Process with chunked approach to avoid OOM
     # - chunk_size=C: Process C samples at a time, extract scores, discard stats
     # - batch_size=1: Individual processing within chunk to avoid padding artifacts
@@ -46,7 +54,7 @@ for dataset_info in "${datasets[@]}"; do
         --metric-col "$metric" \
         --output-path "out/logs/example/EVALS_polygraph/${output_dir}/${name}.json" \
         --cache-dir /mnt/extremessd10tb/seleznev/.cache \
-        --chunk-size 16 \
+        --chunk-size $chunk_size \
         --batch-size 1 \
         --instruct
 
