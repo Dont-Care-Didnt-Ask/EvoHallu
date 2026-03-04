@@ -7,31 +7,34 @@ function_str_to_extract: "HallucinationDetector"
 # Each file must be a raw stats .pt with per-sample `ground_truth_score`.
 datasets:
   - name: "coqa"
-    train_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_train_polygraph_generation_metrics/coqa_simple_instruct_limit_1536_raw_stats_logits.pt"
-    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/test_mix_generations/coqa_simple_instruct_raw_stats_logits.pt"
+    train_raw_path: "/home/m.seleznyov/EvoHallu/data/uncertainty_quantification/polygraph_fixed2/coqa_simple_instruct_limit_1536_raw_stats.pt"
+    test_raw_path: "/home/m.seleznyov/EvoHallu/data/uncertainty_quantification/polygraph_fixed2/coqa_simple_instruct_raw_stats.pt"
     metric_name: "f1"
 
   - name: "samsum"
-    train_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_train_polygraph_generation_metrics/samsum_simple_instruct_limit_1536_raw_stats_logits.pt"
-    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/test_mix_generations/samsum_simple_instruct_raw_stats_logits.pt"
+    train_raw_path: "/home/m.seleznyov/EvoHallu/data/uncertainty_quantification/polygraph_fixed2/samsum_simple_instruct_limit_1536_raw_stats.pt"
+    test_raw_path: "/home/m.seleznyov/EvoHallu/data/uncertainty_quantification/polygraph_fixed2/samsum_simple_instruct_raw_stats.pt"
     metric_name: "rougeL"
 
-  - name: "triviaqa"
-    train_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_train_polygraph_generation_metrics/triviaqa_simple_instruct_limit_1536_raw_stats_logits.pt"
-    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/test_mix_generations/triviaqa_simple_instruct_raw_stats_logits.pt"
-    metric_name: "f1"
+  # - name: "triviaqa"
+  #   train_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_train_polygraph_generation_metrics/triviaqa_simple_instruct_limit_1536_raw_stats_logits.pt"
+  #   test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/test_mix_generations/triviaqa_simple_instruct_raw_stats_logits.pt"
+  #   metric_name: "f1"
 
-  - name: "wmt14_deen"
-    train_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_train_polygraph_generation_metrics/wmt14_deen_limit_1536_raw_stats_logits.pt"
-    test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/test_mix_generations/wmt14_deen_raw_stats_logits.pt"
-    metric_name: "bleu"
+  # - name: "wmt14_deen"
+  #   train_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/length_filtered_train_polygraph_generation_metrics/wmt14_deen_limit_1536_raw_stats_logits.pt"
+  #   test_raw_path: "/mnt/extremessd10tb/seleznev/EvoTune/data/uncertainty_quantification/test_mix_generations/wmt14_deen_raw_stats_logits.pt"
+  #   metric_name: "bleu"
 
-sample_size: 1392     # 0 means use all available train samples. 1392x4 approximately matches PopQA train dataset size (after filtering for ill-formed claims).
+sample_size: 0        # 0 means use all available train samples. 1392x4 approximately matches PopQA train dataset size (after filtering for ill-formed claims).
 val_size: 0.2         # fraction of (sampled) train data used for validation
 split_seed: 441
 # Chunking for make_all_stats in evaluate_func
-chunk_size: 128
-input_regime: "logits"  # Available: "logits", "hidden_states", "attentions", "full"
+chunk_size: 512
+input_regime: "chunked"  # Available: "logits", "hidden_states", "attentions", "full", "chunked"
+use_gpu_hidden_states: true
+hidden_states_device: "cuda:0"
+use_dependency_gated_stats: true
 min_samples_per_dataset: 100
 
 # Multi-dataset supervised mode is intentionally unsupported in task code.

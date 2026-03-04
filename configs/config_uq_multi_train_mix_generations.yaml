@@ -70,9 +70,8 @@ project: "project_name"
 entity: project_entity
 
 # Other settings
-seed: 2003
-# run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
-run_identifier_name: ${model.model_name}_${train.train_method_name}
+seed: 2100
+run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
 prefix: example
 run_or_dev: dev
 use_tgi: ${cluster.use_tgi}

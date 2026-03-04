@@ -63,7 +63,9 @@ def get_full_model_name(cfg):
         elif name == "qwen3coder30b":
             model_id = "Qwen/Qwen3-Coder-30B-A3B-Instruct"
         elif name == "gpt-oss-120b":
-            model_id = "/mnt/extremessd10tb/seleznev/.cache/huggingface/hub/models--openai--gpt-oss-120b"
+            # model_id = "/mnt/extremessd10tb/seleznev/.cache/huggingface/hub/models--openai--gpt-oss-120b"
+            # model_id = "openai/gpt-oss-120b"
+            model_id = "/home/m.seleznyov/.cache/huggingface/hub/models--openai--gpt-oss-120b/"
         else:
             raise ValueError(f"Invalid model name: {name}")
         return model_id
