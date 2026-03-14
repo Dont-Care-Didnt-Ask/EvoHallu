@@ -191,36 +191,70 @@ def build_dataset_metrics_table(model_dirs, output_file=None):
     return df, latex_table
 
 
-def build_aggregated_prr_table(directory, output_file=None):
+def _load_eval_jsons(directory):
+    json_dir = Path(f'out/logs/example/EVALS_polygraph/{directory}')
+    assert json_dir.exists(), f"Directory does not exist: {json_dir}"
+
+    data = {}
+    for json_file in sorted(json_dir.glob('*.json')):
+        with open(json_file, 'r') as f:
+            data[json_file.stem] = json.load(f)
+
+    assert data, f"No JSON files found in: {json_dir}"
+    return data
+
+
+def _discover_available_metrics(data):
+    metric_names = set()
+    for content in data.values():
+        estimators = content.get('estimators', {})
+        for estimator_metrics in estimators.values():
+            metric_names.update(
+                key for key, value in estimator_metrics.items()
+                if isinstance(value, (int, float, np.integer, np.floating))
+            )
+    return sorted(metric_names)
+
+
+def _normalize_metric_name(metric_name, available_metrics):
+    assert metric_name, "metric_name must be a non-empty string"
+    assert available_metrics, "No numeric estimator metrics available in input JSON files"
+    metric_map = {name.lower(): name for name in available_metrics}
+    requested = metric_name.lower()
+    assert requested in metric_map, (
+        f"Unknown metric '{metric_name}'. "
+        f"Available metrics: {', '.join(available_metrics)}"
+    )
+    return metric_map[requested]
+
+
+def _extract_metric_results(data, metric_name):
+    methods = set()
+    for content in data.values():
+        methods.update(content.get('estimators', {}).keys())
+
+    results = {method: {} for method in methods}
+    for dataset_name, content in data.items():
+        for method, metrics in content.get('estimators', {}).items():
+            metric_value = metrics.get(metric_name)
+            results[method][dataset_name] = metric_value
+    return results
+
+
+def build_aggregated_table(directory, output_file=None, metric_name='PRR'):
     """
     Build a table with methods as rows and dataset groups as columns.
     Groups: QA, Summarization, Machine Translation, plus overall Average.
     """
-    # Directory containing JSON files
-    json_dir = Path(f'out/logs/example/EVALS_polygraph/{directory}')
-
-    # Read all JSON files
-    data = {}
-    for json_file in sorted(json_dir.glob('*.json')):
-        dataset_name = json_file.stem  # filename without extension
-        with open(json_file, 'r') as f:
-            content = json.load(f)
-            data[dataset_name] = content
-
-    # Extract PRR values for each estimator and dataset
-    methods = set()
-    for dataset_name, content in data.items():
-        if 'estimators' in content:
-            methods.update(content['estimators'].keys())
-
-    # Create a dictionary to store the results
-    results = {method: {} for method in methods}
-
-    for dataset_name, content in data.items():
-        if 'estimators' in content:
-            for method, metrics in content['estimators'].items():
-                prr_value = metrics.get('PRR')
-                results[method][dataset_name] = prr_value
+    if metric_name == 'PRR':
+        round_to = 1
+    else:
+        round_to = 3
+    data = _load_eval_jsons(directory)
+    available_metrics = _discover_available_metrics(data)
+    metric_name = _normalize_metric_name(metric_name, available_metrics)
+    results = _extract_metric_results(data, metric_name)
+    methods = set(results.keys())
 
     # Define dataset grouping
     qa_datasets = {'babi_qa_continuation', 'coqa_simple_instruct', 'mmlu_simple_instruct',
@@ -265,7 +299,7 @@ def build_aggregated_prr_table(directory, output_file=None):
     # Define column order
     df = df[columns]
 
-    # Sort by average (descending, higher PRR is better)
+    # Sort by average (descending, higher is better)
     df = df.sort_values('Average', ascending=False)
 
     # Shorten method names to max 25 characters and ensure uniqueness
@@ -323,7 +357,7 @@ def build_aggregated_prr_table(directory, output_file=None):
             continue
 
         # Find top-1 and top-2 values using UNIQUE values (fixes tie issue)
-        rounded_values = col_values.round(1)
+        rounded_values = col_values.round(round_to)
         sorted_rounded = rounded_values.sort_values(ascending=False)
         unique_values = sorted_rounded.unique()
 
@@ -343,11 +377,11 @@ def build_aggregated_prr_table(directory, output_file=None):
             val = df.loc[idx, col]
             if pd.notna(val):
                 if idx in top1_indices:
-                    df_formatted.loc[idx, col] = f"\\textbf{{{val:.1f}}}"
+                    df_formatted.loc[idx, col] = f"\\textbf{{{val:.{round_to}f}}}"
                 elif idx in top2_indices:
-                    df_formatted.loc[idx, col] = f"\\underline{{{val:.1f}}}"
+                    df_formatted.loc[idx, col] = f"\\underline{{{val:.{round_to}f}}}"
                 else:
-                    df_formatted.loc[idx, col] = f"{val:.1f}"
+                    df_formatted.loc[idx, col] = f"{val:.{round_to}f}"
             else:
                 df_formatted.loc[idx, col] = '-'
 
@@ -366,8 +400,8 @@ def build_aggregated_prr_table(directory, output_file=None):
 
     latex_table = f"""\\begin{{table}}
 {tabular_content}
-\\caption{{PRR scores across different methods and dataset groups. \\textcolor{{blue}}{{Blue}}: evolved methods, \\textcolor{{orange}}{{orange}}: existing methods, \\textcolor{{gray}}{{gray}}: out-of-competition. \\textbf{{Bold}}: best, \\underline{{underlined}}: second best.}}
-\\label{{tab:prr_aggregated}}
+\\caption{{{metric_name} scores across different methods and dataset groups. \\textcolor{{blue}}{{Blue}}: evolved methods, \\textcolor{{orange}}{{orange}}: existing methods, \\textcolor{{gray}}{{gray}}: out-of-competition. \\textbf{{Bold}}: best, \\underline{{underlined}}: second best.}}
+\\label{{tab:{metric_name.lower()}_aggregated}}
 \\end{{table}}
 """
 
@@ -385,32 +419,15 @@ def build_aggregated_prr_table(directory, output_file=None):
         print(f"\nTable saved to: {output_file}")
 
 
-def build_prr_table(directory):
-    # Directory containing JSON files
-    json_dir = Path(f'out/logs/example/EVALS_polygraph/{directory}')
-
-    # Read all JSON files
-    data = {}
-    for json_file in sorted(json_dir.glob('*.json')):
-        dataset_name = json_file.stem  # filename without extension
-        with open(json_file, 'r') as f:
-            content = json.load(f)
-            data[dataset_name] = content
-
-    # Extract PRR values for each estimator and dataset
-    methods = set()
-    for dataset_name, content in data.items():
-        if 'estimators' in content:
-            methods.update(content['estimators'].keys())
-
-    # Create a dictionary to store the results
-    results = {method: {} for method in methods}
-
-    for dataset_name, content in data.items():
-        if 'estimators' in content:
-            for method, metrics in content['estimators'].items():
-                prr_value = metrics.get('PRR')
-                results[method][dataset_name] = prr_value
+def build_table(directory, metric_name='PRR'):
+    if metric_name == 'PRR':
+        round_to = 1
+    else:
+        round_to = 3
+    data = _load_eval_jsons(directory)
+    available_metrics = _discover_available_metrics(data)
+    metric_name = _normalize_metric_name(metric_name, available_metrics)
+    results = _extract_metric_results(data, metric_name)
 
     # Create DataFrame
     df = pd.DataFrame(results).T
@@ -450,10 +467,9 @@ def build_prr_table(directory):
 
     df = df.rename(columns=column_rename)
 
-    average_prr = df.mean(axis=1)
-    average_prr_col = r'\makecell{Avg\\PRR}'
-    # Calculate ranks for each dataset (higher PRR is better, so rank 1 = highest PRR)
-    # Use ascending=False because higher PRR is better
+    average_score = df.mean(axis=1)
+    average_score_col = rf'\makecell{{Avg\\{metric_name}}}'
+    # Calculate ranks for each dataset (higher is better, so rank 1 = highest)
     ranks = df.rank(ascending=False, na_option='keep')
 
     # Calculate average rank across all datasets
@@ -461,14 +477,14 @@ def build_prr_table(directory):
 
     # Add average rank column to the original dataframe with makecell for multi-line header
     df[r'\makecell{Avg\\Rank}'] = avg_rank
-    df[average_prr_col] = average_prr
+    df[average_score_col] = average_score
 
     # Sort by average rank (ascending, so best methods first)
     avg_rank_col = r'\makecell{Avg\\Rank}'
     df = df.sort_values(avg_rank_col)
 
     # Reorder columns to put Avg Rank first (second column in table after method names)
-    cols = [avg_rank_col] + [average_prr_col] + [col for col in df.columns if col != avg_rank_col and col != average_prr_col]
+    cols = [avg_rank_col] + [average_score_col] + [col for col in df.columns if col != avg_rank_col and col != average_score_col]
     df = df[cols]
 
     # Shorten method names to max 25 characters and ensure uniqueness
@@ -529,7 +545,7 @@ def build_prr_table(directory):
             continue
 
         # ROUND values to 1 decimal before finding top indices (matches display format)
-        rounded_values = col_values.round(1)
+        rounded_values = col_values.round(round_to)
         sorted_rounded = rounded_values.sort_values(ascending=False)
         unique_values = sorted_rounded.unique()
 
@@ -538,22 +554,22 @@ def build_prr_table(directory):
 
         if len(unique_values) >= 1:
             top1_value = unique_values[0]
-            top1_indices = rounded_values[rounded_values.apply(lambda x: abs(x - top1_value) < 0.01)].index.tolist()
+            top1_indices = rounded_values[rounded_values.apply(lambda x: abs(x - top1_value) < 0.0001)].index.tolist()
 
         if len(unique_values) >= 2:
             top2_value = unique_values[1]  # Second UNIQUE rounded value
-            top2_indices = rounded_values[rounded_values.apply(lambda x: abs(x - top2_value) < 0.01)].index.tolist()
+            top2_indices = rounded_values[rounded_values.apply(lambda x: abs(x - top2_value) < 0.0001)].index.tolist()
 
         # Format the column
         for idx in df.index:
             val = df.loc[idx, col]
             if pd.notna(val):
                 if idx in top1_indices:
-                    df_formatted.loc[idx, col] = f"\\textbf{{{val:.1f}}}"
+                    df_formatted.loc[idx, col] = f"\\textbf{{{val:.{round_to}f}}}"
                 elif idx in top2_indices:
-                    df_formatted.loc[idx, col] = f"\\underline{{{val:.1f}}}"
+                    df_formatted.loc[idx, col] = f"\\underline{{{val:.{round_to}f}}}"
                 else:
-                    df_formatted.loc[idx, col] = f"{val:.1f}"
+                    df_formatted.loc[idx, col] = f"{val:.{round_to}f}"
             else:
                 df_formatted.loc[idx, col] = '-'
 
@@ -577,15 +593,15 @@ def build_prr_table(directory):
 
     latex_table = f"""\\begin{{table}}
 {tabular_content}
-\\caption{{PRR scores across different methods and datasets (sorted by average rank). \\textcolor{{blue}}{{Blue}}: evolved methods, \\textcolor{{orange}}{{orange}}: existing methods.}}
-\\label{{tab:prr_scores}}
+\\caption{{{metric_name} scores across different methods and datasets (sorted by average rank). \\textcolor{{blue}}{{Blue}}: evolved methods, \\textcolor{{orange}}{{orange}}: existing methods.}}
+\\label{{tab:{metric_name.lower()}_scores}}
 \\end{{table}}
 """
 
     print(latex_table)
 
     # Save to file
-    output_file = Path('prr_results_table.tex')
+    output_file = Path(f'{metric_name.lower()}_results_table.tex')
     with open(output_file, 'w') as f:
         f.write(latex_table)
 
@@ -593,23 +609,24 @@ def build_prr_table(directory):
 
 
 if __name__ == '__main__':
-    import sys
+    # directory = "Mar13_all_prr_050_length_filtered_alignscore"
+    directory = "Mar13_all_prr_050_length_filtered"
 
-    directory = "Feb25_all_prr_050_length_filtered"
-
-    parser = argparse.ArgumentParser(description='Build PRR evaluation tables')
+    parser = argparse.ArgumentParser(description='Build evaluation tables from estimator metrics')
     parser.add_argument('--metrics', action='store_true', 
                         help='Build dataset metrics table')
     parser.add_argument('--aggregated', action='store_true',
                         help='Build aggregated PRR table with dataset groups')
     parser.add_argument('--directory', type=str, default=directory,
                         help='Directory containing evaluation results')
+    parser.add_argument('--metric', type=str, default='PRR',
+                        help='Estimator metric key to tabulate (e.g., PRR, Pearson, Spearman, Kendall)')
     
     args = parser.parse_args()
 
-    # Default: build PRR table
+    # Default: build per-dataset metric table
     if not args.metrics and not args.aggregated:
-        build_prr_table(args.directory)
+        build_table(args.directory, metric_name=args.metric)
     # Build dataset metrics table
     elif args.metrics:
         model_dirs = {
@@ -620,5 +637,5 @@ if __name__ == '__main__':
         build_dataset_metrics_table(model_dirs, output_file)
     # Build aggregated PRR table
     elif args.aggregated:
-        output_file = Path('prr_aggregated_table.tex')
-        build_aggregated_prr_table(args.directory, output_file)
+        output_file = Path(f'{args.metric.lower()}_aggregated_table.tex')
+        build_aggregated_table(args.directory, output_file, metric_name=args.metric)
