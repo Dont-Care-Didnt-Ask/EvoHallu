@@ -37,6 +37,29 @@ def set_memory_limit():
 _subprocess_input_cache: dict = {}
 
 
+def _resolve_mp_start_method(cfg) -> str:
+    """
+    Resolve multiprocessing start method for task subprocesses.
+
+    Defaults to "fork" for speed. Automatically switches to "spawn" when GPU
+    hidden-state processing is enabled, because CUDA cannot be safely used from
+    forked subprocesses.
+    """
+    configured = getattr(cfg.task, "mp_start_method", None)
+    if configured is not None:
+        method = str(configured).strip().lower()
+    else:
+        use_gpu_hidden_states = bool(getattr(cfg.task, "use_gpu_hidden_states", False))
+        method = "spawn" if use_gpu_hidden_states else "fork"
+
+    valid_methods = {"fork", "spawn", "forkserver"}
+    if method not in valid_methods:
+        raise ValueError(
+            f"Unsupported mp_start_method='{method}'. Expected one of: {sorted(valid_methods)}"
+        )
+    return method
+
+
 def _get_or_load_input(cfg, input_struct_or_spec, task_id):
     """
     Get input data, either from cache, from passed struct, or by loading from disk.
@@ -141,7 +164,9 @@ class StoppableTask:
         self.task_id = task_id
 
         self.process = None
-        self.result_queue = multiprocessing.Queue()
+        self.mp_start_method = _resolve_mp_start_method(cfg)
+        self.mp_ctx = multiprocessing.get_context(self.mp_start_method)
+        self.result_queue = self.mp_ctx.Queue()
         self._process_lock = threading.RLock()
         self._timer_lock = threading.Lock()
         # Shared state for signalling timeouts
@@ -180,12 +205,15 @@ class StoppableTask:
         try:
             with self._process_lock:
                 if self.process is None:
-                    self.process = multiprocessing.Process(target=execute_program, args=(
+                    self.process = self.mp_ctx.Process(target=execute_program, args=(
                         self.cfg, self.input_struct, self.function_class, self.evaluate_func, self.result_queue,
                         self.task_id, self.mem_limit_bytes,
                     ))
                     self.process.start()
-                    logging.info(f"[Task {self.task_id}] Started process PID={self.process.pid}")
+                    logging.info(
+                        f"[Task {self.task_id}] Started process PID={self.process.pid} "
+                        f"(mp_start_method={self.mp_start_method})"
+                    )
                 elif self.is_alive():
                     logging.info(f"[Task {self.task_id}] Already running, PID={self.process.pid}")
                     return
