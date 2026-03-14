@@ -436,21 +436,175 @@ def generate_input(cfg_task: DictConfig, split: str):
 
 def get_initial_func(cfg: DictConfig):
     """Provide an initial baseline estimator implementation."""
+    # class HallucinationDetector(Estimator):
+    #     def __init__(self, context: Dict[str, Any]) -> None:
+    #         super().__init__(
+    #             context,
+    #             stats_dependencies=["sequence_logprobs"],
+    #             level="sequence",
+    #         )
 
+    #     def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
+    #         total_neg_logprob = np.array(
+    #             [-np.sum(sequence_logprobs) for sequence_logprobs in stats["sequence_logprobs"]],
+    #             dtype=np.float32
+    #         )
+    #         return total_neg_logprob
+        
     class HallucinationDetector(Estimator):
-        def __init__(self, context: Dict[str, Any]) -> None:
+        """
+        RAUQ (Recurrent Attention-based Uncertainty Quantification).
+
+        This estimator quantifies uncertainty in LLM outputs by combining
+        attention patterns with token probabilities in a recurrent manner.
+
+        Args:
+            alpha: Weight parameter for combining attention and probability scores
+            model_name: Name or path of the model to load configuration from
+            use_entropy: Whether to use entropy-based uncertainty
+            instruct: Whether the model is instruction-tuned
+        """
+
+        def __init__(
+            self,
+            context: Dict[str, Any],
+            alpha: Optional[float] = None,
+            n_layers: Optional[int] = None,
+            n_heads: Optional[int] = None,
+            use_entropy: bool = False,
+            instruct: bool = False,
+        ):
+            dependencies = ["full_attention_maps", "sequence_logprobs"]
+            if use_entropy:
+                dependencies.append("entropy")
             super().__init__(
                 context,
-                stats_dependencies=["sequence_logprobs"],
+                stats_dependencies=dependencies,
                 level="sequence",
             )
 
+            self.use_entropy = use_entropy
+            self.instruct = instruct
+            self.alpha = alpha if alpha is not None else self.get_alpha()
+
+            self.n_layers = n_layers
+            self.n_heads = n_heads
+
+            # Focus on middle third of layers which typically contain most relevant information
+            if self.n_layers is not None:
+                self.layers = list(
+                    range(self.n_layers // 3, int(np.ceil(self.n_layers / 3 * 2) + 1))
+                )
+            else:
+                self.layers = None
+
+        def get_alpha(self) -> float:
+            if self.instruct:
+                return 0.9 if self.use_entropy else 0.5
+            return 0.8 if self.use_entropy else 0.2
+
+        def _calculate_confidence_scores(
+            self,
+            log_probabilities: np.ndarray,
+            attentions: np.ndarray,
+            layer: int,
+            head: int,
+        ) -> List[float]:
+            """
+            Calculate confidence scores for a sequence using attention and probabilities.
+
+            Args:
+                log_probabilities: Log probabilities for each token
+                attentions: Attention patterns
+                layer: Current layer index
+                head: Selected attention head
+
+            Returns:
+                List[float]: Confidence scores for each position
+            """
+            confidence_scores = [np.exp(log_probabilities[0])]
+
+            for j in range(1, len(log_probabilities)):
+                current_prob = np.exp(log_probabilities[j])
+                prev_confidence = confidence_scores[-1]
+
+                attention_weight = attentions[layer, head, j - 1]
+                confidence = (
+                    self.alpha * current_prob
+                    + (1 - self.alpha) * attention_weight * prev_confidence
+                )
+                confidence_scores.append(confidence)
+
+            return confidence_scores
+
         def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:
-            total_neg_logprob = np.array(
-                [-np.sum(sequence_logprobs) for sequence_logprobs in stats["sequence_logprobs"]],
-                dtype=np.float32
-            )
-            return total_neg_logprob
+            """
+            Calculate uncertainty scores for each sequence in a batch.
+
+            Args:
+                stats: Dictionary containing model statistics including attention weights and log likelihoods
+
+            Returns:
+                np.ndarray: Uncertainty scores for each sequence
+            """
+            if self.n_layers is None:
+                self.n_layers = stats["meta"]["num_layers"]
+                self.layers = list(
+                    range(self.n_layers // 3, int(np.ceil(self.n_layers / 3 * 2) + 1))
+                )
+            if self.n_heads is None:
+                self.n_heads = stats["meta"]["num_attention_heads"]
+
+            # Extract diagonal attention patterns for each sequence
+            attentions = []
+            for attention_weight in stats["full_attention_maps"]:
+                # Reshape attention weights to separate layers and heads
+                reshaped_weights = attention_weight.reshape(
+                    self.n_layers,
+                    self.n_heads,
+                    attention_weight.shape[-2],
+                    attention_weight.shape[-1],
+                )
+                # Extract attention weights for previous token with offset -1
+                attenion_prev_token = np.diagonal(
+                    reshaped_weights, offset=-1, axis1=2, axis2=3
+                )
+                attentions.append(attenion_prev_token)
+            sequence_logprobs = stats["sequence_logprobs"]
+
+            if self.use_entropy:
+                entropy = stats["entropy"]
+                vocab_size = stats["meta"]["vocab_size"]
+                max_entropy = np.log(vocab_size)
+
+            uncertainty_scores = []
+
+            for idx in range(len(sequence_logprobs)):
+                # Get log probabilities for current sequence
+                if self.use_entropy:
+                    log_probabilities = np.log(max_entropy - np.array(entropy[idx]) + 1e-10)
+                else:
+                    log_probabilities = sequence_logprobs[idx]
+
+                # Calculate uncertainty scores for each layer
+                layer_scores = []
+                for layer in self.layers:
+                    # Select most attentive head for current layer
+                    head = attentions[idx][layer].mean(-1).argmax()
+
+                    # Calculate confidence scores
+                    confidence_scores = self._calculate_confidence_scores(
+                        log_probabilities, attentions[idx], layer, head
+                    )
+
+                    # Calculate uncertainty score
+                    uncertainty = 1 - np.log(confidence_scores).mean()
+                    layer_scores.append(uncertainty)
+
+                # Take maximum uncertainty across layers
+                uncertainty_scores.append(np.max(layer_scores))
+
+            return np.array(uncertainty_scores)
 
     return HallucinationDetector, "HallucinationDetector", "class"
 
@@ -475,7 +629,7 @@ def _evaluate_single_dataset(
     meta = raw_struct.get("meta", {}) if isinstance(raw_struct, dict) else {}
     context = {
         "supervised": False,
-        "meta": {"eval_meta": meta},
+        "meta": {"meta": meta},
     }
 
     estimator: Estimator = EstimatorClass(context)
@@ -614,6 +768,7 @@ def evaluate_func(
     globals_dict: Dict[str, Any] = {
         "Estimator": Estimator, "np": np, "scipy": scipy,
         "Dict": Dict, "Any": Any, "Tuple": Tuple,
+        "Optional": Optional, "List": List,
     }
     if imports:
         exec(imports, globals_dict)
@@ -645,7 +800,7 @@ def evaluate_func(
             hidden_states_device=hidden_states_device,
             use_dependency_gated_stats=use_dependency_gated_stats,
         )
-        results["datasets"][name] = dataset_result
+        results["datasets"][dataset_info["name"]] = dataset_result
         all_prr_values.append(dataset_result["prediction_rejection_ratio"])
 
     results["all_prr_values"] = all_prr_values
@@ -703,13 +858,14 @@ Reference values for PRR on our 4 datasets:
 - "greedy_tokens": List[List[int]] of length N. Token IDs for each claim.
 - "top_k_logits": List[np.ndarray] of length N, each array shape [n_i, k]. Top-k logits (before log_softmax) for each token; [:, 0] is the top-1 logit.
 - "top_k_indices": List[np.ndarray] of length N, each array shape [n_i, k]. Token IDs corresponding to top_k_logits.
-- "recent_lookback_attention_weights_from_claim_tokens": List of length N. For sample i: nested list with shape [n_i, min(position, max_lookback), L*H], containing recent lookback attention weights from claim tokens.
+- "recent_lookback_attention_weights_from_claim_tokens": List of length N. For sample i: nested list with shape [n_i, min(position, max_lookback), L*H], containing recent lookback attention weights from claim tokens. Never use np.array(...) or np.stack(...) on the outer list, or .size on list objects - treat this input as a ragged nested Python list.
 - "claim_only_attention_maps": List[np.ndarray] of length N, each array shape [L*H, n_i, n_i]. Attention maps restricted to claim-token region.
 - "full_attention_maps": List[np.ndarray] of length N, each array shape [L, H, n_i_full, n_i_full]. Full per-layer, per-head attention maps from forward pass.
 - "token_embeddings_decoder": np.ndarray with shape [sum_i n_i, D]. Concatenated last-layer token embeddings over all samples.
 - "token_embeddings_decoder_{layer}": np.ndarray with shape [sum_i n_i, D]. Concatenated token embeddings for a specific layer.
 - "embeddings_decoder": np.ndarray with shape [N, D]. Mean-pooled last-layer token embedding per sample.
 - "embeddings_decoder_{layer}": np.ndarray with shape [N, D]. Mean-pooled token embedding per sample for a specific layer.
+- "meta": Dict[str, str | int]. Contains "model_id", "hidden_size", "num_layers", "num_attention_heads", "vocab_size".
 
 You do not have access to logits beyond top-k, so you cannot estimate the missing tail probability mass.
 
@@ -723,7 +879,7 @@ You do not have access to logits beyond top-k, so you cannot estimate the missin
 - In notes, avoid generic hypotheses. When uncertain, err towards not making a note at all.
 
 ## Code constraints
-- Class MUST be named `HallucinationDetector`
+- Class MUST be named `HallucinationDetector`, and inherit from `Estimator` class
 - Output MUST be np.ndarray of shape [N] (one scalar per sample)
 - Pure Python + numpy + scipy only
 - Deterministic
