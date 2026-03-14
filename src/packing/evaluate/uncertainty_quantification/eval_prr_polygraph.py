@@ -35,13 +35,15 @@ import argparse
 import gc
 import json
 import logging
+import re
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 import pandas as pd
 import torch
+from scipy.stats import kendalltau, pearsonr, spearmanr
 from tqdm import tqdm
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -100,12 +102,19 @@ from lm_polygraph.estimators import (
     RAUQ,
     AttentionScore
 )
+from lm_polygraph.estimators import (
+    PastGroundingRisk,
+    Ent_PG_LEV,
+    MeanGreedy_MeanEnt_AttnInstability,
+    LEC_Ent_PG,
+    MeanGreedy,
+)
 from lm_polygraph.ue_metrics.pred_rej_area import PredictionRejectionArea
 from lm_polygraph.utils.model import WhiteboxModel
 from lm_polygraph.utils.generation_parameters import GenerationParameters
 
 # Local imports for data utilities
-from src.packing.evaluate.uncertainty_quantification.utils import (
+from packing.evaluate.uncertainty_quantification.utils import (
     normalize_dataframe_generation,
     detect_dataset_type_from_filename,
     get_metric_for_dataset_type,
@@ -113,6 +122,23 @@ from src.packing.evaluate.uncertainty_quantification.utils import (
 )
 
 MAX_REJECTION_RATIO = 0.5
+
+
+def _get_recent_lookback_attention_features(
+    attn_mask: np.ndarray,
+    n_tokens: int,
+    max_n_tokens: int = 10,
+) -> List[List[List[float]]]:
+    assert attn_mask.ndim == 3, f"attn_mask must be 3D, got shape {attn_mask.shape}"
+    assert n_tokens > 0, f"n_tokens must be positive, got {n_tokens}"
+    current_top_n = min(max_n_tokens, n_tokens)
+    attn_features_seq: List[List[List[float]]] = []
+    for j in range(1, n_tokens):
+        attn_features_tok: List[List[float]] = []
+        for k in range(min(j, current_top_n)):
+            attn_features_tok.append(attn_mask[:, j, j - k - 1].tolist())
+        attn_features_seq.append(attn_features_tok)
+    return attn_features_seq
 
 def compute_stats_for_existing_generation(
     model: WhiteboxModel,
@@ -162,15 +188,22 @@ def compute_stats_for_existing_generation(
     greedy_tokens = []
     attention_all = []
     forwardpass_attention_weights = []
+    recent_lookback_attention_weights_from_claim_tokens = []
 
     # New stats for ported estimators
     sequence_logprobs_list = []
     greedy_logprobs_list = []
     token_entropies_list = []
     top_k_logits_list = []
+    top_k_indices_list = []
+    eval_token_embeddings: Dict[str, List[np.ndarray]] = {}
 
     num_layers = model.model.config.num_hidden_layers
     num_heads = model.model.config.num_attention_heads
+    meta = {
+        "num_layers": num_layers,
+        "num_attention_heads": num_heads,
+    }
 
     # Process each sample individually to avoid batched padding issues
     # This ensures exact matching with generation statistics
@@ -220,7 +253,7 @@ def compute_stats_for_existing_generation(
             outputs = model.model(
                 **full_enc,
                 output_attentions=output_attentions,
-                output_hidden_states=False,
+                output_hidden_states=True,
             )
 
         logits = outputs.logits  # (1, seq_len, vocab_size)
@@ -263,8 +296,16 @@ def compute_stats_for_existing_generation(
         # logits shape: (1, full_seq_len, vocab_size)
         # We need logits at positions [prompt_len-1 : prompt_len-1+gen_len]
         gen_logits = logits[0, prompt_len - 1 : prompt_len - 1 + gen_len].float().cpu()
-        top_k_logits = torch.topk(gen_logits, k=min(512, gen_logits.shape[1]), dim=1).values.numpy().astype(np.float32)
+        top_k = torch.topk(gen_logits, k=min(512, gen_logits.shape[1]), dim=1)
+        top_k_logits = top_k.values.numpy().astype(np.float32)
+        top_k_indices = top_k.indices.numpy()
         top_k_logits_list.append(top_k_logits)
+        top_k_indices_list.append(top_k_indices)
+
+        assert sequence_logprobs_item.shape[0] == top_k_logits.shape[0], (
+            f"sequence_logprobs/top_k length mismatch: "
+            f"{sequence_logprobs_item.shape[0]} vs {top_k_logits.shape[0]}"
+        )
 
         # Extract attention within generation tokens
         # Key insight: shift query positions by -1 to align with generation format
@@ -278,9 +319,16 @@ def compute_stats_for_existing_generation(
             # Concatenate attentions: tuple of (batch, heads, seq, seq) -> (layers, heads, seq, seq)
             attn_mask = tuple(attention.cpu() for attention in attentions)
             attn_mask = torch.cat(attn_mask).float().numpy()  # (layers, heads, seq, seq)
+            assert attn_mask.shape == (num_layers, num_heads, full_len, full_len), (
+                f"Unexpected attention shape {attn_mask.shape}, expected "
+                f"({num_layers}, {num_heads}, {full_len}, {full_len})"
+            )
 
             # Reshape to (layers * heads, seq, seq)
             attn_mask_reshape = attn_mask.reshape(num_layers * num_heads, full_len, full_len)
+            assert attn_mask_reshape.shape[0] == num_layers * num_heads, (
+                f"Unexpected attention reshape head dim {attn_mask_reshape.shape[0]}"
+            )
 
             # Shift query positions by -1 and extract generation token attention
             # Query positions: [prompt_len-1, ..., prompt_len+gen_len-2] (shifted by -1)
@@ -303,8 +351,37 @@ def compute_stats_for_existing_generation(
                 # Zero out attention to keys at indices j and onwards
                 attn_mask_shifted[:, j, j:] = 0.0
 
+            assert attn_mask_shifted.shape[1] > 0 and attn_mask_shifted.shape[2] > 0, (
+                f"Claim-only attention map must be non-empty, got {attn_mask_shifted.shape}"
+            )
+            lookback = _get_recent_lookback_attention_features(attn_mask_shifted, attn_mask_shifted.shape[1])
+
             attention_all.append(attn_mask_shifted)
             forwardpass_attention_weights.append(attn_mask)
+            recent_lookback_attention_weights_from_claim_tokens.append(lookback)
+
+        hidden_states = outputs.hidden_states
+        assert hidden_states is not None, "Model must return hidden_states"
+        assert len(hidden_states) == num_layers + 1, (
+            f"Expected {num_layers + 1} hidden states, got {len(hidden_states)}"
+        )
+        start_idx = prompt_len - 1 if prompt_len > 0 else 0
+        end_idx = start_idx + gen_len
+        for layer in list(range(num_layers)) + [-1]:
+            layer_name = "" if layer == -1 else f"_{layer}"
+            hs = hidden_states[layer][0, start_idx:end_idx, :].to(torch.float32).cpu().numpy()
+            assert hs.shape[0] == gen_len, (
+                f"Hidden-state length mismatch at layer {layer}: {hs.shape[0]} vs {gen_len}"
+            )
+            key = f"token_embeddings_decoder{layer_name}"
+            eval_token_embeddings.setdefault(key, []).append(hs)
+
+    for key in list(eval_token_embeddings.keys()):
+        seq_list = eval_token_embeddings[key]
+        seq_key = key.replace("token_", "")
+        per_seq_means = [t.mean(axis=0) for t in seq_list]
+        eval_token_embeddings[key] = np.concatenate(seq_list, axis=0)
+        eval_token_embeddings[seq_key] = np.stack(per_seq_means, axis=0)
 
     result = {
         "greedy_log_likelihoods": greedy_log_likelihoods,
@@ -312,16 +389,24 @@ def compute_stats_for_existing_generation(
         "greedy_texts": generation_texts,
         "greedy_log_probs": greedy_log_probs,
         "model": model,
+        "meta": meta,
         # New stats for ported estimators
         "sequence_logprobs": sequence_logprobs_list,
         "greedy_logprobs": greedy_logprobs_list,
         "token_entropies": token_entropies_list,
         "top_k_logits": top_k_logits_list,
+        "top_k_indices": top_k_indices_list,
     }
+    result.update(eval_token_embeddings)
 
     if output_attentions:
         result["attention_all"] = attention_all
         result["forwardpass_attention_weights"] = forwardpass_attention_weights
+        result["claim_only_attention_maps"] = attention_all
+        result["full_attention_maps"] = forwardpass_attention_weights
+        result["recent_lookback_attention_weights_from_claim_tokens"] = (
+            recent_lookback_attention_weights_from_claim_tokens
+        )
 
     return result
 
@@ -433,6 +518,87 @@ def _bootstrap_prr_ci(
         ci_str = "(nan, nan)"
 
     return ci_str, bootstrapped_scores
+
+
+def _compute_correlations(
+    uncertainty_scores: np.ndarray,
+    quality_scores: np.ndarray,
+) -> Dict[str, float]:
+    """
+    Compute Pearson/Spearman/Kendall between uncertainty and negative quality.
+
+    Higher uncertainty should correspond to lower quality, so we correlate
+    against -quality to make better estimators produce positive correlations.
+    """
+    assert uncertainty_scores.ndim == 1, (
+        f"uncertainty_scores must be 1D, got shape {uncertainty_scores.shape}"
+    )
+    assert quality_scores.ndim == 1, (
+        f"quality_scores must be 1D, got shape {quality_scores.shape}"
+    )
+    assert len(uncertainty_scores) == len(quality_scores), (
+        f"Length mismatch: uncertainty_scores={len(uncertainty_scores)} "
+        f"quality_scores={len(quality_scores)}"
+    )
+
+    target_scores = -quality_scores
+    pearson_value = float(pearsonr(uncertainty_scores, target_scores).statistic)
+    spearman_value = float(spearmanr(uncertainty_scores, target_scores).statistic)
+    kendall_value = float(kendalltau(uncertainty_scores, target_scores).statistic)
+    return {
+        "Pearson": pearson_value,
+        "Spearman": spearman_value,
+        "Kendall": kendall_value,
+    }
+
+
+def _bootstrap_correlation_ci(
+    uncertainty_scores: np.ndarray,
+    quality_scores: np.ndarray,
+    correlation_type: str,
+    B: int = 1000,
+    bootstrap_indices: Optional[np.ndarray] = None,
+) -> Tuple[str, List[float]]:
+    """
+    Compute 95% bootstrap confidence interval for one correlation type.
+    """
+    assert correlation_type in {"Pearson", "Spearman", "Kendall"}, (
+        f"Unknown correlation_type={correlation_type}"
+    )
+    n = len(uncertainty_scores)
+    assert n == len(quality_scores), (
+        f"Length mismatch: uncertainty_scores={n} quality_scores={len(quality_scores)}"
+    )
+    if bootstrap_indices is None:
+        bootstrap_indices = np.array(
+            [np.random.choice(np.arange(n), size=n, replace=True) for _ in range(B)]
+        )
+    target_scores = -quality_scores
+
+    correlation_fn_map: Dict[str, Callable[[np.ndarray, np.ndarray], float]] = {
+        "Pearson": lambda x, y: float(pearsonr(x, y).statistic),
+        "Spearman": lambda x, y: float(spearmanr(x, y).statistic),
+        "Kendall": lambda x, y: float(kendalltau(x, y).statistic),
+    }
+    corr_fn = correlation_fn_map[correlation_type]
+    bootstrapped_scores = [
+        corr_fn(uncertainty_scores[idxs], target_scores[idxs]) for idxs in bootstrap_indices
+    ]
+
+    valid_scores = [s for s in bootstrapped_scores if np.isfinite(s)]
+    if valid_scores:
+        lower = float(np.percentile(valid_scores, 2.5))
+        upper = float(np.percentile(valid_scores, 97.5))
+        ci_str = f"({lower:.4f}, {upper:.4f})"
+    else:
+        ci_str = "(nan, nan)"
+    return ci_str, bootstrapped_scores
+
+
+def _sanitize_estimator_column_name(estimator_name: str) -> str:
+    sanitized = re.sub(r"[^0-9a-zA-Z_]+", "_", estimator_name).strip("_")
+    assert sanitized, f"Estimator name produced empty column after sanitization: {estimator_name}"
+    return f"uncertainty_{sanitized}"
 
 
 def evaluate_prr(
@@ -662,43 +828,6 @@ def main():
     logging.info(f"Metric stats - mean: {df[args.metric_col].mean():.3f}, "
                  f"std: {df[args.metric_col].std():.3f}")
 
-    # Load model
-    dtype_map = {
-        "float16": torch.float16,
-        "float32": torch.float32,
-        "bfloat16": torch.bfloat16,
-    }
-    torch_dtype = dtype_map[args.dtype]
-
-    logging.info(f"Loading model {args.model_id}...")
-    base_model = AutoModelForCausalLM.from_pretrained(
-        args.model_id,
-        torch_dtype=torch_dtype,
-        device_map="auto",
-        cache_dir=args.cache_dir,
-        trust_remote_code=True,
-    )
-    tokenizer = AutoTokenizer.from_pretrained(
-        args.model_id,
-        cache_dir=args.cache_dir,
-        trust_remote_code=True,
-        padding_side="left",
-    )
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
-
-    base_model.eval()
-
-    # Create lm-polygraph WhiteboxModel
-    gen_params = GenerationParameters(do_sample=False, max_new_tokens=100)
-    model = WhiteboxModel(
-        base_model,
-        tokenizer,
-        model_path=args.model_id,
-        generation_parameters=gen_params,
-        instruct=args.instruct,
-    )
-
     # Setup estimators
     estimators = [
         # Existing LM-Polygraph estimators
@@ -744,6 +873,12 @@ def main():
         SequenceLogProbTimesExpectedRank(),
         SequenceLogProbTimesMeanEntropy(),
         SequenceLogProb_MeanEntropy(),
+        # From RAUQ run
+        MeanGreedy(),
+        MeanGreedy_MeanEnt_AttnInstability(),
+        LEC_Ent_PG(),
+        Ent_PG_LEV(),
+        PastGroundingRisk(),
     ]
 
     output_attentions = not args.disable_rauq
@@ -751,11 +886,63 @@ def main():
         estimators.append(RAUQ(instruct=args.instruct))
         estimators.append(AttentionScore(layer=16))
 
-    logging.info(f"Evaluating {len(estimators)} estimators: {[str(e) for e in estimators]}")
+    estimator_names = [str(estimator) for estimator in estimators]
+    estimator_name_counts = pd.Series(estimator_names).value_counts()
+    duplicate_names = estimator_name_counts[estimator_name_counts > 1].index.tolist()
+    assert not duplicate_names, (
+        "Duplicate estimator names detected before evaluation. "
+        f"Please fix estimator __str__ implementations. Duplicates: {duplicate_names}"
+    )
+    logging.info(f"Evaluating {len(estimators)} estimators: {estimator_names}")
 
     input_texts = df[args.input_col].astype(str).tolist()
     generation_texts = df[args.text_col].astype(str).tolist()
     quality_scores = np.array(df[args.metric_col].tolist())
+    assert quality_scores.ndim == 1, f"quality_scores must be 1D, got {quality_scores.shape}"
+    assert len(quality_scores) == len(df), (
+        f"quality_scores length mismatch: {len(quality_scores)} vs {len(df)}"
+    )
+    nan_quality_count = int(np.isnan(quality_scores).sum())
+    assert nan_quality_count == 0, (
+        f"Quality column '{args.metric_col}' contains {nan_quality_count} NaN values after numeric conversion. "
+        "Please clean the dataset or choose another metric column."
+    )
+
+    # Load model only after fast preflight checks pass
+    dtype_map = {
+        "float16": torch.float16,
+        "float32": torch.float32,
+        "bfloat16": torch.bfloat16,
+    }
+    torch_dtype = dtype_map[args.dtype]
+
+    logging.info(f"Loading model {args.model_id}...")
+    base_model = AutoModelForCausalLM.from_pretrained(
+        args.model_id,
+        torch_dtype=torch_dtype,
+        device_map="auto",
+        cache_dir=args.cache_dir,
+        trust_remote_code=True,
+    )
+    tokenizer = AutoTokenizer.from_pretrained(
+        args.model_id,
+        cache_dir=args.cache_dir,
+        trust_remote_code=True,
+        padding_side="left",
+    )
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    base_model.eval()
+
+    # Create lm-polygraph WhiteboxModel
+    gen_params = GenerationParameters(do_sample=False, max_new_tokens=100)
+    model = WhiteboxModel(
+        base_model,
+        tokenizer,
+        model_path=args.model_id,
+        generation_parameters=gen_params,
+        instruct=args.instruct,
+    )
 
     # Process in chunks to avoid OOM
     # Accumulate only scores (small), not stats (huge)
@@ -782,16 +969,24 @@ def main():
             "greedy_texts": [],
             "greedy_log_probs": [],
             "model": model,
+            "meta": {
+                "num_layers": model.model.config.num_hidden_layers,
+                "num_attention_heads": model.model.config.num_attention_heads,
+            },
             # New stats for ported estimators
             "sequence_logprobs": [],
             "greedy_logprobs": [],
             "token_entropies": [],
             "entropy": [],          # an alias for token_entropies for MeanTokenEntropy estimator
             "top_k_logits": [],
+            "top_k_indices": [],
         }
         if output_attentions:
             chunk_stats["attention_all"] = []
             chunk_stats["forwardpass_attention_weights"] = []
+            chunk_stats["claim_only_attention_maps"] = []
+            chunk_stats["full_attention_maps"] = []
+            chunk_stats["recent_lookback_attention_weights_from_claim_tokens"] = []
 
         # Process samples in this chunk (with mini-batches)
         for mini_start in range(start, end, args.batch_size):
@@ -816,11 +1011,34 @@ def main():
             chunk_stats["token_entropies"].extend(batch_stats["token_entropies"])
             chunk_stats["entropy"].extend(batch_stats["token_entropies"]) # an alias for MeanTokenEntropy estimator
             chunk_stats["top_k_logits"].extend(batch_stats["top_k_logits"])
+            chunk_stats["top_k_indices"].extend(batch_stats["top_k_indices"])
             if output_attentions:
                 chunk_stats["attention_all"].extend(batch_stats["attention_all"])
                 chunk_stats["forwardpass_attention_weights"].extend(batch_stats["forwardpass_attention_weights"])
+                chunk_stats["claim_only_attention_maps"].extend(batch_stats["claim_only_attention_maps"])
+                chunk_stats["full_attention_maps"].extend(batch_stats["full_attention_maps"])
+                chunk_stats[
+                    "recent_lookback_attention_weights_from_claim_tokens"
+                ].extend(batch_stats["recent_lookback_attention_weights_from_claim_tokens"])
+
+            for key, value in batch_stats.items():
+                is_token_embedding = key.startswith("token_embeddings_decoder")
+                is_seq_embedding = key.startswith("embeddings_decoder")
+                if not is_token_embedding and not is_seq_embedding:
+                    continue
+                if key not in chunk_stats:
+                    chunk_stats[key] = value
+                else:
+                    chunk_stats[key] = np.concatenate([chunk_stats[key], value], axis=0)
 
             del batch_stats
+
+        assert len(chunk_stats["greedy_tokens"]) == chunk_size_actual, (
+            f"Chunk token count mismatch: {len(chunk_stats['greedy_tokens'])} vs {chunk_size_actual}"
+        )
+        assert len(chunk_stats["sequence_logprobs"]) == chunk_size_actual, (
+            f"Chunk sequence_logprobs count mismatch: {len(chunk_stats['sequence_logprobs'])} vs {chunk_size_actual}"
+        )
 
         # Extract uncertainty scores from this chunk
         for estimator in estimators:
@@ -840,8 +1058,8 @@ def main():
         torch.cuda.empty_cache()
         gc.collect()
 
-    # Compute PRR with accumulated scores
-    logging.info("Computing PRR metrics...")
+    # Compute PRR + correlations with accumulated scores
+    logging.info("Computing PRR and correlation metrics...")
     prr_metric = PredictionRejectionArea(max_rejection=MAX_REJECTION_RATIO)
     estimator_results = {}
     
@@ -854,8 +1072,8 @@ def main():
     bootstrap_indices = rng.choice(n_samples, size=(B, n_samples), replace=True)
     logging.info(f"Generated {B} bootstrap samples with seed {BOOTSTRAP_SEED}")
     
-    # Store bootstrap PRR values for each estimator
-    estimator_bootstrap_prrs = {}
+    # Store bootstrap values for each estimator and each metric
+    estimator_bootstrap_metrics: Dict[str, Dict[str, List[float]]] = {}
 
     for estimator in estimators:
         estimator_name = str(estimator)
@@ -887,6 +1105,7 @@ def main():
             # All samples are valid, proceed with PRR computation
             prr = prr_metric(uncertainty_scores, quality_scores)
             prr_pct = round(100.0 * prr, 2)
+            correlations = _compute_correlations(uncertainty_scores, quality_scores)
             
             # Bootstrap confidence interval for PRR
             bootstrap_start = time.perf_counter()
@@ -897,18 +1116,58 @@ def main():
                 B=B,
                 bootstrap_indices=bootstrap_indices,
             )
+            pearson_ci, bootstrap_pearson = _bootstrap_correlation_ci(
+                uncertainty_scores,
+                quality_scores,
+                correlation_type="Pearson",
+                B=B,
+                bootstrap_indices=bootstrap_indices,
+            )
+            spearman_ci, bootstrap_spearman = _bootstrap_correlation_ci(
+                uncertainty_scores,
+                quality_scores,
+                correlation_type="Spearman",
+                B=B,
+                bootstrap_indices=bootstrap_indices,
+            )
+            kendall_ci, bootstrap_kendall = _bootstrap_correlation_ci(
+                uncertainty_scores,
+                quality_scores,
+                correlation_type="Kendall",
+                B=B,
+                bootstrap_indices=bootstrap_indices,
+            )
             bootstrap_elapsed = time.perf_counter() - bootstrap_start
-            logging.info(f"Bootstrap CI for {estimator_name} took {bootstrap_elapsed:.2f}s. CI: {prr_ci}")
+            logging.info(
+                f"Bootstrap CIs for {estimator_name} took {bootstrap_elapsed:.2f}s. "
+                f"PRR CI: {prr_ci}, Pearson CI: {pearson_ci}, "
+                f"Spearman CI: {spearman_ci}, Kendall CI: {kendall_ci}"
+            )
 
             estimator_results[estimator_name] = {
                 "PRR": prr_pct,
                 "Bootstrap CI": prr_ci,
+                "Pearson": round(correlations["Pearson"], 4),
+                "Pearson Bootstrap CI": pearson_ci,
+                "Spearman": round(correlations["Spearman"], 4),
+                "Spearman Bootstrap CI": spearman_ci,
+                "Kendall": round(correlations["Kendall"], 4),
+                "Kendall Bootstrap CI": kendall_ci,
                 "num_samples": int(num_valid),
                 "num_failed": int(num_failed),
                 "total_samples": int(total_samples),
             }
-            estimator_bootstrap_prrs[estimator_name] = bootstrap_prrs
-            logging.info(f"  {estimator_name}: PRR = {prr_pct}% ({num_valid}/{total_samples} samples)")
+            estimator_bootstrap_metrics[estimator_name] = {
+                "PRR": bootstrap_prrs,
+                "Pearson": bootstrap_pearson,
+                "Spearman": bootstrap_spearman,
+                "Kendall": bootstrap_kendall,
+            }
+            logging.info(
+                f"  {estimator_name}: PRR={prr_pct}% Pearson={correlations['Pearson']:.4f} "
+                f"Spearman={correlations['Spearman']:.4f} Kendall={correlations['Kendall']:.4f} "
+                f"({num_valid}/{total_samples} samples)"
+            )
 
         except Exception as e:
             logging.warning(f"  {estimator_name}: FAILED - {e}")
@@ -926,21 +1185,53 @@ def main():
             name: {
                 "PRR": data["PRR"],
                 "Bootstrap CI": data.get("Bootstrap CI", None),
+                "Pearson": data.get("Pearson", None),
+                "Pearson Bootstrap CI": data.get("Pearson Bootstrap CI", None),
+                "Spearman": data.get("Spearman", None),
+                "Spearman Bootstrap CI": data.get("Spearman Bootstrap CI", None),
+                "Kendall": data.get("Kendall", None),
+                "Kendall Bootstrap CI": data.get("Kendall Bootstrap CI", None),
             }
             for name, data in estimator_results.items()
         },
     }
 
+    # Save uncertainty scores alongside original data for downstream metrics
+    scores_df = df.copy()
+    used_columns = set(scores_df.columns.tolist())
+    estimator_to_column: Dict[str, str] = {}
+    for estimator_name, score_list in all_uncertainty_scores.items():
+        column_base = _sanitize_estimator_column_name(estimator_name)
+        column_name = column_base
+        suffix = 2
+        while column_name in used_columns:
+            column_name = f"{column_base}_{suffix}"
+            suffix += 1
+        assert len(score_list) == len(scores_df), (
+            f"Estimator score length mismatch for {estimator_name}: "
+            f"{len(score_list)} vs {len(scores_df)}"
+        )
+        scores_df[column_name] = score_list
+        used_columns.add(column_name)
+        estimator_to_column[estimator_name] = column_name
+    results["uncertainty_score_columns"] = estimator_to_column
+
     output_path = Path(args.output_path)
     with open(output_path, "w") as f:
         json.dump(results, f, indent=2)
     logging.info(f"Saved results to {output_path}")
+
+    scores_csv_output_path = output_path.with_name(
+        output_path.stem + "_with_uncertainty_scores.csv"
+    )
+    scores_df.to_csv(scores_csv_output_path, index=False)
+    logging.info(f"Saved uncertainty scores CSV to {scores_csv_output_path}")
     
-    # Save bootstrapped PRR values to a separate file for pairwise comparisons
-    bootstrap_output_path = output_path.with_stem(output_path.stem + "_bootstrap_prrs")
+    # Save bootstrapped metric values to a separate file for pairwise comparisons
+    bootstrap_output_path = output_path.with_stem(output_path.stem + "_bootstrap_metrics")
     with open(bootstrap_output_path, "w") as f:
-        json.dump(estimator_bootstrap_prrs, f, indent=2)
-    logging.info(f"Saved bootstrap PRRs to {bootstrap_output_path}")
+        json.dump(estimator_bootstrap_metrics, f, indent=2)
+    logging.info(f"Saved bootstrap metrics to {bootstrap_output_path}")
 
     # Print summary
     print("\n" + "=" * 80)
@@ -948,8 +1239,14 @@ def main():
     print("=" * 80)
     for name, data in estimator_results.items():
         prr = data.get("PRR", "FAILED")
-        bootstrap_ci = data.get("Bootstrap CI", "N/A")
-        print(f"{name:40s} | PRR: {prr} | Bootstrap CI: {bootstrap_ci}")
+        prr_ci = data.get("Bootstrap CI", "N/A")
+        pearson = data.get("Pearson", "N/A")
+        spearman = data.get("Spearman", "N/A")
+        kendall = data.get("Kendall", "N/A")
+        print(
+            f"{name:40s} | PRR: {prr} | PRR CI: {prr_ci} | "
+            f"Pearson: {pearson} | Spearman: {spearman} | Kendall: {kendall}"
+        )
     print("=" * 80)
 
 
