@@ -24,7 +24,7 @@ def _get_attention_features(attn_mask: np.ndarray, n_tokens: int, max_n_tokens: 
     for j in range(1, n_tokens):
         attn_features_tok = []
         for k in range(min(j, current_top_n)):
-            attn_features_tok.append(attn_mask[:, j, j - k - 1].tolist())
+            attn_features_tok.append(attn_mask[:, j, j - k - 1])
         attn_features_seq.append(attn_features_tok)
     return attn_features_seq
 
@@ -376,7 +376,7 @@ def _compute_probs(
 
     cut_alternatives: List[List[List[Tuple[int, float]]]] = []
     if alternatives:
-        seq = orig_input_ids.cpu().numpy().tolist()
+        seq = orig_input_ids.cpu().numpy()
         length = len(seq)
         cut_alternatives.append([[] for _ in range(length)])
         for j in range(length):
@@ -439,7 +439,7 @@ def _build_train_stats(
         train_log_probs.append(log_probs)
 
         train_greedy_texts.append(sample["claim"])
-        train_greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
+        train_greedy_tokens.append(orig_input_ids.cpu().numpy())
         train_metrics.append(float(sample["label"]))
 
         token_embs = _get_embeddings(
@@ -501,7 +501,7 @@ def make_all_stats(
     train_stats_cache: Dict[str, Any] | None = None,
     background_stats_cache: Dict[str, Any] | None = None,
     input_regime: str = "full",
-    use_gpu_hidden_states: bool = False,
+    use_gpu_hidden_states: bool = True,
     hidden_states_device: str = "cuda:0",
     required_stats: List[str] | None = None,
 ) -> Tuple[
@@ -702,7 +702,7 @@ def make_all_stats(
             top_k_indices.append(sample["top_k_indices"].cpu().numpy() if isinstance(sample["top_k_indices"], torch.Tensor) else sample["top_k_indices"])
 
             greedy_texts.append(sample["claim"])
-            greedy_tokens.append(orig_input_ids.cpu().numpy().tolist())
+            greedy_tokens.append(orig_input_ids.cpu().numpy())
 
         if need_hidden_states:
             hidden_states = sample["hidden_states"]
@@ -730,7 +730,7 @@ def make_all_stats(
 
     # ------------------------ Assemble all_stats ------------------------
     all_stats: Dict[str, Any] = {
-        "eval_meta": meta,
+        "meta": meta,
         "sequence_logprobs": sequence_logprobs,
         "greedy_logprobs": greedy_logprobs,
         "token_entropies": token_entropies,
