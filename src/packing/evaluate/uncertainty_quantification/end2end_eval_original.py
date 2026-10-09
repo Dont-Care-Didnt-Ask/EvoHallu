@@ -49,53 +49,55 @@ from src.packing.evaluate.uncertainty_quantification.found_formulas import (
     SequenceLogProb_BottomMassAvg,
 )
 
-from lm_polygraph.estimators import (
-    Opus46_Round358_Function1_DynamicPrompt,
-    Opus46_Round450_Function1_DynamicPrompt,
-    Opus46_Round330_Function2_DynamicPrompt,
-    Sonnet40_Round419_Function2_StaticPrompt,
-    Sonnet40_Round497_Function2_StaticPrompt,
-    Sonnet40_Round406_Function2_StaticPrompt,
-    Sonnet45_Round19_Function2_DynamicPrompt,
-    Sonnet45_Round32_Function2_DynamicPrompt,
-    Sonnet45_Round249_Function1_DynamicPrompt,
-    Sonnet40_Round493_Function1_DynamicPrompt,
-    Sonnet40_Round412_Function1_DynamicPrompt,
-    Sonnet40_Round400_Function1_DynamicPrompt,
-    Sonnet45_Round476_Function2_StaticPrompt,
-    Sonnet45_Round181_Function2_StaticPrompt,
-    Sonnet45_Round467_Function2_StaticPrompt,
-    Opus45_Round476_Function2_StaticPrompt,
-    Opus45_Round453_Function1_StaticPrompt,
-    Opus45_Round441_Function1_StaticPrompt,
-    Opus45_Round351_Function2_DynamicPrompt,
-    Opus45_Round272_Function1_DynamicPrompt,
-    Opus45_Round385_Function2_DynamicPrompt,
-    Haiku45_Round36_Function1_StaticPrompt,
-    Haiku45_Round30_Function1_StaticPrompt,
-    Haiku45_Round348_Function1_StaticPrompt,
-    Haiku45_Round490_Function1_DynamicPrompt,
-    Haiku45_Round486_Function2_DynamicPrompt,
-    Haiku45_Round404_Function1_DynamicPrompt,
-    Opus46_Round476_Function1_StaticPrompt,
-    Opus46_Round484_Function1_StaticPrompt,
-    Opus46_Round200_Function2_StaticPrompt,
-    # Sonnet45_Round133_Function1_StaticPrompt_3datasettrainmix,
-    # Sonnet45_Round238_Function1_StaticPrompt_3datasettrainmix,
-    # Sonnet45_Round476_Function2_StaticPrompt_3datasettrainmix,
-    # Opus46_Round495_Function1_StaticPrompt_3datasettrainmix,
-    # Opus46_Round461_Function1_StaticPrompt_3datasettrainmix,
-    # Opus46_Round480_Function2_StaticPrompt_3datasettrainmix,
-    # Opus45_Round454_Function2_StaticPrompt_3datasettrainmix,
-    # Opus45_Round456_Function2_StaticPrompt_3datasettrainmix,
-    # Opus45_Round325_Function1_StaticPrompt_3datasettrainmix,
-    # Sonnet40_Round340_Function2_StaticPrompt_3datasettrainmix,
-    # Sonnet40_Round196_Function1_StaticPrompt_3datasettrainmix,
-    # Sonnet40_Round315_Function2_StaticPrompt_3datasettrainmix,
-    # Haiku45_Round309_Function1_StaticPrompt_3datasettrainmix,
-    # Haiku45_Round427_Function1_StaticPrompt_3datasettrainmix,
-    # Haiku45_Round275_Function1_StaticPrompt_3datasettrainmix,
-)
+# Historical candidates are unavailable in the installed LM-Polygraph checkout.
+# Their evaluator entries remain commented out below.
+# from lm_polygraph.estimators import (
+#     Opus46_Round358_Function1_DynamicPrompt,
+#     Opus46_Round450_Function1_DynamicPrompt,
+#     Opus46_Round330_Function2_DynamicPrompt,
+#     Sonnet40_Round419_Function2_StaticPrompt,
+#     Sonnet40_Round497_Function2_StaticPrompt,
+#     Sonnet40_Round406_Function2_StaticPrompt,
+#     Sonnet45_Round19_Function2_DynamicPrompt,
+#     Sonnet45_Round32_Function2_DynamicPrompt,
+#     Sonnet45_Round249_Function1_DynamicPrompt,
+#     Sonnet40_Round493_Function1_DynamicPrompt,
+#     Sonnet40_Round412_Function1_DynamicPrompt,
+#     Sonnet40_Round400_Function1_DynamicPrompt,
+#     Sonnet45_Round476_Function2_StaticPrompt,
+#     Sonnet45_Round181_Function2_StaticPrompt,
+#     Sonnet45_Round467_Function2_StaticPrompt,
+#     Opus45_Round476_Function2_StaticPrompt,
+#     Opus45_Round453_Function1_StaticPrompt,
+#     Opus45_Round441_Function1_StaticPrompt,
+#     Opus45_Round351_Function2_DynamicPrompt,
+#     Opus45_Round272_Function1_DynamicPrompt,
+#     Opus45_Round385_Function2_DynamicPrompt,
+#     Haiku45_Round36_Function1_StaticPrompt,
+#     Haiku45_Round30_Function1_StaticPrompt,
+#     Haiku45_Round348_Function1_StaticPrompt,
+#     Haiku45_Round490_Function1_DynamicPrompt,
+#     Haiku45_Round486_Function2_DynamicPrompt,
+#     Haiku45_Round404_Function1_DynamicPrompt,
+#     Opus46_Round476_Function1_StaticPrompt,
+#     Opus46_Round484_Function1_StaticPrompt,
+#     Opus46_Round200_Function2_StaticPrompt,
+#     Sonnet45_Round133_Function1_StaticPrompt_3datasettrainmix,
+#     Sonnet45_Round238_Function1_StaticPrompt_3datasettrainmix,
+#     Sonnet45_Round476_Function2_StaticPrompt_3datasettrainmix,
+#     Opus46_Round495_Function1_StaticPrompt_3datasettrainmix,
+#     Opus46_Round461_Function1_StaticPrompt_3datasettrainmix,
+#     Opus46_Round480_Function2_StaticPrompt_3datasettrainmix,
+#     Opus45_Round454_Function2_StaticPrompt_3datasettrainmix,
+#     Opus45_Round456_Function2_StaticPrompt_3datasettrainmix,
+#     Opus45_Round325_Function1_StaticPrompt_3datasettrainmix,
+#     Sonnet40_Round340_Function2_StaticPrompt_3datasettrainmix,
+#     Sonnet40_Round196_Function1_StaticPrompt_3datasettrainmix,
+#     Sonnet40_Round315_Function2_StaticPrompt_3datasettrainmix,
+#     Haiku45_Round309_Function1_StaticPrompt_3datasettrainmix,
+#     Haiku45_Round427_Function1_StaticPrompt_3datasettrainmix,
+#     Haiku45_Round275_Function1_StaticPrompt_3datasettrainmix,
+# )
 
 from lm_polygraph.estimators import (
     RAUQ,
@@ -491,6 +493,17 @@ def eval_estimators_on_split(
         stats_elapsed = time.perf_counter() - stats_start_time
         logging.info(f"[UQ evaluate_func] Chunk {end // batch_size}: make_all_stats took {stats_elapsed:.2f}s, got {len(all_stats_chunk)} stat keys")
 
+        # Compatibility names expected by the installed LM-Polygraph baselines.
+        # Match features._compute_probs' historical claim-only likelihood crop.
+        all_stats_chunk["attention_all"] = all_stats_chunk["claim_only_attention_maps"]
+        all_stats_chunk["forwardpass_attention_weights"] = all_stats_chunk["full_attention_maps"]
+        all_stats_chunk["greedy_log_likelihoods"] = [
+            sample["sequence_logprobs"][-len(sample["orig_input_ids"]) - 1:-1]
+            if len(sample["input_ids"]) > len(sample["orig_input_ids"]) + 1
+            else sample["sequence_logprobs"]
+            for sample in samples
+        ]
+
         chunk_start_time = time.perf_counter()
         logging.info(f"[UQ evaluate_func] Chunk {end // batch_size}: calling estimator...")
         for estimator in estimators:
@@ -771,7 +784,11 @@ def main() -> None:
         # Haiku45_Round309_Function1_StaticPrompt_3datasettrainmix(),
         # Haiku45_Round427_Function1_StaticPrompt_3datasettrainmix(),
         # Haiku45_Round275_Function1_StaticPrompt_3datasettrainmix(),
-        RAUQ(),
+        # This evaluator supplies features, not LM-Polygraph's model wrapper.
+        RAUQ(
+            n_layers=model_metadata["num_layers"],
+            n_heads=model_metadata["num_attention_heads"],
+        ),
         AttentionScore(layer=16),
     ]
 
