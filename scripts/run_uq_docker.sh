@@ -6,9 +6,10 @@ set -euo pipefail
 # optimization loop inside it. No detector vLLM server is required.
 
 IMAGE=${IMAGE:-seleznev/seleznev/packing:amd64-cuda-seleznev-latest}
-HOST_REPO=${HOST_REPO:-/disk/4tb/seleznev/EvoHallu}
-HOST_DATA=${HOST_DATA:-/disk/4tb/seleznev}
-HOST_CACHE=${HOST_CACHE:-/disk/4tb/seleznev/.cache/huggingface}
+REPO_ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
+HOST_REPO=${HOST_REPO:-${REPO_ROOT}}
+HOST_DATA=${HOST_DATA:-$(dirname -- "${HOST_REPO}")}
+HOST_CACHE=${HOST_CACHE:-${HOST_DATA}/.cache/huggingface}
 if [ ! -d "${HOST_CACHE}" ]; then
   echo "[run-uq][ERROR] Persistent model cache directory does not exist: ${HOST_CACHE}" >&2
   echo "[run-uq][ERROR] Please create it manually and rerun this script." >&2
@@ -16,7 +17,7 @@ if [ ! -d "${HOST_CACHE}" ]; then
 fi
 echo "[run-uq] Persistent model (HF/vLLM) cache: ${HOST_CACHE}"
 UQ_DEVICES=${UQ_DEVICES:-0}
-CLUSTER=${CLUSTER:-example}  # Cluster config to use (e.g., 'example', 'api')
+CLUSTER=${CLUSTER:-example}  # Cluster config to use
 
 cd "${HOST_REPO}"
 
@@ -42,6 +43,13 @@ DOCKER_ENV_ARGS=(
   -e CUDA_MODULE_LOADING=LAZY
 )
 
+# Optional offline/cache-only execution and reduced GPU reservation for smoke runs.
+for name in HF_HUB_OFFLINE TRANSFORMERS_OFFLINE UQ_VLLM_GPU_MEMORY_UTILIZATION; do
+  if [[ -n "${!name:-}" ]]; then
+    DOCKER_ENV_ARGS+=( -e "${name}=${!name}" )
+  fi
+done
+
 # Pass through API key if set (useful if cluster config relies on an API model)
 if [ -n "${OPENAI_API_KEY:-}" ]; then
   echo "[run-uq] Passing OPENAI_API_KEY to container"
@@ -59,7 +67,7 @@ docker run --rm \
   --network host \
   --ipc host \
   "${IMAGE}" \
-  bash "${HOST_REPO}/scripts/uq_wrapper.sh"
+  bash "${HOST_REPO}/scripts/uq_wrapper.sh" "$@"
 
 echo "[run-uq] Container exited successfully"
 

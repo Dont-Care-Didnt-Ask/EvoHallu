@@ -49,6 +49,10 @@ from packing.utils.vllm import dict_to_namespace
 
 
 def get_full_model_name(cfg):
+    # Optional checkpoint/path override, e.g. a cached mirror for an offline smoke run.
+    if cfg.model.get("hf_model_id"):
+        return cfg.model.hf_model_id
+
     def get_name(name):
         if name == "granite":
             model_id = "ibm-granite/granite-3.1-2b-instruct"
@@ -63,9 +67,7 @@ def get_full_model_name(cfg):
         elif name == "qwen3coder30b":
             model_id = "Qwen/Qwen3-Coder-30B-A3B-Instruct"
         elif name == "gpt-oss-120b":
-            # model_id = "/mnt/extremessd10tb/seleznev/.cache/huggingface/hub/models--openai--gpt-oss-120b"
-            # model_id = "openai/gpt-oss-120b"
-            model_id = "/home/m.seleznyov/.cache/huggingface/hub/models--openai--gpt-oss-120b/"
+            model_id = "openai/gpt-oss-120b"
         else:
             raise ValueError(f"Invalid model name: {name}")
         return model_id
@@ -760,6 +762,11 @@ def start_vllm_server(model_id, gpu_num, port):
     if "gpt-oss" or "qwen3coder30b" in model_id:
         # Reduce max length to avoid OOM errors due to KV-cache size
         command.extend(["--max-model-len", "16384"])
+
+    # Allow small smoke runs to share a GPU without reserving vLLM's default 90%.
+    memory_utilization = os.environ.get("UQ_VLLM_GPU_MEMORY_UTILIZATION")
+    if memory_utilization:
+        command.extend(["--gpu-memory-utilization", memory_utilization])
 
     process = subprocess.Popen(command, env=env_vars)
     return process.pid
