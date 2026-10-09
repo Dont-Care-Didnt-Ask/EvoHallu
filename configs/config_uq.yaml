@@ -72,8 +72,8 @@ entity: project_entity
 
 # Other settings
 seed: 1046
-run_identifier_name: ${cluster.api_model_short_name}_${train.train_method_name}
-prefix: example
+run_identifier_name: gptoss120b
+prefix: popqa_logits
 run_or_dev: dev
 use_tgi: ${cluster.use_tgi}
 use_vllm: ${cluster.use_vllm}
