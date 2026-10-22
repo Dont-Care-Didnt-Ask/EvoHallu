@@ -1,0 +1,200 @@
+{
+  "name": "feature-extractor transfer",
+  "date": "2026-10-22",
+  "models": {
+    "llama": {
+      "id": "VityaVitalich/Llama3.1-8b-instruct",
+      "revision": "247cb7c3baebabc46cff1fb97a3a5913e4c4511d"
+    },
+    "gemma": {
+      "id": "google/gemma-4-E4B-it",
+      "revision": "ee0ef6023621cff504d758262d4e04895a5af4a2"
+    },
+    "olmo": {
+      "id": "allenai/Olmo-3-7B-Instruct",
+      "revision": "6e5971d9eba42665f5bd5a0fcf047f299ce1dccc"
+    }
+  },
+  "archive_sha256": "8f21f73fe026ebbf6ac108a50c67563d711afe5f087f5781f834e468e2c00e7e",
+  "datasets": [
+    {
+      "member": "popqa/popqa_test_filtered_10shot.csv",
+      "sha256": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+      "rows": 6974,
+      "is_hallu_1": 5347,
+      "is_hallu_0": 1627,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 5,
+      "duplicate_effective_claims": 287,
+      "dataset_key": "popqa",
+      "cohort_sha256": "7a7dcf65d73d4c34115c373fda4f6e0a93e5af56c2776b0a87026e0c393b424c"
+    },
+    {
+      "member": "AVeriTeC/dev_filtered_10shot.csv",
+      "sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+      "rows": 427,
+      "is_hallu_1": 305,
+      "is_hallu_0": 122,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 1,
+      "duplicate_effective_claims": 8,
+      "dataset_key": "averitec",
+      "cohort_sha256": "e372fbc0435f3685a1c64fa4ae02852171c38d28b447686c7536491acb683c0d"
+    },
+    {
+      "member": "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv",
+      "sha256": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+      "rows": 2057,
+      "is_hallu_1": 1515,
+      "is_hallu_0": 542,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 0,
+      "duplicate_effective_claims": 6,
+      "dataset_key": "uhead",
+      "cohort_sha256": "a6eba6b244794c3e05f1309762802ee6a364de22a8d184a17fd74b207b2af06c"
+    },
+    {
+      "member": "geometry/cities.csv",
+      "sha256": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+      "rows": 1496,
+      "is_hallu_1": 748,
+      "is_hallu_0": 748,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 0,
+      "duplicate_effective_claims": 0,
+      "dataset_key": "cities",
+      "cohort_sha256": "a01cc8611525924359fbde51cba27a53dd14881f38010558239eb80e6f119d73"
+    },
+    {
+      "member": "geometry/companies_true_false.csv",
+      "sha256": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+      "rows": 1200,
+      "is_hallu_1": 600,
+      "is_hallu_0": 600,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 0,
+      "duplicate_effective_claims": 0,
+      "dataset_key": "companies",
+      "cohort_sha256": "807c949a7589b7cc9547e6227e98fdf7f9f04d5c86ba632353815f492d3940e0"
+    },
+    {
+      "member": "geometry/common_claim_true_false.csv",
+      "sha256": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+      "rows": 4450,
+      "is_hallu_1": 2225,
+      "is_hallu_0": 2225,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 0,
+      "duplicate_effective_claims": 0,
+      "dataset_key": "commonclaim",
+      "cohort_sha256": "4e7fd69c7133870d1387c9bcb1d87e9452a4073a48fa52042028ed9884dc0604"
+    },
+    {
+      "member": "geometry/counterfact_true_false.csv",
+      "sha256": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+      "rows": 31964,
+      "is_hallu_1": 15982,
+      "is_hallu_0": 15982,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 0,
+      "duplicate_effective_claims": 26,
+      "dataset_key": "counterfact",
+      "cohort_sha256": "0052005a66eb369c1d085b974d36d52c7634b53df82a1d6dca0af5089b8f3254"
+    },
+    {
+      "member": "x-fact/test_filtered_10shot.csv",
+      "sha256": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13",
+      "rows": 2315,
+      "is_hallu_1": 1464,
+      "is_hallu_0": 851,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 67,
+      "duplicate_effective_claims": 0,
+      "dataset_key": "xfact",
+      "cohort_sha256": "419f22c4bcf206b8d97436e19a44f97fd19dac6de36395064b1b6b77789e02c6"
+    },
+    {
+      "member": "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv",
+      "sha256": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+      "rows": 46605,
+      "is_hallu_1": 7334,
+      "is_hallu_0": 39271,
+      "empty_after_strip_300": 0,
+      "claims_longer_than_300_chars": 6,
+      "duplicate_effective_claims": 262,
+      "dataset_key": "wildhallucinations",
+      "cohort_sha256": "1cff0c54e4811f3782b916605571f9bdc96d9a00297d76721b577b668680bf7c"
+    }
+  ],
+  "methods": [
+    "SequenceLogProb",
+    "SequenceLogProbBottom",
+    "MinimalLogProb",
+    "MeanTokenEntropy",
+    "Perplexity",
+    "StdTokenEntropy",
+    "MeanStdTokenEntropy",
+    "QuartileEntropyDiffNormalized",
+    "QuartileEntropyDiff",
+    "PositionWeightedGap",
+    "PositionWeightedGapNormalized",
+    "Gap",
+    "QuartileEntropyDiff_PositionWeightedGap",
+    "QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay",
+    "EntropySlope",
+    "LogProbSlope",
+    "ExpWeightedNegLogProbWithTop1",
+    "ExpWeightedNegLogProb",
+    "PositionWeightedGap_EntropySlope_TopKMassInv",
+    "LogProbSlope_OutlierScore",
+    "SequenceLogProb_OutlierScore",
+    "LogProbSlope_TopBottomRatio",
+    "SequenceLogProb_TopBottomRatio",
+    "LogProbSlope_BottomMassAvg",
+    "SequenceLogProb_BottomMassAvg"
+  ],
+  "input": {
+    "field": "claim",
+    "label": "is_hallu",
+    "positive_class": 1,
+    "normalization": "CRLF/CR to LF; strip; first 300 Unicode characters",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Generate true statement"
+      },
+      {
+        "role": "assistant",
+        "content": "<claim>"
+      }
+    ],
+    "native_chat_template": true,
+    "add_special_tokens": true,
+    "add_generation_prompt": false,
+    "gemma_enable_thinking": false
+  },
+  "extraction": {
+    "dtype": "bfloat16",
+    "reductions_dtype": "float32",
+    "top_k": 512,
+    "top_k_values_dtype": "float16",
+    "batch_size": 32,
+    "shard_size": 512,
+    "attention_backend": "eager",
+    "use_cache": false,
+    "quantization": false
+  },
+  "evaluation": {
+    "call_scope": "one complete individual dataset",
+    "primary": "full_folded",
+    "additional": [
+      "full_fixed",
+      "claim_fixed"
+    ],
+    "positive_direction": "higher score predicts hallucination",
+    "folding": "max(AUC_d, 1-AUC_d), separately per dataset",
+    "average": "unweighted mean across nine datasets",
+    "training": false,
+    "generation": false
+  }
+}
