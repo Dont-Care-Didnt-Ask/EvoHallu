@@ -1,0 +1,26 @@
+{
+  "frozen_estimators": {},
+  "feature_model": "/workspace/mod1-models/Llama3.2-1B",
+  "dtype": "float32",
+  "tokenizer": "/workspace/mod1-models/llama31-tokenizer",
+  "primary_only": false,
+  "trimmed_header_suffix_tokens": 0,
+  "scoring_chunk_timeout_seconds": 120,
+  "cpu_worker_address_space_GiB": null,
+  "scoring_chunk_size": 512,
+  "bootstrap_samples": 500,
+  "bootstrap_unit": "claim",
+  "original_bootstrap_policy": "shortlist",
+  "method_prefix": null,
+  "data": {
+    "AVeriTeC/dev_filtered_10shot.csv": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+    "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+    "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+    "geometry/cities.csv": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+    "geometry/common_claim_true_false.csv": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+    "geometry/companies_true_false.csv": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+    "geometry/counterfact_true_false.csv": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+    "popqa/popqa_test_filtered_10shot.csv": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+    "x-fact/test_filtered_10shot.csv": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13"
+  }
+}

@@ -32,7 +32,6 @@ from packing.funsearch.programs_database import ProgramsDatabase
 from hydra import main as hydra_main
 
 from packing.train.dpo.dpo_dataset import DPODataBuffer
-from packing.train.dpo.dpo import prepare_dpo_chats
 from packing.model.model import (
     initialize_models,
     get_full_model_name,
@@ -79,6 +78,13 @@ import getpass
 @hydra_main(config_path="../../configs", config_name="config", version_base="1.3")
 def main(cfg: DictConfig):
     OmegaConf.set_struct(cfg, False)  # So we can assign new fields
+
+    # Local extension trials reuse the task, prompt and population database,
+    # with explicit budgets and validation-only candidate selection.
+    if cfg.get("extension_trial", False):
+        from experiments.extension_trial import run_trial
+        run_trial(cfg)
+        return
 
     # Needed since we always store DPO chats
     cfg.train.dpo_strategy = 2 if "dpo_strategy" not in cfg.train else cfg.train.dpo_strategy

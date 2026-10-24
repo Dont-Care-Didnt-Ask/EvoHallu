@@ -1,0 +1,386 @@
+{
+  "status": "read_only_finalization_preflight_completed",
+  "created_utc": "2026-10-21T23:52:38.175749+00:00",
+  "main_document_hashes_at_snapshot": {
+    "PACKAGING_AND_PUBLISHING_GUIDE.md": "6596076bbf96e1509bbb0b004e8594d29659c853b3e4ea3a087b2cd7e3193f7a",
+    "results/overnight20261021/NARRATIVE_REPORT_DRAFT.md": "8f7e8705c4bd5f0fa282749b02f750caf823a788ed8c824d8f123ca89aa30af1",
+    "results/overnight20261021/CODE_CHANGES_20261021.md": "172ab3f1993958c35f1ffdbe830844f0ac29486ed243e255ced962166b183d1a",
+    "results/overnight20261021/SCREEN_CANDIDATE_INSPECTION.md": "8cf240b70af3bd6398025f38e768cd74e4ffd99c8523c7feed5e91b8c247c73e",
+    "results/overnight20261021/ADAPTIVE_WINNER_INSPECTION.md": "756439fb061e938e63b14fc6fff89026f5860a9aa367f1f2ba2a33c69ac20d70",
+    "results/overnight20261021/WRITER27B_CANDIDATE_INSPECTION.md": "7b8e1be7f517f520f8d80c6cf347af6a1e61fc95bfc4267a04130ede38163331",
+    "results/overnight20261021/INTERPRETATION_CHECKLIST.md": "ca82a61c14fe7db69744f03e607fba9a0d025f4cfba9f33eb37b3c6bc542f70d",
+    "results/overnight20261021/extension_coverage_audit.md": "a06455d472f630f6082118de2200de710f9308b8554e42463d9182c3b261e35c",
+    "results/overnight20261021/shortlist_secondary/SHORTLIST_OUTCOME.md": "defd56291e34787f4e8da36b3c86d83647d0dd536622497980477c2cd8b7cc01",
+    "results/overnight20261021/batch_sensitivity/INTERPRETATION.md": "4d76a049b90a8f1d0a3a2bb897a2cbfcb880b273bc30948bde3a175cbb7828ca",
+    "results/overnight20261021/frozen_train_normalization/INTERPRETATION.md": "485c1e5c64faa9191350dba9a46bdeeebfe15be7848efe319266b74180f605b5",
+    "results/overnight20261021/position_length_controls/INTERPRETATION.md": "368fcdcdac9c516d1d6607774339e9902fc0445938dafd9a6eadc9e115842b34",
+    "results/overnight20261021/screen_component_refit/REFIT_REPORT.md": "835f222b762cc27120e5a211cc911e0fca6b117604bfb683b87238441e3eeed9",
+    "results/overnight20261021/screen_component_ablations/ABLATION_REPORT.md": "925b6898b90d2a10ccdd8dc190ae93f58bb552ca065ff5da5c8fd1e39075eb06"
+  },
+  "review_scope": "Mathematical formulas/numbers, model roles, training/validation/test selection, primary-vs-secondary separation, linked local evidence and portable package prerequisites; ordinary pending optional-writer/full-nine statuses excluded.",
+  "scientific_findings": "No additional mathematical, selection or model-role error identified in the reviewed narrative.",
+  "local_link_check": {
+    "documents": 14,
+    "local_links_checked": 158,
+    "missing": 0,
+    "scope": "Markdown links and images in the reviewed narrative, code changes, packaging guide and eleven principal support reports"
+  },
+  "concrete_issues_reported_to_root": [
+    {
+      "issue": "Offline report-regeneration command requires external CSVs",
+      "evidence": [
+        "scripts/overnight_report.py:307 invokes overnight_report_baseline.compare",
+        "scripts/overnight_report_baseline.py:37 reads PopQA training CSV, then each benchmark CSV",
+        "scripts/overnight_component_refit_report.py:315-324 reads training and benchmark CSVs"
+      ],
+      "action": "Clarify that these existing report commands require the ten original CSVs even when predictions are saved. Inspecting saved JSON/NPZ itself needs no CSVs. Source/evidence ZIP intentionally excludes data/claims; keep those original inputs separately.",
+      "coordination_status": "Root forwarded documentation correction to current packaging/environment editor."
+    },
+    {
+      "issue": "Minimum packaging scope omits historical frozen sources referenced by saved manifest",
+      "sources_omitted_from_explicit_minimum_scope": 20,
+      "bytes": 48558,
+      "action": "Include out/campaign/reference_frozen/ and four additional historical frozen_estimator.py files listed below for historical raw-cache replay.",
+      "coordination_status": "Root confirmed these sources will be included in final stage/package."
+    }
+  ],
+  "historical_source_manifest": {
+    "file": "out/campaign/evaluation_with_4b/manifest.json",
+    "sha256": "2eebcf28123f8a5d4a621027c917337ffc72b55936cee22b4b997e1435bd4ce8",
+    "source_references": 21,
+    "existing_files": 21,
+    "matching_sha256_files": 21,
+    "all_references": [
+      {
+        "file": "out/campaign/reference_frozen/ablation_laguna_slope_only/frozen_estimator.py",
+        "manifest_sha256": "c1c053b0d530931542ae88dd6bbeef58b9eaa2307c21f0eff5e7488fca038ebe",
+        "actual_sha256": "c1c053b0d530931542ae88dd6bbeef58b9eaa2307c21f0eff5e7488fca038ebe",
+        "bytes": 2796,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/ablation_laguna_slope_range/frozen_estimator.py",
+        "manifest_sha256": "4569f2423553d8eb56d26e408fc7e72239dc85baa26ac62046ee9259a5d6aa39",
+        "actual_sha256": "4569f2423553d8eb56d26e408fc7e72239dc85baa26ac62046ee9259a5d6aa39",
+        "bytes": 2830,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/ablation_laguna_slope_variance/frozen_estimator.py",
+        "manifest_sha256": "d7e644ac201b3d29831956667f13351e75d48da1be0f56d573d6c2c866df7269",
+        "actual_sha256": "d7e644ac201b3d29831956667f13351e75d48da1be0f56d573d6c2c866df7269",
+        "bytes": 2819,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/ablation_qwen_linear_position_nll/frozen_estimator.py",
+        "manifest_sha256": "68b25e25db2a5ac75f8febce1eb891cac41d0b92b5738a48d6fa28d52e5d2e63",
+        "actual_sha256": "68b25e25db2a5ac75f8febce1eb891cac41d0b92b5738a48d6fa28d52e5d2e63",
+        "bytes": 523,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_evo_1047/frozen_estimator.py",
+        "manifest_sha256": "eb952792127e317dacb31e89e1c91bc6d03dbe558c5aa55dac9e4afaede0ee8b",
+        "actual_sha256": "eb952792127e317dacb31e89e1c91bc6d03dbe558c5aa55dac9e4afaede0ee8b",
+        "bytes": 3368,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+        "actual_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+        "bytes": 3810,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_independent_1048/frozen_estimator.py",
+        "manifest_sha256": "3b550475be86082880b3ac5711eb9dc4898d15d382fef2b9395b985649c68a22",
+        "actual_sha256": "3b550475be86082880b3ac5711eb9dc4898d15d382fef2b9395b985649c68a22",
+        "bytes": 3360,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_seeded_1048/frozen_estimator.py",
+        "manifest_sha256": "3985d4798f93ba223d8782abf791f420adfa36f46b72a927c6338970b7eb7932",
+        "actual_sha256": "3985d4798f93ba223d8782abf791f420adfa36f46b72a927c6338970b7eb7932",
+        "bytes": 1762,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_evolution_1047/frozen_estimator.py",
+        "manifest_sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a",
+        "actual_sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a",
+        "bytes": 649,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_evolution_1048/frozen_estimator.py",
+        "manifest_sha256": "35c0906c0c4e02e99550b72f858b4bd33cf02aa8acf65245d04ca547d9be17db",
+        "actual_sha256": "35c0906c0c4e02e99550b72f858b4bd33cf02aa8acf65245d04ca547d9be17db",
+        "bytes": 666,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_independent_1047/frozen_estimator.py",
+        "manifest_sha256": "1ac8242ebfc3e7b1b5d8a32bcf732055aa1ce2ba01f6d0c828f857ab4771552a",
+        "actual_sha256": "1ac8242ebfc3e7b1b5d8a32bcf732055aa1ce2ba01f6d0c828f857ab4771552a",
+        "bytes": 648,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_independent_1048/frozen_estimator.py",
+        "manifest_sha256": "e8a1829bc98816e4c88e295a19278cba10c9f78b86da91fb09270407bc2c578c",
+        "actual_sha256": "e8a1829bc98816e4c88e295a19278cba10c9f78b86da91fb09270407bc2c578c",
+        "bytes": 634,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_evo_1047/frozen_estimator.py",
+        "manifest_sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9",
+        "actual_sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9",
+        "bytes": 3512,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "fe26a84cde139742031491e52094fd68fba71389e7f771b712a2ce0b0ab6d6b7",
+        "actual_sha256": "fe26a84cde139742031491e52094fd68fba71389e7f771b712a2ce0b0ab6d6b7",
+        "bytes": 5184,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_independent_contract_1048/frozen_estimator.py",
+        "manifest_sha256": "bda784c76efd69f5c4a161d5e4fccc936cf2725a40d779a77cd692787e6ce04a",
+        "actual_sha256": "bda784c76efd69f5c4a161d5e4fccc936cf2725a40d779a77cd692787e6ce04a",
+        "bytes": 3404,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_pilot_1046/frozen_estimator.py",
+        "manifest_sha256": "38257225408e5630f146b3adf4cd1568df1141c993889f2dae2d9ff0bbcedb03",
+        "actual_sha256": "38257225408e5630f146b3adf4cd1568df1141c993889f2dae2d9ff0bbcedb03",
+        "bytes": 3633,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_4b_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875",
+        "actual_sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875",
+        "bytes": 3898,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1047/frozen_estimator.py",
+        "manifest_sha256": "aa7614dbccd5bd56c2a3da2885300e3600b5e2ba7dfba5f570f37de92a9d9d22",
+        "actual_sha256": "aa7614dbccd5bd56c2a3da2885300e3600b5e2ba7dfba5f570f37de92a9d9d22",
+        "bytes": 2635,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "4b817650efff1f84685e993110aff97c658f0a1467d191529f9eec2c5f245502",
+        "actual_sha256": "4b817650efff1f84685e993110aff97c658f0a1467d191529f9eec2c5f245502",
+        "bytes": 5215,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_independent_1048/frozen_estimator.py",
+        "manifest_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+        "actual_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+        "bytes": 666,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_seeded_1048/frozen_estimator.py",
+        "manifest_sha256": "6d8fb3da2b29a19dd9aa3ab95028057afa70f995c9fe0f3c70ec4062497715c9",
+        "actual_sha256": "6d8fb3da2b29a19dd9aa3ab95028057afa70f995c9fe0f3c70ec4062497715c9",
+        "bytes": 1761,
+        "hash_matches": true
+      }
+    ],
+    "additional_sources_not_named_in_reviewed_minimum_scope": [
+      {
+        "file": "out/campaign/reference_frozen/ablation_laguna_slope_only/frozen_estimator.py",
+        "manifest_sha256": "c1c053b0d530931542ae88dd6bbeef58b9eaa2307c21f0eff5e7488fca038ebe",
+        "actual_sha256": "c1c053b0d530931542ae88dd6bbeef58b9eaa2307c21f0eff5e7488fca038ebe",
+        "bytes": 2796,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/ablation_laguna_slope_range/frozen_estimator.py",
+        "manifest_sha256": "4569f2423553d8eb56d26e408fc7e72239dc85baa26ac62046ee9259a5d6aa39",
+        "actual_sha256": "4569f2423553d8eb56d26e408fc7e72239dc85baa26ac62046ee9259a5d6aa39",
+        "bytes": 2830,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/ablation_laguna_slope_variance/frozen_estimator.py",
+        "manifest_sha256": "d7e644ac201b3d29831956667f13351e75d48da1be0f56d573d6c2c866df7269",
+        "actual_sha256": "d7e644ac201b3d29831956667f13351e75d48da1be0f56d573d6c2c866df7269",
+        "bytes": 2819,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/ablation_qwen_linear_position_nll/frozen_estimator.py",
+        "manifest_sha256": "68b25e25db2a5ac75f8febce1eb891cac41d0b92b5738a48d6fa28d52e5d2e63",
+        "actual_sha256": "68b25e25db2a5ac75f8febce1eb891cac41d0b92b5738a48d6fa28d52e5d2e63",
+        "bytes": 523,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_evo_1047/frozen_estimator.py",
+        "manifest_sha256": "eb952792127e317dacb31e89e1c91bc6d03dbe558c5aa55dac9e4afaede0ee8b",
+        "actual_sha256": "eb952792127e317dacb31e89e1c91bc6d03dbe558c5aa55dac9e4afaede0ee8b",
+        "bytes": 3368,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+        "actual_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+        "bytes": 3810,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_independent_1048/frozen_estimator.py",
+        "manifest_sha256": "3b550475be86082880b3ac5711eb9dc4898d15d382fef2b9395b985649c68a22",
+        "actual_sha256": "3b550475be86082880b3ac5711eb9dc4898d15d382fef2b9395b985649c68a22",
+        "bytes": 3360,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_seeded_1048/frozen_estimator.py",
+        "manifest_sha256": "3985d4798f93ba223d8782abf791f420adfa36f46b72a927c6338970b7eb7932",
+        "actual_sha256": "3985d4798f93ba223d8782abf791f420adfa36f46b72a927c6338970b7eb7932",
+        "bytes": 1762,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_evolution_1047/frozen_estimator.py",
+        "manifest_sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a",
+        "actual_sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a",
+        "bytes": 649,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_evolution_1048/frozen_estimator.py",
+        "manifest_sha256": "35c0906c0c4e02e99550b72f858b4bd33cf02aa8acf65245d04ca547d9be17db",
+        "actual_sha256": "35c0906c0c4e02e99550b72f858b4bd33cf02aa8acf65245d04ca547d9be17db",
+        "bytes": 666,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_independent_1047/frozen_estimator.py",
+        "manifest_sha256": "1ac8242ebfc3e7b1b5d8a32bcf732055aa1ce2ba01f6d0c828f857ab4771552a",
+        "actual_sha256": "1ac8242ebfc3e7b1b5d8a32bcf732055aa1ce2ba01f6d0c828f857ab4771552a",
+        "bytes": 648,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_independent_1048/frozen_estimator.py",
+        "manifest_sha256": "e8a1829bc98816e4c88e295a19278cba10c9f78b86da91fb09270407bc2c578c",
+        "actual_sha256": "e8a1829bc98816e4c88e295a19278cba10c9f78b86da91fb09270407bc2c578c",
+        "bytes": 634,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_evo_1047/frozen_estimator.py",
+        "manifest_sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9",
+        "actual_sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9",
+        "bytes": 3512,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "fe26a84cde139742031491e52094fd68fba71389e7f771b712a2ce0b0ab6d6b7",
+        "actual_sha256": "fe26a84cde139742031491e52094fd68fba71389e7f771b712a2ce0b0ab6d6b7",
+        "bytes": 5184,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_independent_contract_1048/frozen_estimator.py",
+        "manifest_sha256": "bda784c76efd69f5c4a161d5e4fccc936cf2725a40d779a77cd692787e6ce04a",
+        "actual_sha256": "bda784c76efd69f5c4a161d5e4fccc936cf2725a40d779a77cd692787e6ce04a",
+        "bytes": 3404,
+        "hash_matches": true
+      },
+      {
+        "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_pilot_1046/frozen_estimator.py",
+        "manifest_sha256": "38257225408e5630f146b3adf4cd1568df1141c993889f2dae2d9ff0bbcedb03",
+        "actual_sha256": "38257225408e5630f146b3adf4cd1568df1141c993889f2dae2d9ff0bbcedb03",
+        "bytes": 3633,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_4b_evo_1048/frozen_estimator.py",
+        "manifest_sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875",
+        "actual_sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875",
+        "bytes": 3898,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1047/frozen_estimator.py",
+        "manifest_sha256": "aa7614dbccd5bd56c2a3da2885300e3600b5e2ba7dfba5f570f37de92a9d9d22",
+        "actual_sha256": "aa7614dbccd5bd56c2a3da2885300e3600b5e2ba7dfba5f570f37de92a9d9d22",
+        "bytes": 2635,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_independent_1048/frozen_estimator.py",
+        "manifest_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+        "actual_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+        "bytes": 666,
+        "hash_matches": true
+      },
+      {
+        "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_seeded_1048/frozen_estimator.py",
+        "manifest_sha256": "6d8fb3da2b29a19dd9aa3ab95028057afa70f995c9fe0f3c70ec4062497715c9",
+        "actual_sha256": "6d8fb3da2b29a19dd9aa3ab95028057afa70f995c9fe0f3c70ec4062497715c9",
+        "bytes": 1761,
+        "hash_matches": true
+      }
+    ]
+  },
+  "limited_secret_pattern_scan": {
+    "text_files_scanned": 4115,
+    "high_specificity_pattern_matches": 0,
+    "patterns": [
+      "OpenSSH/RSA/EC/DSA private-key header",
+      "Hugging Face hf_ token with >=25 suffix characters",
+      "OpenAI-style sk-/sk-proj- secret with >=32 suffix characters",
+      "RunPod-style rpa_ secret with >=25 suffix characters"
+    ],
+    "scope": [
+      "src",
+      "scripts",
+      "configs",
+      "tests",
+      "results",
+      "out/logs/research20261021",
+      "out/overnight20261021",
+      "out/research20261021/supervised_grouped",
+      "out/campaign/model_provenance"
+    ],
+    "text_suffixes": [
+      ".py",
+      ".md",
+      ".json",
+      ".yaml",
+      ".yml",
+      ".log",
+      ".txt",
+      ".html",
+      ".sh",
+      ".jsonl"
+    ],
+    "maximum_file_bytes": 20971520,
+    "private_results_tree_exists": false,
+    "root_env_filenames_found": 0,
+    "limitations": "Pattern-based text scan only; not a proof that all possible secrets are absent. No actual secret values or environment/credential dumps were read into the audit output."
+  },
+  "no_gpu_or_model_calls": true,
+  "no_scoring_or_fitting": true,
+  "no_core_or_manifest_or_Git_changes": true,
+  "only_new_output": "results/overnight20261021/FINALIZATION_PREFLIGHT_AUDIT.json"
+}

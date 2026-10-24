@@ -1,0 +1,39 @@
+{
+  "status": "complete",
+  "dataset": "geometry__counterfact_true_false",
+  "phase": "target",
+  "rows": 31964,
+  "raw_sha256": "3558db4e70ef43e811f7cdcd8c50e242de00a5f7932cd2b3ac91eb0397f9586e",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "a46df331ece48f50e65c50f3468c3c84bac6f938c031ae0dcaa7d3bd10600869",
+  "bootstrap_sha256": "8bdfb27ab7ef2b503f6e311ae654bb2bb6705189d547c2623c992d9a303c0872",
+  "source_lp_only_saved_prediction_parity": false,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_1",
+      "score_sha256": "30240416f46dc9868aad7b02e08eabb67e42702d65453e13e852bb6528643510",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "original_128",
+      "score_sha256": "30240416f46dc9868aad7b02e08eabb67e42702d65453e13e852bb6528643510",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "original_512",
+      "score_sha256": "30240416f46dc9868aad7b02e08eabb67e42702d65453e13e852bb6528643510",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "shuffle451_512",
+      "score_sha256": "30240416f46dc9868aad7b02e08eabb67e42702d65453e13e852bb6528643510",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

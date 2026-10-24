@@ -1,0 +1,26 @@
+{
+  "created_utc": "2026-10-21T18:23:03.160493+00:00",
+  "status": "prepared_tested_no_writer_inference",
+  "tests": {
+    "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_overnight_sampler_trial.py -q",
+    "passed": 8,
+    "elapsed_seconds": 52.99,
+    "end_to_end_stub": {
+      "rounds": 3,
+      "synthetic_http_requests": 6,
+      "valid_synthetic_candidates": 4,
+      "one_all_invalid_round_continued": true,
+      "held_out_test_access": false,
+      "real_writer_inference": false
+    }
+  },
+  "hydra_configs_resolved": 3,
+  "expected_job_log_paths_verified": true,
+  "pinned_source_config_hash_mismatches": [],
+  "parallel_controller_dry_run_accepted": true,
+  "manifest": "results/next_experiments/sampler_manifest.json",
+  "wrapper_sha256": "26f712cf7207f756cbdc1fb3d205703fc582287478e726aebcadf6b2ae6156e7",
+  "planned_requests": 180,
+  "new_core_source_edits": false,
+  "notes": "Synthetic protocol checks are not scientific detector-quality experiments."
+}

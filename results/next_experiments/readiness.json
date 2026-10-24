@@ -1,0 +1,220 @@
+{
+  "created_utc": "2026-10-21T15:02:07.356477+00:00",
+  "labels": "is_hallu",
+  "no_gpu_or_model_calls": true,
+  "generated_candidate_code_executed": false,
+  "environment": {
+    "python": "3.12.3",
+    "packages": {
+      "torch": "2.14.1+cpu",
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "scikit-learn": "1.9.1",
+      "hydra-core": "1.3.7",
+      "transformers": "5.19.0",
+      "openai": "3.31.0",
+      "vllm": null
+    },
+    "cuda_available": false,
+    "dependency_check": {
+      "exit_code": 0,
+      "output": "Checked 98 packages in 4ms\nAll installed packages are compatible"
+    },
+    "local_writer_serving_ready": false,
+    "caveat": "CPU dependency compatibility does not certify the separate GPU serving environment"
+  },
+  "supplied_file_checks": [
+    {
+      "file": "popqa/popqa_test_filtered_10shot.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+      "bytes_identical": true
+    },
+    {
+      "file": "AVeriTeC/dev_filtered_10shot.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+      "bytes_identical": true
+    },
+    {
+      "file": "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+      "bytes_identical": true
+    },
+    {
+      "file": "geometry/cities.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+      "bytes_identical": true
+    },
+    {
+      "file": "geometry/companies_true_false.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+      "bytes_identical": true
+    },
+    {
+      "file": "geometry/counterfact_true_false.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+      "bytes_identical": true
+    },
+    {
+      "file": "geometry/common_claim_true_false.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+      "bytes_identical": true
+    },
+    {
+      "file": "x-fact/test_filtered_10shot.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13",
+      "bytes_identical": true
+    },
+    {
+      "file": "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv",
+      "source": "supplied datasets.zip",
+      "sha256": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+      "bytes_identical": true
+    },
+    {
+      "file": "popqa/popqa_train_filtered_10shot.csv",
+      "source": "supplied standalone train CSV",
+      "sha256": "b71e07ab49ea97d6a8311f52329390dc7bc3137fcbac07706ba1a0925c16544a",
+      "bytes_identical": true
+    }
+  ],
+  "all_ten_supplied_csvs_identical": true,
+  "benchmark_datasets": [
+    {
+      "dataset": "AVeriTeC/dev_filtered_10shot.csv",
+      "rows": 427,
+      "positives": 305,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 63.76780435366837,
+      "csv_sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+      "scores_sha256": "50a7b060de4f8d78a786647ab4ec6d74b932a66d5dfbb5175892fc87c72320ff"
+    },
+    {
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv",
+      "rows": 2057,
+      "positives": 1515,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 36.19719167488705,
+      "csv_sha256": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+      "scores_sha256": "1052a839a46dcfface01759db8c943b86e6cb90cd7b78f3ab5526c0f16bbe8d6"
+    },
+    {
+      "dataset": "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv",
+      "rows": 46605,
+      "positives": 7334,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 70.68591510605297,
+      "csv_sha256": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+      "scores_sha256": "4b4f9390dbcb433b8b58f5266c9b026380545e8b6f2479066bb7362a024ba431"
+    },
+    {
+      "dataset": "geometry/cities.csv",
+      "rows": 1496,
+      "positives": 748,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 91.93696559810117,
+      "csv_sha256": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+      "scores_sha256": "c6229cff1100838d1429889c654cbdf7b90bdd49ba8a8fe37728ddabefebb301"
+    },
+    {
+      "dataset": "geometry/common_claim_true_false.csv",
+      "rows": 4450,
+      "positives": 2225,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 63.26080040398939,
+      "csv_sha256": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+      "scores_sha256": "e11799ea2b6b8a6dae0bb2ab29eed4423dcc9da137b9082b9db8935db39182d6"
+    },
+    {
+      "dataset": "geometry/companies_true_false.csv",
+      "rows": 1200,
+      "positives": 600,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 72.58069444444443,
+      "csv_sha256": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+      "scores_sha256": "09556740a325df6d495238a02c8935e5f9b5c9e2da30a1a72ea6e32f104b33c9"
+    },
+    {
+      "dataset": "geometry/counterfact_true_false.csv",
+      "rows": 31964,
+      "positives": 15982,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 68.08486277916116,
+      "csv_sha256": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+      "scores_sha256": "2c3d87872de478a2dfad213d9bb06781237682d76a6e70dd3cdb2d0de8d15982"
+    },
+    {
+      "dataset": "popqa/popqa_test_filtered_10shot.csv",
+      "rows": 6974,
+      "positives": 5347,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 74.05170876856083,
+      "csv_sha256": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+      "scores_sha256": "bcb022f2db0c40f00ffaafb5d3364ffb26a218d26dc64c8a22e17ec677e16be7"
+    },
+    {
+      "dataset": "x-fact/test_filtered_10shot.csv",
+      "rows": 2315,
+      "positives": 1464,
+      "saved_labels_match_csv_is_hallu": true,
+      "auc_percent": 50.22899770761495,
+      "csv_sha256": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13",
+      "scores_sha256": "cb628f8fcdfcccddd606d8ea0027f62c0b9c1e7ff172e46776cad54147229b9b"
+    }
+  ],
+  "evaluation_dataset_count": 9,
+  "files_including_training": 10,
+  "macro_sequence_nll_auc_percent": 65.64388231516448,
+  "paper_sequence_probability_auc_percent": 68.7,
+  "raw_vs_paper_reporting_difference_pp": 3.0561176848355274,
+  "paper_direction_invariant_macro_auc_percent": 68.71117305407847,
+  "paper_gap_resolved": true,
+  "resolution": "Author clarified per-dataset max(AUC,100-AUC) reporting; keep is_hallu unchanged",
+  "baseline_caveat": "Saved-prediction replay; this verifies metric/labels but does not recreate historical paper features",
+  "training_cache": {
+    "rows": 7007,
+    "raw_meta": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32"
+    },
+    "raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+    "labels_match_csv_is_hallu": true,
+    "claims_match_csv_in_order": true,
+    "sequence_probability_input_dtypes": {
+      "float16": 7007
+    },
+    "rows_with_topk_length_equal_logprob_length": 0,
+    "rows_with_topk_length_one_greater": 7007,
+    "rows_with_topk512": 7007,
+    "train_rows": 5605,
+    "validation_rows": 1402,
+    "train_auc_percent": 74.32858297398488,
+    "validation_auc_percent": 75.75041445246853,
+    "saved_baseline_validation_scores_identical": true,
+    "stratified_shared_normalized_claims": 88,
+    "grouped_shared_normalized_claims": 0,
+    "grouped_train_auc_percent": 74.8445256853011,
+    "grouped_validation_auc_percent": 73.70519173504877,
+    "grouped_train_rows": 5606,
+    "grouped_validation_rows": 1401
+  },
+  "historical_primary_hashes_unchanged": {
+    "out/campaign/evaluation_with_4b/all_datasets.json": true,
+    "out/campaign/evaluation_with_4b/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": true,
+    "out/campaign/evaluation_with_4b/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz": true,
+    "results/campaign_summary.json": true
+  },
+  "cpu_gate_passed": true
+}

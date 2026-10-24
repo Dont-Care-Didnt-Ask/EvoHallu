@@ -1,0 +1,114 @@
+{
+  "status": "six_original_results_copied_byte_identically",
+  "files": [
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/AVeriTeC__dev_filtered_10shot_scores.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/AVeriTeC__dev_filtered_10shot_scores.npz",
+      "sha256": "100fe4d53dd55c0fd5fff75eb8d98a7fa0c5d3c6fb8a6e87bbe1520e763f20ea",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/AVeriTeC__dev_filtered_10shot_bootstrap.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/AVeriTeC__dev_filtered_10shot_bootstrap.npz",
+      "sha256": "e7cee0c0fded319b9f2463dce00cc8edcd761bff47d42623f73a96fef65e6650",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/AVeriTeC__dev_filtered_10shot.json",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/AVeriTeC__dev_filtered_10shot.json",
+      "sha256": "fb2908c430fc70f6529c44d48e07b815a87ba85fb996dd64c260906668486b06",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz",
+      "sha256": "8c62bcf0a11e37b473d326b976b90257238d38edb3747280e53b70ed485aa202",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz",
+      "sha256": "0f9d55b1918fd06e62c34cffeec21c463d0b60260955f3310ad32f246e78c8b6",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.json",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.json",
+      "sha256": "8a0bec1fd92bf6cbb670863d59a176cf3607edea56de0b99527cc4b96ae2fe92",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz",
+      "sha256": "eb403d7967b8289df86bfaae36103588818477575fce8fb1948e8cff26dca65a",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_bootstrap.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_bootstrap.npz",
+      "sha256": "bfa7f058ab503d8c2a5f922c27e1f24856ab32d033575774696292963b9ad430",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.json",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.json",
+      "sha256": "e6e5c8299eccf6cea65c9f6e4b1fa0a4860c856a2361ee187ae11f7ec338e378",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__cities_scores.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__cities_scores.npz",
+      "sha256": "a55b29c1c2cba6a5fd9443ce1f299b653947e4ab391548f4459079f58654dc90",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__cities_bootstrap.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__cities_bootstrap.npz",
+      "sha256": "cf941742b2ce602081df3d6df20aa7987364e0e444e2e8b19448197457e5c485",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__cities.json",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__cities.json",
+      "sha256": "3996dbf7d8d1827b3e113aa6f44e96516d75877cbb47f9456ff70a8044c33d3e",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__common_claim_true_false_scores.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__common_claim_true_false_scores.npz",
+      "sha256": "9d419503d484701a9bee3bbe35c084873f10c55214b6135c434aa1447ca72277",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__common_claim_true_false_bootstrap.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__common_claim_true_false_bootstrap.npz",
+      "sha256": "d2f078c76873fcf046d286a8b1cc1a4eb24d8d2af3c3f6a41224b553db6aaeef",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__common_claim_true_false.json",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__common_claim_true_false.json",
+      "sha256": "f02a1587860afe2dd50180e0c15350c459c839d1135c3aa6a3066aa154bc5b84",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__companies_true_false_scores.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__companies_true_false_scores.npz",
+      "sha256": "67ce1dd4f12d3848bb86b86993583a43e6839d1d938b3c4e5750c8ed8719b934",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__companies_true_false_bootstrap.npz",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__companies_true_false_bootstrap.npz",
+      "sha256": "93d3c4de868adbdd0f97a31c8a69184dc46ad45dfcfd525858a252da33dcd7ff",
+      "byte_identical": true
+    },
+    {
+      "source": "results/overnight20261021/screen_component_refit/evaluations/target_six/geometry__companies_true_false.json",
+      "copy": "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__companies_true_false.json",
+      "sha256": "d7b4c89a52c35ad73e9af3184c08925210a2a08205d531c7c58604de0aadce34",
+      "byte_identical": true
+    }
+  ],
+  "original_six_unchanged": true
+}

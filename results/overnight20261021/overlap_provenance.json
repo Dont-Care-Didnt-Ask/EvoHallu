@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-21T19:04:10.525892+00:00",
+  "independent_controllers_share_writer_replicas": true,
+  "max_active_search_jobs": 4,
+  "writer_replicas": 2,
+  "evaluation_workers_per_job": 1,
+  "requests_per_round_per_job": 2,
+  "scientific_source_and_candidate_budget_changed": false,
+  "latency_comparisons": "Descriptive; concurrent jobs share each writer queue",
+  "overlap_scope": "Disjoint rank-parent jobs; source controller never launches these IDs"
+}

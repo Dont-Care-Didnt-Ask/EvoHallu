@@ -1,0 +1,53 @@
+{
+  "status": "finished",
+  "generator": "fixed_feature_linear_independent",
+  "seed": 1047,
+  "generated_candidates": 60,
+  "selected_validation_auc_percent": 76.88121678702822,
+  "selected_train_auc_percent": 77.16257996568436,
+  "selected_features": {
+    "nll_position_slope": 0.8979646046179139,
+    "top1_mass_top512_mean": 1.280957094251854
+  },
+  "elapsed_seconds": 0.6689285300672054,
+  "total_tokens": 0,
+  "held_out_test_evaluated": false,
+  "feature_pool": [
+    "length",
+    "nll_sum",
+    "nll_mean",
+    "nll_std",
+    "nll_max",
+    "nll_q90",
+    "nll_q10",
+    "nll_position_slope",
+    "nll_exp_weighted",
+    "entropy_mean",
+    "entropy_std",
+    "entropy_last_minus_first",
+    "top1_mass_top512_mean",
+    "top1_top2_gap_mean",
+    "top512_entropy_mean",
+    "nll_last_quarter",
+    "nll_first_quarter"
+  ],
+  "feature_scales": [
+    30.0,
+    100.0,
+    5.0,
+    3.0,
+    15.0,
+    10.0,
+    2.0,
+    5.0,
+    5.0,
+    5.0,
+    3.0,
+    3.0,
+    1.0,
+    5.0,
+    6.0,
+    5.0,
+    5.0
+  ]
+}

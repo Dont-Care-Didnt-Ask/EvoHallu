@@ -1,0 +1,18 @@
+{
+  "created_utc": "2026-10-21T19:29:56.284415+00:00",
+  "selection_basis": "Seed2107 chosen in advance as the first prepared seed; GPU0 rank2107 complete frees a shared-writer slot",
+  "pilot_seed": 2107,
+  "pilot_requested_candidates": 60,
+  "pilot_writer": "Qwen/Qwen3.5-9B",
+  "pilot_execution_manifest": "results/next_experiments/interface_pilot_manifest.json",
+  "parent_three_seed_manifest": "results/next_experiments/interface_manifest.json",
+  "additional_seeds": [
+    4319,
+    8741
+  ],
+  "additional_seeds_authorized_only_if": "Runtime projection after the pilot leaves time for larger-writer confirmation and full feature transfer; no validation/test quality gate",
+  "higher_writer_prompt_choice": "Unchanged original twelve discovery runs only",
+  "writer_rotation_coordination": "Existing waiting followups is stopped; it restarts only after pilot controller terminates",
+  "new_feature_limits": false,
+  "automatic_repairs": 0
+}

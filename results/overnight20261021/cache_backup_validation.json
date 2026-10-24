@@ -1,0 +1,37 @@
+{
+  "status": "prepared_reviewed_not_started",
+  "created_utc": "2026-10-21T20:06:11.185029+00:00",
+  "focused_tests_passed": 25,
+  "test_seconds": 1.99,
+  "test_command": "PYTHONPATH=src:. OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 .venv/bin/python -m pytest -q tests/test_overnight_cache_backup.py",
+  "compile_passed": true,
+  "dry_run_verified_no_ssh_or_launch": true,
+  "watcher_or_real_archive_started": false,
+  "remote_model_or_gpu_calls": 0,
+  "archive_cutoff_utc": "2026-10-22T02:06:00Z",
+  "local_hard_stop_utc": "2026-10-22T02:13:00Z",
+  "protected_disk_reserve_bytes": 419430400,
+  "local_free_bytes_at_validation": 3139264512,
+  "sha256": {
+    "scripts/overnight_cache_backup.py": "c135f427d2929fa1bc10e6a63a168fb7e211aae6abf85eae437608bb00520875",
+    "tests/test_overnight_cache_backup.py": "14ef2ff3d1a96dae20a1c94ca9bd0d44939a3df88bf8ce0a9170e1db566ba39f",
+    "scripts/overnight_archive_transfer.py": "5d27d8bbeade713006e8efaffca48a6c07ee134c4091cbae6cddb8a06e4d8ee5"
+  },
+  "checks": [
+    "pinned_completion_and_three_cache_identity",
+    "archive_source_and_lossless_receipt_proof",
+    "strict_fixed_remote_and_local_paths",
+    "dry_run_and_nonlocal_execution_block",
+    "remote_script_SHA_guard",
+    "real_local_detached_flock_inheritance_emulation",
+    "dead_archive_launch_not_automatically_repeated",
+    "space_admission_whole_three_file_set",
+    "sparse_partial_allocation_accounting",
+    "in_place_partial_downloads_no_final_overwrite",
+    "compressed_SHA_validation_before_atomic_no_overwrite_publication",
+    "local_final_and_partial_symlink_refusal",
+    "verified_files_reused_without_SSH_or_download",
+    "manual_cancellation_and_deadline_subprocess_termination",
+    "inflight_disk_reserve_protection"
+  ]
+}

@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>evohallu preliminary report</title><style>body{font:16px/1.6 system-ui,sans-serif;max-width:1120px;margin:40px auto;padding:0 24px;color:#17212b}h1,h2{line-height:1.25}h2{margin-top:2em}table{border-collapse:collapse;font-size:14px;display:block;overflow-x:auto}td,th{padding:8px 10px;border:1px solid #dbe2e8;text-align:left}th{background:#f1f5f8}img{max-width:100%;height:auto}pre{overflow-x:auto;background:#f4f6f8;padding:16px}code{font-size:.9em}a{color:#145ea8}@media print{body{margin:0;font-size:11px}a{color:inherit}}</style><body><h1>evohallu preliminary report</h1>
+<p><strong>Completed 22 October 2026.</strong> All writer searches, target-cache extraction, bounded CPU evaluations and verified backups are finished. One frozen target estimator failure is retained. RunPod confirmed the pod stopped at <strong>00:44:41 UTC</strong> with no GPU runtime; elapsed compute was <strong>6 h 28 min, approximately $23.16</strong>. This document supplements the <a href="results/overnight20261021/REPORT.md">machine-generated source report</a>; the historical report is preserved separately.</p>
+<p><strong>Evolutionary results, without an additional supervised fit.</strong> The validation-selected Qwen3.8-27B diverse-prompt detector reaches <strong>72.306 paper-compatible AUROC</strong> across nine source datasets, versus <strong>68.711</strong> for canonical sequence NLL. This is a single-seed, 30-round search. The paper's best displayed GPT-OSS-120B method scores <strong>70.8</strong>, and its best displayed Claude method scores <strong>73.4</strong>. Our 27B result is numerically above the former and below the latter; differing search budgets and candidate-selection procedures prevent a matched model-ranking claim. A separate fixed-context screen reaches <strong>73.137</strong>, using saved historical parents rather than a fresh adaptive trajectory. The campaign issued <strong>1,500 requests across three writers</strong>. The prompt comparisons do <strong>not</strong> establish a reliable diversity improvement; pipeline validity is not algorithmic novelty.</p>
+<p><strong>Additional supervised fitting is reported separately below.</strong> Its scores are excluded from the comparison of evolved formulas without a further fitted prediction layer. Evolution still uses training labels for fitness and PopQA validation for selection; “without an additional supervised fit” does not mean label-free search.</p>
+<h2>Experimental scope and metric reproduction</h2>
+<p><a href="https://aclanthology.org/2026.acl-srw.115.pdf">EvoHallu</a> searches for executable hallucination scores: a code-writing model proposes Python estimators, their training AUROC supplies evolutionary fitness, and validation performance determines which programs are retained. The current source feature model is <strong>Llama3.1-8b-instruct</strong>. <strong>Qwen/Qwen3.5-9B, Qwen3.8-27B and GLM-4.7-Flash are code writers</strong> in the completed new studies. They write detector code; they do not generate new benchmark claims or replace Llama's cached token probabilities.</p>
+<p>Inputs are the supplied <strong>7,007 PopQA training rows</strong> and nine evaluation datasets: PopQA, AVeriTeC, UHEAD, Cities, Companies, Common Claims, CounterFact, X-Fact and WildHallucinations. The estimators consume cached observed-token log-probabilities, top-512 logits/indices and supported uncertainty statistics. Variable-length arrays and the extra top-k row require explicit alignment. Top-512-normalized entropy and confidence are conditional approximations, and positional features include cached chat/template tokens; “late-token uncertainty” is therefore an approximate semantic interpretation.</p>
+<p>The earlier <strong>65 versus 68.7 discrepancy is resolved</strong>. Labels remain <strong><code>is_hallu</code></strong>, with greater directed scores intended to indicate hallucination. The author's clarified reporting convention folds <strong>each method–dataset AUROC</strong> as <code>max(AUC, 100 − AUC)</code>, then averages the nine datasets equally. Canonical NLL reproduces <strong>65.644 directed / 68.711 folded</strong>, matching the paper's displayed <strong>68.7</strong>. Perplexity and mean token entropy also reproduce the displayed <strong>64.2 / 59.9</strong>. UHEAD's below-chance directed results do not imply incorrect labels.</p>
+<p>Both summaries are retained. Folding uses evaluation labels to choose direction separately per dataset; it reproduces the reported metric, rather than supplying a deployment-time direction calibration. AUROC, ROC-AUC and AUC-ROC mean the same ranking metric here. All differences below are percentage points. See the <a href="results/overnight20261021/INTERPRETATION_CHECKLIST.md">interpretation audit</a>.</p>
+<h2>Selection and controlled search design</h2>
+<p>The inherited evolutionary partition contains <strong>5,605 training / 1,402 validation rows</strong>. Directed training AUROC controls population fitness and parent selection. Valid candidates are evaluated on directed PopQA validation, and the run winner is its validation maximum, including <strong>canonical-NLL fallback</strong>. Benchmark and target-model scores do not choose the winner. All generation seeds are retained; incomplete-budget runs are excluded from primary group averages. A separately frozen training-best candidate is a selection diagnostic, not the primary result.</p>
+<p>The completed main comparison has four policies across <strong>three seeds, 60 requests each</strong>. Thirty evolutionary rounds mean two attempted candidates per round, including failed or constant proposals. Neutral removes named formula prescriptions; diverse assigns different sibling roles/families; compositional encourages multiple signals without a feature-count ceiling. All twelve adaptive runs completed their budgets. Pipeline-valid means successful finite, correctly shaped scoring; it includes constant or baseline-equivalent programs and does not imply useful novelty. Values below are nine-dataset means; ± denotes sample SD across search seeds.</p>
+<table>
+<thead>
+<tr>
+<th>Qwen3.5-9B arm</th>
+<th style="text-align:right">Seeds</th>
+<th style="text-align:right">Valid / requests</th>
+<th style="text-align:right">Directed mean</th>
+<th style="text-align:right">Folded mean ± seed SD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Adaptive original</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">101 / 180</td>
+<td style="text-align:right">67.823</td>
+<td style="text-align:right">69.943 ± 1.059</td>
+</tr>
+<tr>
+<td>Adaptive neutral</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">98 / 180</td>
+<td style="text-align:right">65.644</td>
+<td style="text-align:right">68.711 ± 0.000</td>
+</tr>
+<tr>
+<td>Adaptive diverse</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">103 / 180</td>
+<td style="text-align:right">67.748</td>
+<td style="text-align:right">70.355 ± 1.648</td>
+</tr>
+<tr>
+<td>Adaptive compositional</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">78 / 180</td>
+<td style="text-align:right">68.297</td>
+<td style="text-align:right">70.002 ± 0.911</td>
+</tr>
+<tr>
+<td>Neutral fixed NLL examples</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">88 / 180</td>
+<td style="text-align:right">65.644</td>
+<td style="text-align:right">68.711 ± 0.000</td>
+</tr>
+<tr>
+<td>Neutral rank/uniform parents</td>
+<td style="text-align:right">3</td>
+<td style="text-align:right">100 / 180</td>
+<td style="text-align:right">65.864</td>
+<td style="text-align:right">68.922 ± 0.364</td>
+</tr>
+<tr>
+<td>Neutral interface-contract pilot</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">29 / 60</td>
+<td style="text-align:right">65.644</td>
+<td style="text-align:right">68.711; SD unavailable</td>
+</tr>
+</tbody>
+</table>
+<p>Fixed examples and parent sampling are matched against <strong>neutral evolution</strong>, with the same writer, seeds and request budget. All three neutral adaptive and fixed-example winners are canonical NLL: the observed feedback difference is exactly <strong>0.000 pp</strong>. Rank/uniform adds <strong>0.211 pp</strong> on average, driven by one variance formula and one precision-only NLL variant. The single interface pilot retains NLL and has the same 29/60 validity as its matched neutral run. These null results concern the tested prompt/writer/budget, rather than evolution in general.</p>
+<p>Diverse guidance exceeds original by <strong>0.412 folded pp</strong>, but is <strong>0.075 directed pp lower</strong>; compositional guidance adds only <strong>0.059 folded pp</strong>. Together with seed variation and the matched screen, these results do not establish that removing prompt restrictions improves useful diversity or quality. The separate training-only temporal diagnostic finds 11 novel-and-training-useful proposals for original, four for diverse, seven for compositional and zero for neutral across 180 attempts each. These are exploratory probe diagnostics, not held-out improvement counts. <a href="results/overnight20261021/convergence_analysis_source9b/CONVERGENCE.md">Complete source trajectories</a>.</p>
+<p>The rank intervention mixes linear fitness-rank probabilities with <strong>20% uniform probability over eligible groups</strong>, preserving the existing quantile gate, island selection and within-group source preference. On the observed parent pools it actually concentrates selection more than the nearly flat original temperature-40 softmax; it is not evidence of increased exploration. The separate interface pilot appends the actual constructor/API, ragged-array shapes, alignment and score-direction contract, without repair calls or formula restrictions. Its motivation was training failure inspection, including <strong>36 of 51 inspected failures involving shape/API issues</strong>.</p>
+<p>The additional validation-top-three study retains all <strong>36 rank slots</strong>, without choosing test-best candidates. All evaluation processes finished; <strong>35/36 slots</strong> have complete nine-dataset predictions. One rank-three original-policy program overflows its unscaled float32 <code>1.5**position</code> weights on WildHallucinations and X-Fact. Its missing metrics remain unavailable; no repair, replacement or failed-seed omission is used. Complete-policy top-three individual-AUROC collection means do not exceed their rank-one means. These are collections of individual methods, not ensembles. <a href="results/overnight20261021/shortlist_secondary/SHORTLIST_OUTCOME.md">Retained ranks and failure evidence</a>.</p>
+<h2>Larger and different-family writer comparisons</h2>
+<p>The Qwen3.8-27B confirmation finished both original/diverse seed-2107 runs at <strong>60 requests each</strong>, using the same fixed source features and validation-selection rule. These are new full-budget writer runs, not historical results.</p>
+<table>
+<thead>
+<tr>
+<th>Writer / prompt</th>
+<th style="text-align:right">Seeds</th>
+<th style="text-align:right">Valid / requests</th>
+<th style="text-align:right">Directed source-nine</th>
+<th style="text-align:right">Folded source-nine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qwen3.8-27B / original</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">52 / 60</td>
+<td style="text-align:right">69.060</td>
+<td style="text-align:right">71.155</td>
+</tr>
+<tr>
+<td>Qwen3.8-27B / diverse</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">56 / 60</td>
+<td style="text-align:right">70.297</td>
+<td style="text-align:right">72.306</td>
+</tr>
+<tr>
+<td>GLM-4.7-Flash / original</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">28 / 60</td>
+<td style="text-align:right">68.533</td>
+<td style="text-align:right">70.671</td>
+</tr>
+<tr>
+<td>GLM-4.7-Flash / diverse</td>
+<td style="text-align:right">1</td>
+<td style="text-align:right">36 / 60</td>
+<td style="text-align:right">65.644</td>
+<td style="text-align:right">68.711</td>
+</tr>
+</tbody>
+</table>
+<p>The intervention policy was frozen by <strong>mean PopQA validation over all three completed 9B seeds</strong>, among neutral, diverse and compositional: 75.7504, 77.3867 and 77.2458 respectively. Thus diverse was selected. Original's 78.2091 was kept as the reference and excluded from intervention selection; diverse was not the overall validation winner. Neither nine-dataset nor target results chose the intervention.</p>
+<p>The 27B original and diverse winners exceed the corresponding 9B seed-2107 folded scores by <strong>1.811 and 1.961 pp</strong>. Diverse exceeds original by <strong>1.151 pp</strong> in this one matched seed. This is encouraging writer evidence, not an estimate of a stable model-size or prompt-policy advantage. The original formula combines negative position/logprob correlation with centered-window relative drops; diverse implements quadratic later-position-weighted total NLL. Both use only observed-token logprobs, with no batch normalization or top-k term. <a href="results/overnight20261021/WRITER27B_CANDIDATE_INSPECTION.md">Exact sources and formulas</a>.</p>
+<p>GLM-4.7-Flash completed the same original/diverse seed-2107 pair. Its original winner scores <strong>70.671 folded</strong>, but mathematically rediscovers the inherited negative Pearson correlation between token position and observed logprob. Its diverse winner is canonical NLL at <strong>68.711</strong>. More valid proposals under diverse guidance did not produce a better selected detector in this seed. These are not new multifeature discoveries; <a href="results/overnight20261021/GLM_CANDIDATE_INSPECTION.md">selected-source inspection</a> distinguishes executable behavior from comments.</p>
+<p>The measured GLM pilot left <strong>65.54 minutes</strong> before the writer cutoff; a second seed required <strong>73.96 minutes</strong>, and Devstral required <strong>75 minutes</strong>. Both were skipped by the fixed readiness/time gates. Devstral's checkpoint was prefetched, but no serving or quality trial ran. Scheduling used no benchmark-quality criterion. The first feature-extraction launch refused immediately after server cleanup because GPU telemetry was still active. After two verified idle snapshots with no GPU processes, a separate recorded recovery launched the <strong>unchanged formal preparer and 427-row numerical guard</strong>. The original refusal remains recorded; no threshold or estimator was repaired. The recovery completed all three caches; the separate nine-dataset evaluation and recorded failure are described below. <a href="results/overnight20261021/root_transfer_recovery_launch.json">Recovery launch</a>.</p>
+<p>A separate fixed position/length diagnostic first reproduced the 27B quadratic winner, canonical NLL and row/mask arrays exactly on all <strong>97,488 source rows</strong>, then retained all four predefined controls. Uniform float32 mean NLL scores <strong>64.176 folded</strong>, normalized quadratic mean <strong>70.724</strong>, and the original accumulated quadratic sum <strong>72.306</strong>. Position emphasis therefore remains useful after unit-mass normalization in this comparison. Accumulation adds <strong>1.582 folded pp [0.977, 2.277]</strong>, but only <strong>0.431 directed pp [−0.225, 1.102]</strong>; UHEAD folding explains much of that distinction. Plain length scores <strong>54.634 folded</strong>, reproducing the old claim-length ordering: every source row has exactly 18 additional cached-LP positions. UHEAD and WildHallucinations regress versus NLL. These fixed contrasts are exploratory sensitivity tests, not a causal additive decomposition or a test-selected replacement. <a href="results/overnight20261021/position_length_controls/INTERPRETATION.md">All controls and independent verification</a>.</p>
+<h2>Completed matched prompt screen</h2>
+<p>Four arms used the <strong>same fifteen saved historical parent contexts</strong>, two siblings each: <strong>30 requests per arm, 120 total</strong>. These are secondary, fixed-context experiments with inherited search information, not fresh adaptive searches or independent thirty-round trajectories. Each arm's winner was frozen by PopQA validation.</p>
+<table>
+<thead>
+<tr>
+<th>Policy</th>
+<th style="text-align:right">Valid / attempted</th>
+<th style="text-align:right">Joint diverse sibling pairs / 15 contexts</th>
+<th style="text-align:right">Source-nine directed</th>
+<th style="text-align:right">Source-nine folded</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original</td>
+<td style="text-align:right">19 / 30</td>
+<td style="text-align:right">6 / 15</td>
+<td style="text-align:right">68.771</td>
+<td style="text-align:right">69.973</td>
+</tr>
+<tr>
+<td>Neutral</td>
+<td style="text-align:right">19 / 30</td>
+<td style="text-align:right">4 / 15</td>
+<td style="text-align:right">70.848</td>
+<td style="text-align:right">73.137</td>
+</tr>
+<tr>
+<td>Diverse</td>
+<td style="text-align:right">23 / 30</td>
+<td style="text-align:right">7 / 15</td>
+<td style="text-align:right">70.131</td>
+<td style="text-align:right">73.007</td>
+</tr>
+<tr>
+<td>Compositional</td>
+<td style="text-align:right">11 / 30</td>
+<td style="text-align:right">3 / 15</td>
+<td style="text-align:right">67.465</td>
+<td style="text-align:right">69.538</td>
+</tr>
+</tbody>
+</table>
+<p>The joint valid-and-rank-diverse diagnostic requires both siblings to be valid and nonconstant, with signed training-probe rank correlation below <strong>0.995</strong>, divided by <strong>all fifteen contexts</strong>. It does not additionally require training-fitness improvement. Every intervention-minus-original paired interval spans zero. Diverse guidance has the highest validity point estimate; compositional guidance has the lowest. Neither result proves a policy advantage from this small screen. Better validation quality is also insufficient: compositional validation is <strong>80.286</strong>, yet its folded benchmark score is <strong>69.538</strong>. The <a href="results/overnight20261021/prompt_screen_analysis/PROMPT_SCREEN_ANALYSIS.md">paired analysis</a> retains failures, tokens, latency, hashes and diagnostic definitions.</p>
+<h2>What the generated programs actually compute</h2>
+<p>Source inspection is necessary because comments and source length can overstate effective complexity. The neutral screen winner combines <strong>total NLL, a position-weighted observed-versus-top-1 gap and final-quarter gap variance</strong>, with writer-proposed coefficients. The diverse winner combines NLL, early/late gap drift and tail gap variance. The original screen winner is exactly <strong><code>[0.7*(-corr(position, lp)) + 0.3/(1+range(lp[last 10%]))] / (mean(abs(lp))+1e-8)</code></strong>: its slope-like term is a <strong>negative Pearson correlation divided by mean absolute logprob</strong>, not an ordinary regression slope. The compositional winner combines tail surprisal variance, tail mean and a positional correlation. These are small numerical formulas, not reconstructions of the unavailable Claude programs shown in the discussion. The original frozen <a href="results/overnight20261021/frozen/next_prompt_original_2107__primary/frozen_estimator.py">source</a> has SHA256 <code>624e5d7457cff945b4a47b947309e7f84c499431ba134408595e265a435e69d0</code>.</p>
+<p>The completed rank-sampler arm illustrates a more serious distinction. One selected program sorts each row ascending but reverses <strong>rows</strong>, then clips its first-minus-second-column difference at zero. Its purported gap term is identically zero for finite inputs: the executable score is <strong>float32-summed NLL</strong>. Its tiny validation improvement over canonical NLL is <strong>0.0118 pp</strong>, arising from a different summation precision and tie structure. A second seed selects NLL plus <strong>0.5 × log-probability variance</strong>; the third retains baseline NLL. Their folded mean is <strong>68.922</strong>, only <strong>0.211 pp</strong> above matched neutral.</p>
+<p>Another inspected original-arm candidate contains an entropy branch that is inactive on all 7,007 source training rows. That is a verified source-data equivalence, not a proof that the branch is dead on every possible input. The <a href="results/overnight20261021/semantic_rank_winner_audit.md">semantic audit</a> distinguishes mathematical identities, finite-precision differences and dataset-specific inactive branches. These findings prevent an apparent complex detector from being counted as a new multi-signal discovery.</p>
+<p>Inspection of all twelve adaptive winners finds three NLL fallbacks, one float32-NLL variant, and eight nontrivial formulas involving thresholded surprisal, positional weighting/correlation, local variation or top-k contrasts. A compositional winner's claimed “bottom 10%” term actually takes the most confident log-probabilities. Its median/MAD normalization operates across the current sample batch. Exact formulas and caveats are in the <a href="results/overnight20261021/ADAPTIVE_WINNER_INSPECTION.md">twelve-winner inspection</a>.</p>
+<h2>Batching and a train-only normalization control</h2>
+<p>The same frozen compositional seed-8741 program scores <strong>68.965 folded AUROC</strong> under the original 512-row convention. All original training, validation and benchmark paths use 512-row chunks. A separate five-case audit reproduces its nine original prediction vectors exactly before changing chunk size or row membership. Full-dataset calls give <strong>70.847</strong>, while a fixed label-independent shuffle at the same 512-row size gives <strong>70.790</strong>. These are sensitivity results, never replacement primaries. CommonClaims explains about <strong>97%</strong> of the full-batch macro change: its supplied rows form nearly class-pure chunks, and its score changes from <strong>51.890 to 68.357</strong>. The other eight individual changes stay within about 0.21 pp. <a href="results/overnight20261021/batch_sensitivity/INTERPRETATION.md">Batch audit</a>.</p>
+<p>A separately named control freezes the original four normalization medians/MADs using <strong>only the original 5,605 PopQA training rows</strong>, with no label-based coefficient fitting or new generation. It reaches <strong>67.783 directed / 70.558 folded</strong> and gives byte-identical scores under singleton, 128-row, 512-row and shuffled calls. The original zero-MAD rule automatically disables two terms; the feature calculations and writer-proposed coefficients remain fixed. CommonClaims drives the gain and four datasets worsen. This follow-up establishes batching stability for this control, not universal quality improvement; it was designed after test inspection and does not alter any primary result. <a href="results/overnight20261021/frozen_train_normalization/INTERPRETATION.md">Fit and invariance evidence</a>.</p>
+<p><img src="results/overnight20261021/figures/batch_normalization_diagnostics.png" alt="Batch sensitivity and separate train-fixed normalization" /></p>
+<p>The same source-fixed control was first transferred without refitting to the six historical Llama3.2-1B datasets. It scores <strong>65.844 directed / 69.491 folded</strong>, versus original C8741 <strong>64.110 / 67.130</strong> and NLL <strong>63.730 / 67.791</strong>. Its target folded gain is <strong>+2.361 [1.804, 2.975] pp</strong> over the original and <strong>+1.700 [1.320, 2.104] pp</strong> over NLL. CommonClaims supplies about 80% of the gain over the original, and two datasets worsen. Absolute matched-six source-to-target quality falls <strong>72.534 → 69.491</strong>; the change in its NLL-relative advantage is <strong>+0.171 [−0.135, 0.463] pp</strong>, unresolved. All target batch/shuffle cases reproduce the same fixed predictions byte-for-byte. AUROC tests the frozen feature/scale combination; score-offset medians do not affect ranking, so it does not establish calibration transfer. This is a post-benchmark exploratory control, with no primary replacement. <a href="results/overnight20261021/normalization_transfer/INTERPRETATION.md">Transfer protocol and independent audits</a>.</p>
+<p>The <strong>completed nine-dataset normalization extension</strong> reaches <strong>63.564 directed / 66.584 folded</strong> on the target, versus original C8741 <strong>62.779 / 64.995</strong> and NLL <strong>61.459 / 64.835</strong>. Folded gains are <strong>+1.590 [1.133, 2.018] pp</strong> over the original and <strong>+1.750 [1.484, 2.034] pp</strong> over NLL. The matched source-to-target loss is <strong>3.974 pp</strong>; its NLL-relative advantage changes <strong>−0.098 [−0.320, +0.376] pp</strong>, unresolved. Strict target-nine is <strong>66.526</strong>, versus NLL <strong>64.781</strong>. The first six predictions remain byte-identical; only CounterFact, PopQA and X-Fact were added. This establishes a retained ranking advantage and batching stability, not improved transfer robustness or uniform per-dataset improvement. <a href="results/overnight20261021/normalization_transfer/NINE_INTERPRETATION.md">Full-nine interpretation</a>.</p>
+<h2>Fixed-coefficient component ablations</h2>
+<p>All four screen winners also received <strong>eleven predefined fixed-coefficient component drops</strong>. Full-program controls reproduce their original predictions exactly. Tail gap variance helps the neutral and diverse formulas; the diverse drift term contributes negligibly. The compositional tail-mean term is harmful with its fixed coefficient, whereas positional correlation carries much of that formula's useful ranking. These observations concern conditional contributions inside frozen formulas, not independent feature importance or a test-selected replacement detector. All drops, including negative results, remain in the <a href="results/overnight20261021/screen_component_ablations/ABLATION_REPORT.md">ablation report</a>.</p>
+<h2>Separate exploratory experiment: supervised feature combinations</h2>
+<p>The following methods <strong>fit numerical weights or distribution parameters to labelled PopQA training data</strong>, in addition to selecting generated programs. They are supervised follow-ups, not results of evolution alone. Language-model weights are unchanged. Their source and transfer scores must not be used to claim that the unsupervised evolved formulas beat the paper.</p>
+<p>The conventional controls use fourteen documented features and a separate <strong>claim-grouped 5,606 / 1,401 split</strong>. Three-fold grouped CV operates inside fitting rows only, with scaling inside each fold and five predefined regularization values. Heads are fitted on 5,606 rows and frozen without outer-validation refitting. This produces <strong>73.019 logistic / 72.166 QDA folded AUROC</strong>; it is supervised estimation, not supervised program evolution.</p>
+<p>A separate CPU-only follow-up retains <strong>all eleven full-minus-drop component vectors from all four winners</strong>, plus an explicitly named <strong>float64 total-NLL</strong> column. One twelve-column logistic head is trained with the same grouped split, fit-only three-fold CV, scaler and five-value C grid; <strong>C = 0.1</strong> is selected. No feature is removed by benchmark quality, and weights are frozen for transfer. This is a learned combination of generated signals, not jointly supervised evolution.</p>
+<table>
+<thead>
+<tr>
+<th>Completed scope</th>
+<th style="text-align:right">NLL directed</th>
+<th style="text-align:right">Head directed</th>
+<th style="text-align:right">NLL folded</th>
+<th style="text-align:right">Head folded</th>
+<th style="text-align:right">Folded gain</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source Llama3.1, nine datasets</td>
+<td style="text-align:right">65.644</td>
+<td style="text-align:right">71.359</td>
+<td style="text-align:right">68.711</td>
+<td style="text-align:right"><strong>73.633</strong></td>
+<td style="text-align:right">+4.922</td>
+</tr>
+<tr>
+<td>Target Llama3.2-1B, same nine</td>
+<td style="text-align:right">61.459</td>
+<td style="text-align:right">66.552</td>
+<td style="text-align:right">64.835</td>
+<td style="text-align:right"><strong>68.800</strong></td>
+<td style="text-align:right">+3.965</td>
+</tr>
+<tr>
+<td>Source Llama3.1, matched six</td>
+<td style="text-align:right">66.405</td>
+<td style="text-align:right">70.884</td>
+<td style="text-align:right">71.006</td>
+<td style="text-align:right">74.296</td>
+<td style="text-align:right">+3.290</td>
+</tr>
+<tr>
+<td>Target Llama3.2-1B, same six</td>
+<td style="text-align:right">63.730</td>
+<td style="text-align:right">68.060</td>
+<td style="text-align:right">67.791</td>
+<td style="text-align:right"><strong>71.431</strong></td>
+<td style="text-align:right">+3.640</td>
+</tr>
+</tbody>
+</table>
+<p>The <strong>complete nine-dataset head extension</strong> scores <strong>68.800 folded versus NLL 64.835</strong>, a gain of <strong>3.965 pp [3.529, 4.628]</strong>. Its directed advantage is <strong>5.092 pp</strong>. Matched-nine target-minus-source head quality is <strong>−4.834 pp [−5.270, −4.186]</strong>; its NLL-relative advantage changes <strong>−0.957 pp [−1.302, −0.149]</strong>. Thus the advantage over NLL survives, but relative transfer is weaker over all nine datasets. The earlier matched-six gain-change interval spanning zero does not establish this full-nine result. Strict target-nine head/NLL scores are <strong>68.731 / 64.781</strong>. The extension reuses the original six results byte-for-byte, evaluates only three new datasets, and preserves the original report and frozen weights. <a href="results/overnight20261021/screen_component_refit/transfer_nine/TRANSFER9_REPORT.md">Separate nine-dataset report</a>.</p>
+<p>The preserved six-dataset study gives a source-nine gain interval <strong>[4.193, 5.419]</strong> and target-six <strong>[2.943, 4.280]</strong>, from 500 claim-bootstrap replicates conditional on this frozen head. Absolute head performance drops <strong>2.865 pp</strong> on matched six-dataset transfer. Its gain-over-NLL change is <strong>+0.350 pp</strong>, with interval <strong>[−0.128, 0.842]</strong>, so there is no clear relative-gain improvement. Source-nine and target-six means must not be compared directly. See the <a href="results/overnight20261021/screen_component_refit/REFIT_REPORT.md">refit report</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Frozen comparison</th>
+<th style="text-align:right">Source-nine folded</th>
+<th style="text-align:right">Target-nine folded</th>
+<th style="text-align:right">Completed target seeds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fourteen-feature logistic</td>
+<td style="text-align:right">73.019</td>
+<td style="text-align:right">68.939</td>
+<td style="text-align:right">One frozen fit</td>
+</tr>
+<tr>
+<td>Fourteen-feature QDA</td>
+<td style="text-align:right">72.166</td>
+<td style="text-align:right">64.386</td>
+<td style="text-align:right">One frozen fit</td>
+</tr>
+</tbody>
+</table>
+<p>The component head exceeds logistic-14 by <strong>0.614 source folded pp [0.022, 0.912]</strong>, but its target folded difference is <strong>−0.140 pp [−0.515, +0.458]</strong>, unresolved. On directed target AUROC the head is <strong>0.842 pp lower [−1.322, −0.342]</strong>. This does not establish that generated components generalize better than the conventional feature set. <a href="results/overnight20261021/screen_component_refit/transfer_nine/HEAD_VS_LOGISTIC14_NINE.json">Paired comparison</a>.</p>
+<p>For the component combination, the recorded CPU fitting stage took <strong>122.7 seconds</strong>. Fitting plus the initial source-nine and target-six evaluations took <strong>17 minutes 49 seconds</strong> elapsed, with the two evaluations running concurrently while writer searches continued. Later target-nine extension and audit work are additional; implementation/audit effort was not separately timed.</p>
+<p>The component pool is <strong>validation-informed</strong> because its source programs were selected on PopQA validation before coefficient fitting. Its outer-validation <strong>82.094</strong> is diagnostic rather than independent validation. Benchmarks had also been viewed before this follow-up was designed, making its evaluation exploratory. Bootstrap intervals do not measure search-seed variability or correct multiple comparisons.</p>
+<h2>Frozen transfer of evolved formulas</h2>
+<p>Transfer holds source-selected evolved formulas fixed and uses Llama3.2-1B features with the original shared tokenizer, verified row/token identities and no target fitting. All nine target caches are now complete, including <strong>41,253 newly inferred rows</strong>; all six historical cache hashes are unchanged. The formal mixed-runtime 427-row reference passed with exact identities/shapes/dtypes, <strong>0.00390625</strong> maximum token-logprob drift and NLL rank correlation <strong>0.9999998844</strong>. This coarse numerical guard does not establish bitwise feature equivalence across runtimes. The complete evaluation executed all <strong>18 dataset/kind tasks</strong>. <strong>29 of 30 main method identities</strong> have full-nine results. This execution total includes the two supervised controls reported separately; the evolved-formula table below excludes them. Compositional seed <strong>2107</strong> has only eight: its target UHEAD output fails the finite/shape check. Saved warnings and source suggest float16 entropy underflow (<code>0*log(0)</code> after <code>1e-10</code> rounds to zero); this is a static/log-supported diagnosis, without new reproduction or repair. No replacement or complete three-seed compositional target mean is reported. The successful two seeds remain individual results, not a complete primary cohort.</p>
+<table>
+<thead>
+<tr>
+<th>Frozen comparison</th>
+<th style="text-align:right">Source-nine folded</th>
+<th style="text-align:right">Target-nine folded</th>
+<th style="text-align:right">Completed target seeds</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canonical NLL</td>
+<td style="text-align:right">68.711</td>
+<td style="text-align:right">64.835</td>
+<td style="text-align:right">Fixed baseline</td>
+</tr>
+<tr>
+<td>9B adaptive original</td>
+<td style="text-align:right">69.943 ± 1.059</td>
+<td style="text-align:right">66.591 ± 1.135</td>
+<td style="text-align:right">3/3</td>
+</tr>
+<tr>
+<td>9B adaptive diverse</td>
+<td style="text-align:right">70.355 ± 1.648</td>
+<td style="text-align:right">66.132 ± 1.211</td>
+<td style="text-align:right">3/3</td>
+</tr>
+<tr>
+<td>9B adaptive compositional</td>
+<td style="text-align:right">70.002 ± 0.911</td>
+<td style="text-align:right">Incomplete cohort</td>
+<td style="text-align:right">2/3</td>
+</tr>
+<tr>
+<td>9B neutral / fixed-example neutral</td>
+<td style="text-align:right">68.711 / 68.711</td>
+<td style="text-align:right">64.835 / 64.835</td>
+<td style="text-align:right">3/3 each</td>
+</tr>
+<tr>
+<td>9B neutral rank/uniform</td>
+<td style="text-align:right">68.922 ± 0.364</td>
+<td style="text-align:right">65.032 ± 0.343</td>
+<td style="text-align:right">3/3</td>
+</tr>
+<tr>
+<td>Qwen27B original</td>
+<td style="text-align:right">71.155</td>
+<td style="text-align:right">67.471</td>
+<td style="text-align:right">1/1</td>
+</tr>
+<tr>
+<td>Qwen27B diverse</td>
+<td style="text-align:right">72.306</td>
+<td style="text-align:right">67.780</td>
+<td style="text-align:right">1/1</td>
+</tr>
+<tr>
+<td>GLM original</td>
+<td style="text-align:right">70.671</td>
+<td style="text-align:right">67.219</td>
+<td style="text-align:right">1/1</td>
+</tr>
+<tr>
+<td>GLM diverse</td>
+<td style="text-align:right">68.711</td>
+<td style="text-align:right">64.835</td>
+<td style="text-align:right">1/1</td>
+</tr>
+</tbody>
+</table>
+<p>The diverse-versus-original point ordering reverses for the 9B adaptive means on target features. Fixed-example versus adaptive neutral remains exactly zero. The one-seed 27B and GLM results remain descriptive. <a href="results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/TRANSFER_REPORT.md">All method identities, per-dataset failures and paired intervals</a>.</p>
+<p>All four full screen formulas also lose <strong>1.06–3.56 pp on matched six</strong>, and <strong>2.29–4.72 pp on matched nine</strong>. Source-nine and target-six means must not be compared directly.</p>
+<h2>Interpretation limits and comparison with the paper</h2>
+<p>Exact normalized-claim grouping prevents fitting/validation overlap for the fitted heads. The inherited evolutionary split nevertheless has <strong>88 shared normalized claims</strong>. The test collection also includes <strong>520 PopQA rows</strong> matching the full training CSV, plus <strong>six WildHallucinations rows and one Cities row</strong>. The duplicate-disjoint folded macro is <strong>72.949</strong> for the fourteen-feature logistic and <strong>73.570</strong> for the component head. Small macro reductions do not establish semantic-, entity- or relation-disjoint generalization.</p>
+<p>The paper displays <strong>70.8</strong> for its best shown GPT-OSS-120B method and <strong>73.4</strong> for its best shown Claude method. Both are evolved formulas evaluated on Llama3.1-8B-Instruct features. Our Qwen27B detector scores <strong>72.306</strong> without an additional fitted layer: about <strong>1.51 pp above</strong> the displayed GPT-OSS result and <strong>1.09 pp below</strong> the Claude result. The separate historical-context screen reaches <strong>73.137</strong>, also below 73.4. These are numerical comparisons, not matched replications. The paper typically uses <strong>500 rounds with two proposals</strong>, multiple runs and retained collections; our full adaptive trajectories use <strong>30 rounds with two proposals</strong>. There is no paired evaluation of the original paper executables here. The supervised combination belongs to the separate experiment above and is excluded from this evolutionary comparison. These results do not establish that we beat the paper's best method.</p>
+<h2>Coverage, implementation and remaining deliverables</h2>
+<table>
+<thead>
+<tr>
+<th>Original extension question</th>
+<th>Completed evidence</th>
+<th>Remaining scope</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Newer/smaller writers</td>
+<td>Pinned 9B screens, four-policy/three-seed adaptive matrix and controls; complete 27B and GLM original/diverse pairs</td>
+<td>Devstral time-skipped; matched GPT-OSS cost comparison absent</td>
+</tr>
+<tr>
+<td>Diversity and structured generation</td>
+<td>Four matched policies, validity and rank diagnostics</td>
+<td>No reliable diversity gain; sketch-then-code, repair and novelty archive untested</td>
+</tr>
+<tr>
+<td>Claude complexity and writer differences</td>
+<td>Executable local formulas, failures and dead-term audit</td>
+<td>Original Claude populations unavailable; Sonnet/Opus ranking unexplained</td>
+</tr>
+<tr>
+<td>Supervised estimators</td>
+<td>Grouped logistic/QDA and exploratory component head</td>
+<td>Joint supervised evolution untested</td>
+</tr>
+<tr>
+<td>Necessity of feedback</td>
+<td>Three complete matched neutral/fixed-example seeds; all six winners retain NLL and the quality difference is zero</td>
+<td>Long-run/restart comparison and fresh no-example arm untested</td>
+</tr>
+<tr>
+<td>Feature-model transfer</td>
+<td>Full-nine frozen comparison, one retained method failure; separate complete head/normalization studies</td>
+<td>Native-tokenizer transfer and independent confirmation untested</td>
+</tr>
+<tr>
+<td>Component importance</td>
+<td>All eleven drops and all-column refit</td>
+<td>Original paper-formula ablations, Shapley and exhaustive subset frontier untested</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="results/overnight20261021/extension_coverage_audit.md">coverage audit</a> maps these questions to the original proposal. Code changes provide opt-in trials, prompt policies, saved predictions/provenance, unique frozen estimators, cached evaluation, fitted controls and reproducible reporting. During execution, pinned search/core bytes remain fixed; additive wrappers apply the declared sampler and interface hooks. This does not mean the repository is unchanged from the supplied archive. Scheduling reservations allow the same feedback jobs to overlap safely without duplicate requests or altered experimental identities.</p>
+<p>The completed Qwen9B phase issued <strong>1,260 requests across 23 full-budget jobs</strong>, with <strong>669 valid candidates</strong>, including the screens, adaptive matrix, feedback controls, sampler controls and one interface pilot. The completed Qwen27B pair adds <strong>120 requests / 108 valid candidates</strong>. GLM adds <strong>120 requests / 64 valid candidates</strong>, bringing the complete campaign to <strong>27 jobs / 1,500 requests / 841 pipeline-valid candidates</strong>. Recorded usage totals <strong>1,889,962 prompt + 2,204,266 completion = 4,094,228 tokens</strong>; two requests lack token usage. These are persisted local-server usage counts, not paid API charges. The <strong>two A100-SXM4-80GB</strong> pod cost <strong>$3.58/hour total</strong>. From <strong>21 October 18:16:28</strong> through confirmed shutdown <strong>22 October 00:44:41 UTC</strong>, elapsed compute is <strong>6 h 28 min / approximately $23.16</strong>, excluding storage/network and pre-task waiting; it is an estimate rather than an invoice. Summed overlapping request latencies are not GPU-hours. Telemetry samples approximately once a minute and does not certify continuous busy time. <a href="results/overnight20261021/resource_summary/RESOURCE_USAGE.md">Resource accounting</a>.</p>
+<p>All <strong>three new XZ archives</strong>, totaling <strong>762,346,556 bytes</strong>, passed remote lossless raw-SHA round trips and local compressed-SHA verification. <strong>5,889 unchanged scientific artifacts</strong> match the pod snapshot locally. The pre-publication backup verified 5,890 files; mutable progress and the plotting receipt regenerated offline are explicitly excluded from the final scientific scope. RunPod confirms <strong><code>EXITED</code> and <code>runtime: null</code></strong>. <a href="results/overnight20261021/final_local_backup_validation.json">Backup verification</a>, <a href="results/overnight20261021/cache_backup_receipt.json">cache backup</a>, <a href="results/overnight20261021/pod_stop_confirmation.json">stop confirmation</a>.</p>
+<p>The code changes are described in <a href="results/overnight20261021/CODE_CHANGES_20261021.md">the implementation audit</a>. The working GPU environment passed dependency checks and real model/numerical-reference execution; a second clean rebuild remains unperformed. Historical reports and pinned six-dataset studies are preserved separately. The source figure below retains every generation seed; its bars describe seed spread, not confidence intervals or a winner chosen on test quality.</p>
+<p><img src="results/overnight20261021/figures/source_auc_all_seeds.png" alt="Source-validation-selected programs, all search seeds" /></p>
+</body></html>

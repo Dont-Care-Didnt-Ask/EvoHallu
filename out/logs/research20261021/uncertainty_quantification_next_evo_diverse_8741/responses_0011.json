@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n\n1.  **Average Negative Log-Prob (Surprisal)**: This approach normalizes by sequence length. While it handles variable lengths, the ROC-AUC of **71.99** suggests it treats hallucinations as a global property of the sequence's \"surprise level.\" This fails to distinguish between a sequence with one highly unlikely hallucinated token (low average impact) and a sequence with many slightly unlikely tokens (high average impact), or vice versa. It lacks sensitivity to *local* anomalies.\n2.  **Total Negative Log-Prob**: This approach sums the surprisal. The score of **74.32** is better, likely because longer sequences with hallucinations accumulate higher total surprisal. However, it is biased by sequence length; a long, coherent sequence might score higher than a short, hallucinated one. It also suffers from the same lack of local sensitivity.\n\n### Proposed Detector Strategy\n\n**Signal**: Maximum Local Surprisal (Max-Negative-Log-Prob).\n**Aggregation Principle**: Per-sequence maximum.\n\n**Rationale**: Hallucinations often manifest as specific tokens that are extremely unlikely given the context (e.g., a random name, a non-existent fact), causing a sharp spike in negative log-probability. Global averages or sums dilute these spikes with the \"normal\" probability of the rest of the sentence. By taking the **maximum** negative log-probability across all tokens in a sequence, we directly target the most anomalous token, which is the strongest indicator of a hallucination. This approach is robust to sequence length (unlike the sum) and more sensitive to single-event errors (unlike the mean).\n\n### Code Implementation\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the most improbable token within each sequence.\n        \n        Approach: \n        Calculates the negative log-probability for every token in the generated sequence \n        and returns the maximum value per sequence. \n        Hypothesis: Hallucinated tokens often result in extreme local surprisal spikes \n        that are diluted by global averaging or summing methods.\n        \n        Args:\n            stats: Dictionary containing 'sequence_logprobs' (List[np.ndarray]).\n        \n        Returns:\n            np.ndarray of shape [N] containing the max negative log-prob per sequence.\n        \"\"\"\n        log_probs_list = stats[\"sequence_logprobs\"]\n        \n        # Compute max negative log-prob for each sequence\n        # Handles empty sequences gracefully (returns 0 or -inf depending on init, \n        # but assuming non-empty based on problem description \"n_i-1\")\n        scores = np.array([\n            -np.max(lp, dtype=np.float32) \n            for lp in log_probs_list \n        ], dtype=np.float32)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 685,
+      "prompt_tokens": 754,
+      "total_tokens": 1439,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.121386015991447
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Average Surprisal (`-mean(log_probs)`)**: This approach normalizes the total surprise by sequence length. It assumes hallucinations increase the *density* of unlikely tokens. Score: ~72.0.\n2.  **Total Surprisal (`-sum(log_probs)`)**: This approach assumes hallucinations add enough unlikely tokens to outweigh the length normalization, or that hallucinated segments are long enough to dominate the sum. Score: ~74.3.\n\n**Observation**: Both methods rely on global aggregation (mean or sum) of the entire sequence's log-probabilities. They treat the sequence as a bag of tokens, ignoring the *temporal structure* or *contiguity* of unlikely events. A hallucination often manifests as a specific \"burst\" of low-probability tokens (e.g., a fabricated list or fact) rather than uniformly high surprisal across the whole text.\n\n### Proposed Detector Strategy\n**Signal**: **Local Windowed Max-Surprisal** (or \"Peak Surprisal\").\nInstead of averaging or summing, we slide a small window over the sequence log-probabilities to find the maximum negative log-probability within that window. This captures the intensity of the most suspicious local segment.\n\n**Aggregation Principle**: **Max-Pooling**.\nWe aggregate the local windowed maximums by taking the global maximum across the entire sequence.\n*   **Hypothesis**: Hallucinations often involve a concentrated burst of nonsensical or fabricated content that is locally highly improbable, which might be diluted by surrounding coherent text in a mean/sum approach but will dominate a max-pooling operation.\n\n### Python Code\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the most locally improbable token burst.\n        \n        Approach: Slides a window of size 5 over the sequence log-probabilities and \n        computes the maximum negative log-probability (surprisal) within each window. \n        The final score for a sequence is the global maximum of these windowed peaks.\n        \n        Hypothesis: Hallucinations often manifest as contiguous bursts of fabricated content \n        that create a local spike in surprisal, which global averaging (mean/sum) dilutes \n        but peak detection preserves.\n        \"\"\"\n        log_probs_list = stats[\"sequence_logprobs\"]\n        scores = np.zeros(len(log_probs_list), dtype=np.float32)\n        \n        window_size = 5\n        \n        for i, lp in enumerate(log_probs_list):\n            if len(lp) < window_size:\n                # If sequence is shorter than window, take max of all\n                scores[i] = float(-np.max(lp))\n            else:\n                # Compute max surprisal in sliding windows\n                # lp is 1D array of log probs (negative values usually)\n                # We want max(-log_p) = -min(log_p)\n                # Sliding window min of log_probs, then negate\n                local_max_surprisal = -np.min(lp[i-window_size:i+1])\n                scores[i] = float(local_max_surprisal)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 761,
+      "prompt_tokens": 775,
+      "total_tokens": 1536,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.985588704992551
+  }
+]

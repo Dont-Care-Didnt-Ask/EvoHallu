@@ -1,0 +1,3720 @@
+{
+  "created_utc": "2026-10-21T14:56:14.425850+00:00",
+  "labels": "is_hallu",
+  "source_of_clarification": "Paper author's explanation dated 16 October 2026, supplied directly by the user on 21 October 2026",
+  "reporting_rule": "For each method and each dataset: max(AUC_percent, 100-AUC_percent); then unweighted mean over nine datasets",
+  "baseline_reproduction_resolved": true,
+  "interpretation": "Reporting-direction reconciliation; does not imply any UHEAD CSV or is_hallu labeling error",
+  "selection_rule_unchanged": "Training fitness and final program/seed selection retain directed PopQA AUROC",
+  "no_gpu_or_model_calls": true,
+  "historical_predictions_modified": false,
+  "uncertainty_note": "Point estimates only; prior directed-AUROC confidence intervals are not transferred to this transform",
+  "source_predictions_sha256": {
+    "out/campaign/evaluation_with_4b/AVeriTeC__dev_filtered_10shot_scores.npz": "50a7b060de4f8d78a786647ab4ec6d74b932a66d5dfbb5175892fc87c72320ff",
+    "out/campaign/evaluation_with_4b/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "1052a839a46dcfface01759db8c943b86e6cb90cd7b78f3ab5526c0f16bbe8d6",
+    "out/campaign/evaluation_with_4b/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "4b4f9390dbcb433b8b58f5266c9b026380545e8b6f2479066bb7362a024ba431",
+    "out/campaign/evaluation_with_4b/geometry__cities_scores.npz": "c6229cff1100838d1429889c654cbdf7b90bdd49ba8a8fe37728ddabefebb301",
+    "out/campaign/evaluation_with_4b/geometry__common_claim_true_false_scores.npz": "e11799ea2b6b8a6dae0bb2ab29eed4423dcc9da137b9082b9db8935db39182d6",
+    "out/campaign/evaluation_with_4b/geometry__companies_true_false_scores.npz": "09556740a325df6d495238a02c8935e5f9b5c9e2da30a1a72ea6e32f104b33c9",
+    "out/campaign/evaluation_with_4b/geometry__counterfact_true_false_scores.npz": "2c3d87872de478a2dfad213d9bb06781237682d76a6e70dd3cdb2d0de8d15982",
+    "out/campaign/evaluation_with_4b/popqa__popqa_test_filtered_10shot_scores.npz": "bcb022f2db0c40f00ffaafb5d3364ffb26a218d26dc64c8a22e17ec677e16be7",
+    "out/campaign/evaluation_with_4b/x-fact__test_filtered_10shot_scores.npz": "cb628f8fcdfcccddd606d8ea0027f62c0b9c1e7ff172e46776cad54147229b9b"
+  },
+  "baseline_checks": {
+    "original/SequenceLogProb": {
+      "paper_auc_percent": 68.7,
+      "reproduced_auc_percent": 68.71117305407847,
+      "matches_paper_rounding": true
+    },
+    "original/Perplexity": {
+      "paper_auc_percent": 64.2,
+      "reproduced_auc_percent": 64.17472363290479,
+      "matches_paper_rounding": true
+    },
+    "original/MeanTokenEntropy": {
+      "paper_auc_percent": 59.9,
+      "reproduced_auc_percent": 59.90428784096481,
+      "matches_paper_rounding": true
+    }
+  },
+  "methods": {
+    "alignment/ClaimLength": {
+      "raw_macro_auc_percent": 49.368038700219536,
+      "direction_invariant_macro_auc_percent": 54.63369356324781,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__common_claim_true_false",
+        "geometry__companies_true_false",
+        "popqa__popqa_test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 56.349099704380535,
+          "direction_invariant_auc_percent": 56.349099704380535,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.98498410726681,
+          "direction_invariant_auc_percent": 59.01501589273319,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 60.910255412529025,
+          "direction_invariant_auc_percent": 60.910255412529025,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 50.69534802253425,
+          "direction_invariant_auc_percent": 50.69534802253425,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 43.814982956697385,
+          "direction_invariant_auc_percent": 56.185017043302615,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 49.53875,
+          "direction_invariant_auc_percent": 50.46125,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 50.05309204615924,
+          "direction_invariant_auc_percent": 50.05309204615924,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 46.72100997187332,
+          "direction_invariant_auc_percent": 53.27899002812668,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 45.24482608053527,
+          "direction_invariant_auc_percent": 54.75517391946473,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "alignment/ClaimOnlyMeanSurprisal": {
+      "raw_macro_auc_percent": 66.3389614523798,
+      "direction_invariant_macro_auc_percent": 66.9372020882515,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 60.491803278688515,
+          "direction_invariant_auc_percent": 60.491803278688515,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 47.307917138577324,
+          "direction_invariant_auc_percent": 52.692082861422676,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.690014976172264,
+          "direction_invariant_auc_percent": 58.690014976172264,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 90.14394892619177,
+          "direction_invariant_auc_percent": 90.14394892619177,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 71.58344653452848,
+          "direction_invariant_auc_percent": 71.58344653452848,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 74.1523611111111,
+          "direction_invariant_auc_percent": 74.1523611111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 64.83113702984686,
+          "direction_invariant_auc_percent": 64.83113702984686,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 71.8256329710127,
+          "direction_invariant_auc_percent": 71.8256329710127,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 58.02439110528918,
+          "direction_invariant_auc_percent": 58.02439110528918,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "alignment/ClaimOnlySequenceLogProb": {
+      "raw_macro_auc_percent": 65.68582040005109,
+      "direction_invariant_macro_auc_percent": 68.71450580241667,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.791991400161244,
+          "direction_invariant_auc_percent": 63.791991400161244,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.37091568935491,
+          "direction_invariant_auc_percent": 63.62908431064509,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 70.68826447497877,
+          "direction_invariant_auc_percent": 70.68826447497877,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.92159484114501,
+          "direction_invariant_auc_percent": 91.92159484114501,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 63.264496906956204,
+          "direction_invariant_auc_percent": 63.264496906956204,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.5748611111111,
+          "direction_invariant_auc_percent": 72.5748611111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 68.0743669111169,
+          "direction_invariant_auc_percent": 68.0743669111169,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 74.01144240593987,
+          "direction_invariant_auc_percent": 74.01144240593987,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.47444985969576,
+          "direction_invariant_auc_percent": 50.47444985969576,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "alignment/LastInputTokenSurprisal": {
+      "raw_macro_auc_percent": 50.14900858919563,
+      "direction_invariant_macro_auc_percent": 50.14900858919563,
+      "flipped_datasets": [],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 50.022471910112365,
+          "direction_invariant_auc_percent": 50.022471910112365,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 50.19083382207561,
+          "direction_invariant_auc_percent": 50.19083382207561,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 51.12777157057271,
+          "direction_invariant_auc_percent": 51.12777157057271,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "alignment/LegacyTailCropSequenceLogProb": {
+      "raw_macro_auc_percent": 64.521385798152,
+      "direction_invariant_macro_auc_percent": 67.57899260201484,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.41279226014511,
+          "direction_invariant_auc_percent": 64.41279226014511,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.39070549121333,
+          "direction_invariant_auc_percent": 63.60929450878667,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 63.95037751596615,
+          "direction_invariant_auc_percent": 63.95037751596615,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.04528296491178,
+          "direction_invariant_auc_percent": 91.04528296491178,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 61.12795859108699,
+          "direction_invariant_auc_percent": 61.12795859108699,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 73.80250000000001,
+          "direction_invariant_auc_percent": 73.80250000000001,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 67.61640113022283,
+          "direction_invariant_auc_percent": 67.61640113022283,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 72.49639033841791,
+          "direction_invariant_auc_percent": 72.49639033841791,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 49.85006389140388,
+          "direction_invariant_auc_percent": 50.14993610859612,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "alignment/PostClaimSurprisal": {
+      "raw_macro_auc_percent": 65.33971297887359,
+      "direction_invariant_macro_auc_percent": 67.04052717552996,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 58.73689868314968,
+          "direction_invariant_auc_percent": 58.73689868314968,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 43.43818883733392,
+          "direction_invariant_auc_percent": 56.56181116266608,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 56.37867516869365,
+          "direction_invariant_auc_percent": 56.37867516869365,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 99.76872372672939,
+          "direction_invariant_auc_percent": 99.76872372672939,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 64.18669359929304,
+          "direction_invariant_auc_percent": 64.18669359929304,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 69.55833333333332,
+          "direction_invariant_auc_percent": 69.55833333333332,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 76.31907817048777,
+          "direction_invariant_auc_percent": 76.31907817048777,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 70.76267801312916,
+          "direction_invariant_auc_percent": 70.76267801312916,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.9081472777125,
+          "direction_invariant_auc_percent": 51.0918527222875,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/ablation_laguna_slope_only": {
+      "raw_macro_auc_percent": 68.5347209309762,
+      "direction_invariant_macro_auc_percent": 70.67186963443274,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.71969900564365,
+          "direction_invariant_auc_percent": 62.71969900564365,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.78418764385664,
+          "direction_invariant_auc_percent": 58.21581235614336,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.34220056771364,
+          "direction_invariant_auc_percent": 58.34220056771364,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.62649060596529,
+          "direction_invariant_auc_percent": 94.62649060596529,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.7435374321424,
+          "direction_invariant_auc_percent": 67.7435374321424,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.1211111111111,
+          "direction_invariant_auc_percent": 89.1211111111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 75.0197812014176,
+          "direction_invariant_auc_percent": 75.0197812014176,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.85683762034648,
+          "direction_invariant_auc_percent": 78.85683762034648,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.59864319058902,
+          "direction_invariant_auc_percent": 51.40135680941098,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/ablation_laguna_slope_range": {
+      "raw_macro_auc_percent": 69.21921406573375,
+      "direction_invariant_macro_auc_percent": 71.27767821473168,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.48535339962376,
+          "direction_invariant_auc_percent": 64.48535339962376,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.73691132950933,
+          "direction_invariant_auc_percent": 59.26308867049067,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 61.1207988316826,
+          "direction_invariant_auc_percent": 61.1207988316826,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.15571649174984,
+          "direction_invariant_auc_percent": 94.15571649174984,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.41504355510668,
+          "direction_invariant_auc_percent": 69.41504355510668,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 88.7540277777778,
+          "direction_invariant_auc_percent": 88.7540277777778,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.91743669643616,
+          "direction_invariant_auc_percent": 73.91743669643616,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.63378415643349,
+          "direction_invariant_auc_percent": 79.63378415643349,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.75385435328415,
+          "direction_invariant_auc_percent": 50.75385435328415,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/ablation_laguna_slope_variance": {
+      "raw_macro_auc_percent": 68.63507318151103,
+      "direction_invariant_macro_auc_percent": 70.75147591001529,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.99650631550657,
+          "direction_invariant_auc_percent": 62.99650631550657,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.75313287786343,
+          "direction_invariant_auc_percent": 58.24686712213657,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.57526758275655,
+          "direction_invariant_auc_percent": 58.57526758275655,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.57108438903028,
+          "direction_invariant_auc_percent": 94.57108438903028,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.11979295543492,
+          "direction_invariant_auc_percent": 68.11979295543492,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.21666666666665,
+          "direction_invariant_auc_percent": 89.21666666666665,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 74.81998366764788,
+          "direction_invariant_auc_percent": 74.81998366764788,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.94016933482565,
+          "direction_invariant_auc_percent": 78.94016933482565,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.72305484386739,
+          "direction_invariant_auc_percent": 51.27694515613261,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/ablation_qwen_linear_position_nll": {
+      "raw_macro_auc_percent": 69.79260638209647,
+      "direction_invariant_macro_auc_percent": 72.00030931721162,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.57645794141361,
+          "direction_invariant_auc_percent": 65.57645794141361,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.06533679198178,
+          "direction_invariant_auc_percent": 59.93466320801822,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 65.31219885744667,
+          "direction_invariant_auc_percent": 65.31219885744667,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.11566673339243,
+          "direction_invariant_auc_percent": 96.11566673339243,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.98514833985607,
+          "direction_invariant_auc_percent": 68.98514833985607,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 86.47277777777778,
+          "direction_invariant_auc_percent": 86.47277777777778,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 72.11270783279042,
+          "direction_invariant_auc_percent": 72.11270783279042,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.97405032364246,
+          "direction_invariant_auc_percent": 78.97405032364246,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 54.51911284056686,
+          "direction_invariant_auc_percent": 54.51911284056686,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_laguna_evo_1047": {
+      "raw_macro_auc_percent": 69.42873391244322,
+      "direction_invariant_macro_auc_percent": 71.28192538165166,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.49879064767535,
+          "direction_invariant_auc_percent": 64.49879064767535,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.660638388562106,
+          "direction_invariant_auc_percent": 58.339361611437894,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 61.46895107151118,
+          "direction_invariant_auc_percent": 61.46895107151118,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.23310646572679,
+          "direction_invariant_auc_percent": 94.23310646572679,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.90002272440347,
+          "direction_invariant_auc_percent": 69.90002272440347,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.12555555555554,
+          "direction_invariant_auc_percent": 89.12555555555554,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.91231286962318,
+          "direction_invariant_auc_percent": 73.91231286962318,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.20134894039003,
+          "direction_invariant_auc_percent": 79.20134894039003,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.857878548541414,
+          "direction_invariant_auc_percent": 50.857878548541414,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_laguna_evo_1048": {
+      "raw_macro_auc_percent": 69.23434816916189,
+      "direction_invariant_macro_auc_percent": 71.26677773438163,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.57672668637463,
+          "direction_invariant_auc_percent": 64.57672668637463,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.85406695651115,
+          "direction_invariant_auc_percent": 59.14593304348885,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 61.19316661648037,
+          "direction_invariant_auc_percent": 61.19316661648037,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.03650376047355,
+          "direction_invariant_auc_percent": 94.03650376047355,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.62676429743719,
+          "direction_invariant_auc_percent": 69.62676429743719,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 88.64944444444444,
+          "direction_invariant_auc_percent": 88.64944444444444,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.61196069956124,
+          "direction_invariant_auc_percent": 73.61196069956124,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.59113261817913,
+          "direction_invariant_auc_percent": 79.59113261817913,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.969367442995384,
+          "direction_invariant_auc_percent": 50.969367442995384,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_laguna_independent_1048": {
+      "raw_macro_auc_percent": 68.30606336316063,
+      "direction_invariant_macro_auc_percent": 70.42442216358114,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.378124160172,
+          "direction_invariant_auc_percent": 63.378124160172,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.37085479765689,
+          "direction_invariant_auc_percent": 58.62914520234311,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 59.00876408181319,
+          "direction_invariant_auc_percent": 59.00876408181319,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 92.97878120621122,
+          "direction_invariant_auc_percent": 92.97878120621122,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.94008837268022,
+          "direction_invariant_auc_percent": 67.94008837268022,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 87.71472222222222,
+          "direction_invariant_auc_percent": 87.71472222222222,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 74.0791726632895,
+          "direction_invariant_auc_percent": 74.0791726632895,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.18753216394974,
+          "direction_invariant_auc_percent": 79.18753216394974,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 49.09653060045077,
+          "direction_invariant_auc_percent": 50.90346939954923,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_laguna_seeded_1048": {
+      "raw_macro_auc_percent": 68.5347209309762,
+      "direction_invariant_macro_auc_percent": 70.67186963443274,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.71969900564365,
+          "direction_invariant_auc_percent": 62.71969900564365,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.78418764385664,
+          "direction_invariant_auc_percent": 58.21581235614336,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.34220056771364,
+          "direction_invariant_auc_percent": 58.34220056771364,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.62649060596529,
+          "direction_invariant_auc_percent": 94.62649060596529,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.7435374321424,
+          "direction_invariant_auc_percent": 67.7435374321424,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.1211111111111,
+          "direction_invariant_auc_percent": 89.1211111111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 75.0197812014176,
+          "direction_invariant_auc_percent": 75.0197812014176,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.85683762034648,
+          "direction_invariant_auc_percent": 78.85683762034648,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.59864319058902,
+          "direction_invariant_auc_percent": 51.40135680941098,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_linear_evolution_1047": {
+      "raw_macro_auc_percent": 68.50424027661751,
+      "direction_invariant_macro_auc_percent": 71.26903459122732,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.52566514377855,
+          "direction_invariant_auc_percent": 64.52566514377855,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 37.558425584255836,
+          "direction_invariant_auc_percent": 62.441574415744164,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 66.81695949864353,
+          "direction_invariant_auc_percent": 66.81695949864353,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.82130601389802,
+          "direction_invariant_auc_percent": 94.82130601389802,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 66.24709001388713,
+          "direction_invariant_auc_percent": 66.24709001388713,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 83.75583333333333,
+          "direction_invariant_auc_percent": 83.75583333333333,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.36192225764685,
+          "direction_invariant_auc_percent": 73.36192225764685,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.13503531036997,
+          "direction_invariant_auc_percent": 79.13503531036997,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.315925333744296,
+          "direction_invariant_auc_percent": 50.315925333744296,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_linear_evolution_1048": {
+      "raw_macro_auc_percent": 67.55522587072778,
+      "direction_invariant_macro_auc_percent": 70.46561235796136,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.824509540446115,
+          "direction_invariant_auc_percent": 62.824509540446115,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.52248730408097,
+          "direction_invariant_auc_percent": 60.47751269591903,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 63.200584747561535,
+          "direction_invariant_auc_percent": 63.200584747561535,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 98.8264605793703,
+          "direction_invariant_auc_percent": 98.8264605793703,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 62.5215402095695,
+          "direction_invariant_auc_percent": 62.5215402095695,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 78.02194444444443,
+          "direction_invariant_auc_percent": 78.02194444444443,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 75.49913296432959,
+          "direction_invariant_auc_percent": 75.49913296432959,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 80.19959954337968,
+          "direction_invariant_auc_percent": 80.19959954337968,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 47.38077350336795,
+          "direction_invariant_auc_percent": 52.61922649663205,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_linear_independent_1047": {
+      "raw_macro_auc_percent": 66.20051209550056,
+      "direction_invariant_macro_auc_percent": 68.28304354285389,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 58.879333512496636,
+          "direction_invariant_auc_percent": 58.879333512496636,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 44.34474443754339,
+          "direction_invariant_auc_percent": 55.65525556245661,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.33660933701882,
+          "direction_invariant_auc_percent": 58.33660933701882,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 99.10635133975806,
+          "direction_invariant_auc_percent": 99.10635133975806,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 57.28955434919833,
+          "direction_invariant_auc_percent": 57.28955434919833,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 77.57222222222222,
+          "direction_invariant_auc_percent": 77.57222222222222,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 77.3514489168228,
+          "direction_invariant_auc_percent": 77.3514489168228,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 76.64048069507811,
+          "direction_invariant_auc_percent": 76.64048069507811,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 46.28386404936655,
+          "direction_invariant_auc_percent": 53.71613595063345,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_linear_independent_1048": {
+      "raw_macro_auc_percent": 67.30724508057924,
+      "direction_invariant_macro_auc_percent": 70.16163277113733,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.0478366030637,
+          "direction_invariant_auc_percent": 62.0478366030637,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.05364558596081,
+          "direction_invariant_auc_percent": 59.94635441403919,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 62.28142492647064,
+          "direction_invariant_auc_percent": 62.28142492647064,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 98.94817552689524,
+          "direction_invariant_auc_percent": 98.94817552689524,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 61.47429869965914,
+          "direction_invariant_auc_percent": 61.47429869965914,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 77.78944444444444,
+          "direction_invariant_auc_percent": 77.78944444444444,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 76.2046182414483,
+          "direction_invariant_auc_percent": 76.2046182414483,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.8641518907431,
+          "direction_invariant_auc_percent": 79.8641518907431,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 47.10160980652784,
+          "direction_invariant_auc_percent": 52.89839019347216,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_4b_evo_1048": {
+      "raw_macro_auc_percent": 68.36932125185352,
+      "direction_invariant_macro_auc_percent": 70.10421756846364,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.73313625369524,
+          "direction_invariant_auc_percent": 62.73313625369524,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 43.43800616223984,
+          "direction_invariant_auc_percent": 56.56199383776016,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 56.69873688635319,
+          "direction_invariant_auc_percent": 56.69873688635319,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.6284566330178,
+          "direction_invariant_auc_percent": 94.6284566330178,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.29480116146951,
+          "direction_invariant_auc_percent": 68.29480116146951,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 88.43694444444444,
+          "direction_invariant_auc_percent": 88.43694444444444,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.8852500594266,
+          "direction_invariant_auc_percent": 73.8852500594266,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.45359925302047,
+          "direction_invariant_auc_percent": 78.45359925302047,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.75496041301458,
+          "direction_invariant_auc_percent": 51.24503958698542,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1047": {
+      "raw_macro_auc_percent": 68.01845167936695,
+      "direction_invariant_macro_auc_percent": 70.75966060960806,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.13329750067187,
+          "direction_invariant_auc_percent": 64.13329750067187,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 37.66455981391497,
+          "direction_invariant_auc_percent": 62.33544018608503,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 65.93938592062038,
+          "direction_invariant_auc_percent": 65.93938592062038,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 89.22635048185536,
+          "direction_invariant_auc_percent": 89.22635048185536,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.63461179144046,
+          "direction_invariant_auc_percent": 67.63461179144046,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 85.93888888888888,
+          "direction_invariant_auc_percent": 85.93888888888888,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 71.95070505501269,
+          "direction_invariant_auc_percent": 71.95070505501269,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 76.55986750607991,
+          "direction_invariant_auc_percent": 76.55986750607991,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 53.11839815581797,
+          "direction_invariant_auc_percent": 53.11839815581797,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+      "raw_macro_auc_percent": 69.54116727473746,
+      "direction_invariant_macro_auc_percent": 72.45291355391643,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.77317925288901,
+          "direction_invariant_auc_percent": 63.77317925288901,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.89714174369466,
+          "direction_invariant_auc_percent": 63.10285825630534,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 69.21997885835314,
+          "direction_invariant_auc_percent": 69.21997885835314,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 99.14138236723956,
+          "direction_invariant_auc_percent": 99.14138236723956,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 64.5463451584396,
+          "direction_invariant_auc_percent": 64.5463451584396,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 84.5175,
+          "direction_invariant_auc_percent": 84.5175,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 79.31713347707637,
+          "direction_invariant_auc_percent": 79.31713347707637,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.41514332491644,
+          "direction_invariant_auc_percent": 78.41514332491644,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.04270129002843,
+          "direction_invariant_auc_percent": 50.04270129002843,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_independent_1048": {
+      "raw_macro_auc_percent": 65.64388231516448,
+      "direction_invariant_macro_auc_percent": 68.71117305407847,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.76780435366837,
+          "direction_invariant_auc_percent": 63.76780435366837,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.19719167488705,
+          "direction_invariant_auc_percent": 63.80280832511295,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 70.68591510605297,
+          "direction_invariant_auc_percent": 70.68591510605297,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.93696559810117,
+          "direction_invariant_auc_percent": 91.93696559810117,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 63.26080040398939,
+          "direction_invariant_auc_percent": 63.26080040398939,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.58069444444443,
+          "direction_invariant_auc_percent": 72.58069444444443,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 68.08486277916116,
+          "direction_invariant_auc_percent": 68.08486277916116,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 74.05170876856083,
+          "direction_invariant_auc_percent": 74.05170876856083,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.22899770761495,
+          "direction_invariant_auc_percent": 50.22899770761495,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_seeded_1048": {
+      "raw_macro_auc_percent": 69.80096082462104,
+      "direction_invariant_macro_auc_percent": 72.0258622815564,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.57914539102393,
+          "direction_invariant_auc_percent": 65.57914539102393,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.987943443790876,
+          "direction_invariant_auc_percent": 60.012056556209124,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 65.33529360709095,
+          "direction_invariant_auc_percent": 65.33529360709095,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.2245131402099,
+          "direction_invariant_auc_percent": 96.2245131402099,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.9028355005681,
+          "direction_invariant_auc_percent": 68.9028355005681,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 86.49666666666667,
+          "direction_invariant_auc_percent": 86.49666666666667,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 72.2569965576184,
+          "direction_invariant_auc_percent": 72.2569965576184,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.06964126613629,
+          "direction_invariant_auc_percent": 79.06964126613629,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 54.355611848484266,
+          "direction_invariant_auc_percent": 54.355611848484266,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_evo_1047": {
+      "raw_macro_auc_percent": 69.79694193022887,
+      "direction_invariant_macro_auc_percent": 72.00196563063089,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.59527008868584,
+          "direction_invariant_auc_percent": 65.59527008868584,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.07739334819092,
+          "direction_invariant_auc_percent": 59.92260665180908,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 65.31312485566215,
+          "direction_invariant_auc_percent": 65.31312485566215,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.11387943607195,
+          "direction_invariant_auc_percent": 96.11387943607195,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.99012750915288,
+          "direction_invariant_auc_percent": 68.99012750915288,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 86.47777777777776,
+          "direction_invariant_auc_percent": 86.47777777777776,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 72.11287402682918,
+          "direction_invariant_auc_percent": 72.11287402682918,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.97267669237408,
+          "direction_invariant_auc_percent": 78.97267669237408,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 54.51935363731515,
+          "direction_invariant_auc_percent": 54.51935363731515,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_evo_1048": {
+      "raw_macro_auc_percent": 68.53308417221133,
+      "direction_invariant_macro_auc_percent": 70.67107183160111,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.70626175759204,
+          "direction_invariant_auc_percent": 62.70626175759204,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.77864649933628,
+          "direction_invariant_auc_percent": 58.22135350066372,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.34274446580309,
+          "direction_invariant_auc_percent": 58.34274446580309,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.62774171408964,
+          "direction_invariant_auc_percent": 94.62774171408964,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.74313344274712,
+          "direction_invariant_auc_percent": 67.74313344274712,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.12333333333333,
+          "direction_invariant_auc_percent": 89.12333333333333,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 75.0197072068986,
+          "direction_invariant_auc_percent": 75.0197072068986,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.85578009669214,
+          "direction_invariant_auc_percent": 78.85578009669214,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.600409033409754,
+          "direction_invariant_auc_percent": 51.399590966590246,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_independent_contract_1048": {
+      "raw_macro_auc_percent": 69.47011600353005,
+      "direction_invariant_macro_auc_percent": 71.43142406545556,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.05778016662187,
+          "direction_invariant_auc_percent": 65.05778016662187,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.17411372133523,
+          "direction_invariant_auc_percent": 58.82588627866477,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 62.78462909209183,
+          "direction_invariant_auc_percent": 62.78462909209183,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.32211387228688,
+          "direction_invariant_auc_percent": 94.32211387228688,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.85530109834616,
+          "direction_invariant_auc_percent": 69.85530109834616,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 88.25777777777778,
+          "direction_invariant_auc_percent": 88.25777777777778,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.06830906989109,
+          "direction_invariant_auc_percent": 73.06830906989109,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 79.59974224010409,
+          "direction_invariant_auc_percent": 79.59974224010409,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 51.11127699331549,
+          "direction_invariant_auc_percent": 51.11127699331549,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_pilot_1046": {
+      "raw_macro_auc_percent": 70.11829199274169,
+      "direction_invariant_macro_auc_percent": 71.74405973556763,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.37785541521096,
+          "direction_invariant_auc_percent": 64.37785541521096,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 42.68404515728326,
+          "direction_invariant_auc_percent": 57.31595484271674,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 62.72494335109566,
+          "direction_invariant_auc_percent": 62.72494335109566,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.99591066373074,
+          "direction_invariant_auc_percent": 96.99591066373074,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.14528973614442,
+          "direction_invariant_auc_percent": 69.14528973614442,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 87.49694444444445,
+          "direction_invariant_auc_percent": 87.49694444444445,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 73.65661834931588,
+          "direction_invariant_auc_percent": 73.65661834931588,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 77.9228890534692,
+          "direction_invariant_auc_percent": 77.9228890534692,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 56.06013176398066,
+          "direction_invariant_auc_percent": 56.06013176398066,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/EntropySlope": {
+      "raw_macro_auc_percent": 53.03019369706494,
+      "direction_invariant_macro_auc_percent": 56.62739391074485,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__cities",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 61.86509002956194,
+          "direction_invariant_auc_percent": 61.86509002956194,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 38.23761158403663,
+          "direction_invariant_auc_percent": 61.76238841596337,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 67.21988382114597,
+          "direction_invariant_auc_percent": 67.21988382114597,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 48.12414209728617,
+          "direction_invariant_auc_percent": 51.87585790271383,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 53.95951016285822,
+          "direction_invariant_auc_percent": 53.95951016285822,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 51.834722222222226,
+          "direction_invariant_auc_percent": 51.834722222222226,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 51.26007537167838,
+          "direction_invariant_auc_percent": 51.26007537167838,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 57.319862627677296,
+          "direction_invariant_auc_percent": 57.319862627677296,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 47.45084535711763,
+          "direction_invariant_auc_percent": 52.54915464288237,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/ExpWeightedNegLogProb": {
+      "raw_macro_auc_percent": 69.79713233614491,
+      "direction_invariant_macro_auc_percent": 70.60597705825552,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.85917764041924,
+          "direction_invariant_auc_percent": 63.85917764041924,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 46.36019875050235,
+          "direction_invariant_auc_percent": 53.63980124949765,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 57.64788123796163,
+          "direction_invariant_auc_percent": 57.64788123796163,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.41164316966456,
+          "direction_invariant_auc_percent": 96.41164316966456,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 72.04263098093675,
+          "direction_invariant_auc_percent": 72.04263098093675,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 83.70277777777777,
+          "direction_invariant_auc_percent": 83.70277777777777,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 72.74251942426595,
+          "direction_invariant_auc_percent": 72.74251942426595,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 77.18720318213465,
+          "direction_invariant_auc_percent": 77.18720318213465,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 58.2201588616414,
+          "direction_invariant_auc_percent": 58.2201588616414,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/ExpWeightedNegLogProbWithTop1": {
+      "raw_macro_auc_percent": 69.88123547078578,
+      "direction_invariant_macro_auc_percent": 70.78369102999484,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.50685299650632,
+          "direction_invariant_auc_percent": 64.50685299650632,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 45.93894998355924,
+          "direction_invariant_auc_percent": 54.06105001644076,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.09005632284324,
+          "direction_invariant_auc_percent": 58.09005632284324,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.04757070548202,
+          "direction_invariant_auc_percent": 96.04757070548202,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 72.07605100366116,
+          "direction_invariant_auc_percent": 72.07605100366116,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 84.19611111111112,
+          "direction_invariant_auc_percent": 84.19611111111112,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 72.24210212649912,
+          "direction_invariant_auc_percent": 72.24210212649912,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 77.48355694402792,
+          "direction_invariant_auc_percent": 77.48355694402792,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 58.34986804338194,
+          "direction_invariant_auc_percent": 58.34986804338194,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/Gap": {
+      "raw_macro_auc_percent": 63.37179868565516,
+      "direction_invariant_macro_auc_percent": 63.37179868565516,
+      "flipped_datasets": [],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 52.339424885783394,
+          "direction_invariant_auc_percent": 52.339424885783394,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 51.532644039311684,
+          "direction_invariant_auc_percent": 51.532644039311684,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 52.623168057315524,
+          "direction_invariant_auc_percent": 52.623168057315524,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 87.8076832337213,
+          "direction_invariant_auc_percent": 87.8076832337213,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.55155662163868,
+          "direction_invariant_auc_percent": 68.55155662163868,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 67.68111111111111,
+          "direction_invariant_auc_percent": 67.68111111111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 64.71478143170108,
+          "direction_invariant_auc_percent": 64.71478143170108,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 68.79930488510408,
+          "direction_invariant_auc_percent": 68.79930488510408,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 56.29651390520956,
+          "direction_invariant_auc_percent": 56.29651390520956,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/LogProbSlope": {
+      "raw_macro_auc_percent": 68.53308417221133,
+      "direction_invariant_macro_auc_percent": 70.67107183160111,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.70626175759204,
+          "direction_invariant_auc_percent": 62.70626175759204,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.77864649933628,
+          "direction_invariant_auc_percent": 58.22135350066372,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.34274446580309,
+          "direction_invariant_auc_percent": 58.34274446580309,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.62774171408964,
+          "direction_invariant_auc_percent": 94.62774171408964,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.74313344274712,
+          "direction_invariant_auc_percent": 67.74313344274712,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.12333333333333,
+          "direction_invariant_auc_percent": 89.12333333333333,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 75.0197072068986,
+          "direction_invariant_auc_percent": 75.0197072068986,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.85578009669214,
+          "direction_invariant_auc_percent": 78.85578009669214,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.600409033409754,
+          "direction_invariant_auc_percent": 51.399590966590246,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/LogProbSlope_BottomMassAvg": {
+      "raw_macro_auc_percent": 68.62132653351364,
+      "direction_invariant_macro_auc_percent": 70.72912511490351,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.824509540446115,
+          "direction_invariant_auc_percent": 62.824509540446115,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.77523656424683,
+          "direction_invariant_auc_percent": 58.22476343575317,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.58015954070822,
+          "direction_invariant_auc_percent": 58.58015954070822,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.60128971374647,
+          "direction_invariant_auc_percent": 94.60128971374647,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.97899255144553,
+          "direction_invariant_auc_percent": 67.97899255144553,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.24194444444444,
+          "direction_invariant_auc_percent": 89.24194444444444,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 74.96290094908895,
+          "direction_invariant_auc_percent": 74.96290094908895,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.88723567799738,
+          "direction_invariant_auc_percent": 78.88723567799738,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.73966981949876,
+          "direction_invariant_auc_percent": 51.26033018050124,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/LogProbSlope_OutlierScore": {
+      "raw_macro_auc_percent": 67.92843786693389,
+      "direction_invariant_macro_auc_percent": 69.7646473181373,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.13356624563289,
+          "direction_invariant_auc_percent": 63.13356624563289,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.7370574695846,
+          "direction_invariant_auc_percent": 58.2629425304154,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.06051691032803,
+          "direction_invariant_auc_percent": 58.06051691032803,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 89.38631359203866,
+          "direction_invariant_auc_percent": 89.38631359203866,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.64733745739174,
+          "direction_invariant_auc_percent": 67.64733745739174,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 88.26861111111111,
+          "direction_invariant_auc_percent": 88.26861111111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 74.38697283192182,
+          "direction_invariant_auc_percent": 74.38697283192182,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 77.99912846257097,
+          "direction_invariant_auc_percent": 77.99912846257097,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.73643672182517,
+          "direction_invariant_auc_percent": 50.73643672182517,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/LogProbSlope_TopBottomRatio": {
+      "raw_macro_auc_percent": 68.5921695208144,
+      "direction_invariant_macro_auc_percent": 70.69527691168234,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 62.74657350174685,
+          "direction_invariant_auc_percent": 62.74657350174685,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.82997820077211,
+          "direction_invariant_auc_percent": 58.17002179922789,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 58.44072997213596,
+          "direction_invariant_auc_percent": 58.44072997213596,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 94.603255740799,
+          "direction_invariant_auc_percent": 94.603255740799,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 67.9342709253882,
+          "direction_invariant_auc_percent": 67.9342709253882,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 89.22638888888888,
+          "direction_invariant_auc_percent": 89.22638888888888,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 74.98047503886123,
+          "direction_invariant_auc_percent": 74.98047503886123,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 78.86181487841523,
+          "direction_invariant_auc_percent": 78.86181487841523,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.70603854032222,
+          "direction_invariant_auc_percent": 51.29396145967778,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/MeanStdTokenEntropy": {
+      "raw_macro_auc_percent": 57.76002776130046,
+      "direction_invariant_macro_auc_percent": 58.66670853643624,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__cities"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 61.31013168503091,
+          "direction_invariant_auc_percent": 61.31013168503091,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 46.268191394785234,
+          "direction_invariant_auc_percent": 53.731808605214766,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 62.872414556214196,
+          "direction_invariant_auc_percent": 62.872414556214196,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 49.651745117103715,
+          "direction_invariant_auc_percent": 50.348254882896285,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.2233505870471,
+          "direction_invariant_auc_percent": 69.2233505870471,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 56.68333333333333,
+          "direction_invariant_auc_percent": 56.68333333333333,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 50.81515983575628,
+          "direction_invariant_auc_percent": 50.81515983575628,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 63.667872511845125,
+          "direction_invariant_auc_percent": 63.667872511845125,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 59.34805083058825,
+          "direction_invariant_auc_percent": 59.34805083058825,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/MeanTokenEntropy": {
+      "raw_macro_auc_percent": 58.41996535859058,
+      "direction_invariant_macro_auc_percent": 59.90428784096481,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__cities"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.61730717549045,
+          "direction_invariant_auc_percent": 63.61730717549045,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 43.78685470023017,
+          "direction_invariant_auc_percent": 56.21314529976983,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 64.64843173990786,
+          "direction_invariant_auc_percent": 64.64843173990786,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 49.53369412908577,
+          "direction_invariant_auc_percent": 50.46630587091423,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.77880065648277,
+          "direction_invariant_auc_percent": 68.77880065648277,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 59.24527777777777,
+          "direction_invariant_auc_percent": 59.24527777777777,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 51.12141727739289,
+          "direction_invariant_auc_percent": 51.12141727739289,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 65.29306796693032,
+          "direction_invariant_auc_percent": 65.29306796693032,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 59.75483680401713,
+          "direction_invariant_auc_percent": 59.75483680401713,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/MinimalLogProb": {
+      "raw_macro_auc_percent": 50.23046957411132,
+      "direction_invariant_macro_auc_percent": 50.293951357578834,
+      "flipped_datasets": [
+        "AVeriTeC__dev_filtered_10shot",
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 49.75275463585058,
+          "direction_invariant_auc_percent": 50.24724536414942,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 49.961577338545666,
+          "direction_invariant_auc_percent": 50.038422661454334,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 50.308050996523725,
+          "direction_invariant_auc_percent": 50.308050996523725,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 50.13351110984014,
+          "direction_invariant_auc_percent": 50.13351110984014,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 50.31519252619619,
+          "direction_invariant_auc_percent": 50.31519252619619,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 50.0,
+          "direction_invariant_auc_percent": 50.0,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 50.106296454365875,
+          "direction_invariant_auc_percent": 50.106296454365875,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 50.118281721772654,
+          "direction_invariant_auc_percent": 50.118281721772654,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 51.378561383907076,
+          "direction_invariant_auc_percent": 51.378561383907076,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/Perplexity": {
+      "raw_macro_auc_percent": 64.17472363290479,
+      "direction_invariant_macro_auc_percent": 64.17472363290479,
+      "flipped_datasets": [],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 55.64095673206128,
+          "direction_invariant_auc_percent": 55.64095673206128,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 50.03196814146359,
+          "direction_invariant_auc_percent": 50.03196814146359,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 54.92075364908051,
+          "direction_invariant_auc_percent": 54.92075364908051,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 86.5610433526838,
+          "direction_invariant_auc_percent": 86.5610433526838,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 70.30449690695619,
+          "direction_invariant_auc_percent": 70.30449690695619,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 68.86375,
+          "direction_invariant_auc_percent": 68.86375,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 64.2219648196074,
+          "direction_invariant_auc_percent": 64.2219648196074,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 70.00859467865592,
+          "direction_invariant_auc_percent": 70.00859467865592,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 57.01898441563444,
+          "direction_invariant_auc_percent": 57.01898441563444,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/PositionWeightedGap": {
+      "raw_macro_auc_percent": 66.43754186548887,
+      "direction_invariant_macro_auc_percent": 66.50767557012625,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 57.01424348293469,
+          "direction_invariant_auc_percent": 57.01424348293469,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 49.68439832913181,
+          "direction_invariant_auc_percent": 50.31560167086819,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 54.22063945235569,
+          "direction_invariant_auc_percent": 54.22063945235569,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 93.55446967313907,
+          "direction_invariant_auc_percent": 93.55446967313907,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 70.33499810629971,
+          "direction_invariant_auc_percent": 70.33499810629971,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 74.3075,
+          "direction_invariant_auc_percent": 74.3075,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 69.1699328917476,
+          "direction_invariant_auc_percent": 69.1699328917476,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 72.45468137559459,
+          "direction_invariant_auc_percent": 72.45468137559459,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 57.19701347819666,
+          "direction_invariant_auc_percent": 57.19701347819666,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/PositionWeightedGapNormalized": {
+      "raw_macro_auc_percent": 64.46233672171176,
+      "direction_invariant_macro_auc_percent": 64.53387770114796,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 57.01424348293469,
+          "direction_invariant_auc_percent": 57.01424348293469,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 49.67806559253711,
+          "direction_invariant_auc_percent": 50.32193440746289,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 54.160369016573306,
+          "direction_invariant_auc_percent": 54.160369016573306,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 93.54928651090967,
+          "direction_invariant_auc_percent": 93.54928651090967,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 52.44204519631359,
+          "direction_invariant_auc_percent": 52.44204519631359,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 74.33416666666666,
+          "direction_invariant_auc_percent": 74.33416666666666,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 69.21109929217235,
+          "direction_invariant_auc_percent": 69.21109929217235,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 72.3800972209083,
+          "direction_invariant_auc_percent": 72.3800972209083,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 57.391657516390225,
+          "direction_invariant_auc_percent": 57.391657516390225,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/PositionWeightedGap_EntropySlope_TopKMassInv": {
+      "raw_macro_auc_percent": 62.75266358002151,
+      "direction_invariant_macro_auc_percent": 64.57466496835224,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.8505778016662,
+          "direction_invariant_auc_percent": 65.8505778016662,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.800993752511786,
+          "direction_invariant_auc_percent": 58.199006247488214,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 66.93755349271562,
+          "direction_invariant_auc_percent": 66.93755349271562,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 71.54354571191628,
+          "direction_invariant_auc_percent": 71.54354571191628,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 51.319439464714044,
+          "direction_invariant_auc_percent": 51.319439464714044,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 73.9536111111111,
+          "direction_invariant_auc_percent": 73.9536111111111,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 60.90065094975058,
+          "direction_invariant_auc_percent": 60.90065094975058,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 73.8999713663976,
+          "direction_invariant_auc_percent": 73.8999713663976,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 58.56762856941046,
+          "direction_invariant_auc_percent": 58.56762856941046,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/QuartileEntropyDiff": {
+      "raw_macro_auc_percent": 51.71058871826279,
+      "direction_invariant_macro_auc_percent": 57.23505457834796,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__cities",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 60.96076323568934,
+          "direction_invariant_auc_percent": 60.96076323568934,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.70071730420274,
+          "direction_invariant_auc_percent": 60.29928269579726,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 56.863540264294684,
+          "direction_invariant_auc_percent": 56.863540264294684,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 36.82842303182819,
+          "direction_invariant_auc_percent": 63.17157696817181,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 57.75853553844211,
+          "direction_invariant_auc_percent": 57.75853553844211,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 52.008611111111115,
+          "direction_invariant_auc_percent": 52.008611111111115,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 53.16115782301141,
+          "direction_invariant_auc_percent": 53.16115782301141,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 59.502786862199706,
+          "direction_invariant_auc_percent": 59.502786862199706,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.61076329358581,
+          "direction_invariant_auc_percent": 51.38923670641419,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/QuartileEntropyDiffNormalized": {
+      "raw_macro_auc_percent": 50.961761958413206,
+      "direction_invariant_macro_auc_percent": 56.510112649119655,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__cities",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 60.96076323568934,
+          "direction_invariant_auc_percent": 60.96076323568934,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.72677895095782,
+          "direction_invariant_auc_percent": 60.27322104904218,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 56.706889107988175,
+          "direction_invariant_auc_percent": 56.706889107988175,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 36.91689424919214,
+          "direction_invariant_auc_percent": 63.08310575080786,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 51.591203130917805,
+          "direction_invariant_auc_percent": 51.591203130917805,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 51.95402777777778,
+          "direction_invariant_auc_percent": 51.95402777777778,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 53.15209956276521,
+          "direction_invariant_auc_percent": 53.15209956276521,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 59.25845291875954,
+          "direction_invariant_auc_percent": 59.25845291875954,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.388748691671005,
+          "direction_invariant_auc_percent": 51.611251308328995,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/QuartileEntropyDiff_PositionWeightedGap": {
+      "raw_macro_auc_percent": 63.86004212833963,
+      "direction_invariant_macro_auc_percent": 66.17330028940474,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__common_claim_true_false"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 64.53641494221985,
+          "direction_invariant_auc_percent": 64.53641494221985,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 41.94457637645683,
+          "direction_invariant_auc_percent": 58.05542362354317,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 59.38149589744598,
+          "direction_invariant_auc_percent": 59.38149589744598,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 79.33616202922589,
+          "direction_invariant_auc_percent": 79.33616202922589,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 47.64576189875016,
+          "direction_invariant_auc_percent": 52.35423810124984,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 81.19194444444446,
+          "direction_invariant_auc_percent": 81.19194444444446,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 67.55793978337003,
+          "direction_invariant_auc_percent": 67.55793978337003,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 77.15618440407795,
+          "direction_invariant_auc_percent": 77.15618440407795,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 55.989899379065456,
+          "direction_invariant_auc_percent": 55.989899379065456,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay": {
+      "raw_macro_auc_percent": 61.46413403217077,
+      "direction_invariant_macro_auc_percent": 64.00087978200989,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "geometry__common_claim_true_false"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.14109110454179,
+          "direction_invariant_auc_percent": 65.14109110454179,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.694226249193186,
+          "direction_invariant_auc_percent": 59.305773750806814,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 60.380595543860494,
+          "direction_invariant_auc_percent": 60.380595543860494,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 76.24199290800424,
+          "direction_invariant_auc_percent": 76.24199290800424,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 47.89041787653075,
+          "direction_invariant_auc_percent": 52.10958212346925,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.85305555555557,
+          "direction_invariant_auc_percent": 72.85305555555557,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 63.447533681248004,
+          "direction_invariant_auc_percent": 63.447533681248004,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 73.10721370219606,
+          "direction_invariant_auc_percent": 73.10721370219606,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 53.421079668406826,
+          "direction_invariant_auc_percent": 53.421079668406826,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/SequenceLogProb": {
+      "raw_macro_auc_percent": 65.64388231516448,
+      "direction_invariant_macro_auc_percent": 68.71117305407847,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.76780435366837,
+          "direction_invariant_auc_percent": 63.76780435366837,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.19719167488705,
+          "direction_invariant_auc_percent": 63.80280832511295,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 70.68591510605297,
+          "direction_invariant_auc_percent": 70.68591510605297,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.93696559810117,
+          "direction_invariant_auc_percent": 91.93696559810117,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 63.26080040398939,
+          "direction_invariant_auc_percent": 63.26080040398939,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.58069444444443,
+          "direction_invariant_auc_percent": 72.58069444444443,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 68.08486277916116,
+          "direction_invariant_auc_percent": 68.08486277916116,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 74.05170876856083,
+          "direction_invariant_auc_percent": 74.05170876856083,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.22899770761495,
+          "direction_invariant_auc_percent": 50.22899770761495,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/SequenceLogProbBottom": {
+      "raw_macro_auc_percent": 64.36795478783866,
+      "direction_invariant_macro_auc_percent": 67.87162412688714,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.05966138134911,
+          "direction_invariant_auc_percent": 63.05966138134911,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 35.37972062888946,
+          "direction_invariant_auc_percent": 64.62027937111054,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 71.31380300439652,
+          "direction_invariant_auc_percent": 71.31380300439652,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.24027710257657,
+          "direction_invariant_auc_percent": 91.24027710257657,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 61.72317636662037,
+          "direction_invariant_auc_percent": 61.72317636662037,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 69.89625000000001,
+          "direction_invariant_auc_percent": 69.89625000000001,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 67.49910748515869,
+          "direction_invariant_auc_percent": 67.49910748515869,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 70.34582977616479,
+          "direction_invariant_auc_percent": 70.34582977616479,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 48.85376734539243,
+          "direction_invariant_auc_percent": 51.14623265460757,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "original/SequenceLogProb_BottomMassAvg": {
+      "raw_macro_auc_percent": 65.64388231516448,
+      "direction_invariant_macro_auc_percent": 68.71117305407847,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.76780435366837,
+          "direction_invariant_auc_percent": 63.76780435366837,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.19719167488705,
+          "direction_invariant_auc_percent": 63.80280832511295,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 70.68591510605297,
+          "direction_invariant_auc_percent": 70.68591510605297,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.93696559810117,
+          "direction_invariant_auc_percent": 91.93696559810117,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 63.26080040398939,
+          "direction_invariant_auc_percent": 63.26080040398939,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.58069444444443,
+          "direction_invariant_auc_percent": 72.58069444444443,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 68.08486277916116,
+          "direction_invariant_auc_percent": 68.08486277916116,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 74.05170876856083,
+          "direction_invariant_auc_percent": 74.05170876856083,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.22899770761495,
+          "direction_invariant_auc_percent": 50.22899770761495,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/SequenceLogProb_OutlierScore": {
+      "raw_macro_auc_percent": 65.64211506656682,
+      "direction_invariant_macro_auc_percent": 68.70958171483066,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.76511690405805,
+          "direction_invariant_auc_percent": 63.76511690405805,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.19640008281271,
+          "direction_invariant_auc_percent": 63.80359991718729,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 70.68521444448609,
+          "direction_invariant_auc_percent": 70.68521444448609,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.92481197632189,
+          "direction_invariant_auc_percent": 91.92481197632189,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 63.26087110213358,
+          "direction_invariant_auc_percent": 63.26087110213358,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.58097222222221,
+          "direction_invariant_auc_percent": 72.58097222222221,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 68.08537760875114,
+          "direction_invariant_auc_percent": 68.08537760875114,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 74.05191567536276,
+          "direction_invariant_auc_percent": 74.05191567536276,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.228355582952865,
+          "direction_invariant_auc_percent": 50.228355582952865,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/SequenceLogProb_TopBottomRatio": {
+      "raw_macro_auc_percent": 65.64388231516448,
+      "direction_invariant_macro_auc_percent": 68.71117305407847,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 63.76780435366837,
+          "direction_invariant_auc_percent": 63.76780435366837,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 36.19719167488705,
+          "direction_invariant_auc_percent": 63.80280832511295,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 70.68591510605297,
+          "direction_invariant_auc_percent": 70.68591510605297,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 91.93696559810117,
+          "direction_invariant_auc_percent": 91.93696559810117,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 63.26080040398939,
+          "direction_invariant_auc_percent": 63.26080040398939,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 72.58069444444443,
+          "direction_invariant_auc_percent": 72.58069444444443,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 68.08486277916116,
+          "direction_invariant_auc_percent": 68.08486277916116,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 74.05170876856083,
+          "direction_invariant_auc_percent": 74.05170876856083,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.22899770761495,
+          "direction_invariant_auc_percent": 50.22899770761495,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "original/StdTokenEntropy": {
+      "raw_macro_auc_percent": 54.50715674474415,
+      "direction_invariant_macro_auc_percent": 54.50715674474415,
+      "flipped_datasets": [],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 53.26256382692824,
+          "direction_invariant_auc_percent": 53.26256382692824,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 52.487973889639896,
+          "direction_invariant_auc_percent": 52.487973889639896,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 56.84335631556511,
+          "direction_invariant_auc_percent": 56.84335631556511,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 50.1355665017587,
+          "direction_invariant_auc_percent": 50.1355665017587,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 62.049468501451834,
+          "direction_invariant_auc_percent": 62.049468501451834,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 52.1625,
+          "direction_invariant_auc_percent": 52.1625,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 50.01067967982564,
+          "direction_invariant_auc_percent": 50.01067967982564,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 56.26374708907993,
+          "direction_invariant_auc_percent": 56.26374708907993,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 57.348554898447986,
+          "direction_invariant_auc_percent": 57.348554898447986,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "supervised/logistic_claim_group": {
+      "raw_macro_auc_percent": 70.1201644242455,
+      "direction_invariant_macro_auc_percent": 72.36338751654245,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.71351787153992,
+          "direction_invariant_auc_percent": 65.71351787153992,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.90549608466382,
+          "direction_invariant_auc_percent": 60.09450391533618,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 61.505994992998836,
+          "direction_invariant_auc_percent": 61.505994992998836,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 98.24237181503617,
+          "direction_invariant_auc_percent": 98.24237181503617,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.87469258931952,
+          "direction_invariant_auc_percent": 69.87469258931952,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 85.84277777777778,
+          "direction_invariant_auc_percent": 85.84277777777778,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 77.76648260797589,
+          "direction_invariant_auc_percent": 77.76648260797589,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 81.95916947149911,
+          "direction_invariant_auc_percent": 81.95916947149911,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 50.270976607398566,
+          "direction_invariant_auc_percent": 50.270976607398566,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "supervised/logistic_documented_stratified": {
+      "raw_macro_auc_percent": 70.2778688036649,
+      "direction_invariant_macro_auc_percent": 73.10749458680256,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.74845471647407,
+          "direction_invariant_auc_percent": 65.74845471647407,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.520782336536236,
+          "direction_invariant_auc_percent": 60.479217663463764,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 63.494897499844406,
+          "direction_invariant_auc_percent": 63.494897499844406,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 98.98803225714204,
+          "direction_invariant_auc_percent": 98.98803225714204,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.46777427092539,
+          "direction_invariant_auc_percent": 69.46777427092539,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 87.46916666666667,
+          "direction_invariant_auc_percent": 87.46916666666667,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 78.39598804223516,
+          "direction_invariant_auc_percent": 78.39598804223516,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 81.6698218038158,
+          "direction_invariant_auc_percent": 81.6698218038158,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 47.74590163934427,
+          "direction_invariant_auc_percent": 52.25409836065573,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "supervised/logistic_stratified": {
+      "raw_macro_auc_percent": 69.72092428093295,
+      "direction_invariant_macro_auc_percent": 72.62006400771682,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "x-fact__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.50120935232465,
+          "direction_invariant_auc_percent": 65.50120935232465,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 40.28850486524667,
+          "direction_invariant_auc_percent": 59.71149513475333,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 60.82474848732271,
+          "direction_invariant_auc_percent": 60.82474848732271,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 98.34746489748062,
+          "direction_invariant_auc_percent": 98.34746489748062,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.99649539199596,
+          "direction_invariant_auc_percent": 69.99649539199596,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 85.885,
+          "direction_invariant_auc_percent": 85.885,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 77.96247177304852,
+          "direction_invariant_auc_percent": 77.96247177304852,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 82.0170573967515,
+          "direction_invariant_auc_percent": 82.0170573967515,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 46.665366364225946,
+          "direction_invariant_auc_percent": 53.334633635774054,
+          "direction_flipped": true
+        }
+      ]
+    },
+    "supervised/qda_claim_group": {
+      "raw_macro_auc_percent": 69.44793884638867,
+      "direction_invariant_macro_auc_percent": 72.15361408795955,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 65.11959150765924,
+          "direction_invariant_auc_percent": 65.11959150765924,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 37.82446141293096,
+          "direction_invariant_auc_percent": 62.17553858706904,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 63.364526533987565,
+          "direction_invariant_auc_percent": 63.364526533987565,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 97.29724899196431,
+          "direction_invariant_auc_percent": 97.29724899196431,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 68.34573412447924,
+          "direction_invariant_auc_percent": 68.34573412447924,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 81.8777777777778,
+          "direction_invariant_auc_percent": 81.8777777777778,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 78.06661416474962,
+          "direction_invariant_auc_percent": 78.06661416474962,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 80.59468808167394,
+          "direction_invariant_auc_percent": 80.59468808167394,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 52.5408070222753,
+          "direction_invariant_auc_percent": 52.5408070222753,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "supervised/qda_documented_stratified": {
+      "raw_macro_auc_percent": 69.94534917263749,
+      "direction_invariant_macro_auc_percent": 72.34927222176897,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 66.67024993281375,
+          "direction_invariant_auc_percent": 66.67024993281375,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 39.182346278908334,
+          "direction_invariant_auc_percent": 60.817653721091666,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 63.387045268993866,
+          "direction_invariant_auc_percent": 63.387045268993866,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.4000257370814,
+          "direction_invariant_auc_percent": 96.4000257370814,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.13274586542103,
+          "direction_invariant_auc_percent": 69.13274586542103,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 84.22027777777777,
+          "direction_invariant_auc_percent": 84.22027777777777,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 77.14164391798488,
+          "direction_invariant_auc_percent": 77.14164391798488,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 80.63362104490464,
+          "direction_invariant_auc_percent": 80.63362104490464,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 52.740186729851736,
+          "direction_invariant_auc_percent": 52.740186729851736,
+          "direction_flipped": false
+        }
+      ]
+    },
+    "supervised/qda_stratified": {
+      "raw_macro_auc_percent": 69.63241802911242,
+      "direction_invariant_macro_auc_percent": 72.10232061592706,
+      "flipped_datasets": [
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot"
+      ],
+      "per_dataset": [
+        {
+          "dataset": "AVeriTeC__dev_filtered_10shot",
+          "raw_auc_percent": 66.39344262295081,
+          "direction_invariant_auc_percent": 66.39344262295081,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+          "raw_auc_percent": 38.88543835933409,
+          "direction_invariant_auc_percent": 61.11456164066591,
+          "direction_flipped": true
+        },
+        {
+          "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "raw_auc_percent": 63.29223200964105,
+          "direction_invariant_auc_percent": 63.29223200964105,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__cities",
+          "raw_auc_percent": 96.01968886728245,
+          "direction_invariant_auc_percent": 96.01968886728245,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__common_claim_true_false",
+          "raw_auc_percent": 69.40555990405251,
+          "direction_invariant_auc_percent": 69.40555990405251,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__companies_true_false",
+          "raw_auc_percent": 82.90027777777779,
+          "direction_invariant_auc_percent": 82.90027777777779,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "geometry__counterfact_true_false",
+          "raw_auc_percent": 76.45999701265725,
+          "direction_invariant_auc_percent": 76.45999701265725,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "popqa__popqa_test_filtered_10shot",
+          "raw_auc_percent": 80.64069036063741,
+          "direction_invariant_auc_percent": 80.64069036063741,
+          "direction_flipped": false
+        },
+        {
+          "dataset": "x-fact__test_filtered_10shot",
+          "raw_auc_percent": 52.69443534767839,
+          "direction_invariant_auc_percent": 52.69443534767839,
+          "direction_flipped": false
+        }
+      ]
+    }
+  }
+}

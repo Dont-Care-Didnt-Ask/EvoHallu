@@ -1,0 +1,283 @@
+{
+  "started_utc": "2026-10-21T22:47:58.512085+00:00",
+  "pid": 22163,
+  "events": [
+    {
+      "utc": "2026-10-21T22:47:58.512164+00:00",
+      "event": "waiting_for_marker",
+      "path": "/workspace/mod1/results/overnight20261021/generation_complete.json",
+      "deadline_utc": "2026-10-22T01:46:28+00:00"
+    },
+    {
+      "utc": "2026-10-21T23:09:58.522768+00:00",
+      "event": "marker_observed",
+      "path": "/workspace/mod1/results/overnight20261021/generation_complete.json",
+      "sha256": "78fb1af525831403e44b9a30c5306c5944488176ca770e4157281ec276aacc73"
+    },
+    {
+      "utc": "2026-10-21T23:09:58.524320+00:00",
+      "event": "stage_started",
+      "stage": "prepare_glm",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/overnight_prepare_glm.py",
+        "--prepare"
+      ],
+      "deadline_utc": "2026-10-22T01:10:00+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/prepare_glm.log"
+    },
+    {
+      "utc": "2026-10-21T23:09:59.591301+00:00",
+      "event": "stage_finished",
+      "stage": "prepare_glm",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 1.0662737599923275
+    },
+    {
+      "utc": "2026-10-21T23:09:59.592467+00:00",
+      "event": "stage_started",
+      "stage": "start_glm",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/overnight_start_glm.py",
+        "--execute",
+        "--model-path",
+        "/dev/shm/overnight-models/GLM-4.7-Flash",
+        "--ports",
+        "18000",
+        "18001",
+        "--ready-timeout-minutes",
+        "10"
+      ],
+      "deadline_utc": "2026-10-22T01:10:00+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/start_glm.log"
+    },
+    {
+      "utc": "2026-10-21T23:11:12.215371+00:00",
+      "event": "stage_finished",
+      "stage": "start_glm",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 72.62222139400546
+    },
+    {
+      "utc": "2026-10-21T23:11:12.219409+00:00",
+      "event": "stage_started",
+      "stage": "glm_pilot_2107",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/run_overnight_parallel.py",
+        "--execute",
+        "--phase",
+        "all",
+        "--manifest",
+        "results/next_experiments/glm47_seed2107_manifest.json",
+        "--state",
+        "results/next_experiments/glm47_pilot_state.json",
+        "--ports",
+        "18000",
+        "18001",
+        "--max-job-minutes",
+        "60",
+        "--min-job-minutes",
+        "30",
+        "--deadline-utc",
+        "2026-10-22T01:40:00+00:00",
+        "--reserve-minutes",
+        "30"
+      ],
+      "deadline_utc": "2026-10-22T01:10:00+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/glm_pilot_2107.log"
+    },
+    {
+      "utc": "2026-10-22T00:04:27.429488+00:00",
+      "event": "stage_finished",
+      "stage": "glm_pilot_2107",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 3195.209233962989
+    },
+    {
+      "utc": "2026-10-22T00:04:27.453274+00:00",
+      "event": "glm_extension_gate",
+      "eligible": true,
+      "required_minutes": 73.95778782073995,
+      "remaining_minutes": 65.54244628333333,
+      "run": false
+    },
+    {
+      "utc": "2026-10-22T00:04:27.457696+00:00",
+      "event": "devstral_breadth_reservation",
+      "run": false,
+      "enabled": true,
+      "remaining_minutes": 65.54237715000001,
+      "required_minutes": 75,
+      "writer_cutoff_utc": "2026-10-22T01:10:00+00:00",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+      "prefetch_receipt_sha256": "0d3fc236ec2ebd979cfca60ccde47a3e6f3590adaf4e638feb961981dd615cd6",
+      "reason": "less_than_75_minutes_before_writer_cutoff"
+    },
+    {
+      "utc": "2026-10-22T00:04:29.463423+00:00",
+      "event": "managed_servers_stopped",
+      "model": "zai-org/GLM-4.7-Flash",
+      "metadata_sha256": "4ff09b5349393b91e5f1b9e6cd4e31880fa7dca27d2f4825692fd6350d6b4304",
+      "pids": [
+        23469,
+        23474
+      ]
+    },
+    {
+      "utc": "2026-10-22T00:04:29.465367+00:00",
+      "event": "devstral_breadth_entry_gate",
+      "run": false,
+      "enabled": true,
+      "remaining_minutes": 65.5089148,
+      "required_minutes": 75,
+      "writer_cutoff_utc": "2026-10-22T01:10:00+00:00",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+      "prefetch_receipt_sha256": "0d3fc236ec2ebd979cfca60ccde47a3e6f3590adaf4e638feb961981dd615cd6",
+      "reason": "less_than_75_minutes_before_writer_cutoff"
+    },
+    {
+      "utc": "2026-10-22T00:04:29.466316+00:00",
+      "event": "server_metadata_absent",
+      "path": "/workspace/mod1/out/overnight20261021/devstral_servers.json",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512"
+    },
+    {
+      "utc": "2026-10-22T00:04:29.467975+00:00",
+      "event": "late_writer_decision_complete",
+      "marker": "/workspace/mod1/results/overnight20261021/late_writer_decision.json"
+    },
+    {
+      "utc": "2026-10-22T00:04:29.736954+00:00",
+      "event": "feature_completion_failed_fallback_six",
+      "error": "RuntimeError('GPU 0 is not idle; refusing to displace another workload')"
+    },
+    {
+      "utc": "2026-10-22T00:04:29.739587+00:00",
+      "event": "waiting_for_marker",
+      "path": "/workspace/mod1/results/overnight20261021/cpu_complete.json",
+      "deadline_utc": "2026-10-22T02:03:28+00:00"
+    },
+    {
+      "utc": "2026-10-22T00:05:59.744489+00:00",
+      "event": "marker_observed",
+      "path": "/workspace/mod1/results/overnight20261021/cpu_complete.json",
+      "sha256": "9b5f3b32515d1862cbc6daf13561db1bfa3445b45a548533b4289fa308d301de"
+    },
+    {
+      "utc": "2026-10-22T00:05:59.746462+00:00",
+      "event": "stage_started",
+      "stage": "transfer_evaluation",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/overnight_transfer_eval.py",
+        "--execute",
+        "--coverage",
+        "six",
+        "--workers",
+        "4",
+        "--bootstrap",
+        "500",
+        "--max-seconds",
+        "1200",
+        "--cache-dir",
+        "data/restored/mod1-transfer-cache"
+      ],
+      "deadline_utc": "2026-10-22T02:04:28+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/transfer_evaluation.log"
+    },
+    {
+      "utc": "2026-10-22T00:22:21.877374+00:00",
+      "event": "stage_finished",
+      "stage": "transfer_evaluation",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 982.1299390499771
+    },
+    {
+      "utc": "2026-10-22T00:22:21.879122+00:00",
+      "event": "stage_started",
+      "stage": "final_report",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/overnight_report.py",
+        "--manifest",
+        "/workspace/mod1/results/overnight20261021/analysis_manifest.json"
+      ],
+      "deadline_utc": "2026-10-22T02:06:08+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/final_report.log"
+    },
+    {
+      "utc": "2026-10-22T00:22:29.705329+00:00",
+      "event": "stage_finished",
+      "stage": "final_report",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 7.825053655018564
+    },
+    {
+      "utc": "2026-10-22T00:22:29.707286+00:00",
+      "event": "stage_started",
+      "stage": "prompt_screen_analysis",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/overnight_prompt_screen_analysis.py"
+      ],
+      "deadline_utc": "2026-10-22T02:06:08+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/prompt_screen_analysis.log"
+    },
+    {
+      "utc": "2026-10-22T00:22:31.375118+00:00",
+      "event": "stage_finished",
+      "stage": "prompt_screen_analysis",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 1.66678821502137
+    },
+    {
+      "utc": "2026-10-22T00:22:31.377003+00:00",
+      "event": "stage_started",
+      "stage": "failure_audit",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/overnight_failure_audit.py",
+        "--manifest",
+        "/workspace/mod1/results/overnight20261021/analysis_manifest.json"
+      ],
+      "deadline_utc": "2026-10-22T02:06:08+00:00",
+      "log": "/workspace/mod1/results/overnight20261021/late_logs/failure_audit.log"
+    },
+    {
+      "utc": "2026-10-22T00:22:32.494581+00:00",
+      "event": "stage_finished",
+      "stage": "failure_audit",
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 1.1166372720035724
+    },
+    {
+      "utc": "2026-10-22T00:22:32.497194+00:00",
+      "event": "late_extensions_complete",
+      "status": "finished_with_recorded_stage_outcomes"
+    }
+  ],
+  "prefer_devstral_breadth": true,
+  "glm_max_job_minutes": 60,
+  "glm_cutoff_utc": "2026-10-22T01:10:00+00:00",
+  "transfer_cutoff_utc": "2026-10-22T02:01:28+00:00",
+  "cpu_finish_utc": "2026-10-22T02:06:28+00:00",
+  "hard_deadline_utc": "2026-10-22T02:16:28+00:00"
+}

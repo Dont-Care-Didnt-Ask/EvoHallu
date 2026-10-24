@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector (`total_neg_logprob`) aggregates the sum of negative log-probabilities across the entire sequence. This approach assumes that hallucinated tokens are inherently less probable than factual ones, leading to a higher total negative log-probability for hallucinated sequences.\n- **Strengths**: Simple, interpretable, and leverages the core probabilistic nature of LLMs.\n- **Weaknesses**: It is a global aggregate. A single highly probable hallucination mixed with many low-probability correct tokens might yield a similar score to a sequence with many moderate-probability hallucinations. It also lacks sensitivity to the *distribution* of probabilities (e.g., the presence of near-zero probabilities or specific outliers) which often characterizes hallucinations more distinctly than the mean.\n\n### Proposed Detector\n**Signal**: The **maximum negative log-probability** within the sequence (i.e., the lowest probability assigned to any single token in the sequence).\n**Aggregation Principle**: Return this maximum value directly as the sequence score.\n\n**Hypothesis**: Hallucinated tokens often involve the model generating content it has never seen in training or is highly uncertain about, resulting in token probabilities that are significantly closer to zero (higher negative log-probability) than the typical distribution of factual tokens, even if the overall sequence likelihood is maintained by other high-probability tokens.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Extract sequence logprobs\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Calculate the maximum negative log-prob (minimum log-prob) for each sequence\n        # This identifies the most \"surprising\" or unlikely token in the sequence\n        max_neg_logprobs = np.array([\n            -np.min(seq_logprobs) if len(seq_logprobs) > 0 else 0.0 \n            for seq_logprobs in seq_logprobs\n        ], dtype=np.float32)\n        \n        return max_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 508,
+      "prompt_tokens": 498,
+      "total_tokens": 1006,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 12.11420160898706
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Likelihood (NLL)** as the sole signal. It aggregates log-probabilities across the entire sequence into a single scalar per sample.\n- **Strengths**: Simple, captures overall model confidence.\n- **Weaknesses**: It is heavily biased by sequence length. Longer sequences naturally accumulate higher NLL even if the model is perfectly confident at every step. Without length normalization, this metric conflates \"sequence length\" with \"hallucination probability,\" likely causing poor ROC-AUC on variable-length data.\n\n### Proposed Detector\n**Signal**: **Average Per-Token Negative Log-Likelihood (Avg-NLL)**.\nInstead of summing log-probabilities, we compute the mean of the log-probabilities for each sequence. This normalizes the score by the sequence length, isolating the model's confidence per token.\n\n**Aggregation Principle**: Mean aggregation over the token dimension within each sequence.\n**Hypothesis**: Hallucinated tokens often exhibit significantly lower local probability densities compared to factual tokens; averaging preserves this local signal better than summation, which is dominated by the count of tokens.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector:\n    \"\"\"\n    Detects hallucinations by measuring the average negative log-likelihood per token.\n    Hypothesis: Hallucinated tokens exhibit lower local probability densities; averaging \n    isolates this signal from sequence length bias inherent in total NLL.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Calculate negative log-prob for each token in the sequence (excluding first generated token)\n        # sequence_logprobs is a list of 1D arrays.\n        neg_logprobs = [-lp for lp in stats[\"sequence_logprobs\"]]\n        \n        # Calculate the mean negative log-likelihood for each sequence\n        # This normalizes by sequence length, removing the bias present in total NLL\n        avg_nll = np.array([np.mean(neg_lp) for neg_lp in neg_logprobs], dtype=np.float32)\n        \n        return avg_nll\n```",
+    "usage": {
+      "completion_tokens": 521,
+      "prompt_tokens": 498,
+      "total_tokens": 1019,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.14827878199867
+  }
+]

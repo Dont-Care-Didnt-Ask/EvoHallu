@@ -1,0 +1,133 @@
+{
+  "status": "passed",
+  "datasets": [
+    {
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+      "rows": 427,
+      "claims_and_labels_match_csv_in_order": true,
+      "minimum_sequence_logprob_length": 24,
+      "meta": {
+        "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      }
+    },
+    {
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "raw_sha256": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+      "rows": 2057,
+      "claims_and_labels_match_csv_in_order": true,
+      "minimum_sequence_logprob_length": 19,
+      "meta": {
+        "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      }
+    },
+    {
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "raw_sha256": "9aa596bb80778b1c4c5979a8cddc6c90d95e4108defb7a9f4d63b4428d0df3d3",
+      "rows": 46605,
+      "claims_and_labels_match_csv_in_order": true,
+      "minimum_sequence_logprob_length": 22,
+      "meta": {
+        "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      }
+    },
+    {
+      "dataset": "geometry__cities",
+      "raw_sha256": "aa15cb4b5b5d6937ef51f240b31fff4eae0f44e12adadfd720d8f7ccf3975ed2",
+      "rows": 1496,
+      "claims_and_labels_match_csv_in_order": true,
+      "minimum_sequence_logprob_length": 26,
+      "meta": {
+        "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      }
+    },
+    {
+      "dataset": "geometry__common_claim_true_false",
+      "raw_sha256": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+      "rows": 4450,
+      "claims_and_labels_match_csv_in_order": true,
+      "minimum_sequence_logprob_length": 23,
+      "meta": {
+        "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      }
+    },
+    {
+      "dataset": "geometry__companies_true_false",
+      "raw_sha256": "5655c3628d232149a22df2ca1f09e44ef728f740a87bb012db5f6ad6d04dbc96",
+      "rows": 1200,
+      "claims_and_labels_match_csv_in_order": true,
+      "minimum_sequence_logprob_length": 24,
+      "meta": {
+        "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      }
+    }
+  ],
+  "mode": "read_only_cache_verification",
+  "held_out_scores_computed": false
+}

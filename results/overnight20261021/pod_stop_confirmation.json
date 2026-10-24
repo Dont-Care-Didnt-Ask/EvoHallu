@@ -1,0 +1,40 @@
+{
+  "requested_utc": "2026-10-22T00:44:06.813234+00:00",
+  "expected_id": "p4ta9o85on4ojb",
+  "expected_name": "qualified_fuchsia_sole",
+  "scientific_backup_files": 5890,
+  "cache_archives": 3,
+  "exit_code": 0,
+  "responses": [
+    {
+      "verified_current_pod": {
+        "id": "p4ta9o85on4ojb",
+        "name": "qualified_fuchsia_sole",
+        "desiredStatus": "RUNNING",
+        "costPerHr": 3.58,
+        "runtime": {
+          "uptimeInSeconds": 23455
+        }
+      }
+    },
+    {
+      "podStop": {
+        "id": "p4ta9o85on4ojb",
+        "desiredStatus": "EXITED"
+      }
+    },
+    {
+      "stopped_pod": {
+        "id": "p4ta9o85on4ojb",
+        "name": "qualified_fuchsia_sole",
+        "desiredStatus": "EXITED",
+        "costPerHr": 3.58,
+        "runtime": null
+      },
+      "gpu_runtime_released": true
+    }
+  ],
+  "error": "",
+  "confirmed_utc": "2026-10-22T00:44:41.260340+00:00",
+  "gpu_runtime_released": true
+}

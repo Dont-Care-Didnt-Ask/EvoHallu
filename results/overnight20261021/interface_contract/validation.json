@@ -1,0 +1,61 @@
+{
+  "created_utc": "2026-10-21T19:21:25.774457+00:00",
+  "status": "prepared_tested_no_writer_inference",
+  "tests": {
+    "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_overnight_interface_trial.py -q",
+    "passed": 2,
+    "elapsed_seconds": 47.03,
+    "end_to_end_stub": {
+      "rounds": 2,
+      "synthetic_http_requests": 4,
+      "valid_synthetic_candidates": 4,
+      "synthetic_reported_tokens": 400,
+      "actual_saved_prompts_verified": 4,
+      "prompt_hashes_match_ledgers": true,
+      "runtime_hook_restored": true,
+      "held_out_test_access": false,
+      "real_writer_inference": false
+    }
+  },
+  "report_comparator_tests": {
+    "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_overnight_report_matches.py -q",
+    "passed": 4,
+    "elapsed_seconds": 3.99,
+    "interface_seeds": [
+      2107,
+      4319,
+      8741
+    ],
+    "requests_per_seed": 60,
+    "requires_same_writer_seed_request_budget": true
+  },
+  "hydra_configs": [
+    {
+      "id": "next_evo_neutral_interface_2107",
+      "requests": 60,
+      "resolved_logs_dir": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_interface_2107",
+      "config_sha256": "dbd33fb1315670e0ced6f2066fa5d4786ace0abf3a0a52cc22bbac00f5cb6476"
+    },
+    {
+      "id": "next_evo_neutral_interface_4319",
+      "requests": 60,
+      "resolved_logs_dir": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_interface_4319",
+      "config_sha256": "33af0a01bdbdd7cf4be1480119a45582b9b035457ca35232f3d1431b71cfe8a8"
+    },
+    {
+      "id": "next_evo_neutral_interface_8741",
+      "requests": 60,
+      "resolved_logs_dir": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_interface_8741",
+      "config_sha256": "d0dc4229496a9bc98fe585f588ebd1cf969cfea25ced94aab4f25a2511837944"
+    }
+  ],
+  "pinned_source_hash_mismatches": [],
+  "controller_dry_run_accepted": true,
+  "planned_requests": 180,
+  "manifest": "results/next_experiments/interface_manifest.json",
+  "manifest_sha256": "a302af358fa0b3d1d48013cd7652663973ab868f5d21d4e4c21f69d43f0330c1",
+  "wrapper_sha256": "aa1a9e0141d3b93917c411de2ef207084bf7cc1f2cab74bcbf8ec8a9862c4817",
+  "contract_sha256": "bd227c8acf9f9217de300efda4f13961f3e1d3165214dcabec3f96ca12868201",
+  "new_core_source_edits": false,
+  "notes": "Synthetic protocol checks are not scientific detector-quality experiments. Execution phase must map to interface_control before staging/analysis."
+}

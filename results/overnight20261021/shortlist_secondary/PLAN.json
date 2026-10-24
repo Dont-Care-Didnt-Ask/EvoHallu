@@ -1,0 +1,52 @@
+{
+  "execute_requested": true,
+  "ready": false,
+  "pending": [
+    {
+      "job": "next_evo_compositional_8741",
+      "reason": "source run not finished at full 60-request budget"
+    }
+  ],
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/overnight_eval.py",
+    "--manifest",
+    "results/overnight20261021/shortlist_secondary/source_manifest.json",
+    "--directory",
+    "results/overnight20261021/shortlist_secondary",
+    "--shortlist",
+    "3",
+    "--roles",
+    "valrank02,valrank03",
+    "--kind",
+    "new",
+    "--workers",
+    "4",
+    "--bootstrap",
+    "500",
+    "--jobs",
+    "next_evo_original_2107,next_evo_neutral_2107,next_evo_diverse_2107,next_evo_original_4319,next_evo_neutral_4319,next_evo_diverse_4319,next_evo_original_8741,next_evo_neutral_8741,next_evo_diverse_8741,next_evo_compositional_2107,next_evo_compositional_4319,next_evo_compositional_8741",
+    "--cache-dir",
+    "data/restored/mod1-eval-cache",
+    "--data-root",
+    "/workspace/mod1/data/claims",
+    "--execute"
+  ],
+  "helper_sha256": "ea031e91bf51ca4de848c5ce15ca38a1769c860d430905dbc6ea1f77e030ee07",
+  "deadline_utc": "2026-10-22T02:06:00Z",
+  "max_active_seconds": 3600,
+  "active_budget_starts": "after all twelve source runs and primary-nine predictions are ready",
+  "waiting_gate": "absolute UTC deadline only; 20-second polling",
+  "hard_deadline_utc": "2026-10-22T02:06:00+00:00",
+  "cancel_files": [
+    "/workspace/mod1/results/overnight20261021/watchdog.cancel",
+    "/workspace/mod1/results/overnight20261021/shortlist_secondary.cancel",
+    "/workspace/mod1/results/overnight20261021/shortlist_secondary/shortlist_secondary.cancel"
+  ],
+  "planned_rank_slots": 36,
+  "planned_extra_rank_slots": 24,
+  "baseline_source_aliases_reuse_saved_predictions": true,
+  "primary_registry_modified": false,
+  "cpu_only": true,
+  "source_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c"
+}

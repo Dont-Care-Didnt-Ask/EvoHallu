@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as its sole signal.\n- **Approach**: It aggregates log-probabilities across the entire sequence into a single scalar per sample.\n- **Weakness**: NLL is highly sensitive to sequence length. Longer sequences naturally accumulate higher negative log-probability even if the model is confident at every step. Without normalization by length or variance, this metric confuses \"long sequence\" with \"hallucinated sequence,\" likely capping the ROC-AUC around 0.74.\n\n### Proposed Detector: \"Normalized Per-Token Log-Probability Variance\"\n- **Signal**: The variance of the log-probabilities of the generated tokens, normalized by the sequence length.\n- **Hypothesis**: Hallucinated tokens often exhibit erratic confidence levels (extreme swings between high and low probability) compared to coherent ground-truth tokens, which tend to have more stable, moderate confidence distributions.\n- **Aggregation Principle**: Compute the variance of `sequence_logprobs` for each sample. This captures the *instability* of the model's confidence.\n- **Improvement**: This replaces the raw sum (which favors length) with a variance metric (which favors instability), a known characteristic of hallucinations in autoregressive models.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Calculate variance of log-probs for each sequence\n        # Hallucinations often exhibit higher variance in token confidence\n        variances = np.array([\n            np.var(seq_logprobs, ddof=0) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        return variances\n```",
+    "usage": {
+      "completion_tokens": 447,
+      "prompt_tokens": 531,
+      "total_tokens": 978,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 10.523094674019376
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided candidate detector uses a **global aggregation principle**: it sums (or averages) the negative log-probabilities across the entire sequence to produce a single scalar score per sample.\n- **Signal**: Cumulative uncertainty (Total Negative Log-Likelihood).\n- **Weakness**: This approach is highly sensitive to sequence length. Longer sequences naturally accumulate higher negative log-probability even if the model is confident at every step. Conversely, a short sequence with one highly improbable token might score lower than a long sequence of moderate uncertainty. This confounds the detector's ability to distinguish hallucinations (which are often local anomalies) from mere length differences.\n\n### Proposed Detector\nTo address the length sensitivity and focus on local anomalies, I propose a detector based on **robust quantile aggregation of local uncertainty**.\n\n- **Signal Family**: Local Token Uncertainty (Negative Log-Probability of the generated token).\n- **Aggregation Principle**: Instead of a global sum, we compute the **95th percentile** of the negative log-probabilities within each sequence. This identifies the \"worst-case\" local uncertainty, making the score robust to long sequences of easy tokens while remaining sensitive to the presence of even a single highly improbable (hallucinatory) token.\n- **Structural Difference**: Shifts from a **global sum** (sensitive to length and average difficulty) to a **local quantile maximum** (sensitive to the presence of outliers/hallucinations, robust to sequence length).\n\n```python\nimport numpy as np\nfrom sklearn.base import Estimator\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the maximum local uncertainty in a sequence.\n        \n        Approach: Computes the 95th percentile of negative log-probabilities for each sequence.\n        Hypothesis: Hallucinations manifest as localized tokens with extremely low probability \n        (high negative log-prob), which a global sum might dilute, whereas a high quantile \n        captures these local anomalies regardless of sequence length.\n        \"\"\"\n        neg_logprobs = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # Convert to negative log-probability\n            # seq_logprobs shape: (n_i - 1,)\n            neg_lp = -np.array(seq_logprobs, dtype=np.float32)\n            # Compute 95th percentile as the robust local uncertainty score\n            score = np.percentile(neg_lp, 95)\n            neg_logprobs.append(score)\n        \n        return np.array(neg_logprobs, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 634,
+      "prompt_tokens": 551,
+      "total_tokens": 1185,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 17.91847237298498
+  }
+]

@@ -1,0 +1,142 @@
+FFF.F.....................                                               [100%]
+=================================== FAILURES ===================================
+_______ test_neutral_policy_preserves_parents_contract_and_original_chat _______
+
+    def test_neutral_policy_preserves_parents_contract_and_original_chat():
+>       chat = saved_chat()
+               ^^^^^^^^^^^^
+
+tests/test_prompt_policies.py:17: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_prompt_policies.py:13: in saved_chat
+    return json.loads(path.read_text())
+                      ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+____ test_diverse_policy_assigns_different_sibling_roles_and_is_repeatable _____
+
+    def test_diverse_policy_assigns_different_sibling_roles_and_is_repeatable():
+>       chat = saved_chat()
+               ^^^^^^^^^^^^
+
+tests/test_prompt_policies.py:30: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_prompt_policies.py:13: in saved_chat
+    return json.loads(path.read_text())
+                      ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+_____ test_frozen_context_never_samples_population_and_checks_round_count ______
+
+tmp_path = PosixPath('/tmp/pytest-of-root/pytest-0/test_frozen_context_never_samp0')
+
+    def test_frozen_context_never_samples_population_and_checks_round_count(tmp_path):
+        class Forbidden:
+            def get_prompt(self, **kwargs):
+                raise AssertionError("sampled evolved population during a frozen-context experiment")
+        path = tmp_path / "contexts.json"
+>       path.write_text(json.dumps({"contexts": [{"chat": saved_chat()}]}))
+                                                          ^^^^^^^^^^^^
+
+tests/test_prompt_policies.py:45: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_prompt_policies.py:13: in saved_chat
+    return json.loads(path.read_text())
+                      ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+______ test_compositional_policy_keeps_contract_and_permits_many_features ______
+
+    def test_compositional_policy_keeps_contract_and_permits_many_features():
+>       chat = saved_chat()
+               ^^^^^^^^^^^^
+
+tests/test_prompt_policies.py:61: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_prompt_policies.py:13: in saved_chat
+    return json.loads(path.read_text())
+                      ^^^^^^^^^^^^^^^^
+/usr/lib/python3.12/pathlib.py:1029: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json')
+mode = 'r', buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/workspace/mod1/out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/prompt_0000.json'
+
+/usr/lib/python3.12/pathlib.py:1015: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_prompt_policies.py::test_neutral_policy_preserves_parents_contract_and_original_chat
+FAILED tests/test_prompt_policies.py::test_diverse_policy_assigns_different_sibling_roles_and_is_repeatable
+FAILED tests/test_prompt_policies.py::test_frozen_context_never_samples_population_and_checks_round_count
+FAILED tests/test_prompt_policies.py::test_compositional_policy_keeps_contract_and_permits_many_features
+4 failed, 22 passed in 46.42s

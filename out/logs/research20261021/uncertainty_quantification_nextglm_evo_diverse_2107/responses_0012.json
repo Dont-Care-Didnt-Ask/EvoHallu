@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\nThe previous attempts focused on aggregate uncertainty metrics:\n- **Detector 1** used Mean Absolute Deviation (MAD) of local confidence. It failed (61.67) because it measures dispersion rather than the magnitude of confidence. Hallucinations often have high confidence (low NLL), so a high MAD score would incorrectly flag them as normal.\n- **Detector 2** used the average Negative Log Probability (NLL). It achieved 71.99, indicating that the model's average confidence is a decent signal, but it ignores the *distribution* of confidence across the sequence.\n\n2. **Proposed Detector**\n- **Signal:** **Confidence Variance** (or Variance of Negative Log-Probability).\n- **Aggregation Principle:** Calculate the variance of the local confidence values within each sequence.\n- **Rationale:** This detector captures the *instability* of the model's confidence. A hallucination often consists of a few tokens where the model is confidently wrong (low NLL) amidst tokens of high uncertainty (high NLL). A high variance indicates this \"jagged\" confidence profile, distinguishing it from the smooth, low-variance confidence of fluent text.\n\n3. **Code**\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the variance of local token confidence.\n        \n        Approach: Converts sequence log-probabilities to confidence (negative NLL)\n        and computes the variance for each sequence. This measures the dispersion\n        of confidence across the generated tokens.\n        \n        Hypothesis for future: This detector identifies sequences with high\n        confidence variance. Hallucinations are hypothesized to be characterized\n        by \"jagged\" confidence profiles\u2014where the model is confidently wrong on\n        specific tokens\u2014resulting in higher variance compared to fluent text.\n        \"\"\"\n        scores = []\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n\n        for seq_logprobs in sequence_logprobs:\n            # seq_logprobs length is n_i - 1\n            if len(seq_logprobs) == 0:\n                scores.append(0.0)\n                continue\n\n            # Compute local confidence (negative log-prob)\n            local_confidence = -seq_logprobs\n\n            # Calculate variance of confidence\n            # This highlights sequences where confidence varies significantly\n            # across different tokens.\n            conf_variance = np.var(local_confidence)\n            \n            scores.append(conf_variance)\n\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 582,
+      "prompt_tokens": 983,
+      "total_tokens": 1565,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 45.05342073299107
+  },
+  {
+    "content": "### 1. Analysis of Shown Detectors\nThe provided candidates utilize **sequence-level log-probability aggregation**.\n- **Detector 1** uses a sliding window to calculate the Mean Absolute Deviation (MAD) of local confidence, hypothesizing that hallucinations are localized confidence spikes.\n- **Detector 2** uses the global average negative log-probability (NLL), hypothesizing that hallucinations are characterized by high overall uncertainty.\n\nBoth approaches rely solely on the `sequence_logprobs` and do not utilize the `top_k_logits` or `top_k_indices` inputs, which represent the model's alternative predictions and distribution concentration.\n\n### 2. Proposed Detector\n**Signal:** **Top-k Entropy** (or Sharpness).\n**Aggregation Principle:** **Mean Aggregation**.\n\n**Rationale:**\nHallucinations often occur when the model is uncertain about the correct token, leading to a flatter distribution (higher entropy) over the top-k candidates. Conversely, a sharp distribution (low entropy) indicates the model is confident in a specific token. By calculating the entropy of the top-k logits for each generated token and averaging these values across the sequence, we measure the \"sharpness\" of the model's predictions. This is structurally different from the NLL-based methods as it relies on the shape of the distribution (relative probabilities of top candidates) rather than the absolute probability of the selected token.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average top-k entropy (sharpness) of generated tokens.\n        \n        Approach: Computes the Shannon entropy of the top-k logits for each\n        generated token. The entropy is calculated using the softmax probabilities\n        of the top-k logits. The detector averages this entropy across the sequence.\n        \n        Hypothesis for future: This detector identifies \"sharpness\" anomalies.\n        Hallucinations are hypothesized to occur when the model generates tokens\n        from a flatter top-k distribution (higher entropy), indicating lower\n        confidence in the specific token selection relative to alternatives.\n        \"\"\"\n        scores = []\n        top_k_logits = stats[\"top_k_logits\"]\n\n        for logits in top_k_logits:\n            # logits shape: (n_i, k)\n            # Apply softmax to get probabilities for the top-k candidates\n            # Subtract max for numerical stability\n            exp_logits = np.exp(logits - np.max(logits, axis=1, keepdims=True))\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # Calculate entropy: -sum(p * log(p))\n            # Avoid log(0) by clipping probabilities\n            entropy = -np.sum(probs * np.log(probs + 1e-12), axis=1)\n            \n            # Average entropy across the sequence\n            avg_entropy = np.mean(entropy)\n            scores.append(avg_entropy)\n\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 674,
+      "prompt_tokens": 1003,
+      "total_tokens": 1677,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 52.088739978004014
+  }
+]

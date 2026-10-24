@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-21T15:04:21.144545+00:00",
+  "protocol_tests": {
+    "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_prompt_policies.py tests/test_extension_trial.py -q",
+    "passed": 26,
+    "elapsed_seconds": 98.69,
+    "real_writer_calls": false
+  },
+  "prepared_configs_verified": 19,
+  "historical_prompts_replayed": 201,
+  "historical_prompt_mismatches": 0,
+  "source_and_config_hashes_verified": true,
+  "all_ten_supplied_csvs_identical": true,
+  "historical_primary_results_unchanged": true,
+  "baseline_reporting_resolved": true,
+  "real_writer_requests_this_preparation": 0,
+  "new_cpu_fit": "14-feature logistic/QDA, claim-grouped inner/outer splits",
+  "gpu_serving_validation": "pending_on_GPU_execution_host",
+  "git_main_unchanged": "45dff51361a6f252a17ff71f479bbfb9ea4c5431",
+  "new_changes_committed": false
+}

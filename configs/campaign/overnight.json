@@ -1,0 +1,173 @@
+{
+  "hard_deadline_utc": "2026-10-15T10:45:00+00:00",
+  "actions": [
+    {
+      "id": "wait_training_features",
+      "kind": "wait_file",
+      "path": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+      "timeout": 1800,
+      "log": "out/campaign/precompute_train.log",
+      "log_contains": "Saved logits to:"
+    },
+    {
+      "id": "serve_qwen38",
+      "kind": "serve",
+      "log": "out/campaign/qwen38_server.log",
+      "timeout": 1200,
+      "command": [
+        "vllm",
+        "serve",
+        "/dev/shm/mod1-models/Qwen3.8-27B",
+        "--served-model-name",
+        "Qwen/Qwen3.8-27B",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.90",
+        "--language-model-only",
+        "--reasoning-parser",
+        "qwen3",
+        "--enforce-eager"
+      ]
+    },
+    {
+      "id": "qwen38_pilot_1046",
+      "kind": "command",
+      "log": "out/campaign/qwen38_pilot_1046.log",
+      "timeout": 1920,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "run_identifier_name=qwen38_pilot",
+        "search_mode=evolution",
+        "seed=1046",
+        "num_rounds=5",
+        "trial.max_seconds=1800",
+        "trial.max_total_tokens=3000000"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "qwen38_evo_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen38_evo_1048.log",
+      "timeout": 5520,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "run_identifier_name=qwen38_evo",
+        "search_mode=evolution",
+        "seed=1048",
+        "num_rounds=30",
+        "trial.max_seconds=5400",
+        "trial.max_total_tokens=3000000",
+        "model.max_tokens=4096",
+        "trial.request_timeout_seconds=300"
+      ],
+      "continue_on_failure": true,
+      "minimum_remaining_seconds": 12600
+    },
+    {
+      "id": "qwen38_evo_1047",
+      "kind": "command",
+      "log": "out/campaign/qwen38_evo_1047.log",
+      "timeout": 5520,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "run_identifier_name=qwen38_evo",
+        "search_mode=evolution",
+        "seed=1047",
+        "num_rounds=30",
+        "trial.max_seconds=5400",
+        "trial.max_total_tokens=3000000",
+        "model.max_tokens=4096",
+        "trial.request_timeout_seconds=300"
+      ],
+      "continue_on_failure": true,
+      "minimum_remaining_seconds": 12600
+    },
+    {
+      "id": "qwen38_independent_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen38_independent_1048.log",
+      "timeout": 5520,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "run_identifier_name=qwen38_independent",
+        "search_mode=independent",
+        "seed=1048",
+        "num_rounds=30",
+        "trial.max_seconds=5400",
+        "trial.max_total_tokens=3000000",
+        "model.max_tokens=4096",
+        "trial.request_timeout_seconds=300"
+      ],
+      "continue_on_failure": true,
+      "minimum_remaining_seconds": 12600
+    },
+    {
+      "id": "wait_independent_contract_fix",
+      "kind": "wait_file",
+      "path": "out/campaign/independent_contract_fixed",
+      "timeout": 600
+    },
+    {
+      "id": "qwen38_independent_contract_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen38_independent_contract_1048.log",
+      "timeout": 5520,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "run_identifier_name=qwen38_independent_contract",
+        "search_mode=independent",
+        "seed=1048",
+        "num_rounds=30",
+        "trial.max_seconds=5400",
+        "trial.max_total_tokens=3000000",
+        "model.max_tokens=4096",
+        "trial.request_timeout_seconds=300"
+      ],
+      "continue_on_failure": true,
+      "minimum_remaining_seconds": 12600
+    },
+    {
+      "id": "stop_qwen38",
+      "kind": "stop_server"
+    },
+    {
+      "id": "phase2_campaign",
+      "kind": "command",
+      "log": "out/campaign/phase2_driver.log",
+      "timeout": 43200,
+      "command": [
+        "python",
+        "scripts/campaign.py",
+        "--plan",
+        "configs/campaign/phase2.json",
+        "--state",
+        "out/campaign/state_phase2.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,280 @@
+{
+  "test_data_used": false,
+  "scoring_chunk_size": 512,
+  "protocols": {
+    "stratified": {
+      "train_rows": 5605,
+      "val_rows": 1402,
+      "methods": {
+        "EntropySlope": {
+          "ast_nodes": 222,
+          "train_auc_percent": 55.36143814661417,
+          "val_auc_percent": 57.4036539946405
+        },
+        "ExpWeightedNegLogProb": {
+          "ast_nodes": 304,
+          "train_auc_percent": 78.68036558379211,
+          "val_auc_percent": 76.05486669391833
+        },
+        "ExpWeightedNegLogProbWithTop1": {
+          "ast_nodes": 465,
+          "train_auc_percent": 78.92703592916432,
+          "val_auc_percent": 76.34299632102466
+        },
+        "Gap": {
+          "ast_nodes": 227,
+          "train_auc_percent": 70.97147121235363,
+          "val_auc_percent": 68.36308307217149
+        },
+        "LogProbSlope": {
+          "ast_nodes": 186,
+          "train_auc_percent": 79.82556686153863,
+          "val_auc_percent": 78.7666916473634
+        },
+        "LogProbSlope_BottomMassAvg": {
+          "ast_nodes": 449,
+          "train_auc_percent": 79.86102233925902,
+          "val_auc_percent": 78.8078530226643
+        },
+        "LogProbSlope_OutlierScore": {
+          "ast_nodes": 300,
+          "train_auc_percent": 78.6721541874748,
+          "val_auc_percent": 77.0171912612981
+        },
+        "LogProbSlope_TopBottomRatio": {
+          "ast_nodes": 501,
+          "train_auc_percent": 79.83360071415179,
+          "val_auc_percent": 78.7666916473634
+        },
+        "MeanStdTokenEntropy": {
+          "ast_nodes": 107,
+          "train_auc_percent": 64.48977667842716,
+          "val_auc_percent": 63.2732661125494
+        },
+        "MeanTokenEntropy": {
+          "ast_nodes": 96,
+          "train_auc_percent": 65.52429721100147,
+          "val_auc_percent": 64.53166871054185
+        },
+        "MinimalLogProb": {
+          "ast_nodes": 98,
+          "train_auc_percent": 50.06546036372313,
+          "val_auc_percent": 49.68405096062134
+        },
+        "Perplexity": {
+          "ast_nodes": 103,
+          "train_auc_percent": 71.99687487571941,
+          "val_auc_percent": 69.51091769995912
+        },
+        "PositionWeightedGap": {
+          "ast_nodes": 273,
+          "train_auc_percent": 74.45965461357969,
+          "val_auc_percent": 71.69318026979153
+        },
+        "PositionWeightedGapNormalized": {
+          "ast_nodes": 332,
+          "train_auc_percent": 74.47273070739094,
+          "val_auc_percent": 71.63044465640186
+        },
+        "PositionWeightedGap_EntropySlope_TopKMassInv": {
+          "ast_nodes": 912,
+          "train_auc_percent": 74.14162945350627,
+          "val_auc_percent": 73.89971385747378
+        },
+        "QuartileEntropyDiff": {
+          "ast_nodes": 197,
+          "train_auc_percent": 57.98729177674375,
+          "val_auc_percent": 58.741682563473674
+        },
+        "QuartileEntropyDiffNormalized": {
+          "ast_nodes": 256,
+          "train_auc_percent": 57.79354720958111,
+          "val_auc_percent": 58.659217877094974
+        },
+        "QuartileEntropyDiff_PositionWeightedGap": {
+          "ast_nodes": 515,
+          "train_auc_percent": 77.87166288853665,
+          "val_auc_percent": 77.32235318163238
+        },
+        "QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay": {
+          "ast_nodes": 763,
+          "train_auc_percent": 72.78016218972463,
+          "val_auc_percent": 73.3765385838216
+        },
+        "SequenceLogProb": {
+          "ast_nodes": 98,
+          "train_auc_percent": 74.32858297398488,
+          "val_auc_percent": 75.75041445246853
+        },
+        "SequenceLogProbBottom": {
+          "ast_nodes": 145,
+          "train_auc_percent": 70.54369741155483,
+          "val_auc_percent": 72.83193100785756
+        },
+        "SequenceLogProb_BottomMassAvg": {
+          "ast_nodes": 399,
+          "train_auc_percent": 74.32858297398488,
+          "val_auc_percent": 75.75041445246853
+        },
+        "SequenceLogProb_OutlierScore": {
+          "ast_nodes": 250,
+          "train_auc_percent": 74.32830778124342,
+          "val_auc_percent": 75.74942090203024
+        },
+        "SequenceLogProb_TopBottomRatio": {
+          "ast_nodes": 451,
+          "train_auc_percent": 74.32858297398488,
+          "val_auc_percent": 75.75041445246853
+        },
+        "StdTokenEntropy": {
+          "ast_nodes": 98,
+          "train_auc_percent": 57.852988841733286,
+          "val_auc_percent": 56.79304628241814
+        }
+      },
+      "frozen_top_three_by_validation": [
+        "LogProbSlope_BottomMassAvg",
+        "LogProbSlope",
+        "LogProbSlope_TopBottomRatio"
+      ],
+      "complexity_validation_spearman": 0.5848584196366573
+    },
+    "claim_group": {
+      "train_rows": 5606,
+      "val_rows": 1401,
+      "methods": {
+        "EntropySlope": {
+          "ast_nodes": 222,
+          "train_auc_percent": 55.919703613663984,
+          "val_auc_percent": 55.325989361943954
+        },
+        "ExpWeightedNegLogProb": {
+          "ast_nodes": 304,
+          "train_auc_percent": 78.1764490582435,
+          "val_auc_percent": 78.08188234491851
+        },
+        "ExpWeightedNegLogProbWithTop1": {
+          "ast_nodes": 465,
+          "train_auc_percent": 78.42196144364797,
+          "val_auc_percent": 78.38022526311003
+        },
+        "Gap": {
+          "ast_nodes": 227,
+          "train_auc_percent": 70.7480286588206,
+          "val_auc_percent": 69.14651194508218
+        },
+        "LogProbSlope": {
+          "ast_nodes": 186,
+          "train_auc_percent": 79.72908880229929,
+          "val_auc_percent": 79.15421203373263
+        },
+        "LogProbSlope_BottomMassAvg": {
+          "ast_nodes": 449,
+          "train_auc_percent": 79.75654841696299,
+          "val_auc_percent": 79.21359648125839
+        },
+        "LogProbSlope_OutlierScore": {
+          "ast_nodes": 300,
+          "train_auc_percent": 78.52029774955412,
+          "val_auc_percent": 77.62328665924123
+        },
+        "LogProbSlope_TopBottomRatio": {
+          "ast_nodes": 501,
+          "train_auc_percent": 79.7290621769457,
+          "val_auc_percent": 79.18717182278998
+        },
+        "MeanStdTokenEntropy": {
+          "ast_nodes": 107,
+          "train_auc_percent": 64.24139575073558,
+          "val_auc_percent": 64.24672675198326
+        },
+        "MeanTokenEntropy": {
+          "ast_nodes": 96,
+          "train_auc_percent": 65.24839324866234,
+          "val_auc_percent": 65.6757893301207
+        },
+        "MinimalLogProb": {
+          "ast_nodes": 98,
+          "train_auc_percent": 49.87811800640713,
+          "val_auc_percent": 50.43131861887118
+        },
+        "Perplexity": {
+          "ast_nodes": 103,
+          "train_auc_percent": 71.82428757653902,
+          "val_auc_percent": 70.08060941513423
+        },
+        "PositionWeightedGap": {
+          "ast_nodes": 273,
+          "train_auc_percent": 74.07571860054301,
+          "val_auc_percent": 73.15467801695725
+        },
+        "PositionWeightedGapNormalized": {
+          "ast_nodes": 332,
+          "train_auc_percent": 74.05605133936179,
+          "val_auc_percent": 73.09983974723251
+        },
+        "PositionWeightedGap_EntropySlope_TopKMassInv": {
+          "ast_nodes": 912,
+          "train_auc_percent": 73.8696294886796,
+          "val_auc_percent": 74.3258870729434
+        },
+        "QuartileEntropyDiff": {
+          "ast_nodes": 197,
+          "train_auc_percent": 57.56508833937315,
+          "val_auc_percent": 60.38773213920396
+        },
+        "QuartileEntropyDiffNormalized": {
+          "ast_nodes": 256,
+          "train_auc_percent": 57.38913912776762,
+          "val_auc_percent": 60.26867910803991
+        },
+        "QuartileEntropyDiff_PositionWeightedGap": {
+          "ast_nodes": 515,
+          "train_auc_percent": 77.43582047269588,
+          "val_auc_percent": 78.91212806582865
+        },
+        "QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay": {
+          "ast_nodes": 763,
+          "train_auc_percent": 72.5801902399264,
+          "val_auc_percent": 74.67707930807174
+        },
+        "SequenceLogProb": {
+          "ast_nodes": 98,
+          "train_auc_percent": 74.8445256853011,
+          "val_auc_percent": 73.70519173504877
+        },
+        "SequenceLogProbBottom": {
+          "ast_nodes": 145,
+          "train_auc_percent": 71.34699261306191,
+          "val_auc_percent": 69.60397108630917
+        },
+        "SequenceLogProb_BottomMassAvg": {
+          "ast_nodes": 399,
+          "train_auc_percent": 74.8445256853011,
+          "val_auc_percent": 73.70519173504877
+        },
+        "SequenceLogProb_OutlierScore": {
+          "ast_nodes": 250,
+          "train_auc_percent": 74.84389555193293,
+          "val_auc_percent": 73.70774896006182
+        },
+        "SequenceLogProb_TopBottomRatio": {
+          "ast_nodes": 451,
+          "train_auc_percent": 74.8445256853011,
+          "val_auc_percent": 73.70519173504877
+        },
+        "StdTokenEntropy": {
+          "ast_nodes": 98,
+          "train_auc_percent": 57.65608492280777,
+          "val_auc_percent": 57.627918077876025
+        }
+      },
+      "frozen_top_three_by_validation": [
+        "LogProbSlope_BottomMassAvg",
+        "LogProbSlope_TopBottomRatio",
+        "LogProbSlope"
+      ],
+      "complexity_validation_spearman": 0.6664098613251156
+    }
+  }
+}

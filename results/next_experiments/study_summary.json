@@ -1,0 +1,159 @@
+{
+  "status": "prepared_only",
+  "diversity_partition": "512 fixed training-probe rows; not source validation",
+  "confirmation_status": "No independent held-out confirmation established",
+  "runs": [
+    {
+      "id": "next_prompt_original_2107",
+      "phase": "prompt_screen",
+      "policy": "original",
+      "seed": 2107,
+      "planned_requests": 30,
+      "status": "not_run"
+    },
+    {
+      "id": "next_prompt_neutral_2107",
+      "phase": "prompt_screen",
+      "policy": "neutral",
+      "seed": 2107,
+      "planned_requests": 30,
+      "status": "not_run"
+    },
+    {
+      "id": "next_prompt_diverse_2107",
+      "phase": "prompt_screen",
+      "policy": "diverse",
+      "seed": 2107,
+      "planned_requests": 30,
+      "status": "not_run"
+    },
+    {
+      "id": "next_prompt_compositional_2107",
+      "phase": "prompt_screen",
+      "policy": "compositional",
+      "seed": 2107,
+      "planned_requests": 30,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_original_2107",
+      "phase": "evolution_screen",
+      "policy": "original",
+      "seed": 2107,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_neutral_2107",
+      "phase": "evolution_screen",
+      "policy": "neutral",
+      "seed": 2107,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_diverse_2107",
+      "phase": "evolution_screen",
+      "policy": "diverse",
+      "seed": 2107,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_original_4319",
+      "phase": "evolution_screen",
+      "policy": "original",
+      "seed": 4319,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_neutral_4319",
+      "phase": "evolution_screen",
+      "policy": "neutral",
+      "seed": 4319,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_diverse_4319",
+      "phase": "evolution_screen",
+      "policy": "diverse",
+      "seed": 4319,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_original_8741",
+      "phase": "evolution_screen",
+      "policy": "original",
+      "seed": 8741,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_neutral_8741",
+      "phase": "evolution_screen",
+      "policy": "neutral",
+      "seed": 8741,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_diverse_8741",
+      "phase": "evolution_screen",
+      "policy": "diverse",
+      "seed": 8741,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_compositional_2107",
+      "phase": "compositional_control",
+      "policy": "compositional",
+      "seed": 2107,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_compositional_4319",
+      "phase": "compositional_control",
+      "policy": "compositional",
+      "seed": 4319,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_evo_compositional_8741",
+      "phase": "compositional_control",
+      "policy": "compositional",
+      "seed": 8741,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_fixed_neutral_2107",
+      "phase": "feedback_control",
+      "policy": "neutral",
+      "seed": 2107,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_fixed_neutral_4319",
+      "phase": "feedback_control",
+      "policy": "neutral",
+      "seed": 4319,
+      "planned_requests": 60,
+      "status": "not_run"
+    },
+    {
+      "id": "next_fixed_neutral_8741",
+      "phase": "feedback_control",
+      "policy": "neutral",
+      "seed": 8741,
+      "planned_requests": 60,
+      "status": "not_run"
+    }
+  ]
+}

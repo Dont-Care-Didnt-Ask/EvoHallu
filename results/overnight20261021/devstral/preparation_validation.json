@@ -1,0 +1,28 @@
+{
+  "status": "prefetch_verified_and_orchestrator_prepared",
+  "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+  "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+  "tests": {
+    "command": ".venv/bin/python -m pytest -q tests/test_overnight_devstral.py",
+    "passed": 7,
+    "elapsed_seconds": 0.59
+  },
+  "helper_sha256": "72259724055459f2081336679f5139085076c5ce1c40878835de2cb3a209bd2e",
+  "tests_sha256": "ce4bfce8d5ff5dcbb0dea85c3a88a0c6cce9d9ea63b5fca35ad4de1bc8bfa2c1",
+  "prefetch_receipt_sha256": "0d3fc236ec2ebd979cfca60ccde47a3e6f3590adaf4e638feb961981dd615cd6",
+  "actual_native_files": 13,
+  "actual_weight_bytes": 25793035888,
+  "actual_total_file_bytes": 25827009376,
+  "all_published_hashes_verified": true,
+  "verified_remote_default_dry_run": true,
+  "source_twelve_complete": true,
+  "source_validation_selected_policy": "diverse",
+  "gpu_or_inference_launched": false,
+  "execution_manifest_created": false,
+  "analysis_registry_modified": false,
+  "entry_minutes": 75,
+  "poststartup_minutes": 65,
+  "startup_max_minutes": 10,
+  "per_job_minutes": 60,
+  "writer_cutoff_utc": "2026-10-22T01:10:00Z"
+}

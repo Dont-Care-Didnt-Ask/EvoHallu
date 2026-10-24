@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (Mean Gap):** Calculates the average difference between the maximum top-k log-probability and the actual log-probability. It uses a simple mean aggregation.\n   - **Detector 2 (Surprisal Std Dev):** Calculates the standard deviation of negative log-probabilities (surprisal). It focuses on the variance of confidence rather than the absolute confidence level.\n\n2. **Proposed Detector**\n   - **Signal:** Weighted Standard Deviation of Negative Log-Probabilities (Surprisal).\n   - **Aggregation Principle:** Instead of a uniform standard deviation, apply a **linearly decreasing weight** to tokens based on their position in the sequence. This down-weights the influence of the initial tokens (where the model is often most confident due to context) and up-weights the influence of the later tokens (where hallucinations are more likely to occur or persist). This addresses the \"Local-refinement\" role by focusing the signal on the tail of the sequence.\n\n3. **Code**\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Computes a weighted standard deviation of negative log-probabilities.\n        \n        Signal: The local instability of confidence, weighted to emphasize\n        later tokens in the sequence.\n        \n        Hypothesis: Hallucinated tokens often appear in the tail of a sequence\n        where confidence fluctuates more wildly. By weighting tokens by their\n        position (linearly decreasing), we focus the detector on these critical\n        regions, improving robustness compared to a uniform standard deviation.\n        \"\"\"\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n        scores = []\n        \n        for probs in sequence_logprobs:\n            # Convert to negative log-probability (surprisal)\n            surprisal = -probs\n            \n            n = len(surprisal)\n            if n == 0:\n                scores.append(0.0)\n                continue\n            \n            # Create linearly decreasing weights: [1, 0.99, ..., 1/n]\n            # Weights are normalized to sum to 1\n            weights = np.linspace(1.0, 1.0 / n, n)\n            weights = weights / np.sum(weights)\n            \n            # Calculate weighted mean\n            weighted_mean = np.sum(weights * surprisal)\n            \n            # Calculate weighted standard deviation\n            weighted_std = np.sqrt(np.sum(weights * (surprisal - weighted_mean) ** 2))\n            \n            scores.append(weighted_std)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 605,
+      "prompt_tokens": 1028,
+      "total_tokens": 1633,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 47.01717498400831
+  },
+  {
+    "content": "1. **Analyze shown detectors**\nThe existing detectors utilize the following approaches:\n- **Detector 1 (Mean Confidence Gap):** Measures the average difference between the actual token log-probability and the maximum log-probability in the top-512 set. It assumes hallucinations result in tokens that are significantly less likely than the model's own top picks.\n- **Detector 2 (Surprisal Standard Deviation):** Measures the local stability (fluctuation) of the negative log-probabilities. It assumes hallucinations introduce erratic confidence levels compared to factual tokens.\n\n2. **Propose a detector**\n**Signal:** **Top-k Entropy (Normalized)**.\n**Aggregation Principle:** **Average**.\n**Structural Difference:** Unlike the existing methods which rely on the *absolute* value of the actual token's probability (gap) or the *variance* of probabilities (surprisal), this detector measures the **shape** of the probability distribution itself (entropy). It assumes that hallucinations are characterized by a flatter, more uniform distribution of the top-512 logits, whereas factual tokens tend to concentrate probability mass in a few high-probability tokens.\n\n3. **Code**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Computes the average top-k entropy score.\n        \n        Signal: The average Shannon entropy of the top-k probability distribution\n        for each generated token.\n        \n        Hypothesis: Hallucinated tokens are generated when the model's top-k\n        distribution is flatter (more uniform) rather than peaked. \n        Normalizing by log(k) makes the score comparable across different\n        sequence lengths.\n        \"\"\"\n        top_k_logits = stats[\"top_k_logits\"]  # List[np.ndarray], shape (n_i, k)\n        \n        scores = []\n        \n        for i, logits in enumerate(top_k_logits):\n            # We take rows 0 to n_i-1 (excluding the final stop token if present)\n            step_logits = logits[:-1, :]\n            \n            # 1. Compute Softmax probabilities\n            # Use stable softmax implementation to avoid overflow\n            exp_logits = np.exp(step_logits - np.max(step_logits, axis=1, keepdims=True))\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # 2. Compute Entropy for each step: H = -sum(p * log(p))\n            # Clip probabilities to avoid log(0) (numerical stability)\n            epsilon = 1e-12\n            clipped_probs = np.clip(probs, epsilon, 1.0)\n            entropy = -np.sum(clipped_probs * np.log(clipped_probs), axis=1)\n            \n            # 3. Normalize by log(k) to get a score between 0 and 1\n            # k is 512, so log(512) ~ 6.238\n            k = 512\n            normalized_entropy = entropy / np.log(k)\n            \n            # 4. Aggregate: Mean of the normalized entropy\n            if len(normalized_entropy) > 0:\n                mean_score = np.mean(normalized_entropy, dtype=np.float64)\n            else:\n                mean_score = 0.0\n                \n            scores.append(mean_score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 748,
+      "prompt_tokens": 1048,
+      "total_tokens": 1796,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 57.8881651830161
+  }
+]

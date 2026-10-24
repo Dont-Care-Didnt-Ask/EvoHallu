@@ -1,0 +1,38 @@
+{
+  "recorded_utc": "2026-10-21T22:48:26Z",
+  "status": "focused_validation_passed_before_GLM_execution",
+  "scope": "Optional 60-minute GLM job cap, preserving the existing opt-in Devstral breadth allocation and all absolute deadlines",
+  "tests": {
+    "command": ".venv/bin/python -m pytest -q tests/test_overnight_late_extensions.py tests/test_overnight_devstral.py",
+    "exit_code": 0,
+    "passed": 44,
+    "elapsed_seconds": 1.41,
+    "output_summary": "44 passed in 1.41s"
+  },
+  "compilation": {
+    "command": ".venv/bin/python -m py_compile scripts/overnight_late_extensions.py",
+    "exit_code": 0
+  },
+  "dry_run": {
+    "command": ".venv/bin/python scripts/overnight_late_extensions.py --prefer-devstral-breadth --glm-max-job-minutes 60",
+    "exit_code": 0,
+    "event": "dry_run",
+    "prefer_devstral_breadth": true,
+    "glm_max_job_minutes": 60,
+    "glm_cutoff_utc": "2026-10-22T01:10:00+00:00",
+    "transfer_cutoff_utc": "2026-10-22T02:01:28+00:00",
+    "cpu_finish_utc": "2026-10-22T02:06:28+00:00",
+    "hard_deadline_utc": "2026-10-22T02:16:28+00:00",
+    "no_pod_stop": true
+  },
+  "sha256": {
+    "scripts/overnight_late_extensions.py": "a787a8785c2fbc23ea151020ffeacfc0dd6ea24794707b07f762f669c9a887cf",
+    "tests/test_overnight_late_extensions.py": "83567d5714bee18755de3fef93fdfc060204cd2e6539fc8ae7afb69fa81f54c5",
+    "results/overnight20261021/DEVSTRAL_BREADTH_ALLOCATION.md": "39b43778c14e4d6528d40cb783cee77932f9441863a181097d16f6328f394147",
+    "scripts/overnight_devstral.py": "72259724055459f2081336679f5139085076c5ce1c40878835de2cb3a209bd2e"
+  },
+  "gpu_actions_performed_by_preparation": false,
+  "manifest_config_or_core_changes": false,
+  "earlier_36_pass_validation_receipt_overwritten": false,
+  "note": "This records the already captured validation run; tests were not repeated to create this receipt. Controller activation is recorded separately by the root agent."
+}

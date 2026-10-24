@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-15T08:57:30.513176+00:00",
+  "reason": "All six requests rejected with HTTP400 before token generation: native Mistral tokenizer forbids chat_template_kwargs. This is a request protocol failure, not a writer capability result.",
+  "replacement_run": "uncertainty_quantification_devstral_evo_native_1048",
+  "target_quality_evaluated_at_exclusion": false
+}

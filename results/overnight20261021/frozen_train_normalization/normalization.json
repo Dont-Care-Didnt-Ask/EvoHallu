@@ -1,0 +1,58 @@
+{
+  "format": "C8741_frozen_training_median_mad_v1",
+  "parent_source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "helper_sha256": "f2f92a85857801c301e1383fabde5b4903c68a401f46d7a6dbb1a968a7fdc89d",
+  "statistics": [
+    {
+      "feature": 1,
+      "dtype": "<f4",
+      "median": 141.0,
+      "mad": 6.875,
+      "degenerate": false,
+      "minimum": 105.8125,
+      "maximum": 359.25,
+      "rows": 5605
+    },
+    {
+      "feature": 2,
+      "dtype": "<f4",
+      "median": 21.5625,
+      "mad": 2.734375,
+      "degenerate": false,
+      "minimum": 6.18359375,
+      "maximum": 44.25,
+      "rows": 5605
+    },
+    {
+      "feature": 3,
+      "dtype": "<f4",
+      "median": 0.0,
+      "mad": 0.0,
+      "degenerate": true,
+      "minimum": -0.00048732757568359375,
+      "maximum": 0.0,
+      "rows": 5605
+    },
+    {
+      "feature": 4,
+      "dtype": "<f4",
+      "median": 13.359375,
+      "mad": 0.0,
+      "degenerate": true,
+      "minimum": 13.359375,
+      "maximum": 22.25,
+      "rows": 5605
+    }
+  ],
+  "coefficients": [
+    0.4,
+    0.25,
+    0.2,
+    0.15
+  ],
+  "mad_multiplier": 1.4826,
+  "source_fit_rows": 5605,
+  "excluded_validation_rows": 1402,
+  "train_only": true,
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced"
+}

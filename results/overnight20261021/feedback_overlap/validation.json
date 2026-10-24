@@ -1,0 +1,42 @@
+{
+  "created_utc": "2026-10-21T20:22:45.396758+00:00",
+  "status": "prepared_only_no_launch",
+  "test_command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_feedback_overlap.py tests/test_overnight_followups.py -q",
+  "tests_passed": 29,
+  "exact_original_subset": true,
+  "additional_requests": 0,
+  "configs": [
+    {
+      "id": "next_fixed_neutral_2107",
+      "requests": 60,
+      "request_timeout_seconds": 180,
+      "evaluation_workers": 1,
+      "original_config_sha256": "c0de93cc872a097c291080f9ffedce74753f7b997129be97cedbd59417476a85"
+    },
+    {
+      "id": "next_fixed_neutral_4319",
+      "requests": 60,
+      "request_timeout_seconds": 180,
+      "evaluation_workers": 1,
+      "original_config_sha256": "7cff22dc3ebe26b45270a9700b4147fb2ed7d0e47ce3b74e3c3b6ef0e4924686"
+    },
+    {
+      "id": "next_fixed_neutral_8741",
+      "requests": 60,
+      "request_timeout_seconds": 180,
+      "evaluation_workers": 1,
+      "original_config_sha256": "69dadb364646932f783cb95381df1aecfb7ab4fb41ec0d14bbf33ecf78d94c89"
+    }
+  ],
+  "pinned_source_hash_mismatches": [],
+  "manifest_sha256": "c06460d1620ef8d9d13476ec9bf147bf03b662201c2cc74c66f63c320ae5b291",
+  "helper_sha256": "1bb5dc37d65c4e324f9cb6852b11ecdc25a478d38fa531fb5cd9dc5db5d27190",
+  "followups_sha256": "caedd34a900c39758357d7c41801599c7a7573a7ae5bdf96c43d093b454329e6",
+  "unchanged_controller_sha256": "18db8d5f719a0f3b56f58da63172ca048a6198ee3d5e1f78593b499ef2b124ec",
+  "no_gpu_or_llm_calls": true,
+  "synthetic_child_test_uses_real_controller": true,
+  "source_or_followups_processes_restarted": false,
+  "prioritize_novel_writer_flag_preserved": "--prioritize-novel-writer-after-utc",
+  "reservation_and_queued_duplicate_protection": true,
+  "elapsed_seconds": 6.59
+}

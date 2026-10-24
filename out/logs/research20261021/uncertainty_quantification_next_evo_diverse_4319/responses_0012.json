@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Max Negative Log-Prob (Score: 50.06)**: This approach assumes hallucinations contain at least one extremely unlikely token (a \"hard\" hallucination). The low score suggests that while some hallucinations are obvious, many are subtle or distributed across the sequence, making the single minimum a poor discriminator.\n2.  **Log-Prob Variance (Score: 58.06)**: This approach captures the *distributional instability* of the model's confidence. It performs better than the max-neg approach, implying that hallucinated sequences often have a more erratic confidence profile (mixing high and low confidence tokens) compared to coherent, hallucination-free sequences.\n\n### Proposed Detector Strategy\nThe variance approach is promising but sensitive to sequence length (longer sequences naturally have higher variance). To improve robustness, I will shift from variance to the **Coefficient of Variation (CV)** of the log-probabilities, normalized by the sequence length. This measures the *relative* spread of confidence, making it invariant to sequence length.\n\n**Signal**: Relative dispersion of token log-probabilities ($ \\frac{\\sigma}{\\mu} $ or similar robust metric, here using std/mean magnitude).\n**Aggregation Principle**: Compute the standard deviation and mean absolute value of log-probs for each sequence; the score is the ratio of these two. Higher ratios indicate inconsistent confidence, characteristic of hallucinations.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the relative dispersion (Coefficient of Variation)\n        of token log-probabilities within each sequence.\n        \n        Hypothesis: Hallucinated sequences exhibit a higher ratio of standard deviation to mean \n        magnitude of log-probabilities compared to coherent sequences, reflecting inconsistent \n        model confidence across the generated tokens.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Calculate std and mean absolute value for each sequence\n        stds = np.array([np.std(seq_logprobs) for seq_logprobs in seq_logprobs], dtype=np.float32)\n        means_abs = np.array([np.mean(np.abs(seq_logprobs)) for seq_logprobs in seq_logprobs], dtype=np.float32)\n        \n        # Avoid division by zero\n        means_abs_safe = np.where(means_abs == 0, 1.0, means_abs)\n        \n        # Coefficient of Variation: std / mean(|log_prob|)\n        scores = stds / means_abs_safe\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 630,
+      "prompt_tokens": 781,
+      "total_tokens": 1411,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 7.401520357991103
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detectors rely exclusively on the `sequence_logprobs` distribution:\n1.  **Max Negative Log-prob**: Searches for a single \"worst\" token. This assumes hallucinations are defined by a catastrophic drop in probability at one specific point.\n2.  **Variance**: Measures the spread of log-probabilities. This assumes hallucinations create a bimodal distribution (high confidence on known facts, low confidence on hallucinations).\n\nBoth approaches are limited to univariate statistics of the log-probability values themselves. They ignore the relationship between the *predicted* token and the *available* alternatives at that step, which is captured in `top_k_logits` and `top_k_indices`.\n\n### Proposed Detector\n**Signal Family**: Top-K Distribution Shape / Concentration.\n**Aggregation Principle**: Ratio of the highest logit to the sum of the top-K logits (a proxy for \"peakiness\" or confidence concentration).\n\n**Structural Difference**: Unlike the previous methods which analyze the scalar values of log-probabilities of the *chosen* tokens, this method analyzes the *relative mass* assigned to the chosen token versus its closest alternatives within the model's top-512 candidates. Hallucinations often force the model to pick a token that, while top-1, has a significantly lower ratio compared to the rest of the top-k set (indicating the model is \"splitting\" its confidence among many plausible but incorrect options, or the top-1 is a weak signal).\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the concentration of probability mass \n        on the top-1 token relative to the top-k candidates.\n        \n        Hypothesis: Hallucinated sequences exhibit a lower 'peakiness' score (logit_0 / sum(top_k)), \n        indicating the model's confidence is diluted across many alternatives rather than \n        strongly concentrated on the generated token, even if it is the top-1 choice.\n        \"\"\"\n        # Extract top-k logits and indices\n        logits = stats[\"top_k_logits\"]\n        indices = stats[\"top_k_indices\"]\n        \n        # Ensure we have valid data\n        if logits.shape[0] == 0:\n            return np.zeros(len(stats[\"top_k_logits\"]), dtype=np.float32)\n            \n        # Get the logit of the selected token (index 0 in top-k)\n        # top_k_logits shape is (n_tokens, k)\n        # We need the logit corresponding to the generated token for each position\n        # The generated token is at indices[:, 0]\n        selected_logits = logits[np.arange(logits.shape[0]), indices[:, 0]]\n        \n        # Calculate the sum of all top-k logits for each token position\n        # This acts as a normalization factor for the concentration\n        top_k_sums = np.sum(logits, axis=1)\n        \n        # Avoid division by zero (though unlikely with logits, safety first)\n        top_k_sums = np.where(top_k_sums == 0, 1e-9, top_k_sums)\n        \n        # Calculate concentration score\n        # Higher score = more confident in top-1 choice\n        # Lower score = more hallucination-prone (diffuse confidence)\n        concentration_scores = selected_logits / top_k_sums\n        \n        return concentration_scores\n```",
+    "usage": {
+      "completion_tokens": 811,
+      "prompt_tokens": 801,
+      "total_tokens": 1612,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 10.375764554017223
+  }
+]

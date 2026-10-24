@@ -1,0 +1,24 @@
+run,model,search_mode,seed,split,serving_profile,writer_weight_precision,status,protocol_excluded,requests,valid_candidates,validation_auc_percent,macro_auc_percent,gain_pp,elapsed_seconds,reported_tokens
+ablation_laguna_slope_only,poolside/Laguna-XS-2.1,frozen_ablation,1048,stratified,none,bfloat16,finished,False,0,0,78.7735045646546,68.5347209309762,2.890838615811731,0.0,0
+ablation_laguna_slope_range,poolside/Laguna-XS-2.1,frozen_ablation,1048,stratified,none,bfloat16,finished,False,0,0,79.5356996866058,69.21921406573375,3.5753317505692763,0.0,0
+ablation_laguna_slope_variance,poolside/Laguna-XS-2.1,frozen_ablation,1048,stratified,none,bfloat16,finished,False,0,0,78.88506608529772,68.63507318151103,2.9911908663465567,0.0,0
+ablation_qwen_linear_position_nll,Qwen/Qwen3.8-27B,frozen_ablation,1047,stratified,none,bfloat16,finished,False,0,0,79.61461597856201,69.79260638209645,4.148724066931976,0.0,0
+uncertainty_quantification_devstral_evo_1048,mistralai/Devstral-Small-2-24B-Instruct-2512,evolution,1048,stratified,fp8_marlin_eager,published_fp8,finished,True,6,0,75.7504,,,10.908337144181132,0
+uncertainty_quantification_laguna_evo_1047,poolside/Laguna-XS-2.1,evolution,1047,stratified,vllm_eager,bfloat16,finished,False,60,46,79.2575,69.42873391244323,3.7848515972787595,2126.1730163656175,141183
+uncertainty_quantification_laguna_evo_1048,poolside/Laguna-XS-2.1,evolution,1048,stratified,vllm_eager,bfloat16,finished,False,60,43,79.5008,69.2343481691619,3.5904658539974292,2008.6850759219378,138096
+uncertainty_quantification_laguna_independent_1048,poolside/Laguna-XS-2.1,independent,1048,stratified,vllm_eager,bfloat16,finished,False,60,35,79.0003,68.30606336316065,2.662181047996171,2327.3694228772074,85793
+uncertainty_quantification_laguna_seeded_1048,poolside/Laguna-XS-2.1,baseline_seeded,1048,stratified,vllm_eager,bfloat16,finished,False,60,43,78.7735,68.5347209309762,2.890838615811731,1995.2719495054334,78062
+uncertainty_quantification_linear_evolution_1047,fixed feature pool,fixed_feature_linear_evolution,1047,stratified,none,none,finished,False,0,60,80.13637189444519,68.50424027661751,2.8603579614530332,0.9102252647280693,0
+uncertainty_quantification_linear_evolution_1048,fixed feature pool,fixed_feature_linear_evolution,1048,stratified,none,none,finished,False,0,60,80.07988145523913,67.55522587072778,1.911343555563306,0.729416960850358,0
+uncertainty_quantification_linear_independent_1047,fixed feature pool,fixed_feature_linear_independent,1047,stratified,none,none,finished,False,0,60,76.88121678702822,66.20051209550056,0.5566297803360811,0.6689285300672054,0
+uncertainty_quantification_linear_independent_1048,fixed feature pool,fixed_feature_linear_independent,1048,stratified,none,none,finished,False,0,60,79.75030658127811,67.30724508057924,1.6633627654147602,0.6717074438929558,0
+uncertainty_quantification_qwen35_4b_evo_1048,Qwen/Qwen3.5-4B,evolution,1048,stratified,vllm_default,bfloat16,finished,False,42,16,78.0317,68.36932125185352,2.725438936689045,705.6375347152352,147190
+uncertainty_quantification_qwen35_9b_evo_1047,Qwen/Qwen3.5-9B,evolution,1047,stratified,vllm_default,bfloat16,finished,False,60,32,77.8208,68.01845167936695,2.374569364202472,1266.4133275095373,214266
+uncertainty_quantification_qwen35_9b_evo_1048,Qwen/Qwen3.5-9B,evolution,1048,stratified,vllm_default,bfloat16,finished,False,60,36,79.5752,69.54116727473746,3.8972849595729855,1128.5983065348119,221536
+uncertainty_quantification_qwen35_9b_independent_1048,Qwen/Qwen3.5-9B,independent,1048,stratified,vllm_default,bfloat16,finished,False,12,1,75.7504,65.64388231516448,0.0,265.94331633485854,35213
+uncertainty_quantification_qwen35_9b_seeded_1048,Qwen/Qwen3.5-9B,baseline_seeded,1048,stratified,vllm_default,bfloat16,finished,False,60,34,79.71,69.80096082462103,4.157078509456554,889.3338226508349,112438
+uncertainty_quantification_qwen38_evo_1047,Qwen/Qwen3.8-27B,evolution,1047,stratified,vllm_eager,bfloat16,finished,False,60,57,79.6135,69.79694193022887,4.153059615064393,4456.509634871036,242076
+uncertainty_quantification_qwen38_evo_1048,Qwen/Qwen3.8-27B,evolution,1048,stratified,vllm_eager,bfloat16,finished,False,60,53,78.7667,68.53308417221132,2.8892018570468423,4874.888502115384,230825
+uncertainty_quantification_qwen38_independent_1048,Qwen/Qwen3.8-27B,independent,1048,stratified,vllm_eager,bfloat16,finished,True,6,0,75.7504,,,344.3198826946318,10222
+uncertainty_quantification_qwen38_independent_contract_1048,Qwen/Qwen3.8-27B,independent,1048,stratified,vllm_eager,bfloat16,finished,False,60,58,79.7812,69.47011600353005,3.8262336883655763,2867.458130983636,102000
+uncertainty_quantification_qwen38_pilot_1046,Qwen/Qwen3.8-27B,evolution,1046,stratified,vllm_eager,bfloat16,finished,False,10,9,78.4814,70.11829199274169,4.4744096775772135,841.2694434057921,26075

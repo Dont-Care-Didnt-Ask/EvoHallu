@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analyze shown detectors**:\n   - **Detector 1 (LLR/Gap)**: Uses a Log-Likelihood Ratio of the final step's actual probability vs. the maximum top-512 probability. It applies a division, which can lead to numerical instability or unbounded scores if the denominator is small. The score is 50.0.\n   - **Detector 2 (Total Neg Log Prob)**: A baseline method that sums the negative log probabilities over the entire sequence. It is a simple but effective measure of model certainty. The score is 74.33.\n\n2. **Propose a detector**:\n   - **Signal**: The **Negative Log-Likelihood (NLL)** of the sequence, calculated as the sum of the log probabilities of the generated tokens. This is the most direct measure of how \"surprised\" the model is by its own generation.\n   - **Aggregation Principle**: Summation of log probabilities across the sequence length.\n   - **Hypothesis**: The detector's performance is primarily driven by the **overall model confidence** (lower NLL = more confident = less likely to hallucinate) rather than the final step's confidence gap. A simple, robust NLL score is likely to outperform complex ratios that suffer from numerical instability.\n\n3. **Code**:\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\"sequence_logprobs\"],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the Negative Log-Likelihood (NLL) of the generated sequences.\n        \n        Approach:\n        1. Sum the log probabilities of the generated tokens (excluding the first).\n        2. Negate the sum to obtain the NLL.\n        \n        Hypothesis:\n        The detector's performance is driven by the model's overall confidence\n        (lower NLL = higher confidence = lower hallucination probability).\n        \"\"\"\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Sum log probabilities for each sequence, then negate to get NLL\n        nll_scores = np.array([-np.sum(probs) for probs in sequence_logprobs], dtype=np.float32)\n        \n        return nll_scores\n```",
+    "usage": {
+      "completion_tokens": 498,
+      "prompt_tokens": 872,
+      "total_tokens": 1370,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 38.876849663007306
+  },
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\nThe provided training results suggest two primary approaches have been explored:\n\n1.  **Step-Wise Gap (Score: 50.0):** This method focuses on the **final token generation step**. It calculates the Log-Likelihood Ratio (LLR) between the actual token's probability and the model's top-512 probability at that specific step. The hypothesis is that the confidence gap at the final token indicates whether the model \"settled\" on a hallucination or a fact.\n2.  **Sequence Entropy/Confidence (Score: 74.33):** This method aggregates the **entire sequence** by summing the negative log-probabilities (total likelihood). It assumes that longer or more complex hallucinations will result in lower overall log-probability scores compared to grounded facts.\n\n### 2. Proposed Detector\n\n**Signal:** **Entropy of Top-K Confidence**.\nInstead of relying on the actual generated token (which is a hard label) or the sum of log-probs (which is dominated by sequence length), this detector measures the **uncertainty** (entropy) of the top-512 logits at the final step.\n\n**Aggregation Principle:** Per-sequence aggregation.\nFor each sample, we compute the Shannon entropy of the top-k probability distribution at the final token position. We normalize this by the log of $k$ (512) to obtain a score between 0 and 1.\n\n**Structural Difference:** This differs from the \"Step-Wise Gap\" detector by not relying on the *actual* generated token's probability. It treats the top-k distribution as a confidence distribution, measuring how \"flat\" or uncertain the model was before it committed to the final token.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    Detects hallucinations by measuring the entropy of the top-k \n    probability distribution at the final token step.\n    \n    Hypothesis: High entropy (low confidence) at the final step indicates\n    the model was uncertain, potentially hallucinating, rather than \n    confidently generating a fact.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        top_k_logits = stats[\"top_k_logits\"]  # List[np.ndarray], shape (n_i, k)\n        \n        scores = []\n        k = 512\n        \n        for logits in top_k_logits:\n            # Extract the logits for the final token position (last row)\n            final_logits = logits[-1, :]\n            \n            # Convert logits to probabilities (softmax)\n            exp_logits = np.exp(final_logits)\n            probs = exp_logits / np.sum(exp_logits)\n            \n            # Compute Shannon Entropy: -sum(p * log(p))\n            # Add a small epsilon to avoid log(0)\n            entropy = -np.sum(probs * np.log(probs + 1e-12))\n            \n            # Normalize entropy by log(k) to get a score in [0, 1]\n            # Max entropy for k=512 is log(512)\n            normalized_score = entropy / np.log(k)\n            \n            scores.append(normalized_score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 717,
+      "prompt_tokens": 891,
+      "total_tokens": 1608,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 55.65773699001875
+  }
+]

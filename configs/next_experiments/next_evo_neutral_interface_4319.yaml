@@ -1,0 +1,23 @@
+# @package _global_
+defaults:
+- /config_uq_trial
+- override /model: qwen35_9b
+- _self_
+prefix: research20261021
+run_identifier_name: next_evo_neutral_interface
+seed: 4319
+search_mode: evolution
+num_rounds: 30
+num_outputs_per_prompt: 2
+trial:
+  prompt_policy: neutral
+  save_train_predictions: true
+  shortlist_size: 3
+  evaluation_workers: 1
+  max_seconds: 5400
+  max_total_tokens: 2000000
+  max_consecutive_failed_rounds: 31
+  interface_clarification: interface_and_metric_contract
+  interface_contract_sha256: bd227c8acf9f9217de300efda4f13961f3e1d3165214dcabec3f96ca12868201
+  interface_evidence_path: results/overnight20261021/interface_contract/training_failure_evidence.json
+  interface_evidence_sha256: 503b7aaa22640b7bc82cf97eec5259043fe15d38e0d925a770b7596da75d99b4

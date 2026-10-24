@@ -1,0 +1,140 @@
+Extracted training components: 512
+Extracted training components: 1024
+Extracted training components: 1536
+Extracted training components: 2048
+Extracted training components: 2560
+Extracted training components: 3072
+Extracted training components: 3584
+Extracted training components: 4096
+Extracted training components: 4608
+Extracted training components: 5120
+Extracted training components: 5632
+Extracted training components: 6144
+Extracted training components: 6656
+Extracted training components: 7007
+{
+  "chosen_C": 0.1,
+  "C_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "tuning": [
+    {
+      "C": 0.01,
+      "mean_auc": 0.8147692982983855,
+      "fold_auc": [
+        0.8220389785974849,
+        0.8062051948758049,
+        0.8160637214218667
+      ]
+    },
+    {
+      "C": 0.1,
+      "mean_auc": 0.8154433024515256,
+      "fold_auc": [
+        0.8228632560393868,
+        0.8081289268198297,
+        0.8153377244953603
+      ]
+    },
+    {
+      "C": 1.0,
+      "mean_auc": 0.8146859611509303,
+      "fold_auc": [
+        0.8227580291319099,
+        0.8089092935602153,
+        0.8123905607606656
+      ]
+    },
+    {
+      "C": 10.0,
+      "mean_auc": 0.8145538615914042,
+      "fold_auc": [
+        0.8226639626540139,
+        0.8089332802428092,
+        0.8120643418773897
+      ]
+    },
+    {
+      "C": 100.0,
+      "mean_auc": 0.8145272319589418,
+      "fold_auc": [
+        0.8226416417948521,
+        0.8089380775793278,
+        0.8120019765026457
+      ]
+    }
+  ],
+  "inner_folds": [
+    {
+      "fit_samples": 3736,
+      "validation_samples": 1870,
+      "shared_normalized_claims": 0
+    },
+    {
+      "fit_samples": 3738,
+      "validation_samples": 1868,
+      "shared_normalized_claims": 0
+    },
+    {
+      "fit_samples": 3738,
+      "validation_samples": 1868,
+      "shared_normalized_claims": 0
+    }
+  ],
+  "fit_samples": 5606,
+  "validation_samples": 1401,
+  "outer_shared_normalized_claims": 0,
+  "scaler_fit_samples": 5606,
+  "train_auc": 0.8181962281459098,
+  "validation_auc": 0.8209388425431318,
+  "outer_validation_is_independent": false,
+  "validation_informed_feature_pool": true,
+  "standardized_coefficients": [
+    0.6619613166829457,
+    0.06882607215249709,
+    0.22738473310716598,
+    -0.36025194116576953,
+    0.2680103302043475,
+    0.2273860909411124,
+    -0.03469998022098105,
+    0.47016359921099216,
+    -0.3507088537922056,
+    0.19661074299458306,
+    0.39254964333542425,
+    0.22798322655160028
+  ],
+  "created_utc": "2026-10-21T19:40:35.768482+00:00",
+  "status": "frozen_source_fit_only",
+  "feature_names": [
+    "original/normalized_slope",
+    "original/inverse_tail_range",
+    "neutral/total_nll",
+    "neutral/weighted_gap",
+    "neutral/tail_gap_variance",
+    "diverse/total_nll",
+    "diverse/relative_gap_drift",
+    "diverse/tail_gap_variance",
+    "compositional/tail_surprisal_variance",
+    "compositional/tail_surprisal_mean",
+    "compositional/global_correlation",
+    "float64_total_nll"
+  ],
+  "pool_sha256": "e99a2ccb4992f996b2269b0bba3dc437a2cb98d987a7c78e9952417281aedc43",
+  "weights_sha256": "0319dd55eb20c87e20596d892fb2e384451126d80bebc7c45989a41a1d9602e3",
+  "wrapper_sha256": "42899af323249240b457cf6839b698dd1905090ec4d69b139f886b5dd86ef760",
+  "inference_module_sha256": "e86f98e49d710317e685af1a57f5ee68ba4b1fd48ac5a919091f0cc0eb564a01",
+  "fitter_sha256": "bf7089c93f04a5fd7012e816ccb06881cbde3e29a80bc9f7791001cde9fc0c3f",
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "split_strategy": "claim_group",
+  "split_seed": 441,
+  "test_data_read": false,
+  "target_refitting": false,
+  "joint_supervised_evolution": false,
+  "serialized_prediction_parity": true,
+  "previous_held_out_results_already_viewed": true,
+  "interpretation": "Exploratory; source-validation-informed feature pool; outer validation is diagnostic"
+}

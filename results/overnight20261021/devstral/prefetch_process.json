@@ -1,0 +1,18 @@
+{
+  "pid": 21152,
+  "started_utc": "2026-10-21T22:30:20.793965+00:00",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/download_checkpoint.py",
+    "mistralai/Devstral-Small-2-24B-Instruct-2512",
+    "/dev/shm/overnight-models/Devstral-Small-2-24B",
+    "--revision",
+    "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+    "--weight-format",
+    "mistral",
+    "--workers",
+    "4"
+  ],
+  "native_only": true,
+  "gpu_work": false
+}

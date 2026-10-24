@@ -1,0 +1,39 @@
+{
+  "status": "complete",
+  "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+  "phase": "target",
+  "rows": 2057,
+  "raw_sha256": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "a0d79d465fb62ed5d49b69df540617413b128c906126fbff5fc07cadc7178356",
+  "bootstrap_sha256": "f9da5a83a2390588727b444ec5d1c442ad5db73b36f9cc9e5b7496121f1e5539",
+  "source_lp_only_saved_prediction_parity": false,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_1",
+      "score_sha256": "b1e6f35d0ba49a3e456a63bdcb05bd75dcab52ab5a0e953e67017f434bd5b401",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "original_128",
+      "score_sha256": "b1e6f35d0ba49a3e456a63bdcb05bd75dcab52ab5a0e953e67017f434bd5b401",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "original_512",
+      "score_sha256": "b1e6f35d0ba49a3e456a63bdcb05bd75dcab52ab5a0e953e67017f434bd5b401",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "shuffle451_512",
+      "score_sha256": "b1e6f35d0ba49a3e456a63bdcb05bd75dcab52ab5a0e953e67017f434bd5b401",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

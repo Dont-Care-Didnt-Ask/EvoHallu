@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Max Negative Log-Prob**: This approach identifies the single most surprising token in a sequence. While sensitive to outliers, it ignores the cumulative probability mass of the entire generation. A sequence could have one very low-prob token but otherwise be highly confident, leading to a moderate score despite potential overall hallucination. Score: 50.0655.\n2.  **Sum Negative Log-Prob**: This approach aggregates the surprise across the entire sequence. It assumes that hallucinations often manifest as a drift in probability over time or a generally lower confidence trajectory compared to factual grounding. This is a more robust signal for atomic claims where the model might be \"stumbling\" rather than making a single sharp error. Score: 74.3286.\n\n### Proposed Detector\n**Signal**: The sum of negative log-probabilities (cumulative surprise) across the generated sequence.\n**Aggregation Principle**: Global summation. We hypothesize that hallucinated atomic claims are characterized by a systematically lower probability mass under the model's distribution compared to factual claims, which the cumulative sum captures better than a single-point maximum.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by aggregating cumulative surprise (sum of negative log-probs).\n        Hypothesis: Hallucinated claims exhibit a systematically lower probability mass \n        across the generation trajectory compared to factual claims, making the sum \n        a more discriminative signal than the maximum single-token surprise.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Compute negative log-prob for each token in each sequence\n        # Input shape: List of arrays with shape (n_i - 1,)\n        neg_logprobs = [-lp for lp in seq_logprobs]\n        \n        # Aggregate: Sum of negative log-probs per sequence.\n        # Higher scores indicate lower total probability mass, suggesting hallucination.\n        scores = np.array([np.sum(nlps) for nlps in neg_logprobs], dtype=np.float32)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 531,
+      "prompt_tokens": 758,
+      "total_tokens": 1289,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 13.953388802998234
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Max Negative Log-Prob**: This approach identifies the single most \"surprising\" token in a sequence. It is sensitive to local anomalies but ignores the overall fluency or cumulative uncertainty of the generation. The score of ~50 suggests it captures some signal but is not robust enough on its own.\n2.  **Sum Negative Log-Prob (Perplexity Proxy)**: This aggregates the uncertainty over the entire sequence. It correlates well with overall model confidence. The score of ~74.4 indicates this is a strong baseline, likely because hallucinated sequences often contain multiple low-probability tokens or a long tail of unlikely continuations, increasing the total perplexity.\n\n### Proposed Detector Strategy\nThe sum of negative log-probabilities is a strong indicator of overall model uncertainty, but it can be confounded by sequence length (longer sequences naturally accumulate higher scores). To improve the ROC-AUC, we should normalize the cumulative uncertainty by the sequence length. This creates a measure of **average token surprise** (directly related to perplexity).\n\n**Signal**: The average negative log-probability per generated token.\n**Aggregation Principle**: Normalize the sum of negative log-probabilities by the number of generated tokens (sequence length) to create a length-invariant score. This assumes that hallucinations increase the *density* of unlikely tokens rather than just the total count.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Extract sequence logprobs: List[np.ndarray] of length N\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Compute negative log-prob for each token in each sequence\n        # Input shape: List of arrays with shape (n_i - 1,)\n        neg_logprobs = [-lp for lp in seq_logprobs]\n        \n        # Aggregate: Calculate the mean negative log-prob per sequence.\n        # This normalizes the total uncertainty by sequence length, \n        # making the score invariant to generation length and focusing on \n        # the average \"surprise\" per token.\n        # Higher scores indicate higher likelihood of hallucination.\n        lengths = np.array([len(nlps) for nlps in neg_logprobs], dtype=np.float32)\n        \n        # Avoid division by zero if any sequence has length 0 (though input spec says n_i-1, so n_i>=1)\n        # If length is 0, score is 0.\n        scores = np.divide(np.array([np.sum(nlps) for nlps in neg_logprobs], dtype=np.float32), lengths, out=np.zeros(len(lengths), dtype=np.float32), where=lengths!=0)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 662,
+      "prompt_tokens": 758,
+      "total_tokens": 1420,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 7.783652487007203
+  }
+]

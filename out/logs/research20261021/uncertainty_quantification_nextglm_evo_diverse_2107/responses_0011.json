@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\nThe provided training results show two distinct approaches:\n1.  **LLR (Log-Likelihood Ratio) - Score: 50.0**: This method compares the log-probability of the *actual* token at the final step against the maximum log-probability of the top-512 tokens at the final step. It is sensitive to the final token's confidence gap but ignores the cumulative likelihood of the entire sequence.\n2.  **Total Negative Log-Likelihood - Score: 74.33**: This method sums the negative log-probabilities of *all* tokens in the sequence. It captures the overall \"surprise\" of the generated text but lacks the specificity to distinguish between a hallucinated token and a low-probability but factual token.\n\n### 2. Proposed Detector\n\n**Approach:** **Cumulative Confidence Gap with Entropy Smoothing.**\n**Signal:** The detector computes the sum of negative log-probabilities for the sequence, but applies a weighting scheme based on the local entropy (uncertainty) at each step.\n**Aggregation Principle:** Instead of summing raw probabilities, we sum the *log-probabilities of the actual tokens*. To dampen the noise of low-confidence (high entropy) steps which often occur in valid text (e.g., rare entities), we apply a non-linear scaling factor derived from the entropy of the top-k distribution at each step.\n**Specific Change:** We introduce an entropy-based weight ($w$) to the log-probabilities: $w = \\frac{1}{1 + \\text{entropy}}$. This reduces the contribution of steps where the model is highly uncertain (high entropy), focusing the score on steps where the model is confident yet the probability is low (hallucinations).\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    Detector based on cumulative negative log-likelihood with entropy weighting.\n    \n    Hypothesis: Hallucinations often occur at specific steps where the model is\n    confident (low entropy) but assigns low probability to the actual token.\n    This detector weights the log-probability by the inverse of the step's entropy,\n    dampening the influence of high-entropy (uncertain) steps while amplifying\n    low-entropy (confident) errors.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        top_k_logits = stats[\"top_k_logits\"]           # List[np.ndarray]\n        \n        scores = []\n        \n        for i, probs in enumerate(sequence_logprobs):\n            # 1. Extract log-probabilities for the actual generated tokens\n            # Shape: (n_i - 1,)\n            actual_log_probs = probs\n            \n            # 2. Extract top-k logits for entropy calculation\n            # Shape: (n_i, k)\n            final_logits = top_k_logits[i][-1, :]\n            \n            # 3. Calculate Entropy for the final step\n            # Normalize logits to probabilities\n            exp_logits = np.exp(final_logits - np.max(final_logits))\n            probs_k = exp_logits / np.sum(exp_logits)\n            # Clip to avoid log(0)\n            probs_k = np.clip(probs_k, 1e-10, 1.0)\n            entropy = -np.sum(probs_k * np.log(probs_k))\n            \n            # 4. Apply Entropy-based Weighting\n            # Weight decreases as entropy increases (more uncertainty)\n            # Weight increases as entropy decreases (more confidence)\n            # Using a soft sigmoid-like scaling factor\n            weight = 1.0 / (1.0 + np.exp(entropy - 2.0)) \n            \n            # 5. Weighted Sum of Negative Log-Likelihood\n            # We sum the negative log-probs, effectively summing the log-probs\n            # but weighted by our confidence metric.\n            weighted_score = np.sum(weight * actual_log_probs)\n            \n            scores.append(weighted_score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 915,
+      "prompt_tokens": 872,
+      "total_tokens": 1787,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 70.02783125900896
+  },
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (LLR)**: Uses the ratio of the final token's actual log-probability to the maximum log-probability among the top-512 candidates. This is a \"local, step-wise\" metric focusing on the final token's confidence gap.\n   - **Detector 2 (Total NLL)**: Uses the sum of negative log-probabilities across the entire sequence. This is a \"global, cumulative\" metric representing the overall likelihood of the generated text.\n\n2. **Proposed Detector**\n   - **Signal**: **Local Surprisal Variance**. Instead of comparing the final token to the top-512, this detector measures the local variation in token surprisal (negative log-probability) across the sequence. It calculates the standard deviation of the negative log-probabilities within a sliding window.\n   - **Aggregation Principle**: The detector computes the standard deviation for each sample and returns these values. High standard deviation indicates that the model is fluctuating between highly confident and low-confidence tokens, which is characteristic of hallucinations.\n   - **Structural Difference**: This differs from the shown methods by not relying on the final token (like Detector 1) or the global sum (like Detector 2). It focuses on the *local stability* of the generation process, aggregating the signal via the standard deviation of the surprisal distribution.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        \n        scores = []\n        \n        for probs in sequence_logprobs:\n            # Convert to negative log-probability (surprisal)\n            surprisal = -probs\n            \n            # Calculate standard deviation of surprisal\n            # This measures local stability/fluctuation of token confidence\n            std_dev = np.std(surprisal)\n            \n            scores.append(std_dev)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 481,
+      "prompt_tokens": 894,
+      "total_tokens": 1375,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 37.39633937898907
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as its sole signal. It aggregates log-probabilities across the entire sequence into a single scalar per sample.\n- **Approach**: Global perplexity proxy.\n- **Limitation**: This approach conflates sequence length with hallucination likelihood. A long, coherent sequence (high token count) will naturally have a higher total NLL than a short, hallucinated one, potentially biasing the ROC-AUC unless sequence lengths are perfectly normalized or the distribution of lengths is trivial. It also lacks local sensitivity; a single high-probability hallucination at the end of a very long sequence might be drowned out by the cumulative probability of the correct prefix.\n\n### Proposed Detector\n**Signal**: **Maximum Local Negative Log-Peak**.\nInstead of summing probabilities, we identify the single most \"surprising\" token (highest negative log-prob) within the generated sequence. Hallucinations often manifest as tokens that are extremely unlikely given the context (low probability), whereas correct continuations usually have moderate-to-high probabilities. The maximum negative log-prob isolates these local anomalies.\n\n**Aggregation Principle**:\nFor each sequence, compute the maximum value of $-\\log(P(x_t | x_{<t}))$ across all generated tokens $t$. This scalar represents the \"worst-case\" surprise in the sequence. Higher values indicate a higher likelihood of containing a severe hallucination.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the most surprising token in a sequence.\n        Signal: Maximum negative log-probability (local anomaly detection).\n        Hypothesis: Hallucinated tokens often have near-zero probability under the model, \n        creating a sharp local peak in negative log-probability that global sums miss.\n        \"\"\"\n        # Calculate negative log-prob for each token in each sequence\n        # sequence_logprobs is List[np.ndarray] of shape (n_i - 1,)\n        neg_logprobs = [-np.array(sequence_logprobs) for sequence_logprobs in stats[\"sequence_logprobs\"]]\n        \n        # Find the maximum negative log-prob per sequence\n        # Result shape: [N]\n        scores = np.array([np.max(seq_neg_logprob) for seq_neg_logprob in neg_logprobs], dtype=np.float32)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 594,
+      "prompt_tokens": 498,
+      "total_tokens": 1092,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.988216658006422
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses a simple aggregation principle: it sums the negative log-probabilities (NLP) of all tokens in a sequence to produce a single scalar score per sample.\n- **Signal Family**: Entropy/Probability Mass (specifically, total sequence perplexity).\n- **Aggregation Principle**: Summation.\n- **Limitations**: This approach assumes that hallucinated sequences are uniformly less probable than truthful ones. However, long hallucinated sequences can accumulate high total NLP simply due to length, while short, highly confident hallucinations might have low total NLP. Conversely, a long truthful sequence with many common words might also have a high total NLP, creating false positives. The ROC-AUC of 74.3 suggests this is a reasonable baseline but leaves significant room for improvement by better normalizing for sequence length or focusing on local anomalies rather than global totals.\n\n### Proposed Detector\n**Signal Family**: Local Probability Density (Normalized Log-Probability).\n**Aggregation Principle**: Mean of normalized negative log-probabilities (equivalent to average perplexity).\n\n**Hypothesis**: Hallucinated claims often involve specific, rare entities or fabricated facts that result in a spike of low-probability tokens. While total NLP penalizes length, the *average* NLP (or perplexity) better isolates the \"surprise\" factor per token. A sequence with one highly unlikely hallucinated token will have a significantly higher average NLP than a long sequence of common, truthful words, even if the total NLP of the short hallucinated sequence is lower. This normalization reduces the bias towards longer sequences and highlights localized improbability.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any, List\n\nclass HallucinationDetector:\n    \"\"\"\n    Detects hallucinations by measuring the average negative log-probability (per-token perplexity) \n    of the generated sequence. \n    Hypothesis: Hallucinated claims contain specific low-probability tokens (rare entities/facts) \n    that inflate the mean NLP more than long truthful sequences, which are composed of common tokens.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # sequence_logprobs: List[np.ndarray] of length N, inner 1d array has length n_i - 1.\n        # We compute the mean negative log-probability for each sequence.\n        # This is equivalent to log(perplexity).\n        \n        neg_logprobs_list = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # Ensure we handle the case where the sequence might be empty after slicing\n            if len(seq_logprobs) == 0:\n                neg_logprobs_list.append(np.array([0.0], dtype=np.float32))\n            else:\n                neg_logprobs_list.append(np.mean(seq_logprobs, dtype=np.float32))\n        \n        return np.array(neg_logprobs_list, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 701,
+      "prompt_tokens": 498,
+      "total_tokens": 1199,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.210383727011504
+  }
+]

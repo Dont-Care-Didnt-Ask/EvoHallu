@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+- /config_uq_trial
+- override /model: qwen35_9b
+- _self_
+prefix: research20261021
+run_identifier_name: next_evo_diverse
+seed: 2107
+search_mode: evolution
+num_rounds: 30
+num_outputs_per_prompt: 2
+trial:
+  prompt_policy: diverse
+  save_train_predictions: true
+  shortlist_size: 3
+  evaluation_workers: 1
+  max_seconds: 5400
+  max_total_tokens: 2000000
+  max_consecutive_failed_rounds: 31

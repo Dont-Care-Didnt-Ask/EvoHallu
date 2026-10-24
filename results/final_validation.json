@@ -1,0 +1,23 @@
+{
+  "verified_utc": "2026-10-15T09:28:54.749430+00:00",
+  "complete_primary_datasets": 9,
+  "complete_primary_claims": 97488,
+  "primary_methods_per_dataset": 58,
+  "primary_scoring_failures": 0,
+  "feature_archives_crc_and_manifest_verified": 16,
+  "source_feature_archives": 9,
+  "target_partial_feature_archives": 6,
+  "training_feature_archives": 1,
+  "frozen_estimators_audited": 23,
+  "frozen_source_mismatches": 0,
+  "frozen_estimators_with_flagged_rng_or_external_io_calls": 0,
+  "pod_gpu_runtime_released": true,
+  "validation_sources": [
+    "results/feature_cache_validation.json",
+    "results/frozen_estimator_audit.json",
+    "out/campaign/evaluation_with_4b/cohort_verified.json",
+    "out/campaign/header_suffix_ablation_refitted/cohort_verified.json",
+    "out/campaign/pod_stop_confirmed.json"
+  ],
+  "scope": "Final artifact integrity and completed-cohort checks; protocol and HTTP client tests ran during implementation."
+}

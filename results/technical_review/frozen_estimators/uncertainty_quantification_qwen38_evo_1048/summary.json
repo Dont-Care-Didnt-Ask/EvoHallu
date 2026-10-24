@@ -1,0 +1,35 @@
+{
+  "status": "finished",
+  "stop_reason": "round_budget",
+  "requests": 60,
+  "valid_candidates": 53,
+  "total_tokens": 230825,
+  "baseline_train": {
+    "score": 74.3286,
+    "metrics": {
+      "AUC": 74.33,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.75, 75.91)",
+      "Precision at median score threshold": 89.02,
+      "Recall at median score threshold": 58.19,
+      "Number of samples": 5605
+    },
+    "seconds": 8.72992323897779
+  },
+  "baseline_val": {
+    "score": 75.7504,
+    "metrics": {
+      "AUC": 75.75,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.69, 78.81)",
+      "Precision at median score threshold": 90.73,
+      "Recall at median score threshold": 59.22,
+      "Number of samples": 1402
+    },
+    "seconds": 8.646499304100871
+  },
+  "selected_candidate": "06c6dd8c553780efbba5d5fdf77c6015b51511a80afbe1328fbc5e6d7be4627b",
+  "selected_validation_auc_percent": 78.7667,
+  "held_out_test_evaluated": false,
+  "elapsed_seconds": 4874.888502115384
+}

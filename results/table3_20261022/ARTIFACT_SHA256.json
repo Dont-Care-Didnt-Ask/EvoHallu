@@ -1,0 +1,82 @@
+{
+  "MODELS_FROZEN_BEFORE_TEST.json": {
+    "sha256": "ffa5c9736024b2e1e93b4d1544608aabe0a3380d7ef9abaca2a5e972d2171b8d",
+    "bytes": 447
+  },
+  "TABLE3.csv": {
+    "sha256": "598364c884c2817f1f081ed78af1251b23cc8c8101dde84678c72897a832a958",
+    "bytes": 13692
+  },
+  "PLAN.json": {
+    "sha256": "c82d14278bcad7304d04cf8b9171211e665be84e90629eeca763eac40fc2b032",
+    "bytes": 5802
+  },
+  "TABLE3_REPORT.md": {
+    "sha256": "469b3e6e5960fe152c1cda954148a28b20eac24a0d1de4f10893237a5c128147",
+    "bytes": 10556
+  },
+  "compositional_weights.json": {
+    "sha256": "8a3bfc02d861c4fef38911c078ba9fc202c206bac5e43cdd061623d4c7e002ae",
+    "bytes": 2387
+  },
+  "neutral_weights.json": {
+    "sha256": "d870bb7aa476b5099d43ae9e10b9b8fedb61ed393365d20ca1e1f88f2b092006",
+    "bytes": 2341
+  },
+  "diverse_weights.json": {
+    "sha256": "e25949a5debfd3fcafde8b9037636e44fd3129e3052a91e0d35339a879d1ae4d",
+    "bytes": 2348
+  },
+  "original_weights.json": {
+    "sha256": "08343c06889f2c6030ec785febd838969401d185cf31920279168d189665c72e",
+    "bytes": 2211
+  },
+  "COEFFICIENTS.csv": {
+    "sha256": "0a981bb48141e3f9a6ab138355378c2eedc8cc39a4aa0a8076b6bf7f8b2a0a76",
+    "bytes": 3717
+  },
+  "RESULTS.json": {
+    "sha256": "8a9881a41b99235b7307967557b6e1b01fbf085c1f1a3ff29c91d32425f68ad0",
+    "bytes": 60424
+  },
+  "training_predictions_and_features.npz": {
+    "sha256": "1236c4a220e4904d6d4dd150393c0ea4771be1b64fe01883fbe307ade4a906dd",
+    "bytes": 845342
+  },
+  "source_nine/AVeriTeC__dev_filtered_10shot_scores.npz": {
+    "sha256": "60de1233ec4fbb46548ac78de6e0b3be161275eaa7506fe74605e57ef5cb88d2",
+    "bytes": 43359
+  },
+  "source_nine/geometry__companies_true_false_scores.npz": {
+    "sha256": "ebe66ad5a653544c5177eba52419810cfd2edbf4bbb6a41fd706507065a742c2",
+    "bytes": 110298
+  },
+  "source_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": {
+    "sha256": "24d9c209585629f67cbdf6ec1dea5034d718017689bed4e8dbf1c7dcae466455",
+    "bytes": 182552
+  },
+  "source_nine/geometry__common_claim_true_false_scores.npz": {
+    "sha256": "2ebb967c17e5a06165447ec45c343a486f0f7ead6050830ab2a57567f0beca16",
+    "bytes": 390367
+  },
+  "source_nine/geometry__cities_scores.npz": {
+    "sha256": "d105b8d9ca80388c898a51525aa9d925f176fa6651d8845468ad5abd7b0d730d",
+    "bytes": 132048
+  },
+  "source_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": {
+    "sha256": "ae70e692f1a122d49581a799a82f225048bf15b7545cb14cb1031a45f1f6ad0b",
+    "bytes": 3993056
+  },
+  "source_nine/x-fact__test_filtered_10shot_scores.npz": {
+    "sha256": "3e4a3f104237bcb3bc6593973ed544ed0dc6fd29871a8ad4147c546039bf3768",
+    "bytes": 223852
+  },
+  "source_nine/popqa__popqa_test_filtered_10shot_scores.npz": {
+    "sha256": "10be3577c53bdbe59b7e1d46a086b2bf071df824fb4834dd8855a8ab51776af6",
+    "bytes": 603553
+  },
+  "source_nine/geometry__counterfact_true_false_scores.npz": {
+    "sha256": "7241538aaeccf6e868a010e726aed3df60753cf907e0fdac11f51f1d82711925",
+    "bytes": 2768313
+  }
+}

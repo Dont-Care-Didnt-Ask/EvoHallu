@@ -1,0 +1,86 @@
+{
+  "rows": 2057,
+  "duplicate_disjoint_rows": 2057,
+  "failed": {},
+  "methods": {
+    "original/SequenceLogProb": {
+      "auc_percent": 36.19719167488705,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 36.19719167488705,
+      "auc_ci95_percent": [
+        33.727009008119055,
+        38.4683483385775
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/next_fixed_neutral_2107__primary": {
+      "auc_percent": 36.19719167488705,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 36.19719167488705,
+      "auc_ci95_percent": [
+        33.727009008119055,
+        38.4683483385775
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/next_fixed_neutral_2107__trainbest": {
+      "auc_percent": 36.19719167488705,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 36.19719167488705,
+      "auc_ci95_percent": [
+        33.727009008119055,
+        38.4683483385775
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/next_fixed_neutral_4319__primary": {
+      "auc_percent": 36.19719167488705,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 36.19719167488705,
+      "auc_ci95_percent": [
+        33.727009008119055,
+        38.4683483385775
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/next_fixed_neutral_4319__trainbest": {
+      "auc_percent": 48.76310693800007,
+      "gain_pp": 12.56591526311302,
+      "duplicate_disjoint_auc_percent": 48.76310693800007,
+      "auc_ci95_percent": [
+        45.945098100784854,
+        51.872547209305786
+      ],
+      "paired_gain_ci95_pp": [
+        9.34455512031968,
+        15.96745989284745
+      ]
+    }
+  },
+  "feature_model_metadata": {
+    "model_id": "/workspace/mod1-models/llama31",
+    "hidden_size": 4096,
+    "num_layers": 32,
+    "num_attention_heads": 32,
+    "vocab_size": 128256,
+    "modalities": "logits",
+    "model_dtype": "torch.float32",
+    "requested_forward_batch_size": 16,
+    "max_padded_forward_tokens": 16384,
+    "cpu_feature_threads": 12
+  },
+  "unique_normalized_claims": 2051,
+  "bootstrap_unit": "claim"
+}

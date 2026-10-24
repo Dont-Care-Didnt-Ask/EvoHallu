@@ -1,0 +1,8 @@
+model_name: laguna_xs21
+hf_model_id: poolside/Laguna-XS-2.1
+revision: c5f36269bbdbd3f27fddc9a9f9dbae0cf2cf57db
+temperature: 0.7
+topk: 20
+topp: 0.8
+max_tokens: 4096
+repetition_penalty: 1.0

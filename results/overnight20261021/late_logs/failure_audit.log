@@ -1,0 +1,20 @@
+{
+  "status": "all_planned_jobs_complete",
+  "ledger_rows": 1500,
+  "pipeline_valid": 841,
+  "request_outcomes": 1500,
+  "planned_requests": 1500,
+  "failure_counts": {
+    "ragged_shape_alignment_nonfinite": 420,
+    "evaluation_timeout": 5,
+    "imports_api": 93,
+    "wrong_estimator_constructor": 66,
+    "syntax_extraction": 6,
+    "other_failure": 55,
+    "truncation_parse_extraction": 8,
+    "exact_duplicate_code": 4,
+    "generation_timeout": 2
+  },
+  "valid_constant_scores": 56,
+  "output": "/workspace/mod1/results/overnight20261021/failure_audit"
+}

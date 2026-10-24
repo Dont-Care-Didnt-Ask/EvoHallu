@@ -1,0 +1,425 @@
+{
+  "AVeriTeC__dev_filtered_10shot": {
+    "rows": 427,
+    "duplicate_disjoint_rows": 427,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.76780435366837,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.76780435366837,
+        "auc_ci95_percent": [
+          57.23204458167941,
+          70.23949108842564
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 63.891427035743085,
+        "gain_pp": 0.12362268207471994,
+        "duplicate_disjoint_auc_percent": 63.891427035743085,
+        "auc_ci95_percent": [
+          57.145735337597856,
+          70.43693206756384
+        ],
+        "paired_gain_ci95_pp": [
+          -1.6126727183013376,
+          1.8094427893361993
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 419,
+    "bootstrap_unit": "claim"
+  },
+  "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {
+    "rows": 2057,
+    "duplicate_disjoint_rows": 2057,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 36.19719167488705,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 36.19719167488705,
+        "auc_ci95_percent": [
+          33.727009008119055,
+          38.4683483385775
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 37.05594729214619,
+        "gain_pp": 0.8587556172591382,
+        "duplicate_disjoint_auc_percent": 37.05594729214619,
+        "auc_ci95_percent": [
+          34.40560186724456,
+          39.66068334623486
+        ],
+        "paired_gain_ci95_pp": [
+          -0.3498204199146467,
+          2.031196609476613
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2051,
+    "bootstrap_unit": "claim"
+  },
+  "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {
+    "rows": 46605,
+    "duplicate_disjoint_rows": 46599,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 70.68591510605297,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 70.6814726670195,
+        "auc_ci95_percent": [
+          70.04724940140954,
+          71.3095596991671
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 68.83305239628443,
+        "gain_pp": -1.8528627097685435,
+        "duplicate_disjoint_auc_percent": 68.82832560988835,
+        "auc_ci95_percent": [
+          68.21096558859607,
+          69.47242400101594
+        ],
+        "paired_gain_ci95_pp": [
+          -2.058714816894253,
+          -1.6455057079168909
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 46283,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__cities": {
+    "rows": 1496,
+    "duplicate_disjoint_rows": 1495,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 91.93696559810117,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 91.92635067900837,
+        "auc_ci95_percent": [
+          90.53825859295301,
+          93.26341852742824
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 99.35067488346822,
+        "gain_pp": 7.413709285367043,
+        "duplicate_disjoint_auc_percent": 99.34980563967099,
+        "auc_ci95_percent": [
+          99.01886476002056,
+          99.62608836051
+        ],
+        "paired_gain_ci95_pp": [
+          6.142782064013798,
+          8.598241906777758
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1496,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__common_claim_true_false": {
+    "rows": 4450,
+    "duplicate_disjoint_rows": 4450,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.26080040398939,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.26080040398939,
+        "auc_ci95_percent": [
+          61.68247129343744,
+          64.88894884275209
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 65.14517863906073,
+        "gain_pp": 1.8843782350713378,
+        "duplicate_disjoint_auc_percent": 65.14517863906073,
+        "auc_ci95_percent": [
+          63.635455295182595,
+          66.8344095606705
+        ],
+        "paired_gain_ci95_pp": [
+          1.2994531424927713,
+          2.4513069641731136
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 4447,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__companies_true_false": {
+    "rows": 1200,
+    "duplicate_disjoint_rows": 1200,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 72.58069444444443,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 72.58069444444443,
+        "auc_ci95_percent": [
+          69.65842172941194,
+          75.38574147158444
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 86.84861111111111,
+        "gain_pp": 14.267916666666668,
+        "duplicate_disjoint_auc_percent": 86.84861111111111,
+        "auc_ci95_percent": [
+          84.70960209251088,
+          89.02075059219044
+        ],
+        "paired_gain_ci95_pp": [
+          12.226176199442532,
+          16.598856341018674
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1186,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__counterfact_true_false": {
+    "rows": 31964,
+    "duplicate_disjoint_rows": 31964,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 68.08486277916116,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 68.08486277916116,
+        "auc_ci95_percent": [
+          67.48551431303397,
+          68.65757659018908
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 80.31527999659109,
+        "gain_pp": 12.230417217429924,
+        "duplicate_disjoint_auc_percent": 80.31527999659109,
+        "auc_ci95_percent": [
+          79.7802294305947,
+          80.76764072675797
+        ],
+        "paired_gain_ci95_pp": [
+          11.821168537071634,
+          12.658669299663543
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 31938,
+    "bootstrap_unit": "claim"
+  },
+  "popqa__popqa_test_filtered_10shot": {
+    "rows": 6974,
+    "duplicate_disjoint_rows": 6454,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 74.05170876856083,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 73.83072001100092,
+        "auc_ci95_percent": [
+          72.4306032260263,
+          75.34065956942705
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 78.44082275800099,
+        "gain_pp": 4.389113989440164,
+        "duplicate_disjoint_auc_percent": 77.95925830951961,
+        "auc_ci95_percent": [
+          77.03702118092546,
+          79.60783187918442
+        ],
+        "paired_gain_ci95_pp": [
+          3.4428439314229333,
+          5.3360904347420055
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 6686,
+    "bootstrap_unit": "claim"
+  },
+  "x-fact__test_filtered_10shot": {
+    "rows": 2315,
+    "duplicate_disjoint_rows": 2315,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 50.22899770761495,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 50.22899770761495,
+        "auc_ci95_percent": [
+          47.85887972459884,
+          52.86128885641865
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_prompt_diverse_2107__primary": {
+        "auc_percent": 51.29556677133298,
+        "gain_pp": 1.0665690637180258,
+        "duplicate_disjoint_auc_percent": 51.29556677133298,
+        "auc_ci95_percent": [
+          48.866304323633344,
+          53.77036286564086
+        ],
+        "paired_gain_ci95_pp": [
+          0.177190870676639,
+          2.0799173774151716
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2315,
+    "bootstrap_unit": "claim"
+  }
+}

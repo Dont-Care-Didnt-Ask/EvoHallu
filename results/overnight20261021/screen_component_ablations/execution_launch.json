@@ -1,0 +1,24 @@
+{
+  "launched_utc": "2026-10-21T19:27:38.966788+00:00",
+  "processes": [
+    {
+      "stage": "source_nine",
+      "pid": 8347,
+      "command": [
+        "bash",
+        "results/overnight20261021/screen_component_ablations/run_source_nine.sh"
+      ]
+    },
+    {
+      "stage": "target_six",
+      "pid": 8348,
+      "command": [
+        "bash",
+        "results/overnight20261021/screen_component_ablations/run_target_six.sh"
+      ]
+    }
+  ],
+  "new_llm_calls": 0,
+  "new_gpu_feature_calls": 0,
+  "scope": "Allfour screen validationwinners, unchangedfullcontrols plus11fixedcoefficientcomponentdrops"
+}

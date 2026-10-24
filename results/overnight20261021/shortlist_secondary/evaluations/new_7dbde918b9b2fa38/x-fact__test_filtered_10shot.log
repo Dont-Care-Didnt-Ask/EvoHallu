@@ -1,0 +1,13 @@
+<string>:59: RuntimeWarning: divide by zero encountered in log
+<string>:59: RuntimeWarning: invalid value encountered in multiply
+<string>:100: RuntimeWarning: divide by zero encountered in log
+<string>:100: RuntimeWarning: invalid value encountered in multiply
+<string>:46: RuntimeWarning: overflow encountered in power
+<string>:60: RuntimeWarning: overflow encountered in multiply
+<string>:60: RuntimeWarning: invalid value encountered in multiply
+<string>:64: RuntimeWarning: invalid value encountered in multiply
+/workspace/mod1/.venv/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:86: RuntimeWarning: overflow encountered in reduce
+  return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
+<string>:64: RuntimeWarning: overflow encountered in multiply
+<string>:62: RuntimeWarning: invalid value encountered in scalar divide
+{"dataset": "x-fact__test_filtered_10shot", "rows": 2315, "methods": 24, "failed": {"new/next_evo_original_8741__valrank03": "ValueError: nonfinite scores or wrong output shape"}}

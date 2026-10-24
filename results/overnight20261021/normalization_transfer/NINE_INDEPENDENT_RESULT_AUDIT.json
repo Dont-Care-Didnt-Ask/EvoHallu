@@ -1,0 +1,181 @@
+{
+  "status": "independent_nine_saved_predictions_statistics_and_seals_passed",
+  "created_utc": "2026-10-22T00:40:57.463699+00:00",
+  "study_report_sha256": "2eb402b54129089a36bded5fbd921f317075d6a010b99ca0b010de3168572f41",
+  "six_seal_sha256": "34a341a4097cfff88a713ab506d5e08f99a5686d6b74adafc86e77b98ccaa0ed",
+  "formal_completion_sha256": "7c0d8f1daeed7a2309eeb696d1098ccd83d824c80df49b3c09abe3f2823a588c",
+  "inference_launched": false,
+  "protected_artifacts_exact": 62,
+  "sealed_six_files_exact": 21,
+  "copied_six_target_files_exact": 18,
+  "independent_point_comparisons": 108,
+  "independent_expanded_bootstrap_AUC_checks": 540,
+  "macro_and_transfer_CIs_recomputed": 64,
+  "all500_draws_usable": true,
+  "replay_rule": "First5 deterministic claim draws expanded explicitly with numpy.repeat and sklearn.roc_auc_score, independent of weighted implementation; all500 saved draws used to recompute intervals",
+  "limitation": "Raw target inference was not repeated; case invariance independently checked from execution case hashes and saved scores",
+  "per_dataset": [
+    {
+      "view": "source",
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "rows": 427,
+      "strict_rows": 427,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "rows": 2057,
+      "strict_rows": 2057,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "rows": 46605,
+      "strict_rows": 46599,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__cities",
+      "rows": 1496,
+      "strict_rows": 1495,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__common_claim_true_false",
+      "rows": 4450,
+      "strict_rows": 4450,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__companies_true_false",
+      "rows": 1200,
+      "strict_rows": 1200,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__counterfact_true_false",
+      "rows": 31964,
+      "strict_rows": 31964,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "popqa__popqa_test_filtered_10shot",
+      "rows": 6974,
+      "strict_rows": 6454,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "x-fact__test_filtered_10shot",
+      "rows": 2315,
+      "strict_rows": 2315,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": false
+    },
+    {
+      "view": "target",
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "rows": 427,
+      "strict_rows": 427,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "rows": 2057,
+      "strict_rows": 2057,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "rows": 46605,
+      "strict_rows": 46599,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__cities",
+      "rows": 1496,
+      "strict_rows": 1495,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__common_claim_true_false",
+      "rows": 4450,
+      "strict_rows": 4450,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__companies_true_false",
+      "rows": 1200,
+      "strict_rows": 1200,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__counterfact_true_false",
+      "rows": 31964,
+      "strict_rows": 31964,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "popqa__popqa_test_filtered_10shot",
+      "rows": 6974,
+      "strict_rows": 6454,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "x-fact__test_filtered_10shot",
+      "rows": 2315,
+      "strict_rows": 2315,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_target_invariance_matches_saved_scores": true
+    }
+  ]
+}

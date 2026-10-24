@@ -1,0 +1,9 @@
+{
+  "id": "VityaVitalich/Llama3.1-8b-instruct",
+  "revision": "247cb7c3baebabc46cff1fb97a3a5913e4c4511d",
+  "card": {
+    "library_name": "transformers",
+    "tags": []
+  },
+  "weight_bytes": 16060556376
+}

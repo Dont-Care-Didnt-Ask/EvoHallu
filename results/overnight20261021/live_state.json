@@ -1,0 +1,188 @@
+{
+  "updated_utc": "2026-10-21T22:37:09.464310+00:00",
+  "authorized_start_utc": "2026-10-21T18:16:28Z",
+  "hard_deadline_utc": "2026-10-22T02:16:28Z",
+  "pod": {
+    "id": "p4ta9o85on4ojb",
+    "name": "qualified_fuchsia_sole",
+    "host": "root@204.12.201.57",
+    "port": 5933,
+    "ssh_identity": "/root/.ssh/processbench_pod_ed25519",
+    "hourly_usd": 3.58,
+    "gpus": "2 A100-SXM4-80GB",
+    "cpu": 64,
+    "ram_GB": 503
+  },
+  "remote_repo": "/workspace/mod1",
+  "local_repo": "/root/evohallu/mod1",
+  "active_services": [
+    "Qwen3.5-9B GPU0 port18000",
+    "Qwen3.5-9B GPU1 port18001"
+  ],
+  "active_or_waiting_controllers": [
+    "main sourcecontroller2988 lastC9B",
+    "followups13855 waitingmainterminal then27Bmax2",
+    "CPUdriver5342 waits generation_complete+late_writer_decision",
+    "remoteharddeadline02:16:28",
+    "localguard1629875 backups120s+deadline02:13:58",
+    "localcachebackup1634254",
+    "headtransfer9CPU14559",
+    "shortlistsecondaryCPU18553",
+    "late21679 waiting generation marker, --prefer-devstral-breadth; old5640 verifiedwaitingkilledonlyPID, NO prematuremarkers"
+  ],
+  "pending_main_actions": [
+    "27Bpair original/diverse2107 active; thennewlate21679 GLMpilot andconditionalDevstralbreadth, same01:10writer cutoff. Originalsource9B1260finished22:07allfull.",
+    "ShortlistCPUhelperPID18553 autoevals validationranks2/3 afterall12primarynine preds ready;36slots, noreselection. Checkreport completeness.",
+    "Monitor optional27B andGLM pilots/extensiongatedruntime. Lastcontrollerdoesformal427numericalcheck then3missing1Bcaches andfulltargetnineCPU.",
+    "Headtarget9helperPID14559 autoauditsand scores3new only; aftermainfull9 run --report-only forbaseline/rows parity. Do NOTregenerateoriginal REFIT_REPORT files.",
+    "LocalcachebackupwatcherPID1634254 autoarchiver+new3XZlocalSHAverification; no manualduplicatearchiver.",
+    "Finalsourceconvergence/failure/report/plots/resourcecounts. Allseedgroups full3, canonicalNLLexact9, no provenancewarnings. UpdateEnglishreportfromdraft+FINAL_REPORT_NOTES.",
+    "BackupsandcachesverifiedthenSTOPauthorizedpod assoonexperimentsfinished beforelocalprosepolish; confirmEXITED runtimeNone. Cancelguardonlyafterstop.",
+    "Vladimirbranch/mainunchanged; finalcommitfullcodepatch+code/resultsZIP excludesweights/venv/rawcaches/intermediates/secrets."
+  ],
+  "latest_real_results": {
+    "baseline_exact_all9": true,
+    "nll_directed": 65.64388231516448,
+    "nll_paper": 68.71117305407847,
+    "grouped14_logistic_paper": 73.01940542698907,
+    "grouped14_qda_paper": 72.16571384631908,
+    "frozen_screen_neutral30_paper": 73.136560859309,
+    "frozen_screen_original30_paper": 69.97286532835223,
+    "frozen_screen_diverse30_paper": 73.00718514438294,
+    "frozen_screen_compositional30_paper": 69.53768969833672,
+    "matched_screen_valid_counts": {
+      "original": 19,
+      "neutral": 19,
+      "diverse": 23,
+      "compositional": 11
+    },
+    "matched_screen_joint_diverse_contexts_of15": {
+      "original": 6,
+      "neutral": 4,
+      "diverse": 7,
+      "compositional": 3
+    },
+    "matched_screen_protocol_errors": 0,
+    "early_six_transfer_complete": true,
+    "target1B_six_paper": {
+      "NLL": 67.791,
+      "original_screen": 69.304,
+      "neutral_screen": 71.156,
+      "diverse_screen": 71.349,
+      "compositional_screen": 66.939,
+      "grouped14_logistic": 70.618,
+      "grouped14_qda": 65.694
+    },
+    "first_adaptive_neutral2107": {
+      "requests": 60,
+      "valid": 29,
+      "selected": "baseline",
+      "PopQA_validation": 75.7504,
+      "paper9macro": 68.71117305407847
+    }
+  },
+  "scientific_rules": [
+    "is_hallu unchanged; paper metric max(AUC,100-AUC) per dataset then macro",
+    "Parentfitness training AUROC; finalprogramvalidation only; allseedsmean no testbestselection",
+    "Conditional27B andoptionalGLM choose nonoriginalprompt by 3-seed mean validation across12 complete9B adaptive trials only",
+    "4 frozen-context screen winners quality is secondary with inherited histories; not 60req adaptive primary",
+    "Analysis_manifest maps compositional to evolution_screen and rank to sampler_control; GLM separate writer_generalization; 27B writer_confirmation",
+    "Source nine raw caches restored to data/restored/mod1-eval-cache; sixexisting1B caches restoring data/restored/mod1-transfer-cache",
+    "Source selectors/core files pinned unchanged duringrun; all modifications additive wrappers/newprompt hooks madebeforestudies"
+  ],
+  "checkpoints": {
+    "9B": "/workspace/models/Qwen3.5-9B",
+    "27B": "/workspace/models/Qwen3.8-27B",
+    "optional_GLM_downloaded_no_inference": "/dev/shm/overnight-models/GLM-4.7-Flash",
+    "1B": "/workspace/mod1-models/Llama3.2-1B",
+    "shared_tokenizer": "/workspace/mod1-models/llama31-tokenizer"
+  },
+  "git": {
+    "branch": "vladimir/evohallu-preliminary",
+    "author": "Vladimir Urvantsev <urvantsevve@gmail.com>",
+    "head": "52ff26004fa884c3ff3f80bcdb8d6f8dc41c7264",
+    "main": "45dff51361a6f252a17ff71f479bbfb9ea4c5431",
+    "remote_published": false
+  },
+  "local_detached_guard_pid": 1629875,
+  "target_archive_upload_pid": 1629876,
+  "additional_tasks": [
+    "Early six-target transfer all4frozen screen winners+grouped14 heads launched19:06; firstattemptcaught missinghistoricalprotocolfile, uploadedunchangedoriginalandreran",
+    "Fulladaptive12+rank3 running since19:03:44UTC"
+  ],
+  "early_transfer_cohort": "aa4771d92b2c7bca",
+  "active_cpu_followups": [
+    "Ablationsdone, REFIT_REPORT source9/target6done/pinned",
+    "Headtarget9watcher14559 waitingformal3newcaches",
+    "Shortlistsecondary18553 waitingall12fullsource+primarynine"
+  ],
+  "important_provenance": [
+    "Oldsource19manifestuntouched; optionalinterfacepilotexecutionmanifestSHA8901cf6f8a4be3becceed0f65005d2d0cf98d1b29212e62b73c312d611fb4ace; full3preparedmanifestSHAa302af...",
+    "analysismanifestmapsinterface_controlseparatefromordinaryneutral; update_analysishelperhandlesexplicitinterfacephase andpreservesitlater.",
+    "Legacytrialserving_profilevllm_eagerislabelonly; actual9BcompiledBF16servers, clarificationJSONsaved.",
+    "Actualread-onlywatchprocessSSHsession9910 printsprogress/min; foregroundwatchcanrestartifkilled. LocalguardPopenpid1629875detached."
+  ],
+  "source_controller_pid": 2988,
+  "followups_pid": 13855,
+  "feedback_overlap_pid": 12570,
+  "local_resource_guard_pid": 1629875,
+  "local_cache_backup_pid": 1634254,
+  "foreground_watch_session": 15317,
+  "feedback_overlap_manifest_sha256": "c06460d1620ef8d9d13476ec9bf147bf03b662201c2cc74c66f63c320ae5b291",
+  "feedback_overlap_note": "Same original three feedback jobs moved earlier, reservations prevent duplicate main launches; updated followups waits optional overlap terminal before original19 ledger check",
+  "novel_writer_priority_after_utc": "2026-10-21T22:45:00Z",
+  "new_numeric_reference_guard": "427 AVeriTeC rows first, LPmax<=.1,NLLrho>=.999,exact identity; required for target9",
+  "additional_completed_reports": [
+    "screen_component_ablations/ABLATION_REPORT.md",
+    "screen_component_refit/REFIT_REPORT.md",
+    "semantic_rank_winner_audit.md",
+    "component_head_interpretation_audit.md",
+    "parent_sampling_analysis/PARENT_SAMPLING.md"
+  ],
+  "component_head_source9_paper_auc": 73.633,
+  "component_head_target6_paper_auc": 71.431,
+  "component_head_frozen_helper_sha256": "e86f98e49d710317e685af1a57f5ee68ba4b1fd48ac5a919091f0cc0eb564a01",
+  "followups_flags": [
+    "--reserve-transfer-minutes",
+    "45",
+    "--prioritize-novel-writer-after-utc",
+    "2026-10-21T22:45:00Z",
+    "--max-confirmation-jobs",
+    "2"
+  ],
+  "feedback_overlap_status": "finished all3 full60; no extra requests; original main will skip completed controls",
+  "component_head_transfer9_pid": 14559,
+  "component_head_transfer9_status": "waiting numeric verified3newcaches; separateCPU3newdatasets only, preservesoriginal6/refitreportbytes",
+  "shortlist_secondary_status": "all9scoringprocessesfinished;35of36slotsfullnine;original8741rank3nonfiniteWild+XFact exponentialfloat32overflow; no repairs; seeSHORTLIST_OUTCOME",
+  "narrative_draft": "results/overnight20261021/NARRATIVE_REPORT_DRAFT.md",
+  "latest_watch_finished_jobs": 22,
+  "latest_watch_requests": 1256,
+  "planned_qwen9b_requests": 1260,
+  "model_roles": "Qwen/GLM write detector code; sourceLlama3.1-8B feature caches fixed; target1B pendingfull9",
+  "final_checks": [
+    "Refreshheadtransfer9 --report-only AFTER mainfull9transfer, no rescoring",
+    "Do notrerun REFIT_REPORT original6: transfer9 PLAN pins itsbytes",
+    "Run convergence/parentselection/resource/plots/failurefinalreports",
+    "Source primary groups allseeds retained; paperfold per dataset labelsunchanged",
+    "Verify allnewcompressedcaches localreceipt andscorehashes; archivehelper autotriggerbylocalcachebackupguard",
+    "Stop pod assoon experiments andbackup complete, before polishingnarrative locally",
+    "Cancelwatchdog onlyafterconfirmedstop; commitVladimir branch mainuntouched; code/resultsZIP andfullpatch"
+  ],
+  "shortlist_secondary_pid": 18553,
+  "focused_validation": "183 passed in237.54s; separate updatedshortlist5passed",
+  "local_training_raw": "redundant1.074GBraw removedaftergziproundtripSHA;435.98MBgzipretained; remoteunchanged",
+  "local_free_GiB_approx": 3.8,
+  "scientific_final_notes": "results/overnight20261021/FINAL_REPORT_NOTES.md",
+  "late_extensions_pid": 21679,
+  "late_extensions_flags": [
+    "--execute",
+    "--prefer-devstral-breadth"
+  ],
+  "devstral_prefetch": "ready_native_checkpoint:25.83GB publicFP8nativeweights,pin55c5b41...,noDevGPU/trials yet",
+  "devstral_helper_sha256": "72259724055459f2081336679f5139085076c5ce1c40878835de2cb3a209bd2e",
+  "new_late_helper_sha256": "ea1a246351edeb3250880ffd0d50a51c8d1ac628da6d62e576b796af5ef32fb4",
+  "batch_diagnostic": "all45casescomplete;primary512exact9;CommonClaimsclassorderedbatchsensitivity+1.88macrofull,+1.82shuffle512; primaryunchanged",
+  "train_normalized_control": "separate5605train-onlymedianMAD;source9directed67.7833/fold70.5585;all36casesbatchinvariant;no targetstudy; no primaryreplacement",
+  "new_breadth_allocation": "AfterGLMseed2107 prefernewDevstralpaironlyprefetchready+>=75minbefore01:10; otherwiseexistingGLMextensiongate. No extraGPUbudget. SetbeforeanyGLMresults.",
+  "watch_restart": "22:39UTC readonlySSHmonitorconnectionreset;scienceuninterrupted, newkeepaliveSSHwatch15317"
+}

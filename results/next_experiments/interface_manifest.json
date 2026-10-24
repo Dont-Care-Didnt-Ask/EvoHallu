@@ -1,0 +1,107 @@
+{
+  "created_utc": "2026-10-21T19:17:07.107403+00:00",
+  "status": "prepared_only_no_model_calls",
+  "feature_model": "Llama3.1-8b-instruct",
+  "labels": "is_hallu",
+  "writer": "Qwen/Qwen3.5-9B",
+  "writer_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+  "seeds": [
+    2107,
+    4319,
+    8741
+  ],
+  "jobs": [
+    {
+      "id": "next_evo_neutral_interface_2107",
+      "phase": "evolution_screen",
+      "analysis_phase": "interface_control",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "parent_sampling": "inherited",
+      "intervention": "interface_and_metric_contract",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_interface_2107",
+      "command": [
+        ".venv/bin/python",
+        "scripts/overnight_interface_trial.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_interface_2107"
+      ],
+      "config_sha256": "dbd33fb1315670e0ced6f2066fa5d4786ace0abf3a0a52cc22bbac00f5cb6476",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_interface_2107"
+    },
+    {
+      "id": "next_evo_neutral_interface_4319",
+      "phase": "evolution_screen",
+      "analysis_phase": "interface_control",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "parent_sampling": "inherited",
+      "intervention": "interface_and_metric_contract",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_interface_4319",
+      "command": [
+        ".venv/bin/python",
+        "scripts/overnight_interface_trial.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_interface_4319"
+      ],
+      "config_sha256": "33af0a01bdbdd7cf4be1480119a45582b9b035457ca35232f3d1431b71cfe8a8",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_interface_4319"
+    },
+    {
+      "id": "next_evo_neutral_interface_8741",
+      "phase": "evolution_screen",
+      "analysis_phase": "interface_control",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "parent_sampling": "inherited",
+      "intervention": "interface_and_metric_contract",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_interface_8741",
+      "command": [
+        ".venv/bin/python",
+        "scripts/overnight_interface_trial.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_interface_8741"
+      ],
+      "config_sha256": "d0dc4229496a9bc98fe585f588ebd1cf969cfea25ced94aab4f25a2511837944",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_interface_8741"
+    }
+  ],
+  "training_csv_sha256": "b71e07ab49ea97d6a8311f52329390dc7bc3137fcbac07706ba1a0925c16544a",
+  "training_raw_path": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "study_source_sha256": {
+    "src/experiments/extension_trial.py": "5d9e7e93febe82f01cb6988ba7c8d139e1931fef72ce259469b6b4168c031f36",
+    "src/experiments/prompt_policies.py": "bb8d3092c22b0e1255c440a626c086cb692762669d60517e1563b921584d1daa",
+    "src/packing/funsearch/programs_database.py": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+    "src/packing/model/prompt.py": "1c60df86c1ae48c11815751299459d7679e995cae7892ff93288c5d87424b625",
+    "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+    "src/packing/evaluate/uncertainty_quantification/features.py": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+    "configs/config_uq_trial.yaml": "a8e5fb034dbcdfbff9de5eb7c75848ecfb81a1256d51f74e933fd727482db199",
+    "configs/config_uq.yaml": "b54cb74fc7886336c0aa7047ae78b63d9e870755be69975500153d1c63509949",
+    "configs/model/qwen35_9b.yaml": "16e49c2c7d01cf2097a9ae9c3e03c280f5a8d31d026c73be8993f42e52cfee47",
+    "configs/task/uncertainty_quantification.yaml": "40e1da09c9dc3c34af2315c194cdf75d7edd936c7f1ca88e596fd6fbd3bc55c7",
+    "scripts/overnight_interface_trial.py": "aa1a9e0141d3b93917c411de2ef207084bf7cc1f2cab74bcbf8ec8a9862c4817",
+    "results/overnight20261021/interface_contract/training_failure_evidence.json": "503b7aaa22640b7bc82cf97eec5259043fe15d38e0d925a770b7596da75d99b4",
+    "results/overnight20261021/interface_contract/failure_audit_snapshot.json": "c4fe15988e9961d49f1d63c79797df8d1fe7ffe213de0f0a10092d369c0f56cd",
+    "src/packing/evaluate/uncertainty_quantification/estimator_base.py": "67f791cf66e84968e318aa6b113f043eba268785dc198f8d9c4aaa023d8c6dd5",
+    "src/packing/evaluate/uncertainty_quantification/precompute_raw_stats_separated.py": "b2dadaee51c1052aa04381a1b03e2c05d8c38cc2f57b1f00cdbfad42e31ef834"
+  },
+  "requests_by_phase": {
+    "evolution_screen": 180
+  },
+  "study": "exploratory_interface_and_metric_contract",
+  "study_phase": "interface_control",
+  "base_study_manifest": "results/next_experiments/run_manifest.json",
+  "base_study_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c",
+  "intervention": "interface_and_metric_contract",
+  "analysis_phase": "interface_control",
+  "training_failure_evidence_sha256": "503b7aaa22640b7bc82cf97eec5259043fe15d38e0d925a770b7596da75d99b4",
+  "contract_sha256": "bd227c8acf9f9217de300efda4f13961f3e1d3165214dcabec3f96ca12868201",
+  "scope_note": "This separate prospective arm covers only interface_and_metric_contract clarification. It does not assert implementation status of other campaign studies."
+}

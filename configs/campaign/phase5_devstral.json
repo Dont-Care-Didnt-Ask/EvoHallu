@@ -1,0 +1,147 @@
+{
+  "hard_deadline_utc": "2026-10-15T10:45:00+00:00",
+  "actions": [
+    {
+      "id": "devstral_rotate_4b",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/rotate_checkpoint.py",
+        "/dev/shm/mod1-models/Qwen3.5-4B"
+      ],
+      "log": "out/campaign/devstral_rotate_4b.log",
+      "timeout": 60,
+      "continue_on_failure": false
+    },
+    {
+      "id": "devstral_rotate_1b",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/rotate_checkpoint.py",
+        "/dev/shm/mod1-models/Llama3.2-1B"
+      ],
+      "log": "out/campaign/devstral_rotate_1b.log",
+      "timeout": 60,
+      "continue_on_failure": false
+    },
+    {
+      "id": "devstral_rotate_source_weights",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/rotate_checkpoint.py",
+        "/workspace/mod1-models/llama31"
+      ],
+      "log": "out/campaign/devstral_rotate_source_weights.log",
+      "timeout": 60
+    },
+    {
+      "id": "download_devstral",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/download_checkpoint.py",
+        "mistralai/Devstral-Small-2-24B-Instruct-2512",
+        "/dev/shm/mod1-models/Devstral-Small-2",
+        "--revision",
+        "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+        "--weight-format",
+        "mistral",
+        "--spill-dir",
+        "/workspace/mod1-model-spill"
+      ],
+      "log": "out/campaign/download_devstral.log",
+      "timeout": 1800,
+      "continue_on_failure": false
+    },
+    {
+      "id": "serve_devstral",
+      "kind": "serve",
+      "log": "out/campaign/devstral_server.log",
+      "timeout": 600,
+      "command": [
+        "vllm",
+        "serve",
+        "/dev/shm/mod1-models/Devstral-Small-2",
+        "--served-model-name",
+        "mistralai/Devstral-Small-2-24B-Instruct-2512",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--dtype",
+        "bfloat16",
+        "--tokenizer-mode",
+        "mistral",
+        "--config-format",
+        "mistral",
+        "--load-format",
+        "mistral",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.85",
+        "--language-model-only",
+        "--enforce-eager",
+        "--linear-backend",
+        "marlin"
+      ]
+    },
+    {
+      "id": "devstral_evo_1048",
+      "kind": "command",
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=devstral_small2",
+        "run_identifier_name=devstral_evo",
+        "search_mode=evolution",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=1800",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "trial.serving_profile=fp8_marlin_eager"
+      ],
+      "log": "out/campaign/devstral_evo_1048.log",
+      "timeout": 1920,
+      "continue_on_failure": true
+    },
+    {
+      "id": "stop_devstral",
+      "kind": "stop_server"
+    },
+    {
+      "id": "rotate_devstral_after_search",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/rotate_checkpoint.py",
+        "/dev/shm/mod1-models/Devstral-Small-2"
+      ],
+      "log": "out/campaign/rotate_devstral_after_search.log",
+      "timeout": 60
+    },
+    {
+      "id": "evaluate_added_devstral",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/evaluate_added_run.py",
+        "--run",
+        "out/logs/mod1/uncertainty_quantification_devstral_evo_1048",
+        "--output",
+        "out/campaign/evaluation_with_devstral"
+      ],
+      "log": "out/campaign/evaluate_added_devstral.log",
+      "timeout": 1800,
+      "continue_on_failure": false
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "created_utc": "2026-10-21T21:43:02.612785+00:00",
+  "status": "read_only_existing_runtime_audit",
+  "gpu_launch_or_installs": 0,
+  "remote_python": "3.12.3",
+  "remote_python_base_executable": "/usr/bin/python3.12",
+  "remote_platform": "Ubuntu 24.04.5 LTS; Linux 6.8.0-147-generic x86_64; glibc2.39",
+  "uv": "0.13.1",
+  "driver": "595.91.07",
+  "driver_advertised_cuda": "13.2",
+  "torch_module": "2.13.0+cu130",
+  "torch_metadata": "2.13.0",
+  "torch_build_cuda": "13.0",
+  "gpus": "2x NVIDIA A100-SXM4-80GB, 81920MiB each",
+  "active_distribution_count": 227,
+  "frozen_distribution_count": 227,
+  "active_vs_frozen_differences": {},
+  "uv_pip_check": "All installed packages are compatible; 227 checked",
+  "fresh_second_rebuild_performed": false,
+  "historical_venv_setup_log_python": "3.11.17 (superseded by active3.12 environment)",
+  "local_analysis_runtime": {
+    "python": "3.12.3",
+    "torch": "2.14.1+cpu",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "scikit-learn": "1.9.1",
+    "pandas": "3.0.6"
+  },
+  "sha256": {
+    "results/overnight20261021/requirements_gpu_frozen.txt": "f2f69008ebfd843d972f0b737314d5940113e44b2b139c6b0f7c8b43c1325033",
+    "requirements-overnight-gpu.txt": "2f37ca4e28cb529fb1d7d9ac95311a20ee1e111768dfd498fef336c7e6f2df6b",
+    "results/overnight20261021/install_gpu.log": "c0b8c6f39296f78fa50a49f3b57e15252efa3ac4b993db8bbd9d483064661adb",
+    "results/overnight20261021/venv_setup.log": "a679c45b65124361fbf5be73567d41e13113201287f33e233ad28b91d7c31e7c",
+    "results/overnight20261021/nvidia_setup.txt": "a059a9caf8dd5909a49eb2a33df80848f458ff8279ac58b1c6ba9c00cf562a50"
+  },
+  "portable_snapshot_validation": {
+    "exact_227_original_pins_preserved": true,
+    "absolute_or_editable_paths": false,
+    "direct_or_secret_urls": false
+  }
+}

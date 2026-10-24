@@ -1,0 +1,32 @@
+defaults:
+  - config_uq
+  - override cluster: local_endpoint
+  - override model: qwen38_27b
+  - _self_
+
+extension_trial: true
+search_mode: evolution  # evolution, independent, baseline_seeded, structured, frozen_context
+num_rounds: 5
+num_outputs_per_prompt: 2
+seed: 1046
+prefix: mod1
+run_identifier_name: qwen38_pilot
+wandb: 0
+task:
+  bootstrap_samples: 0
+  timeout_period: 120
+  mem_limit_gb: 16
+
+trial:
+  serving_profile: vllm_eager
+  evaluation_workers: 2
+  max_seconds: 1800
+  max_total_tokens: 200000
+  request_timeout_seconds: 180
+  resume: false
+  enable_thinking: false
+  local_only: true
+  max_consecutive_failed_rounds: 3
+  prompt_policy: original  # original, neutral, diverse, compositional
+  save_train_predictions: false
+  shortlist_size: 1

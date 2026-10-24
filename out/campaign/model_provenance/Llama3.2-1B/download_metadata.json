@@ -1,0 +1,251 @@
+{
+  "_id": "66f4591241aafc2b3032aeb8",
+  "id": "unsloth/Llama-3.2-1B-Instruct",
+  "private": false,
+  "pipeline_tag": "text-generation",
+  "library_name": "transformers",
+  "tags": [
+    "transformers",
+    "safetensors",
+    "llama",
+    "text-generation",
+    "llama-3",
+    "meta",
+    "facebook",
+    "unsloth",
+    "conversational",
+    "en",
+    "base_model:meta-llama/Llama-3.2-1B-Instruct",
+    "base_model:finetune:meta-llama/Llama-3.2-1B-Instruct",
+    "license:llama3.2",
+    "text-generation-inference",
+    "endpoints_compatible",
+    "deploy:azure",
+    "region:us"
+  ],
+  "downloads": 761239,
+  "likes": 103,
+  "modelId": "unsloth/Llama-3.2-1B-Instruct",
+  "author": "unsloth",
+  "sha": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+  "lastModified": "2025-05-09T20:24:41.000Z",
+  "gated": false,
+  "disabled": false,
+  "widgetData": [
+    {
+      "text": "Hi, what can you help me with?"
+    },
+    {
+      "text": "What is 84 * 3 / 2?"
+    },
+    {
+      "text": "Tell me an interesting fact about the universe!"
+    },
+    {
+      "text": "Explain quantum computing in simple terms."
+    }
+  ],
+  "model-index": null,
+  "config": {
+    "architectures": [
+      "LlamaForCausalLM"
+    ],
+    "model_type": "llama",
+    "tokenizer_config": {
+      "bos_token": "<|begin_of_text|>",
+      "eos_token": "<|eot_id|>",
+      "pad_token": "<|finetune_right_pad_id|>",
+      "unk_token": null,
+      "chat_template": "{{- bos_token }}\n{%- if custom_tools is defined %}\n    {%- set tools = custom_tools %}\n{%- endif %}\n{%- if not tools_in_user_message is defined %}\n    {%- set tools_in_user_message = true %}\n{%- endif %}\n{%- if not date_string is defined %}\n    {%- if strftime_now is defined %}\n        {%- set date_string = strftime_now(\"%d %b %Y\") %}\n    {%- else %}\n        {%- set date_string = \"26 Jul 2024\" %}\n    {%- endif %}\n{%- endif %}\n{%- if not tools is defined %}\n    {%- set tools = none %}\n{%- endif %}\n\n{#- This block extracts the system message, so we can slot it into the right place. #}\n{%- if messages[0]['role'] == 'system' %}\n    {%- set system_message = messages[0]['content']|trim %}\n    {%- set messages = messages[1:] %}\n{%- else %}\n    {%- set system_message = \"\" %}\n{%- endif %}\n\n{#- System message #}\n{{- \"<|start_header_id|>system<|end_header_id|>\\n\\n\" }}\n{%- if tools is not none %}\n    {{- \"Environment: ipython\\n\" }}\n{%- endif %}\n{{- \"Cutting Knowledge Date: December 2023\\n\" }}\n{{- \"Today Date: \" + date_string + \"\\n\\n\" }}\n{%- if tools is not none and not tools_in_user_message %}\n    {{- \"You have access to the following functions. To call a function, please respond with JSON for a function call.\" }}\n    {{- 'Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}.' }}\n    {{- \"Do not use variables.\\n\\n\" }}\n    {%- for t in tools %}\n        {{- t | tojson(indent=4) }}\n        {{- \"\\n\\n\" }}\n    {%- endfor %}\n{%- endif %}\n{{- system_message }}\n{{- \"<|eot_id|>\" }}\n\n{#- Custom tools are passed in a user message with some extra guidance #}\n{%- if tools_in_user_message and not tools is none %}\n    {#- Extract the first user message so we can plug it in here #}\n    {%- if messages | length != 0 %}\n        {%- set first_user_message = messages[0]['content']|trim %}\n        {%- set messages = messages[1:] %}\n    {%- else %}\n        {{- raise_exception(\"Cannot put tools in the first user message when there's no first user message!\") }}\n{%- endif %}\n    {{- '<|start_header_id|>user<|end_header_id|>\\n\\n' -}}\n    {{- \"Given the following functions, please respond with a JSON for a function call \" }}\n    {{- \"with its proper arguments that best answers the given prompt.\\n\\n\" }}\n    {{- 'Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}.' }}\n    {{- \"Do not use variables.\\n\\n\" }}\n    {%- for t in tools %}\n        {{- t | tojson(indent=4) }}\n        {{- \"\\n\\n\" }}\n    {%- endfor %}\n    {{- first_user_message + \"<|eot_id|>\"}}\n{%- endif %}\n\n{%- for message in messages %}\n    {%- if not (message.role == 'ipython' or message.role == 'tool' or 'tool_calls' in message) %}\n        {{- '<|start_header_id|>' + message['role'] + '<|end_header_id|>\\n\\n'+ message['content'] | trim + '<|eot_id|>' }}\n    {%- elif 'tool_calls' in message %}\n        {%- if not message.tool_calls|length == 1 %}\n            {{- raise_exception(\"This model only supports single tool-calls at once!\") }}\n        {%- endif %}\n        {%- set tool_call = message.tool_calls[0].function %}\n        {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' -}}\n        {{- '{\"name\": \"' + tool_call.name + '\", ' }}\n        {{- '\"parameters\": ' }}\n        {{- tool_call.arguments | tojson }}\n        {{- \"}\" }}\n        {{- \"<|eot_id|>\" }}\n    {%- elif message.role == \"tool\" or message.role == \"ipython\" %}\n        {{- \"<|start_header_id|>ipython<|end_header_id|>\\n\\n\" }}\n        {%- if message.content is mapping or message.content is iterable %}\n            {{- message.content | tojson }}\n        {%- else %}\n            {{- message.content }}\n        {%- endif %}\n        {{- \"<|eot_id|>\" }}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' }}\n{%- endif %}\n"
+    },
+    "chat_template_jinja": "{{- bos_token }}\n{%- if custom_tools is defined %}\n    {%- set tools = custom_tools %}\n{%- endif %}\n{%- if not tools_in_user_message is defined %}\n    {%- set tools_in_user_message = true %}\n{%- endif %}\n{%- if not date_string is defined %}\n    {%- if strftime_now is defined %}\n        {%- set date_string = strftime_now(\"%d %b %Y\") %}\n    {%- else %}\n        {%- set date_string = \"26 Jul 2024\" %}\n    {%- endif %}\n{%- endif %}\n{%- if not tools is defined %}\n    {%- set tools = none %}\n{%- endif %}\n\n{#- This block extracts the system message, so we can slot it into the right place. #}\n{%- if messages[0]['role'] == 'system' %}\n    {%- set system_message = messages[0]['content']|trim %}\n    {%- set messages = messages[1:] %}\n{%- else %}\n    {%- set system_message = \"\" %}\n{%- endif %}\n\n{#- System message #}\n{{- \"<|start_header_id|>system<|end_header_id|>\\n\\n\" }}\n{%- if tools is not none %}\n    {{- \"Environment: ipython\\n\" }}\n{%- endif %}\n{{- \"Cutting Knowledge Date: December 2023\\n\" }}\n{{- \"Today Date: \" + date_string + \"\\n\\n\" }}\n{%- if tools is not none and not tools_in_user_message %}\n    {{- \"You have access to the following functions. To call a function, please respond with JSON for a function call.\" }}\n    {{- 'Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}.' }}\n    {{- \"Do not use variables.\\n\\n\" }}\n    {%- for t in tools %}\n        {{- t | tojson(indent=4) }}\n        {{- \"\\n\\n\" }}\n    {%- endfor %}\n{%- endif %}\n{{- system_message }}\n{{- \"<|eot_id|>\" }}\n\n{#- Custom tools are passed in a user message with some extra guidance #}\n{%- if tools_in_user_message and not tools is none %}\n    {#- Extract the first user message so we can plug it in here #}\n    {%- if messages | length != 0 %}\n        {%- set first_user_message = messages[0]['content']|trim %}\n        {%- set messages = messages[1:] %}\n    {%- else %}\n        {{- raise_exception(\"Cannot put tools in the first user message when there's no first user message!\") }}\n{%- endif %}\n    {{- '<|start_header_id|>user<|end_header_id|>\\n\\n' -}}\n    {{- \"Given the following functions, please respond with a JSON for a function call \" }}\n    {{- \"with its proper arguments that best answers the given prompt.\\n\\n\" }}\n    {{- 'Respond in the format {\"name\": function name, \"parameters\": dictionary of argument name and its value}.' }}\n    {{- \"Do not use variables.\\n\\n\" }}\n    {%- for t in tools %}\n        {{- t | tojson(indent=4) }}\n        {{- \"\\n\\n\" }}\n    {%- endfor %}\n    {{- first_user_message + \"<|eot_id|>\"}}\n{%- endif %}\n\n{%- for message in messages %}\n    {%- if not (message.role == 'ipython' or message.role == 'tool' or 'tool_calls' in message) %}\n        {{- '<|start_header_id|>' + message['role'] + '<|end_header_id|>\\n\\n'+ message['content'] | trim + '<|eot_id|>' }}\n    {%- elif 'tool_calls' in message %}\n        {%- if not message.tool_calls|length == 1 %}\n            {{- raise_exception(\"This model only supports single tool-calls at once!\") }}\n        {%- endif %}\n        {%- set tool_call = message.tool_calls[0].function %}\n        {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' -}}\n        {{- '{\"name\": \"' + tool_call.name + '\", ' }}\n        {{- '\"parameters\": ' }}\n        {{- tool_call.arguments | tojson }}\n        {{- \"}\" }}\n        {{- \"<|eot_id|>\" }}\n    {%- elif message.role == \"tool\" or message.role == \"ipython\" %}\n        {{- \"<|start_header_id|>ipython<|end_header_id|>\\n\\n\" }}\n        {%- if message.content is mapping or message.content is iterable %}\n            {{- message.content | tojson }}\n        {%- else %}\n            {{- message.content }}\n        {%- endif %}\n        {{- \"<|eot_id|>\" }}\n    {%- endif %}\n{%- endfor %}\n{%- if add_generation_prompt %}\n    {{- '<|start_header_id|>assistant<|end_header_id|>\\n\\n' }}\n{%- endif %}\n"
+  },
+  "cardData": {
+    "base_model": "meta-llama/Llama-3.2-1B-Instruct",
+    "language": [
+      "en"
+    ],
+    "library_name": "transformers",
+    "license": "llama3.2",
+    "tags": [
+      "llama-3",
+      "llama",
+      "meta",
+      "facebook",
+      "unsloth",
+      "transformers"
+    ]
+  },
+  "transformersInfo": {
+    "auto_model": "AutoModelForCausalLM",
+    "pipeline_tag": "text-generation",
+    "processor": "AutoTokenizer"
+  },
+  "siblings": [
+    {
+      "rfilename": ".gitattributes",
+      "blobId": "52373fe24473b1aa44333d318f578ae6bf04b49b",
+      "size": 1570
+    },
+    {
+      "rfilename": "README.md",
+      "blobId": "0d01bf250f2f0ee855c4a1df6a1581ff937f81fa",
+      "size": 5743
+    },
+    {
+      "rfilename": "chat_template.jinja",
+      "blobId": "1bad6a0f648dccdbec523ca79ba90fbcfc806af0",
+      "size": 3827
+    },
+    {
+      "rfilename": "config.json",
+      "blobId": "efa30582955bb5e3a626981b1b74c6ebb107c02c",
+      "size": 894
+    },
+    {
+      "rfilename": "generation_config.json",
+      "blobId": "d3af262e14cd9f678b04201e6a04ca36ba4ebb48",
+      "size": 239
+    },
+    {
+      "rfilename": "model.safetensors",
+      "blobId": "5daf23edd80cedb879a4a18e6049a19b2417a3f7",
+      "size": 2471645608,
+      "lfs": {
+        "sha256": "1ff795ff6a07e6a68085d206fb84417da2f083f68391c2843cd2b8ac6df8538f",
+        "size": 2471645608,
+        "pointerSize": 135
+      }
+    },
+    {
+      "rfilename": "special_tokens_map.json",
+      "blobId": "3c1d04911c269b925af977a3151c9704e990e4d0",
+      "size": 454
+    },
+    {
+      "rfilename": "tokenizer.json",
+      "blobId": "1c1d8d5c9024994f1d3b00f9662b8dd89ca13cf2",
+      "size": 17209920,
+      "lfs": {
+        "sha256": "6b9e4e7fb171f92fd137b777cc2714bf87d11576700a1dcd7a399e7bbe39537b",
+        "size": 17209920,
+        "pointerSize": 133
+      }
+    },
+    {
+      "rfilename": "tokenizer_config.json",
+      "blobId": "3dc1faa6025cdb195c0889dd8d3d13ca26af9225",
+      "size": 54669
+    }
+  ],
+  "spaces": [
+    "KwabsHug/GameConfigIdea",
+    "Nymbo/Llama-3.2-1B-Instruct",
+    "FlameF0X/SLM-Playground",
+    "RavichandraNayakar/customer_support_env",
+    "Mihaiii/backtrack_sampler_demo",
+    "danhtran2mind/Vietnamese-Health-Chat-LoRA",
+    "lablab-ai-amd-developer-hackathon/Chaos-Economy",
+    "Gbeckler/Llama-BruvacAI_Space",
+    "estivs/teste",
+    "harxsan/demo-app",
+    "Sannidhi/Psychologist-chatbot",
+    "Grandediw/lab2-fine-tune",
+    "CallmeKaito/BrainrotGPT",
+    "Uener/My-Chatbot",
+    "Ephraimmm/Lse_reporter",
+    "rubenaghayan/llm_memory_visualizer",
+    "rizwankhan08/shayari-api",
+    "rudra9439/vidya-meta-rl",
+    "anshumanatrey/pharmarl",
+    "ChiragDalal/XashLM",
+    "maufadel/wattgpu",
+    "inteligenciamilgrau/juninho",
+    "inteligenciamilgrau/chat",
+    "mvalssj/imagem",
+    "mvalssj/Assistente",
+    "aguinaldomavenda0/JoanaChatBot",
+    "rven7/Llama_1",
+    "JJWOLF00/Writer",
+    "DanielNettoHeckert/Matrix",
+    "lopesrfx/teste",
+    "davidbizzo/Adv",
+    "BetoMenten/BEM",
+    "exo-is/space-llama-1B-11M-esg-context",
+    "raptor-o/Niera-P",
+    "harbor9/landily",
+    "RaniRahbani/DietitianAssistant",
+    "felipeserafim001/teste",
+    "sebdg/DietitianAssistant",
+    "exo-is/Test-llama-1B-11M-esg-context",
+    "felipeserafim001/GPT",
+    "KPDEV12/cucasmole",
+    "DrDomedag/LocoLama",
+    "Joojoo20/Teste_de_chatbot",
+    "Joojoo20/Teste_ia",
+    "marcelomx30/Tutorial-Test",
+    "nsv2042/testandoscript",
+    "T3lli/TestGame",
+    "DrDomedag/LocoLama2",
+    "joaopaulo418/llama",
+    "rayandiniz/elo",
+    "Sasmitah/ai-mental_health_support",
+    "PierreJousselin/LAB_LLM",
+    "Alder12/IAgeral",
+    "n3ffos/Llama",
+    "AdenilsonSouza/MyAI",
+    "kkrainiukk/ChatBot",
+    "CraftWork/CWS",
+    "kkrainiukk/nai14",
+    "caiocsr/CaioDev",
+    "alisson-pipeelo/hello-world",
+    "fabioknipper/DragonIA",
+    "frankai98/Tokentesting",
+    "bilibidum/astanga",
+    "ViniciusAndrade1981/lisboainformatica",
+    "heyIamUmair/llama_1B_epoch4",
+    "nandogomes/TreinamentoAI",
+    "Saintyves/Giu_1.0",
+    "npaw1/automacaoaula",
+    "JaimeMartins/Professor",
+    "gestao10/n8n",
+    "klausz11/meta-llama-Llama-3.2-3B-Instruct",
+    "TestOpenn/ChatGam",
+    "Carlosbatista/avalia_oportunidade",
+    "Slimzzi/Fabinho.O.Juninho.AI",
+    "edinaldohvieira/tutorialIA",
+    "aiwithankit/chatwithllama",
+    "Abdul8008/abdul-portfolio-chatbot-app",
+    "Ru21/content_generator",
+    "sophiaautomacao/condominus",
+    "AA65327/emotion-classifier",
+    "Hugob12312/my-unsloth-trainer",
+    "DhruvDubey/CBT",
+    "Ryan-PC/Llama",
+    "ID2223-group-RSA/ID2223-lab2",
+    "mihailocvetkovic/SML-Lab-2",
+    "greenie-sweden/chatbot-for-fine-tuned-llm",
+    "pontusluthi/iris",
+    "lauraloretta/llama-1B-model-centric",
+    "baldassarre/llama-3.2-peft",
+    "baldassarreFr/Iris",
+    "lauraloretta/UI-llama-1B-full-epoch",
+    "darbha18/iris-lab2",
+    "salemmmm/Iris",
+    "schmuelling/hopsworks_chat",
+    "laasyades/Iris",
+    "id2223-g22/Iris-Evaluation",
+    "lauraloretta/llama-1B-data-centric",
+    "FatimaZh/sec-risk-chatbot",
+    "cmyRick/ID2223-Lab2",
+    "wenboxia/ID2223-Lab2"
+  ],
+  "createdAt": "2024-09-25T18:40:18.000Z",
+  "safetensors": {
+    "parameters": {
+      "BF16": 1235814400
+    },
+    "total": 1235814400
+  },
+  "usedStorage": 2497941185
+}

@@ -1,0 +1,15 @@
+{
+  "status": "redundant_local_raw_removed_after_lossless_archive_verification",
+  "verified_utc": "2026-10-21T21:55:33.392358+00:00",
+  "raw_path": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+  "archive_path": "data/feature_cache_archive/train/popqa_train_filtered_10shot_raw_stats_logits.pt.gz",
+  "raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "archive_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "raw_bytes": 1074638092,
+  "archive_bytes": 435979549,
+  "raw_removed": true,
+  "remote_training_raw_unchanged": true,
+  "removed_utc": "2026-10-21T21:58:07.436734+00:00",
+  "reason": "Reserve local disk for three new lossless target caches and final repository ZIP",
+  "restore_command": "gzip -dc data/feature_cache_archive/train/popqa_train_filtered_10shot_raw_stats_logits.pt.gz > data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt"
+}

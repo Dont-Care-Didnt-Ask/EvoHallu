@@ -1,0 +1,49 @@
+{
+  "untuned_ablations": {
+    "laguna_slope_only": {
+      "parent": "out/logs/mod1/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+      "parent_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+      "expression": "baseline",
+      "coefficients_retuned": false,
+      "held_out_data_read": false,
+      "preparation_partition": "source-model validation"
+    },
+    "laguna_slope_range": {
+      "parent": "out/logs/mod1/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+      "parent_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+      "expression": "baseline + 0.25 * normalized_entropy_range",
+      "coefficients_retuned": false,
+      "held_out_data_read": false,
+      "preparation_partition": "source-model validation"
+    },
+    "laguna_slope_variance": {
+      "parent": "out/logs/mod1/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+      "parent_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+      "expression": "baseline + 0.15 * top1_variance",
+      "coefficients_retuned": false,
+      "held_out_data_read": false,
+      "preparation_partition": "source-model validation"
+    },
+    "qwen_linear_position_nll": {
+      "parent": "out/logs/mod1/uncertainty_quantification_qwen38_evo_1047/frozen_estimator.py",
+      "parent_sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9",
+      "expression": "n_tokens * position_weighted_mean_nll; float64 removes half-precision cancellation residuals",
+      "coefficients_retuned": false,
+      "held_out_data_read": false,
+      "preparation_partition": "source-model validation"
+    }
+  },
+  "validation_auc_percent": {
+    "new/ablation_laguna_slope_only": 78.7735045646546,
+    "new/ablation_laguna_slope_range": 79.5356996866058,
+    "new/ablation_laguna_slope_variance": 78.88506608529772,
+    "new/ablation_qwen_linear_position_nll": 79.61461597856201,
+    "new/uncertainty_quantification_laguna_evo_1048": 79.50078348548848,
+    "new/uncertainty_quantification_qwen38_evo_1047": 79.61348049234682
+  },
+  "qwen_simplification_prediction_spearman": 0.9999888263750116,
+  "qwen_simplification_max_absolute_score_difference": 0.11719436645508097,
+  "all_training_rows_skip_qwen1048_margin_branch": true,
+  "training_rows_audited": 7007,
+  "held_out_data_read": false
+}

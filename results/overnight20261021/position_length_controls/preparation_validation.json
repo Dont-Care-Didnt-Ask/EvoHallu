@@ -1,0 +1,23 @@
+{
+  "status": "passed_focused_synthetic_validation",
+  "created_utc": "2026-10-21T23:26:20.340113+00:00",
+  "command": "PYTHONPATH=src:. .venv/bin/python -m pytest -q tests/test_overnight_position_length_controls.py",
+  "result": "7 passed in 5.88s",
+  "passed": 7,
+  "failed": 0,
+  "pytest_elapsed_seconds": 5.88,
+  "helper_sha256": "de8dad4dc7548b4bc364a3bbcdca784d8418a2d4aee3729c87d12f4288d167fe",
+  "tests_sha256": "079de976d3947a5118ec9bedab36b66842ff11efe686938d8a049818ac022456",
+  "real_benchmark_scoring": false,
+  "gpu_calls": 0,
+  "checks": [
+    "Frozen source/hash contract and n=0/1 guards",
+    "Float32 reduction and post-summation weight-mass division",
+    "Length versus position on constant/permuted token surprise",
+    "Nonfinite-input fail closed",
+    "LP dependency gate exact parity with full pack on synthetic fixture; no top-k access",
+    "Claim/label/group/strict-mask identity guards",
+    "All-nine reference gate rejects a false parity receipt and changed score bytes",
+    "Shared claim-bootstrap multiplicities and one-class strict undefined AUC preserved"
+  ]
+}

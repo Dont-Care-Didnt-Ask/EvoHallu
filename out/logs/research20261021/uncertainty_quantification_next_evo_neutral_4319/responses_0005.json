@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Max Negative Log-Prob (Score: 50.0655)**: This detector looks for the single most unlikely token in a sequence (`-min(logprobs)`). While hallucinated tokens are often low-probability, a single outlier in a long, coherent sequence might not trigger this if the rest of the sequence is highly probable. Conversely, a long sequence with many slightly unlikely tokens might not trigger it if the minimum is acceptable. The ROC-AUC near 0.5 suggests it fails to distinguish hallucinations from facts effectively, likely due to noise or the \"needle in a haystack\" problem.\n2.  **Average Negative Log-Prob (Score: 71.9965)**: This detector averages the negative log-probabilities across the sequence. It achieved a significant improvement. The hypothesis is that hallucinated atomic claims often consist of multiple tokens that are collectively less probable than the ground truth, or that the distribution of probabilities shifts significantly for hallucinations. Averaging smooths out single-token noise and captures the overall \"coherence penalty\" of the generated claim.\n\n### Proposed Detector\nThe average NLL detector is promising but sensitive to sequence length (longer sequences naturally accumulate higher total error, though the averaging helps, variance remains). A more robust signal for atomic claims (which are short, 10-25 tokens) is the **variance of the log-probabilities**.\n\n**Signal**: The variance of the sequence log-probabilities.\n**Aggregation Principle**: Hallucinated sequences often exhibit higher variance because they contain a mix of plausible context tokens (high prob) and specific hallucinated entities (very low prob), creating a bimodal or high-variance distribution. Factual sequences tend to be more uniformly probable (lower variance) as the model predicts the correct path consistently.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations using the variance of sequence log-probabilities.\n        \n        Approach: Computes the variance of log-probabilities within each sequence.\n        Hallucinated atomic claims often display higher variance due to the mixture \n        of high-probability context tokens and very low-probability hallucinated entities,\n        whereas factual claims tend to follow a more consistent probability distribution.\n        \n        Hypothesis for future: High-variance log-probability distributions are a stronger \n        indicator of semantic inconsistency (hallucination) than mean NLL for short atomic claims.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Calculate variance for each sequence\n        # If length < 2, variance is undefined; set to 0.0 as it implies no internal conflict\n        variances = np.array([\n            np.var(seq, ddof=0) if len(seq) > 1 else 0.0 \n            for seq in seq_logprobs\n        ], dtype=np.float32)\n        \n        return variances\n```",
+    "usage": {
+      "completion_tokens": 711,
+      "prompt_tokens": 954,
+      "total_tokens": 1665,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.39710994399502
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Max Negative Log-Prob (Score: 50.06)**: This approach looks for the single most unlikely token in the sequence. While effective for catching obvious outliers, it is highly sensitive to noise and may miss hallucinations where all tokens are slightly improbable but collectively wrong. The ROC-AUC near 50 suggests it performs no better than random, likely because the \"worst\" token in a hallucinated sequence isn't always distinct enough from the worst token in a coherent sequence, or the metric is too volatile across sequences of different lengths.\n2.  **Average Negative Log-Prob (Score: 71.99)**: This approach normalizes the total surprise by sequence length. It performed significantly better. The hypothesis that \"averaging amplifies the impact of low-confidence outliers\" holds some water, but the score suggests it's still not optimal. It treats a sequence of 10 hallucinated tokens the same as a sequence of 100 mixed tokens if their averages align, ignoring the *density* of errors.\n\n### Proposed Detector Strategy\nThe previous attempts rely solely on marginal probabilities of individual tokens. However, hallucinations often manifest as **semantic drift** or **incoherence** that isn't captured by a single token's log-prob. A more robust signal for atomic claims (10-25 tokens) is the **variance of the log-probabilities**.\n\n**Signal Family**: Statistical Dispersion of Confidence.\n**Aggregation Principle**: Compute the standard deviation of the negative log-probabilities within each sequence.\n**Hypothesis**: Hallucinated atomic claims often contain a mix of plausible-sounding filler and completely wrong specifics, leading to high variance in token confidence (some tokens look normal, others are impossible). Coherent factual claims tend to have a more consistent (lower variance) confidence profile.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations using the standard deviation of negative log-probabilities.\n        \n        Approach: Calculates the dispersion of token-level confidence within each sequence.\n        High variance suggests a mix of plausible and highly unlikely tokens, indicative of \n        semantic inconsistency or hallucination within the atomic claim.\n        \n        Hypothesis for future: Hallucinated atomic claims exhibit higher internal variance \n        in token confidence compared to coherent factual claims, as they often blend \n        correct context with specific, low-probability errors.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Calculate negative log-probs for each sequence\n        neg_logprobs = np.array([-seq for seq in seq_logprobs], dtype=np.float32)\n        \n        # Compute standard deviation for each sequence\n        # If a sequence has length 0 or 1, std is 0\n        std_devs = np.array([\n            np.std(seq) if len(seq) > 1 else 0.0 \n            for seq in neg_logprobs\n        ], dtype=np.float32)\n        \n        return std_devs\n```",
+    "usage": {
+      "completion_tokens": 730,
+      "prompt_tokens": 954,
+      "total_tokens": 1684,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.613852276001126
+  }
+]

@@ -1,0 +1,7 @@
+{
+  "common_method_predictions_identical": true,
+  "datasets": 9,
+  "arrays_compared": 540,
+  "original": "out/campaign/evaluation",
+  "extended": "out/campaign/evaluation_with_4b"
+}

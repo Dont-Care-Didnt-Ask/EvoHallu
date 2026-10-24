@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-21T22:47:58.531735+00:00",
+  "status": "replacement_waiting_verified",
+  "old_pid": 21679,
+  "new_pid": 22163,
+  "old_source_sha256": "ea1a246351edeb3250880ffd0d50a51c8d1ac628da6d62e576b796af5ef32fb4",
+  "new_source_sha256": "a787a8785c2fbc23ea151020ffeacfc0dd6ea24794707b07f762f669c9a887cf",
+  "archive": "results/overnight20261021/scheduling_restarts/late_waiting_before_glm60_20261021T224758Z",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/overnight_late_extensions.py",
+    "--execute",
+    "--prefer-devstral-breadth",
+    "--glm-max-job-minutes",
+    "60"
+  ],
+  "signal": "SIGKILL exact verified waiting pid only; avoid obsolete finally markers",
+  "scientific_jobs_untouched": true,
+  "markers_absent": {
+    "generation_complete.json": true,
+    "late_writer_decision.json": true,
+    "late_extensions_complete.json": true
+  }
+}

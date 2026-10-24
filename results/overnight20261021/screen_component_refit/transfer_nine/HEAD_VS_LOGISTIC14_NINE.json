@@ -1,0 +1,93 @@
+{
+  "status": "complete_saved500_paired_source9_target9_head_vs_logistic14",
+  "created_utc": "2026-10-22T00:41:55.779988+00:00",
+  "datasets": 9,
+  "shared_claim_bootstrap_replicates": 500,
+  "finite_common_replicates": 500,
+  "source_target_NLL_bootstrap_parity_verified": true,
+  "results": {
+    "directed": {
+      "source_head_minus_logistic14": {
+        "point_pp": 0.7434878891342009,
+        "paired_claim_bootstrap_ci95_pp": [
+          0.31985363377377746,
+          1.1113081833044425
+        ]
+      },
+      "target_head_minus_logistic14": {
+        "point_pp": -0.8421959109181358,
+        "paired_claim_bootstrap_ci95_pp": [
+          -1.321644191629023,
+          -0.34227132758049217
+        ]
+      },
+      "target_minus_source_change_in_head_advantage": {
+        "point_pp": -1.5856838000523368,
+        "paired_claim_bootstrap_ci95_pp": [
+          -2.095787143635623,
+          -1.076215465433563
+        ]
+      }
+    },
+    "folded": {
+      "source_head_minus_logistic14": {
+        "point_pp": 0.6140321391311687,
+        "paired_claim_bootstrap_ci95_pp": [
+          0.02214793984999099,
+          0.9118386912541768
+        ]
+      },
+      "target_head_minus_logistic14": {
+        "point_pp": -0.13981693993372346,
+        "paired_claim_bootstrap_ci95_pp": [
+          -0.5148268921243633,
+          0.4579017613734346
+        ]
+      },
+      "target_minus_source_change_in_head_advantage": {
+        "point_pp": -0.7538490790648922,
+        "paired_claim_bootstrap_ci95_pp": [
+          -1.0987494038896568,
+          0.17220509145297666
+        ]
+      }
+    }
+  },
+  "fitting": false,
+  "scoring": false,
+  "gpu_calls": 0,
+  "limits": [
+    "Both heads are frozen source-only fits; generated component pool was validation-informed.",
+    "Exploratory after previous benchmark viewing; intervals condition on the fitted heads.",
+    "Numerical point ranking is not a new model selection rule; preserve both fitted controls."
+  ],
+  "input_bootstrap_sha256": {
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/AVeriTeC__dev_filtered_10shot_bootstrap.npz": "a78eaf1874cabb1d77a12f826c6f521bf0a166213a209e0f98989faadcad58ff",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/AVeriTeC__dev_filtered_10shot_bootstrap.npz": "e7cee0c0fded319b9f2463dce00cc8edcd761bff47d42623f73a96fef65e6650",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/AVeriTeC__dev_filtered_10shot_bootstrap.npz": "95e6e02198f24e191e499240fe4d16777c9a039eaaa9d2052aa17b0869cdb9bc",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz": "688436bf33c21ffcf618a4983f3d4cb52da85fbf6b06463eaaf87313696814a1",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz": "0f9d55b1918fd06e62c34cffeec21c463d0b60260955f3310ad32f246e78c8b6",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz": "2ec4ad970c6a62ab6b798e6729ab982f7757a51e6fe7df9834e3efa9b09aa92e",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_bootstrap.npz": "a223bef2753b299dafe2e556cd7e5dbd6ef97bdaec3b4a83112c8f5c87af562b",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_bootstrap.npz": "bfa7f058ab503d8c2a5f922c27e1f24856ab32d033575774696292963b9ad430",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_bootstrap.npz": "12ce4bbc18902fd722793fbc4194746be1df512f206e0a17e2ee9c63891fb5a6",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/geometry__cities_bootstrap.npz": "d2d84c1596b0f4bbde16e88f59e6ed7b6c5dc98494b04d470333a64481abec35",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__cities_bootstrap.npz": "cf941742b2ce602081df3d6df20aa7987364e0e444e2e8b19448197457e5c485",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/geometry__cities_bootstrap.npz": "8a36c31d4f4d6607869cd0590e21b4511fe79aeff505c24fd8add03e64b7b905",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/geometry__common_claim_true_false_bootstrap.npz": "868fb63b7cbcde400e0c246849f9df8256a79d8a46dec1eca303fd73350a4a31",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__common_claim_true_false_bootstrap.npz": "d2f078c76873fcf046d286a8b1cc1a4eb24d8d2af3c3f6a41224b553db6aaeef",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/geometry__common_claim_true_false_bootstrap.npz": "d389630453620cba6c736b57c1a2db1d76627a438f920ba2e72b7b41dce310c3",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/geometry__companies_true_false_bootstrap.npz": "13a2f9374da24cbcc9bd2bd9c2477463d060c07d86c96662df96fa439c5194a9",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__companies_true_false_bootstrap.npz": "93d3c4de868adbdd0f97a31c8a69184dc46ad45dfcfd525858a252da33dcd7ff",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/geometry__companies_true_false_bootstrap.npz": "8b099fef3d3cae75317e842f5a4a7103b0e6a3d37abfa487d6bd1d240ed8b994",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/geometry__counterfact_true_false_bootstrap.npz": "13c7734360307e6e88f3a707db7fffcd5722dc361cae1922f8407c7f581a6d6c",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/geometry__counterfact_true_false_bootstrap.npz": "2a99ab321d53c408030b6ef753f6572cdc70393f3c3229d526971bfc9909897f",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/geometry__counterfact_true_false_bootstrap.npz": "a579b5d8752bf75ffab8dad8da2959a50888ef1d460fc055520b1f6ec5996701",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/popqa__popqa_test_filtered_10shot_bootstrap.npz": "2aa3a7828fd4394acc591a974f269784bb18a71e0fd948d898b7a639235ae8f8",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/popqa__popqa_test_filtered_10shot_bootstrap.npz": "f5394bcd2f76c2eb5acd9f64b01c60c453dc306cbf27003fe0197846b428afae",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/popqa__popqa_test_filtered_10shot_bootstrap.npz": "2361a15f560b1909dd3e15d6bab5696794f1ea15922a72068ec74fb6af16866c",
+    "results/overnight20261021/screen_component_refit/evaluations/source_nine/x-fact__test_filtered_10shot_bootstrap.npz": "66fe6ec3d4c85d87f012c3a52ab8c97c88e2529479066434af8b8bb304b6c6a2",
+    "results/overnight20261021/screen_component_refit/transfer_nine/target_nine/x-fact__test_filtered_10shot_bootstrap.npz": "4e99c2f41c0d65d43e517e63cb10e54b0a29af294e9cfac82690f0106620b3f3",
+    "results/overnight20261021/transfer_llama32_1b/d00b4c0d58d795bf/supervised/x-fact__test_filtered_10shot_bootstrap.npz": "ae34239bad6e730924b790d61b97073dd76bf6fcd8342f7ec04f7ac5cccf6fbe"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "status": "passed_original_proxy_reference",
+  "dataset": "popqa__popqa_test_filtered_10shot",
+  "rows": 6974,
+  "phase": "reference",
+  "parent_source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "8f78c1e2111a48e7d58d5fd6213b408c1413746d34a39e1bec591edcbc14dad9",
+  "reference_npz_sha256": "6fb262463d3c9fd6e0456cd4fcf8d764b52ee2e243d733490805a4cb31a87ad4",
+  "labels_groups_masks_exact": true,
+  "conditions": [
+    {
+      "case": "original_512",
+      "directed_auc_percent": 76.76257295045306,
+      "paper_auc_percent": 76.76257295045306,
+      "canonical_nll_byte_exact": true,
+      "original512_byte_exact": true,
+      "frozen_case_invariance_exact": false,
+      "spearman_vs_original512": 1.0,
+      "elapsed_seconds": 4.466935417003697
+    }
+  ]
+}

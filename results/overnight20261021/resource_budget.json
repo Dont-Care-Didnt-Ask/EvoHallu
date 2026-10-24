@@ -1,0 +1,18 @@
+{
+  "start_utc": "2026-10-21T18:16:28Z",
+  "deadline_utc": "2026-10-22T02:16:28Z",
+  "pod_id": "p4ta9o85on4ojb",
+  "pod_name": "qualified_fuchsia_sole",
+  "gpus": "2x A100-SXM4-80GB",
+  "hourly_cost_usd": 3.58,
+  "maximum_8h_compute_usd": 28.64,
+  "stop_authorized": true,
+  "writer": "Qwen/Qwen3.5-9B",
+  "writer_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+  "feature_model": "Llama3.1-8b-instruct",
+  "labels": "is_hallu",
+  "planned_requests_core": 1200,
+  "optional_27b_requests": 240,
+  "feature_transfer_remaining_rows": 41253,
+  "feature_transfer_gpu_window_reserved_minutes": 45
+}

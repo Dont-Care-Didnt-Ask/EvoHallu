@@ -1,0 +1,32 @@
+{
+  "created_utc": "2026-10-21T19:37:51.137941+00:00",
+  "status": "prepared_only_no_real_fit_or_benchmark_scoring",
+  "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_screen_component_logistic.py -q",
+  "passed": 2,
+  "real_training_or_benchmark_cache_opened": false,
+  "llm_calls": 0,
+  "gpu_calls": 0,
+  "synthetic_checks": [
+    "all_four_full_sources_and_all_eleven_drops_retained",
+    "exact_full_minus_drop_vectors_with_original_short_sequence_branches",
+    "twelve_columns_including_explicit_float64_total_nll",
+    "changed_outer_validation_labels_and_features_do_not_change_C_or_fit_coefficients",
+    "scaler_fitted_only_on_fit_rows",
+    "inner_and_outer_normalized_claim_groups_disjoint",
+    "frozen_wrapper_loads_through_existing_cached_evaluator",
+    "frozen_json_prediction_matches_sklearn_pipeline",
+    "row_chunk_partition_parity",
+    "source_artifact_and_module_hash_guards"
+  ],
+  "pinned_inputs": {
+    "scripts/fit_screen_component_logistic.py": "bf7089c93f04a5fd7012e816ccb06881cbde3e29a80bc9f7791001cde9fc0c3f",
+    "scripts/overnight_component_model.py": "e86f98e49d710317e685af1a57f5ee68ba4b1fd48ac5a919091f0cc0eb564a01",
+    "results/overnight20261021/screen_component_refit/component_pool.json": "e99a2ccb4992f996b2269b0bba3dc437a2cb98d987a7c78e9952417281aedc43",
+    "results/overnight20261021/screen_component_ablations/manifest.json": "cf29f4efb8587c5b4eabfd8285dfd2ef22ef71dde9862353595c0281a0981f18"
+  },
+  "new_core_or_execution_manifest_changes": false,
+  "note": "Synthetic labels only. Source program pool is validation-informed; actual outer validation must be labeled diagnostic.",
+  "elapsed_seconds": 11.74,
+  "extra_feature": "float64_total_nll",
+  "extra_feature_matches_canonical_sequence_logprob_numerics": false
+}

@@ -1,0 +1,64 @@
+READY 2026-10-21T18:26:46.864661+00:00
+Absolute deadline: 2026-10-22T02:16:28+00:00; generation cutoff: 2026-10-22T01:46:28+00:00
+Batch prompt_screen: 4 jobs, 120 requests
+next_prompt_original_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_prompt_original_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_prompt_neutral_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_prompt_neutral_2107 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_prompt_diverse_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_prompt_diverse_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_prompt_compositional_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_prompt_compositional_2107 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+Batch evolution_four_policies: 12 jobs, 720 requests
+next_evo_original_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_original_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_neutral_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_neutral_2107 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_evo_diverse_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_diverse_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_compositional_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_compositional_2107 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_evo_original_4319 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_original_4319 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_neutral_4319 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_neutral_4319 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_evo_diverse_4319 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_diverse_4319 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_compositional_4319 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_compositional_4319 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_evo_original_8741 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_original_8741 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_neutral_8741 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_neutral_8741 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_evo_diverse_8741 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_diverse_8741 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_compositional_8741 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_evo_compositional_8741 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+Batch feedback_control: 3 jobs, 180 requests
+next_fixed_neutral_2107 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_fixed_neutral_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_fixed_neutral_4319 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_fixed_neutral_4319 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_fixed_neutral_8741 .venv/bin/python src/experiments/main.py --config-name next_experiments/next_fixed_neutral_8741 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+{"utc": "2026-10-21T18:26:47.831051+00:00", "event": "controller_started", "selected_jobs": 19, "completed_skips": 0}
+{"utc": "2026-10-21T18:26:47.868362+00:00", "event": "batch_started", "batch": "prompt_screen", "pending": 4}
+{"utc": "2026-10-21T18:26:47.870738+00:00", "event": "job_started", "job": "next_prompt_original_2107", "port": 18000, "pid": 3496, "max_seconds": 5400}
+{"utc": "2026-10-21T18:26:47.872917+00:00", "event": "job_started", "job": "next_prompt_neutral_2107", "port": 18001, "pid": 3497, "max_seconds": 5400}
+{"utc": "2026-10-21T18:41:05.955414+00:00", "event": "job_finished", "job": "next_prompt_neutral_2107", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 858.079508862982, "error": null}
+{"utc": "2026-10-21T18:41:07.962104+00:00", "event": "job_started", "job": "next_prompt_diverse_2107", "port": 18001, "pid": 4606, "max_seconds": 5400}
+{"utc": "2026-10-21T18:45:55.999053+00:00", "event": "job_finished", "job": "next_prompt_original_2107", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1148.1248145389836, "error": null}
+{"utc": "2026-10-21T18:45:58.005740+00:00", "event": "job_started", "job": "next_prompt_compositional_2107", "port": 18000, "pid": 5028, "max_seconds": 5400}
+{"utc": "2026-10-21T18:54:58.077144+00:00", "event": "job_finished", "job": "next_prompt_diverse_2107", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 830.1125525090029, "error": null}
+{"utc": "2026-10-21T19:03:44.120442+00:00", "event": "job_finished", "job": "next_prompt_compositional_2107", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1066.1121755989734, "error": null}
+{"utc": "2026-10-21T19:03:44.127537+00:00", "event": "batch_started", "batch": "evolution_four_policies", "pending": 12}
+{"utc": "2026-10-21T19:03:44.131399+00:00", "event": "job_started", "job": "next_evo_original_2107", "port": 18000, "pid": 6200, "max_seconds": 5400}
+{"utc": "2026-10-21T19:03:44.133893+00:00", "event": "job_started", "job": "next_evo_neutral_2107", "port": 18001, "pid": 6201, "max_seconds": 5400}
+{"utc": "2026-10-21T19:34:14.287260+00:00", "event": "job_finished", "job": "next_evo_neutral_2107", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1830.1479398370138, "error": null}
+{"utc": "2026-10-21T19:34:16.291427+00:00", "event": "job_started", "job": "next_evo_diverse_2107", "port": 18001, "pid": 8870, "max_seconds": 5400}
+{"utc": "2026-10-21T19:44:28.366777+00:00", "event": "job_finished", "job": "next_evo_original_2107", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 2444.2292591009755, "error": null}
+{"utc": "2026-10-21T19:44:30.373883+00:00", "event": "job_started", "job": "next_evo_compositional_2107", "port": 18000, "pid": 9794, "max_seconds": 5400}
+{"utc": "2026-10-21T19:58:14.445754+00:00", "event": "job_finished", "job": "next_evo_diverse_2107", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1438.1502742670127, "error": null}
+{"utc": "2026-10-21T19:58:16.450192+00:00", "event": "job_started", "job": "next_evo_original_4319", "port": 18001, "pid": 11026, "max_seconds": 5400}
+{"utc": "2026-10-21T20:15:24.534965+00:00", "event": "job_finished", "job": "next_evo_compositional_2107", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1854.1562379850075, "error": null}
+{"utc": "2026-10-21T20:15:26.539356+00:00", "event": "job_started", "job": "next_evo_neutral_4319", "port": 18000, "pid": 11948, "max_seconds": 5400}
+{"utc": "2026-10-21T20:26:14.595751+00:00", "event": "job_finished", "job": "next_evo_original_4319", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1678.1404419599858, "error": null}
+{"utc": "2026-10-21T20:26:16.600205+00:00", "event": "job_started", "job": "next_evo_diverse_4319", "port": 18001, "pid": 12596, "max_seconds": 5400}
+{"utc": "2026-10-21T20:40:28.666623+00:00", "event": "job_finished", "job": "next_evo_neutral_4319", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1502.123328087997, "error": null}
+{"utc": "2026-10-21T20:40:30.670875+00:00", "event": "job_started", "job": "next_evo_compositional_4319", "port": 18000, "pid": 13645, "max_seconds": 5400}
+{"utc": "2026-10-21T20:50:34.720971+00:00", "event": "job_finished", "job": "next_evo_diverse_4319", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1458.1168565069966, "error": null}
+{"utc": "2026-10-21T20:50:36.726130+00:00", "event": "job_started", "job": "next_evo_original_8741", "port": 18001, "pid": 14354, "max_seconds": 5400}
+{"utc": "2026-10-21T21:17:00.854717+00:00", "event": "job_finished", "job": "next_evo_original_8741", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1584.1235656740027, "error": null}
+{"utc": "2026-10-21T21:17:02.859638+00:00", "event": "job_started", "job": "next_evo_neutral_8741", "port": 18001, "pid": 15925, "max_seconds": 5400}
+{"utc": "2026-10-21T21:19:14.877146+00:00", "event": "job_finished", "job": "next_evo_compositional_4319", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 2324.201692503004, "error": null}
+{"utc": "2026-10-21T21:19:16.881770+00:00", "event": "job_started", "job": "next_evo_diverse_8741", "port": 18000, "pid": 16058, "max_seconds": 5400}
+{"utc": "2026-10-21T21:40:18.980563+00:00", "event": "job_finished", "job": "next_evo_neutral_8741", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1396.116703414009, "error": null}
+{"utc": "2026-10-21T21:40:20.987434+00:00", "event": "job_started", "job": "next_evo_compositional_8741", "port": 18001, "pid": 17391, "max_seconds": 5400}
+{"utc": "2026-10-21T21:44:45.015879+00:00", "event": "job_finished", "job": "next_evo_diverse_8741", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1528.1296259749797, "error": null}
+{"utc": "2026-10-21T22:07:33.119087+00:00", "event": "job_finished", "job": "next_evo_compositional_8741", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1632.1272809329967, "error": null}
+{"utc": "2026-10-21T22:07:33.123851+00:00", "event": "batch_started", "batch": "feedback_control", "pending": 3}
+{"utc": "2026-10-21T22:07:33.128294+00:00", "event": "completed_skip", "job": "next_fixed_neutral_2107"}
+{"utc": "2026-10-21T22:07:33.132671+00:00", "event": "completed_skip", "job": "next_fixed_neutral_4319"}
+{"utc": "2026-10-21T22:07:35.138017+00:00", "event": "completed_skip", "job": "next_fixed_neutral_8741"}
+{"utc": "2026-10-21T22:07:35.140798+00:00", "event": "controller_stopped", "failed_jobs": [], "budget_stop": false, "unfinished_jobs": []}

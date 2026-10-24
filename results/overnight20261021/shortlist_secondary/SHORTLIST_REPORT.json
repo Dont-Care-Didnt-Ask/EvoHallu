@@ -1,0 +1,4211 @@
+{
+  "created_utc": "2026-10-21T22:17:16.795151+00:00",
+  "status": "incomplete_secondary_shortlist",
+  "slots": [
+    {
+      "job_id": "next_evo_original_2107",
+      "policy": "original",
+      "seed": 2107,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "744d5e48aae6eb6913c81fcc1653ff54b0eb2c13dcf38a702919fcb343d9ba93",
+      "validation_auc_percent": 76.9672,
+      "source_sha256": "39c2607087c09c58d6e49d5b700061d45bdb3218ced3139f98da2be7fde37d5b",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_2107__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_2107__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_2107__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 64.07686105885514,
+            "paper": 64.07686105885514,
+            "strict_directed": 64.07686105885514,
+            "strict_paper": 64.07686105885514
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.33967824826763,
+            "paper": 63.66032175173237,
+            "strict_directed": 36.33967824826763,
+            "strict_paper": 63.66032175173237
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.18523478033742,
+            "paper": 70.18523478033742,
+            "strict_directed": 70.18073684259143,
+            "strict_paper": 70.18073684259143
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.28817667076554,
+            "paper": 91.28817667076554,
+            "strict_directed": 91.27669322566558,
+            "strict_paper": 91.27669322566558
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 64.49132180280269,
+            "paper": 64.49132180280269,
+            "strict_directed": 64.49132180280269,
+            "strict_paper": 64.49132180280269
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 75.79541666666665,
+            "paper": 75.79541666666665,
+            "strict_directed": 75.79541666666665,
+            "strict_paper": 75.79541666666665
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.69179851485092,
+            "paper": 68.69179851485092,
+            "strict_directed": 68.69179851485092,
+            "strict_paper": 68.69179851485092
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.99404855573879,
+            "paper": 74.99404855573879,
+            "strict_directed": 74.77507556784063,
+            "strict_paper": 74.77507556784063
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.90948931825624,
+            "paper": 50.90948931825624,
+            "strict_directed": 50.90948931825624,
+            "strict_paper": 50.90948931825624
+          }
+        ],
+        "directed": 66.30800284628233,
+        "paper": 69.34362990222286,
+        "strict_directed": 66.28189680508854,
+        "strict_paper": 69.31752386102907
+      }
+    },
+    {
+      "job_id": "next_evo_original_2107",
+      "policy": "original",
+      "seed": 2107,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "e8f7a5d06ed750d9a1d8c8f7614ddb22a3eb4c9c21b9ea2fe70b270321a5407e",
+      "validation_auc_percent": 76.8033,
+      "source_sha256": "29a8152bad2fff03e96abd354a4cf40eb428323d70524e48de45f46a523fd4bf",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_2107__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_2107__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 64.03251814028488,
+            "paper": 64.03251814028488,
+            "strict_directed": 64.03251814028488,
+            "strict_paper": 64.03251814028488
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.46328839526019,
+            "paper": 63.53671160473981,
+            "strict_directed": 36.46328839526019,
+            "strict_paper": 63.53671160473981
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.31282636272408,
+            "paper": 70.31282636272408,
+            "strict_directed": 70.30832951724646,
+            "strict_paper": 70.30832951724646
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 92.50988375418228,
+            "paper": 92.50988375418228,
+            "strict_directed": 92.50003579379907,
+            "strict_paper": 92.50003579379907
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 64.31134452720617,
+            "paper": 64.31134452720617,
+            "strict_directed": 64.31134452720617,
+            "strict_paper": 64.31134452720617
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 74.82208333333334,
+            "paper": 74.82208333333334,
+            "strict_directed": 74.82208333333334,
+            "strict_paper": 74.82208333333334
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.53181316435627,
+            "paper": 68.53181316435627,
+            "strict_directed": 68.53181316435627,
+            "strict_paper": 68.53181316435627
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.94531050906085,
+            "paper": 74.94531050906085,
+            "strict_directed": 74.69140484284283,
+            "strict_paper": 74.69140484284283
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.54628755626618,
+            "paper": 50.54628755626618,
+            "strict_directed": 50.54628755626618,
+            "strict_paper": 50.54628755626618
+          }
+        ],
+        "directed": 66.2750395269638,
+        "paper": 69.28319766135043,
+        "strict_directed": 66.24523391895504,
+        "strict_paper": 69.25339205334166
+      }
+    },
+    {
+      "job_id": "next_evo_original_2107",
+      "policy": "original",
+      "seed": 2107,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "5de4874f7654cac2b4e319301be5e7d4782cf4136fb0989a1c934339bc31ef7b",
+      "validation_auc_percent": 76.1889,
+      "source_sha256": "bc08279e6bf8a06d80227c79f6cce6e8a34fd6a155eb21af11b0eaf42846f451",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_2107__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_2107__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.87530233808116,
+            "paper": 63.87530233808116,
+            "strict_directed": 63.87530233808116,
+            "strict_paper": 63.87530233808116
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.24754910915446,
+            "paper": 63.75245089084554,
+            "strict_directed": 36.24754910915446,
+            "strict_paper": 63.75245089084554
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.49265420927436,
+            "paper": 70.49265420927436,
+            "strict_directed": 70.4881872737152,
+            "strict_paper": 70.4881872737152
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.71694929794963,
+            "paper": 91.71694929794963,
+            "strict_directed": 91.70586087666173,
+            "strict_paper": 91.70586087666173
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.54153263476834,
+            "paper": 63.54153263476834,
+            "strict_directed": 63.54153263476834,
+            "strict_paper": 63.54153263476834
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.91694444444443,
+            "paper": 72.91694444444443,
+            "strict_directed": 72.91694444444443,
+            "strict_paper": 72.91694444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 67.70100857739766,
+            "paper": 67.70100857739766,
+            "strict_directed": 67.70100857739766,
+            "strict_paper": 67.70100857739766
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.35020631481858,
+            "paper": 74.35020631481858,
+            "strict_directed": 74.11990235606328,
+            "strict_paper": 74.11990235606328
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22578708430454,
+            "paper": 50.22578708430454,
+            "strict_directed": 50.22578708430454,
+            "strict_paper": 50.22578708430454
+          }
+        ],
+        "directed": 65.67421489002146,
+        "paper": 68.73031508798714,
+        "strict_directed": 65.64689718828787,
+        "strict_paper": 68.70299738625356
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_2107",
+      "policy": "neutral",
+      "seed": 2107,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_2107__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_2107__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_2107__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_2107",
+      "policy": "neutral",
+      "seed": 2107,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "dbb37c4a66a40ac42a17b7163dc8ab5dca37b607cbfc16d61446e0e23b904232",
+      "validation_auc_percent": 75.0156,
+      "source_sha256": "95771a951d94dce273ae01f979dfe81a6f26c072fb4e3831728a7c587e54936b",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_2107__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_2107__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 62.657887664606285,
+            "paper": 62.657887664606285,
+            "strict_directed": 62.657887664606285,
+            "strict_paper": 62.657887664606285
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 37.594595252883224,
+            "paper": 62.405404747116776,
+            "strict_directed": 37.594595252883224,
+            "strict_paper": 62.405404747116776
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 67.03273218630984,
+            "paper": 67.03273218630984,
+            "strict_directed": 67.02802685603764,
+            "strict_paper": 67.02802685603764
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 82.18565014727332,
+            "paper": 82.18565014727332,
+            "strict_directed": 82.16198125836681,
+            "strict_paper": 82.16198125836681
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 65.33205403358163,
+            "paper": 65.33205403358163,
+            "strict_directed": 65.33205403358163,
+            "strict_paper": 65.33205403358163
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 79.35388888888887,
+            "paper": 79.35388888888887,
+            "strict_directed": 79.35388888888887,
+            "strict_paper": 79.35388888888887
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 67.26295632674358,
+            "paper": 67.26295632674358,
+            "strict_directed": 67.26295632674358,
+            "strict_paper": 67.26295632674358
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 73.5380166534687,
+            "paper": 73.5380166534687,
+            "strict_directed": 73.25243558056448,
+            "strict_paper": 73.25243558056448
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 53.396839462413226,
+            "paper": 53.396839462413226,
+            "strict_directed": 53.396839462413226,
+            "strict_paper": 53.396839462413226
+          }
+        ],
+        "directed": 65.37273562401874,
+        "paper": 68.12949223448913,
+        "strict_directed": 65.3378517026762,
+        "strict_paper": 68.0946083131466
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_2107",
+      "policy": "neutral",
+      "seed": 2107,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "590810ba4d52711982ac2b7646cc9fa849f55efcf6cc1add86163d3af62474b2",
+      "validation_auc_percent": 69.922,
+      "source_sha256": "4cc1a1207c4bc6ccfb48b74fbe4ad0e0988bd177edd7f74d2f805f4b89888aed",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_2107__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_2107__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 56.151572158022034,
+            "paper": 56.151572158022034,
+            "strict_directed": 56.151572158022034,
+            "strict_paper": 56.151572158022034
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 49.701204437786956,
+            "paper": 50.298795562213044,
+            "strict_directed": 49.701204437786956,
+            "strict_paper": 50.298795562213044
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 55.369569394580566,
+            "paper": 55.369569394580566,
+            "strict_directed": 55.36531367504844,
+            "strict_paper": 55.36531367504844
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 87.12484629243045,
+            "paper": 87.12484629243045,
+            "strict_directed": 87.10940016751498,
+            "strict_paper": 87.10940016751498
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 70.49155409670496,
+            "paper": 70.49155409670496,
+            "strict_directed": 70.49155409670496,
+            "strict_paper": 70.49155409670496
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 69.54083333333334,
+            "paper": 69.54083333333334,
+            "strict_directed": 69.54083333333334,
+            "strict_paper": 69.54083333333334
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 64.52358996945021,
+            "paper": 64.52358996945021,
+            "strict_directed": 64.52358996945021,
+            "strict_paper": 64.52358996945021
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 70.40269466222982,
+            "paper": 70.40269466222982,
+            "strict_directed": 69.61451137968679,
+            "strict_paper": 69.61451137968679
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 57.080788914359836,
+            "paper": 57.080788914359836,
+            "strict_directed": 57.080788914359836,
+            "strict_paper": 57.080788914359836
+          }
+        ],
+        "directed": 64.48740591765535,
+        "paper": 64.55380493148046,
+        "strict_directed": 64.39764090354528,
+        "strict_paper": 64.4640399173704
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_2107",
+      "policy": "diverse",
+      "seed": 2107,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "231e2ec0f77946f643f2830d55c1f2e4e26ce04d1039347df8cfd5f36b3d5646",
+      "validation_auc_percent": 76.8771,
+      "source_sha256": "8839fa3cd06414c27e4d42119fe72ef98134ea07377a56b1c3bc25572ad7be8f",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_2107__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_2107__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_2107__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.16850309056705,
+            "paper": 63.16850309056705,
+            "strict_directed": 63.16850309056705,
+            "strict_paper": 63.16850309056705
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 38.294727996784914,
+            "paper": 61.705272003215086,
+            "strict_directed": 38.294727996784914,
+            "strict_paper": 61.705272003215086
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 69.01016891172684,
+            "paper": 69.01016891172684,
+            "strict_directed": 69.00580551045144,
+            "strict_paper": 69.00580551045144
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 92.81783508250166,
+            "paper": 92.81783508250166,
+            "strict_directed": 92.80839937289265,
+            "strict_paper": 92.80839937289265
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 66.7507940916551,
+            "paper": 66.7507940916551,
+            "strict_directed": 66.7507940916551,
+            "strict_paper": 66.7507940916551
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 79.22805555555556,
+            "paper": 79.22805555555556,
+            "strict_directed": 79.22805555555556,
+            "strict_paper": 79.22805555555556
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 71.0774785098384,
+            "paper": 71.0774785098384,
+            "strict_directed": 71.0774785098384,
+            "strict_paper": 71.0774785098384
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.94420125870603,
+            "paper": 74.94420125870603,
+            "strict_directed": 74.52691930008737,
+            "strict_paper": 74.52691930008737
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 54.406580493537014,
+            "paper": 54.406580493537014,
+            "strict_directed": 54.406580493537014,
+            "strict_paper": 54.406580493537014
+          }
+        ],
+        "directed": 67.7442605545414,
+        "paper": 70.34543211081142,
+        "strict_directed": 67.69636265792995,
+        "strict_paper": 70.29753421419997
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_2107",
+      "policy": "diverse",
+      "seed": 2107,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_2107__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_2107__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_2107",
+      "policy": "diverse",
+      "seed": 2107,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "340c827591d3b2020dc5de90cc423e83a91479a18c8c84b5a46ba318c1f1081a",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "1aaa9a65dfb97229dacc702736b52312dc23107b424bbae836401ded7c5307f1",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_2107__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_2107__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08483204598791,
+            "paper": 68.08483204598791,
+            "strict_directed": 68.08483204598791,
+            "strict_paper": 68.08483204598791
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64387890036745,
+        "paper": 68.71116963928145,
+        "strict_directed": 65.6176515541801,
+        "strict_paper": 68.68494229309408
+      }
+    },
+    {
+      "job_id": "next_evo_original_4319",
+      "policy": "original",
+      "seed": 4319,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "01ab33c6722e45a84279ed1f753c0d7a1905b2659bc9dc1ebdbae31dbbf32405",
+      "validation_auc_percent": 79.2061,
+      "source_sha256": "eabfdd5476779c29b48595b16544bb76a0bb471b61c8c6aef61bf526a837728f",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_4319__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_4319__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_4319__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 62.71701155603333,
+            "paper": 62.71701155603333,
+            "strict_directed": 62.71701155603333,
+            "strict_paper": 62.71701155603333
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 42.70456565951798,
+            "paper": 57.29543434048202,
+            "strict_directed": 42.70456565951798,
+            "strict_paper": 57.29543434048202
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 57.20913238119791,
+            "paper": 57.20913238119791,
+            "strict_directed": 57.20299503235603,
+            "strict_paper": 57.20299503235603
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 96.71780720066344,
+            "paper": 96.71780720066344,
+            "strict_directed": 96.71341336826808,
+            "strict_paper": 96.71341336826808
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 68.31780835753061,
+            "paper": 68.31780835753061,
+            "strict_directed": 68.31780835753061,
+            "strict_paper": 68.31780835753061
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 89.76833333333335,
+            "paper": 89.76833333333335,
+            "strict_directed": 89.76833333333335,
+            "strict_paper": 89.76833333333335
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 77.00828524068052,
+            "paper": 77.00828524068052,
+            "strict_directed": 77.00828524068052,
+            "strict_paper": 77.00828524068052
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 79.43660197418976,
+            "paper": 79.43660197418976,
+            "strict_directed": 78.69705218204021,
+            "strict_paper": 78.69705218204021
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 47.97096633340397,
+            "paper": 52.02903366659603,
+            "strict_directed": 47.97096633340397,
+            "strict_paper": 52.02903366659603
+          }
+        ],
+        "directed": 69.09450133739455,
+        "paper": 71.16660533896743,
+        "strict_directed": 69.01115900701822,
+        "strict_paper": 71.08326300859113
+      }
+    },
+    {
+      "job_id": "next_evo_original_4319",
+      "policy": "original",
+      "seed": 4319,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "eb27fb1fd2fb839805186f1b9c6f8dd292a24f858d8c33eb2944fd269f8e0b92",
+      "validation_auc_percent": 78.7959,
+      "source_sha256": "510149dc343d8f67280cf03cd993e7921ed3d4416dd7e18fc29ef504f74464b3",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_4319__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_4319__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 62.703574307981725,
+            "paper": 62.703574307981725,
+            "strict_directed": 62.703574307981725,
+            "strict_paper": 62.703574307981725
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 41.749540267679905,
+            "paper": 58.250459732320095,
+            "strict_directed": 41.749540267679905,
+            "strict_paper": 58.250459732320095
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 58.46426168044323,
+            "paper": 58.46426168044323,
+            "strict_directed": 58.45837029760548,
+            "strict_paper": 58.45837029760548
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 94.67814349852728,
+            "paper": 94.67814349852728,
+            "strict_directed": 94.67101919263506,
+            "strict_paper": 94.67101919263506
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 67.68614063880823,
+            "paper": 67.68614063880823,
+            "strict_directed": 67.68614063880823,
+            "strict_paper": 67.68614063880823
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 89.00916666666666,
+            "paper": 89.00916666666666,
+            "strict_directed": 89.00916666666666,
+            "strict_paper": 89.00916666666666
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 74.93368603375457,
+            "paper": 74.93368603375457,
+            "strict_directed": 74.93368603375457,
+            "strict_paper": 74.93368603375457
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 78.86802208247329,
+            "paper": 78.86802208247329,
+            "strict_directed": 78.18148400966165,
+            "strict_paper": 78.18148400966165
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 48.55658402522266,
+            "paper": 51.44341597477734,
+            "strict_directed": 48.55658402522266,
+            "strict_paper": 51.44341597477734
+          }
+        ],
+        "directed": 68.51656880017306,
+        "paper": 70.67076340175026,
+        "strict_directed": 68.43884060444621,
+        "strict_paper": 70.59303520602342
+      }
+    },
+    {
+      "job_id": "next_evo_original_4319",
+      "policy": "original",
+      "seed": 4319,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "471c8b58668fd9fdba3ef7e4f00604f5c47ee1a48340e5c2c207e282e1d30626",
+      "validation_auc_percent": 78.7667,
+      "source_sha256": "ccb01623193442c26d57d7300982dfb7b278c8e05f91a848976b5ef6da0b2ad2",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_4319__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_4319__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 62.76269819940876,
+            "paper": 62.76269819940876,
+            "strict_directed": 62.76269819940876,
+            "strict_paper": 62.76269819940876
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 41.77864649933628,
+            "paper": 58.22135350066372,
+            "strict_directed": 41.77864649933628,
+            "strict_paper": 58.22135350066372
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 58.345778177617035,
+            "paper": 58.345778177617035,
+            "strict_directed": 58.339897859325454,
+            "strict_paper": 58.339897859325454
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 94.62774171408964,
+            "paper": 94.62774171408964,
+            "strict_directed": 94.6205499359291,
+            "strict_paper": 94.6205499359291
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 67.74819340992299,
+            "paper": 67.74819340992299,
+            "strict_directed": 67.74819340992299,
+            "strict_paper": 67.74819340992299
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 89.12333333333333,
+            "paper": 89.12333333333333,
+            "strict_directed": 89.12333333333333,
+            "strict_paper": 89.12333333333333
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 75.01632342579872,
+            "paper": 75.01632342579872,
+            "strict_directed": 75.01632342579872,
+            "strict_paper": 75.01632342579872
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 78.84434849588527,
+            "paper": 78.84434849588527,
+            "strict_directed": 78.15627577924467,
+            "strict_paper": 78.15627577924467
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 48.77394322333738,
+            "paper": 51.22605677666262,
+            "strict_directed": 48.77394322333738,
+            "strict_paper": 51.22605677666262
+          }
+        ],
+        "directed": 68.55788960874771,
+        "paper": 70.65731411482022,
+        "strict_directed": 68.47998462951517,
+        "strict_paper": 70.5794091355877
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_4319",
+      "policy": "neutral",
+      "seed": 4319,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_4319__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_4319__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_4319__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_4319",
+      "policy": "neutral",
+      "seed": 4319,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "d1be0234c85d474716a33f2cc3d1d5c6b644797c5c9e32364f0d68f0cdf5aaec",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "f3371a5fe4aae6909a4c085d1dd50b6bbb9cf9edc90f6d457b390568fbce4924",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_4319__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_4319__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_4319",
+      "policy": "neutral",
+      "seed": 4319,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "9fd7b901da80d0a2928d401c5942e80c9911707ce1f8bd04f75301dd80866d10",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "c34d936fbf32744333048e89f78bbfe4840c6b48946e0e7042e3efcaf45785df",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_4319__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_4319__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_4319",
+      "policy": "diverse",
+      "seed": 4319,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "4edc60e6fc8a6b4f83ba7c14cfc002c152eae013b4c9febcb3a40762df0427db",
+      "validation_auc_percent": 79.5207,
+      "source_sha256": "403f7b69e0eaf01e68b12f57004088d758f6518914f9585517717f725d0763fc",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_4319__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_4319__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_4319__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 65.59527008868584,
+            "paper": 65.59527008868584,
+            "strict_directed": 65.59527008868584,
+            "strict_paper": 65.59527008868584
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 40.324857208968126,
+            "paper": 59.675142791031874,
+            "strict_directed": 40.324857208968126,
+            "strict_paper": 59.675142791031874
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 65.05077379806559,
+            "paper": 65.05077379806559,
+            "strict_directed": 65.04558677062721,
+            "strict_paper": 65.04558677062721
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 96.10083216563243,
+            "paper": 96.10083216563243,
+            "strict_directed": 96.09561239610849,
+            "strict_paper": 96.09561239610849
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 69.18503219290494,
+            "paper": 69.18503219290494,
+            "strict_directed": 69.18503219290494,
+            "strict_paper": 69.18503219290494
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 86.68416666666666,
+            "paper": 86.68416666666666,
+            "strict_directed": 86.68416666666666,
+            "strict_paper": 86.68416666666666
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 72.08769357455557,
+            "paper": 72.08769357455557,
+            "strict_directed": 72.08769357455557,
+            "strict_paper": 72.08769357455557
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 78.93672088812676,
+            "paper": 78.93672088812676,
+            "strict_directed": 78.32871371944395,
+            "strict_paper": 78.32871371944395
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 54.75529431783887,
+            "paper": 54.75529431783887,
+            "strict_directed": 54.75529431783887,
+            "strict_paper": 54.75529431783887
+          }
+        ],
+        "directed": 69.85784898904942,
+        "paper": 72.00788072038985,
+        "strict_directed": 69.78913632619998,
+        "strict_paper": 71.93916805754037
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_4319",
+      "policy": "diverse",
+      "seed": 4319,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_4319__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_4319__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_4319",
+      "policy": "diverse",
+      "seed": 4319,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "5cf493157feebed529dbcebcef99ee2d5f13327dc56e26775ea400024e9c1527",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "c349d6fbea77afb5381ba5e45b38d3ed3ff3ea610b72e7082a5c6c80fa7cb68a",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_4319__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_4319__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_original_8741",
+      "policy": "original",
+      "seed": 8741,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "74adf6f7b19dedf77b0681fa0f201fb76106b2a617e9b0c80da3ab04ddd41af2",
+      "validation_auc_percent": 78.454,
+      "source_sha256": "baf4ddab41363eb2beac71c0cf9e753e543f09d911b81240ebd1eeeaff64f4fc",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_8741__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_8741__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_8741__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 60.967481859715136,
+            "paper": 60.967481859715136,
+            "strict_directed": 60.967481859715136,
+            "strict_paper": 60.967481859715136
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 44.81622885535786,
+            "paper": 55.18377114464214,
+            "strict_directed": 44.81622885535786,
+            "strict_paper": 55.18377114464214
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 55.39792101560901,
+            "paper": 55.39792101560901,
+            "strict_directed": 55.39450513354696,
+            "strict_paper": 55.39450513354696
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 95.13175955846606,
+            "paper": 95.13175955846606,
+            "strict_directed": 95.1254214719842,
+            "strict_paper": 95.1254214719842
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 69.20650422926398,
+            "paper": 69.20650422926398,
+            "strict_directed": 69.20650422926398,
+            "strict_paper": 69.20650422926398
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 86.49666666666667,
+            "paper": 86.49666666666667,
+            "strict_directed": 86.49666666666667,
+            "strict_paper": 86.49666666666667
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 73.69536759545265,
+            "paper": 73.69536759545265,
+            "strict_directed": 73.69536759545265,
+            "strict_paper": 73.69536759545265
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 77.3444695938385,
+            "paper": 77.3444695938385,
+            "strict_directed": 76.59852886666766,
+            "strict_paper": 76.59852886666766
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 49.54657972298742,
+            "paper": 50.45342027701258,
+            "strict_directed": 49.54657972298742,
+            "strict_paper": 50.45342027701258
+          }
+        ],
+        "directed": 68.06699767748415,
+        "paper": 69.31970688229632,
+        "strict_directed": 67.98303160018251,
+        "strict_paper": 69.23574080499468
+      }
+    },
+    {
+      "job_id": "next_evo_original_8741",
+      "policy": "original",
+      "seed": 8741,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "b906e278fe072edd30d45abda809689379f5e0a54a16d54ab5938433ed7571d4",
+      "validation_auc_percent": 76.1852,
+      "source_sha256": "38cb7772bfdb4f781467ab9323ee4e535c688aa9d0e5fc6d382fe4b4e6a19a14",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_8741__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_8741__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.840365493147,
+            "paper": 63.840365493147,
+            "strict_directed": 63.840365493147,
+            "strict_paper": 63.840365493147
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.13380341724209,
+            "paper": 63.86619658275791,
+            "strict_directed": 36.13380341724209,
+            "strict_paper": 63.86619658275791
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.56696877772201,
+            "paper": 70.56696877772201,
+            "strict_directed": 70.56250764186807,
+            "strict_paper": 70.56250764186807
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 92.62561125568361,
+            "paper": 92.62561125568361,
+            "strict_directed": 92.61591821832786,
+            "strict_paper": 92.61591821832786
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.47807600050499,
+            "paper": 63.47807600050499,
+            "strict_directed": 63.47807600050499,
+            "strict_paper": 63.47807600050499
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 73.47333333333333,
+            "paper": 73.47333333333333,
+            "strict_directed": 73.47333333333333,
+            "strict_paper": 73.47333333333333
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.83908401769912,
+            "paper": 68.83908401769912,
+            "strict_directed": 68.83908401769912,
+            "strict_paper": 68.83908401769912
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.42748025793001,
+            "paper": 74.42748025793001,
+            "strict_directed": 74.20880333741187,
+            "strict_paper": 74.20880333741187
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.21049649078873,
+            "paper": 50.21049649078873,
+            "strict_directed": 50.21049649078873,
+            "strict_paper": 50.21049649078873
+          }
+        ],
+        "directed": 65.95502433822787,
+        "paper": 69.03640135661853,
+        "strict_directed": 65.92915421670256,
+        "strict_paper": 69.01053123509321
+      }
+    },
+    {
+      "job_id": "next_evo_original_8741",
+      "policy": "original",
+      "seed": 8741,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "09061240720756834dac5589a2f552001250b6bde3fcf7b4ec31df75b183127e",
+      "validation_auc_percent": 76.0972,
+      "source_sha256": "1998aad097ac6435bc260da7e1396637d8f828c4875d77514775e9dca08971ca",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_original_8741__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_original_8741__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_original_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "incomplete",
+        "missing_datasets": [
+          "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+          "x-fact__test_filtered_10shot"
+        ]
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_8741",
+      "policy": "neutral",
+      "seed": 8741,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_8741__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_8741__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_8741__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_8741",
+      "policy": "neutral",
+      "seed": 8741,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "fbe7c4ecab2f78ae6b6d8aad263245458a9d59a6326be844c098091ac0a56871",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "ea30bd02ddd1f27b5548e7f18bbe6b1ba70e78421b0747c8136ffa87b3ba0782",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_8741__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_8741__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_neutral_8741",
+      "policy": "neutral",
+      "seed": 8741,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "28cf5c3c503edf939cea542c7e6e3b70e2589e26adaf78995ceb6505f46b3bb4",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "d33633252a94e919b9b8e25368898b015550bfc863395a2862fa2151a22c4274",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_neutral_8741__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_neutral_8741__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_neutral_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_8741",
+      "policy": "diverse",
+      "seed": 8741,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "271d0a456048e7672fec6ea3b8ac5bd427fa1c9efead76d9cb51e51c3be0d71f",
+      "validation_auc_percent": 75.7622,
+      "source_sha256": "66be09b1f829a618d937133de49375a6cbb598028ec21532133ac00e265317d7",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_8741__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_8741__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_8741__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366835,
+            "paper": 63.76780435366835,
+            "strict_directed": 63.76780435366835,
+            "strict_paper": 63.76780435366835
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.191650530366694,
+            "paper": 63.808349469633306,
+            "strict_directed": 36.191650530366694,
+            "strict_paper": 63.808349469633306
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.687056892754,
+            "paper": 70.687056892754,
+            "strict_directed": 70.682614454565,
+            "strict_paper": 70.682614454565
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.92981640881924,
+            "paper": 91.92981640881924,
+            "strict_directed": 91.91919191919192,
+            "strict_paper": 91.91919191919192
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26277995202626,
+            "paper": 63.26277995202626,
+            "strict_directed": 63.26277995202626,
+            "strict_paper": 63.26277995202626
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58055555555558,
+            "paper": 72.58055555555558,
+            "strict_directed": 72.58055555555558,
+            "strict_paper": 72.58055555555558
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08493657792746,
+            "paper": 68.08493657792746,
+            "strict_directed": 68.08493657792746,
+            "strict_paper": 68.08493657792746
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.0526628388142,
+            "paper": 74.0526628388142,
+            "strict_directed": 73.8327131265924,
+            "strict_paper": 73.8327131265924
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.23108461276672,
+            "paper": 50.23108461276672,
+            "strict_directed": 50.23108461276672,
+            "strict_paper": 50.23108461276672
+          }
+        ],
+        "directed": 65.6431497469665,
+        "paper": 68.71167185132946,
+        "strict_directed": 65.61703678696226,
+        "strict_paper": 68.68555889132523
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_8741",
+      "policy": "diverse",
+      "seed": 8741,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_8741__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_8741__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_diverse_8741",
+      "policy": "diverse",
+      "seed": 8741,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "f0e42511c796623ec4534fcd24e8242870a605b3de059131f4b4dd76de8a5a56",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "4f46896ac00150bd63559a4b91130a940be80d7b698e2ea0350a3b3b115481f6",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_diverse_8741__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_diverse_8741__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_diverse_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_2107",
+      "policy": "compositional",
+      "seed": 2107,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "697c9e4d98162be91a3f5af352b353aba17226e234d432d28f7a02ee90c53e70",
+      "validation_auc_percent": 76.8237,
+      "source_sha256": "0be32c5d64072ed4a7cfebea20f705755ecbd63b92e3fa35db2e33916100758c",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_2107__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_2107__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_2107__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 62.218489653319,
+            "paper": 62.218489653319,
+            "strict_directed": 62.218489653319,
+            "strict_paper": 62.218489653319
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 45.34781337912389,
+            "paper": 54.65218662087611,
+            "strict_directed": 45.34781337912389,
+            "strict_paper": 54.65218662087611
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 58.06497572888194,
+            "paper": 58.06497572888194,
+            "strict_directed": 58.059400281647875,
+            "strict_paper": 58.059400281647875
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 98.81421759272499,
+            "paper": 98.81421759272499,
+            "strict_directed": 98.81388298291202,
+            "strict_paper": 98.81388298291202
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 67.9531372301477,
+            "paper": 67.9531372301477,
+            "strict_directed": 67.9531372301477,
+            "strict_paper": 67.9531372301477
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 86.57305555555557,
+            "paper": 86.57305555555557,
+            "strict_directed": 86.57305555555557,
+            "strict_paper": 86.57305555555557
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 78.34912347658793,
+            "paper": 78.34912347658793,
+            "strict_directed": 78.34912347658793,
+            "strict_paper": 78.34912347658793
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 76.91139066774457,
+            "paper": 76.91139066774457,
+            "strict_directed": 76.07142336410357,
+            "strict_paper": 76.07142336410357
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 47.444504376079564,
+            "paper": 52.555495623920436,
+            "strict_directed": 47.444504376079564,
+            "strict_paper": 52.555495623920436
+          }
+        ],
+        "directed": 69.07518974001833,
+        "paper": 70.6768969055287,
+        "strict_directed": 68.98120336660857,
+        "strict_paper": 70.58291053211892
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_2107",
+      "policy": "compositional",
+      "seed": 2107,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "268adb1b9a7fa9537bbf4a6007becda12b37b9d0e1b690f4d5878a56e98d745b",
+      "validation_auc_percent": 76.5968,
+      "source_sha256": "01007544fff361f09bd1d0d6be5eae5e07b199c8f8e97ee4396e3a4ef2b5ac66",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_2107__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_2107__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 61.542596076323576,
+            "paper": 61.542596076323576,
+            "strict_directed": 61.542596076323576,
+            "strict_paper": 61.542596076323576
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 45.471849768002635,
+            "paper": 54.528150231997365,
+            "strict_directed": 45.471849768002635,
+            "strict_paper": 54.528150231997365
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 57.555996660628914,
+            "paper": 57.555996660628914,
+            "strict_directed": 57.550474701297375,
+            "strict_paper": 57.550474701297375
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 98.7689096056507,
+            "paper": 98.7689096056507,
+            "strict_directed": 98.7685143425753,
+            "strict_paper": 98.7685143425753
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 67.2651735891933,
+            "paper": 67.2651735891933,
+            "strict_directed": 67.2651735891933,
+            "strict_paper": 67.2651735891933
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 86.58250000000001,
+            "paper": 86.58250000000001,
+            "strict_directed": 86.58250000000001,
+            "strict_paper": 86.58250000000001
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 79.10351286669159,
+            "paper": 79.10351286669159,
+            "strict_directed": 79.10351286669159,
+            "strict_paper": 79.10351286669159
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 76.54067115278929,
+            "paper": 76.54067115278929,
+            "strict_directed": 75.6827123173072,
+            "strict_paper": 75.6827123173072
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 46.458361426287304,
+            "paper": 53.541638573712696,
+            "strict_directed": 46.458361426287304,
+            "strict_paper": 53.541638573712696
+          }
+        ],
+        "directed": 68.80995234950747,
+        "paper": 70.60323875077638,
+        "strict_directed": 68.71396612085314,
+        "strict_paper": 70.50725252212204
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_2107",
+      "policy": "compositional",
+      "seed": 2107,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "3e00401895e976ce642a110e8fee19aa1e35d9db1e28a2758b96b5a18afaa227",
+      "validation_auc_percent": 76.5376,
+      "source_sha256": "eaa431c6f8e2df9ee5d526f9cefbaaac63186806f51ec0096fe8098d254e4dfa",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_2107__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_2107__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_2107__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 61.824778285407156,
+            "paper": 61.824778285407156,
+            "strict_directed": 61.824778285407156,
+            "strict_paper": 61.824778285407156
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 45.32065568180434,
+            "paper": 54.67934431819566,
+            "strict_directed": 45.32065568180434,
+            "strict_paper": 54.67934431819566
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 57.50214970815571,
+            "paper": 57.50214970815571,
+            "strict_directed": 57.49639345498765,
+            "strict_paper": 57.49639345498765
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 98.78106322743001,
+            "paper": 98.78106322743001,
+            "strict_directed": 98.78068423426325,
+            "strict_paper": 98.78068423426325
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 67.28732230778942,
+            "paper": 67.28732230778942,
+            "strict_directed": 67.28732230778942,
+            "strict_paper": 67.28732230778942
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 86.60083333333334,
+            "paper": 86.60083333333334,
+            "strict_directed": 86.60083333333334,
+            "strict_paper": 86.60083333333334
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 78.39821746968781,
+            "paper": 78.39821746968781,
+            "strict_directed": 78.39821746968781,
+            "strict_paper": 78.39821746968781
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 76.50266927016727,
+            "paper": 76.50266927016727,
+            "strict_directed": 75.65026733833324,
+            "strict_paper": 75.65026733833324
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 46.65766086828097,
+            "paper": 53.34233913171903,
+            "strict_directed": 46.65766086828097,
+            "strict_paper": 53.34233913171903
+          }
+        ],
+        "directed": 68.76392779467288,
+        "paper": 70.54652411687614,
+        "strict_directed": 68.66853477487636,
+        "strict_paper": 70.4511310970796
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_4319",
+      "policy": "compositional",
+      "seed": 4319,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "4803d0d3622d864a5449a6f4233e43e57d3b65699dad5adee8630d905ca180b2",
+      "validation_auc_percent": 76.6394,
+      "source_sha256": "71795a8c291b410a69ad1dc49e6af3ce1d6e0ae8ae7fbb819a83844f0d4aaf91",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_4319__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_4319__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_4319__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 61.99946251007794,
+            "paper": 61.99946251007794,
+            "strict_directed": 61.99946251007794,
+            "strict_paper": 61.99946251007794
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 45.23297163664706,
+            "paper": 54.76702836335294,
+            "strict_directed": 45.23297163664706,
+            "strict_paper": 54.76702836335294
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 54.77643455299809,
+            "paper": 54.77643455299809,
+            "strict_directed": 54.770492021881076,
+            "strict_paper": 54.770492021881076
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 98.38848337098575,
+            "paper": 98.38848337098575,
+            "strict_directed": 98.38775780483789,
+            "strict_paper": 98.38775780483789
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 68.05781088246434,
+            "paper": 68.05781088246434,
+            "strict_directed": 68.05781088246434,
+            "strict_paper": 68.05781088246434
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 83.42625,
+            "paper": 83.42625,
+            "strict_directed": 83.42625,
+            "strict_paper": 83.42625
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 82.063893217938,
+            "paper": 82.063893217938,
+            "strict_directed": 82.063893217938,
+            "strict_paper": 82.063893217938
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 76.06527978569973,
+            "paper": 76.06527978569973,
+            "strict_directed": 75.09727808630939,
+            "strict_paper": 75.09727808630939
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 53.72528622706811,
+            "paper": 53.72528622706811,
+            "strict_directed": 53.72528622706811,
+            "strict_paper": 53.72528622706811
+          }
+        ],
+        "directed": 69.30398579820877,
+        "paper": 70.36332543450943,
+        "strict_directed": 69.19568915413598,
+        "strict_paper": 70.25502879043663
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_4319",
+      "policy": "compositional",
+      "seed": 4319,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_4319__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_4319__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_4319",
+      "policy": "compositional",
+      "seed": 4319,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "f262c47ef5e92c80a858d8b4aa8d49caf009454336a51ffa8d7b0caf6353e461",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "8739474b1854a0a78289961abc491661599e2274d2e6c45d593872ca314a9593",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_4319__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_4319__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_4319__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_8741",
+      "policy": "compositional",
+      "seed": 8741,
+      "validation_rank": 1,
+      "status": "frozen",
+      "candidate": "eac31045503bb9c0506ddd333e56ffd578caa83456c74cc20081ddbe2e2a62d6",
+      "validation_auc_percent": 78.2742,
+      "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_8741__primary/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_8741__primary",
+      "staged_role": "primary",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_8741__primary",
+      "predictions_from": "original primary reference",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.84305294275732,
+            "paper": 63.84305294275732,
+            "strict_directed": 63.84305294275732,
+            "strict_paper": 63.84305294275732
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 38.96009158111383,
+            "paper": 61.03990841888617,
+            "strict_directed": 38.96009158111383,
+            "strict_paper": 61.03990841888617
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 65.68062288910512,
+            "paper": 65.68062288910512,
+            "strict_directed": 65.67554669242588,
+            "strict_paper": 65.67554669242588
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.12231547942463,
+            "paper": 91.12231547942463,
+            "strict_directed": 91.11060999792396,
+            "strict_paper": 91.11060999792396
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 51.88981189243782,
+            "paper": 51.88981189243782,
+            "strict_directed": 51.88981189243782,
+            "strict_paper": 51.88981189243782
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 84.3801388888889,
+            "paper": 84.3801388888889,
+            "strict_directed": 84.3801388888889,
+            "strict_paper": 84.3801388888889
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 71.04836166660462,
+            "paper": 71.04836166660462,
+            "strict_directed": 71.04836166660462,
+            "strict_paper": 71.04836166660462
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 76.76257295045306,
+            "paper": 76.76257295045306,
+            "strict_directed": 76.42063995597489,
+            "strict_paper": 76.42063995597489
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 54.92268819068534,
+            "paper": 54.92268819068534,
+            "strict_directed": 54.92268819068534,
+            "strict_paper": 54.92268819068534
+          }
+        ],
+        "directed": 66.51218405349672,
+        "paper": 68.96549703547143,
+        "strict_directed": 66.47232686764585,
+        "strict_paper": 68.92563984962055
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_8741",
+      "policy": "compositional",
+      "seed": 8741,
+      "validation_rank": 2,
+      "status": "frozen",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_8741__valrank02/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_8741__valrank02",
+      "staged_role": "valrank02",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    },
+    {
+      "job_id": "next_evo_compositional_8741",
+      "policy": "compositional",
+      "seed": 8741,
+      "validation_rank": 3,
+      "status": "frozen",
+      "candidate": "e9aaab3599074fdb2adf7ca91ece01ea4e34341b69095c238e36f71e79edee5d",
+      "validation_auc_percent": 75.7504,
+      "source_sha256": "259e8fb77c92404188deef700741be22b2250ca9bc63095434223e14857fe3bd",
+      "staged_file": "results/overnight20261021/shortlist_secondary/frozen/next_evo_compositional_8741__valrank03/frozen_estimator.py",
+      "staged_method": "new/next_evo_compositional_8741__valrank03",
+      "staged_role": "valrank03",
+      "aliases_earlier_source": false,
+      "original_primary_method": "new/next_evo_compositional_8741__primary",
+      "predictions_from": "isolated secondary evaluation",
+      "metrics": {
+        "status": "complete",
+        "per_dataset": [
+          {
+            "dataset": "AVeriTeC__dev_filtered_10shot",
+            "directed": 63.76780435366837,
+            "paper": 63.76780435366837,
+            "strict_directed": 63.76780435366837,
+            "strict_paper": 63.76780435366837
+          },
+          {
+            "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+            "directed": 36.19719167488705,
+            "paper": 63.80280832511295,
+            "strict_directed": 36.19719167488705,
+            "strict_paper": 63.80280832511295
+          },
+          {
+            "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+            "directed": 70.68591510605297,
+            "paper": 70.68591510605297,
+            "strict_directed": 70.6814726670195,
+            "strict_paper": 70.6814726670195
+          },
+          {
+            "dataset": "geometry__cities",
+            "directed": 91.93696559810117,
+            "paper": 91.93696559810117,
+            "strict_directed": 91.92635067900837,
+            "strict_paper": 91.92635067900837
+          },
+          {
+            "dataset": "geometry__common_claim_true_false",
+            "directed": 63.26080040398939,
+            "paper": 63.26080040398939,
+            "strict_directed": 63.26080040398939,
+            "strict_paper": 63.26080040398939
+          },
+          {
+            "dataset": "geometry__companies_true_false",
+            "directed": 72.58069444444443,
+            "paper": 72.58069444444443,
+            "strict_directed": 72.58069444444443,
+            "strict_paper": 72.58069444444443
+          },
+          {
+            "dataset": "geometry__counterfact_true_false",
+            "directed": 68.08486277916116,
+            "paper": 68.08486277916116,
+            "strict_directed": 68.08486277916116,
+            "strict_paper": 68.08486277916116
+          },
+          {
+            "dataset": "popqa__popqa_test_filtered_10shot",
+            "directed": 74.05170876856083,
+            "paper": 74.05170876856083,
+            "strict_directed": 73.83072001100092,
+            "strict_paper": 73.83072001100092
+          },
+          {
+            "dataset": "x-fact__test_filtered_10shot",
+            "directed": 50.22899770761495,
+            "paper": 50.22899770761495,
+            "strict_directed": 50.22899770761495,
+            "strict_paper": 50.22899770761495
+          }
+        ],
+        "directed": 65.64388231516448,
+        "paper": 68.71117305407847,
+        "strict_directed": 65.61765496897712,
+        "strict_paper": 68.68494570789113
+      }
+    }
+  ],
+  "policy_rank_all_seed_groups": [
+    {
+      "policy": "original",
+      "validation_rank": 1,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 67.82316728705368,
+        "std": 1.4091605319181228,
+        "minimum": 66.30800284628233,
+        "maximum": 69.09450133739455
+      },
+      "paper": {
+        "n": 3,
+        "mean": 69.9433140411622,
+        "std": 1.0594688656044124,
+        "minimum": 69.31970688229632,
+        "maximum": 71.16660533896743
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 67.75869580409642,
+        "std": 1.3783914370652133,
+        "minimum": 66.28189680508854,
+        "maximum": 69.01115900701822
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.87884255820497,
+        "std": 1.0438599441711047,
+        "minimum": 69.23574080499468,
+        "maximum": 71.08326300859113
+      }
+    },
+    {
+      "policy": "original",
+      "validation_rank": 2,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 66.91554422178824,
+        "std": 1.3957299902558649,
+        "minimum": 65.95502433822787,
+        "maximum": 68.51656880017306
+      },
+      "paper": {
+        "n": 3,
+        "mean": 69.66345413990639,
+        "std": 0.8810397640031032,
+        "minimum": 69.03640135661853,
+        "maximum": 70.67076340175026
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 66.87107624670126,
+        "std": 1.3668907804230617,
+        "minimum": 65.92915421670256,
+        "maximum": 68.43884060444621
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.61898616481943,
+        "std": 0.8522464404518697,
+        "minimum": 69.01053123509321,
+        "maximum": 70.59303520602342
+      }
+    },
+    {
+      "policy": "original",
+      "validation_rank": 3,
+      "status": "incomplete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ]
+    },
+    {
+      "policy": "neutral",
+      "validation_rank": 1,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 65.64388231516448,
+        "std": 0.0,
+        "minimum": 65.64388231516448,
+        "maximum": 65.64388231516448
+      },
+      "paper": {
+        "n": 3,
+        "mean": 68.71117305407847,
+        "std": 0.0,
+        "minimum": 68.71117305407847,
+        "maximum": 68.71117305407847
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 65.61765496897712,
+        "std": 0.0,
+        "minimum": 65.61765496897712,
+        "maximum": 65.61765496897712
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 68.68494570789113,
+        "std": 0.0,
+        "minimum": 68.68494570789113,
+        "maximum": 68.68494570789113
+      }
+    },
+    {
+      "policy": "neutral",
+      "validation_rank": 2,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 65.55350008478257,
+        "std": 0.15654661512286397,
+        "minimum": 65.37273562401874,
+        "maximum": 65.64388231516448
+      },
+      "paper": {
+        "n": 3,
+        "mean": 68.51727944754869,
+        "std": 0.335833577772346,
+        "minimum": 68.12949223448913,
+        "maximum": 68.71117305407847
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 65.52438721354348,
+        "std": 0.1615444911189708,
+        "minimum": 65.3378517026762,
+        "maximum": 65.61765496897712
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 68.48816657630961,
+        "std": 0.340831453768461,
+        "minimum": 68.0946083131466,
+        "maximum": 68.68494570789113
+      }
+    },
+    {
+      "policy": "neutral",
+      "validation_rank": 3,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 65.25839018266144,
+        "std": 0.6676919594133414,
+        "minimum": 64.48740591765535,
+        "maximum": 65.64388231516448
+      },
+      "paper": {
+        "n": 3,
+        "mean": 67.32538367987912,
+        "std": 2.400257604702333,
+        "minimum": 64.55380493148046,
+        "maximum": 68.71117305407847
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 65.21098361383318,
+        "std": 0.7043754490922027,
+        "minimum": 64.39764090354528,
+        "maximum": 65.61765496897712
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 67.27797711105089,
+        "std": 2.4369410943811944,
+        "minimum": 64.4640399173704,
+        "maximum": 68.68494570789113
+      }
+    },
+    {
+      "policy": "diverse",
+      "validation_rank": 1,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 67.74841976351911,
+        "std": 2.107352699376178,
+        "minimum": 65.6431497469665,
+        "maximum": 69.85784898904942
+      },
+      "paper": {
+        "n": 3,
+        "mean": 70.35499489417691,
+        "std": 1.648125241672298,
+        "minimum": 68.71167185132946,
+        "maximum": 72.00788072038985
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 67.70084525703074,
+        "std": 2.086053381770928,
+        "minimum": 65.61703678696226,
+        "maximum": 69.78913632619998
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 70.30742038768852,
+        "std": 1.6268271124921303,
+        "minimum": 68.68555889132523,
+        "maximum": 71.93916805754037
+      }
+    },
+    {
+      "policy": "diverse",
+      "validation_rank": 2,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 65.64388231516448,
+        "std": 0.0,
+        "minimum": 65.64388231516448,
+        "maximum": 65.64388231516448
+      },
+      "paper": {
+        "n": 3,
+        "mean": 68.71117305407847,
+        "std": 0.0,
+        "minimum": 68.71117305407847,
+        "maximum": 68.71117305407847
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 65.61765496897712,
+        "std": 0.0,
+        "minimum": 65.61765496897712,
+        "maximum": 65.61765496897712
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 68.68494570789113,
+        "std": 0.0,
+        "minimum": 68.68494570789113,
+        "maximum": 68.68494570789113
+      }
+    },
+    {
+      "policy": "diverse",
+      "validation_rank": 3,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 65.6438811768988,
+        "std": 1.971533979389267e-06,
+        "minimum": 65.64387890036745,
+        "maximum": 65.64388231516448
+      },
+      "paper": {
+        "n": 3,
+        "mean": 68.7111719158128,
+        "std": 1.971533979389267e-06,
+        "minimum": 68.71116963928145,
+        "maximum": 68.71117305407847
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 65.61765383071145,
+        "std": 1.971533979389267e-06,
+        "minimum": 65.6176515541801,
+        "maximum": 65.61765496897712
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 68.68494456962544,
+        "std": 1.971533995798548e-06,
+        "minimum": 68.68494229309408,
+        "maximum": 68.68494570789113
+      }
+    },
+    {
+      "policy": "compositional",
+      "validation_rank": 1,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 68.29711986390795,
+        "std": 1.5500270302569348,
+        "minimum": 66.51218405349672,
+        "maximum": 69.30398579820877
+      },
+      "paper": {
+        "n": 3,
+        "mean": 70.00190645850319,
+        "std": 0.9111477026097683,
+        "minimum": 68.96549703547143,
+        "maximum": 70.6768969055287
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 68.2164064627968,
+        "std": 1.514219688132881,
+        "minimum": 66.47232686764585,
+        "maximum": 69.19568915413598
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.92119305739203,
+        "std": 0.8776224992901075,
+        "minimum": 68.92563984962055,
+        "maximum": 70.58291053211892
+      }
+    },
+    {
+      "policy": "compositional",
+      "validation_rank": 2,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 66.69923899327881,
+        "std": 1.827931386601135,
+        "minimum": 65.64388231516448,
+        "maximum": 68.80995234950747
+      },
+      "paper": {
+        "n": 3,
+        "mean": 69.34186161964443,
+        "std": 1.0923846393129966,
+        "minimum": 68.71117305407847,
+        "maximum": 70.60323875077638
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 66.64975868626912,
+        "std": 1.7876560770304621,
+        "minimum": 65.61765496897712,
+        "maximum": 68.71396612085314
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.29238131263476,
+        "std": 1.0521093297423072,
+        "minimum": 68.68494570789113,
+        "maximum": 70.50725252212204
+      }
+    },
+    {
+      "policy": "compositional",
+      "validation_rank": 3,
+      "status": "complete",
+      "seeds": [
+        2107,
+        4319,
+        8741
+      ],
+      "directed": {
+        "n": 3,
+        "mean": 66.6838974750006,
+        "std": 1.801359097478053,
+        "minimum": 65.64388231516448,
+        "maximum": 68.76392779467288
+      },
+      "paper": {
+        "n": 3,
+        "mean": 69.32295674167769,
+        "std": 1.0596404301637006,
+        "minimum": 68.71117305407847,
+        "maximum": 70.54652411687614
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 66.63461490427686,
+        "std": 1.7614262772011209,
+        "minimum": 65.61765496897712,
+        "maximum": 68.66853477487636
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.27367417095395,
+        "std": 1.0197076098867441,
+        "minimum": 68.68494570789113,
+        "maximum": 70.4511310970796
+      }
+    }
+  ],
+  "per_run_top_three_mean_individual_auc": [
+    {
+      "job_id": "next_evo_compositional_2107",
+      "policy": "compositional",
+      "seed": 2107,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 68.8830232947329,
+      "paper": 70.60888659106041,
+      "strict_directed": 68.78790142077936,
+      "strict_paper": 70.51376471710687
+    },
+    {
+      "job_id": "next_evo_compositional_4319",
+      "policy": "compositional",
+      "seed": 4319,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 66.86391680951259,
+      "paper": 69.26189051422212,
+      "strict_directed": 66.81033303069674,
+      "strict_paper": 69.2083067354063
+    },
+    {
+      "job_id": "next_evo_compositional_8741",
+      "policy": "compositional",
+      "seed": 8741,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 65.93331622794189,
+      "paper": 68.79594771454279,
+      "strict_directed": 65.90254560186669,
+      "strict_paper": 68.76517708846761
+    },
+    {
+      "job_id": "next_evo_diverse_2107",
+      "policy": "diverse",
+      "seed": 2107,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 66.3440072566911,
+      "paper": 69.25592493472378,
+      "strict_directed": 66.31055639369572,
+      "strict_paper": 69.2224740717284
+    },
+    {
+      "job_id": "next_evo_diverse_4319",
+      "policy": "diverse",
+      "seed": 4319,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 67.04853787312612,
+      "paper": 69.8100756095156,
+      "strict_directed": 67.00814875471808,
+      "strict_paper": 69.76968649110755
+    },
+    {
+      "job_id": "next_evo_diverse_8741",
+      "policy": "diverse",
+      "seed": 8741,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 65.64363812576515,
+      "paper": 68.71133931982881,
+      "strict_directed": 65.61744890830549,
+      "strict_paper": 68.68515010236916
+    },
+    {
+      "job_id": "next_evo_neutral_2107",
+      "policy": "neutral",
+      "seed": 2107,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 65.16800795227952,
+      "paper": 67.13149007334935,
+      "strict_directed": 65.11771585839954,
+      "strict_paper": 67.08119797946937
+    },
+    {
+      "job_id": "next_evo_neutral_4319",
+      "policy": "neutral",
+      "seed": 4319,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 65.64388231516448,
+      "paper": 68.71117305407847,
+      "strict_directed": 65.61765496897712,
+      "strict_paper": 68.68494570789113
+    },
+    {
+      "job_id": "next_evo_neutral_8741",
+      "policy": "neutral",
+      "seed": 8741,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 65.64388231516448,
+      "paper": 68.71117305407847,
+      "strict_directed": 65.61765496897712,
+      "strict_paper": 68.68494570789113
+    },
+    {
+      "job_id": "next_evo_original_2107",
+      "policy": "original",
+      "seed": 2107,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 66.0857524210892,
+      "paper": 69.11904755052014,
+      "strict_directed": 66.05800930411048,
+      "strict_paper": 69.09130443354144
+    },
+    {
+      "job_id": "next_evo_original_4319",
+      "policy": "original",
+      "seed": 4319,
+      "status": "complete",
+      "unique_sources": 3,
+      "directed": 68.7229865821051,
+      "paper": 70.83156095184597,
+      "strict_directed": 68.64332808032653,
+      "strict_paper": 70.75190245006742
+    },
+    {
+      "job_id": "next_evo_original_8741",
+      "policy": "original",
+      "seed": 8741,
+      "status": "incomplete",
+      "unique_sources": 3
+    }
+  ],
+  "policy_top_three_collection_all_seed_groups": [
+    {
+      "policy": "original",
+      "status": "incomplete"
+    },
+    {
+      "policy": "neutral",
+      "status": "complete",
+      "directed": {
+        "n": 3,
+        "mean": 65.48525752753615,
+        "std": 0.2747461915120684,
+        "minimum": 65.16800795227952,
+        "maximum": 65.64388231516448
+      },
+      "paper": {
+        "n": 3,
+        "mean": 68.1846120605021,
+        "std": 0.9120303941582264,
+        "minimum": 67.13149007334935,
+        "maximum": 68.71117305407847
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 65.45100859878458,
+        "std": 0.28863998007039116,
+        "minimum": 65.11771585839954,
+        "maximum": 65.61765496897712
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 68.15036313175055,
+        "std": 0.9259241827165573,
+        "minimum": 67.08119797946937,
+        "maximum": 68.68494570789113
+      }
+    },
+    {
+      "policy": "diverse",
+      "status": "complete",
+      "directed": {
+        "n": 3,
+        "mean": 66.34539441852746,
+        "std": 0.7024509009156445,
+        "minimum": 65.64363812576515,
+        "maximum": 67.04853787312612
+      },
+      "paper": {
+        "n": 3,
+        "mean": 69.25911328802273,
+        "std": 0.549375083860052,
+        "minimum": 68.71133931982881,
+        "maximum": 69.8100756095156
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 66.31205135223978,
+        "std": 0.69535112848027,
+        "minimum": 65.61744890830549,
+        "maximum": 67.00814875471808
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.22577022173503,
+        "std": 0.542275707623045,
+        "minimum": 68.68515010236916,
+        "maximum": 69.76968649110755
+      }
+    },
+    {
+      "policy": "compositional",
+      "status": "complete",
+      "directed": {
+        "n": 3,
+        "mean": 67.22675211072912,
+        "std": 1.5079555818477781,
+        "minimum": 65.93331622794189,
+        "maximum": 68.8830232947329
+      },
+      "paper": {
+        "n": 3,
+        "mean": 69.55557493994176,
+        "std": 0.9414747733901084,
+        "minimum": 68.79594771454279,
+        "maximum": 70.60888659106041
+      },
+      "strict_directed": {
+        "n": 3,
+        "mean": 67.1669266844476,
+        "std": 1.4753605748612248,
+        "minimum": 65.90254560186669,
+        "maximum": 68.78790142077936
+      },
+      "strict_paper": {
+        "n": 3,
+        "mean": 69.49574951366026,
+        "std": 0.9090419059841697,
+        "minimum": 68.76517708846761,
+        "maximum": 70.51376471710687
+      }
+    }
+  ],
+  "interpretation": "Top-three means average individual method AUROCs, not predictions or ensembles. No test-best or oracle selection.",
+  "selection": "Source directed PopQA validation ranks, preserving baseline and stable ties; all twelve runs and seeds retained",
+  "primary_registry_modified": false,
+  "feature_extraction_or_llm_calls": 0,
+  "source_prediction_sha256": {
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/AVeriTeC__dev_filtered_10shot_scores.npz": "a561ef3ddde03865ce74bc8aa01cbef01ae664edc11de58bc9cb9d44d83e38b7",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "ec8a76bb3f82eab966ecd9be64327a9072c76d4b6b280cd2ba97027fb5ed1b6c",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "e789688e6d4a18a0c6196e1b39c6cbb38ddccd1905447b0ed0cd9591cb9f5297",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/geometry__cities_scores.npz": "6f6e764c14a248652b19fc20c2529540949d04264ace22ca9bf6a6aa81c2ca03",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/geometry__common_claim_true_false_scores.npz": "85bf30208b1aa8c108a036972837bce87e01c50a0338cd0717deab18fe0c9d1f",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/geometry__companies_true_false_scores.npz": "f9970c80e81ccc5c4dbf970aa10ea5544c6696a428421d1a1a444cd2000d15a0",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/geometry__counterfact_true_false_scores.npz": "04e041beacbe7052045de2197dadd9bd4e76481e876bed501cb78d1008567c5b",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/popqa__popqa_test_filtered_10shot_scores.npz": "ace91d64f6c52c05c0350ac28a621a8e9a3a7c56554b56b38d0fbf6213fc35b4",
+    "results/overnight20261021/evaluations/new_0422ff753b693bed/x-fact__test_filtered_10shot_scores.npz": "ea7ca3a7ad62aae2231a6019ea950ceddad2dfec5c895d50e611f22c8e3fb6cb",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/AVeriTeC__dev_filtered_10shot_scores.npz": "86184b88ad5b45127c97d26165d1f2401aa7e8798d43ae28c4dcbe6ac16f8d3b",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "4d6625b41933fcb859567760c1e030a214b37e97dd171e52f3417485b8380314",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "2841832e9d0560fd71234a4fd2bf4a2677cc926c2bf63252ffc23b300760c491",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/geometry__cities_scores.npz": "12bd4196a350ab9ee2a8bf0a2abbc3404b2e97c9f1796f54a584c844ba4e0113",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/geometry__common_claim_true_false_scores.npz": "029c51d12473c89b5ede6c7078b20473cbb0cae61164a886d03a2195be61c0b6",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/geometry__companies_true_false_scores.npz": "fa0f074d2546d5a606576c40e29ab02ac13df7c613d980471aa508a281467ad8",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/geometry__counterfact_true_false_scores.npz": "d8d67caf7a1912eb49319c2e1077ee676e86632c723dbc6d68c6f50b448c0a55",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/popqa__popqa_test_filtered_10shot_scores.npz": "d5ff3620772101912063f112f2acdb7b3199457d928fe4b03cdde3433f9644cb",
+    "results/overnight20261021/evaluations/new_0dcc1f1e2e53cfed/x-fact__test_filtered_10shot_scores.npz": "e5f094ce8d32661ebca0470c79f00143e6be8756e7ef3923778f1dcd0c6d4391",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/AVeriTeC__dev_filtered_10shot_scores.npz": "8d374e1ef34cbeed3af7b8dbd2bdec9f6cdc800fbb17a7a121e68612983e7f95",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "12ca229d288826777d47c41b203fae0ae5d5d663e23205e0d67af469c4581cba",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "d6f8e82c62698cf35cf29f05b52779e413dd4b74d24768b9dbec9bab7853846a",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/geometry__cities_scores.npz": "1e1488b5ea95990d22a3951a50e7938ad09ee1576489ebd16c336d89b3eb5471",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/geometry__common_claim_true_false_scores.npz": "3c30339689d156aa98db5a91f2c3a2add36ecb9918216a83edce11796ff3d971",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/geometry__companies_true_false_scores.npz": "07be006ef1509737010b00dd878a0ce495bcbdcf16ddb9a461ccdfd68d247555",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/geometry__counterfact_true_false_scores.npz": "f4bd5dbeb3f9a4b68afb0c96e9772096a24ea8dbefcf1419711998b615836cb2",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/popqa__popqa_test_filtered_10shot_scores.npz": "b280d065a6664066ea8be6cdd18200769b03e6e8b1cc4c35b917e7b1795823c8",
+    "results/overnight20261021/evaluations/new_0f6f0d39ccb67cdc/x-fact__test_filtered_10shot_scores.npz": "9dcf3a02a3948100ef16e0c63ac4cbc2cdbe009944a40406300bace6e67aa647",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/AVeriTeC__dev_filtered_10shot_scores.npz": "0ab72f5a9580e9e56f572fe40a4e7a17421e421b8ef2b157c5a45395a647d3be",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "4431bfd67af9e324b1aa42fe43cf329174e68706da46bc7a5947ffec21e7c10c",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "ac41948ac4c8a35e184f5c1e67c06d9e34b574eac97cc2f78fcf78e218c94d2e",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/geometry__cities_scores.npz": "2c5b34db73d7185cb7d9643589c49fa433e0b9ae5f8a29d10a734b20e1d881e4",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/geometry__common_claim_true_false_scores.npz": "83eb5fb0bb94185ed4564338cc411410bf61ed7d2d92c52fdc96b6446c2f224a",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/geometry__companies_true_false_scores.npz": "dc71e842a230be52b9231670526214ed151091669bab7d20087ee9341e6e537f",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/geometry__counterfact_true_false_scores.npz": "770d47cbd2410f6356166c8a65d3bc3ccc5e6b363340515a1ede7c2cbe5aaf05",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/popqa__popqa_test_filtered_10shot_scores.npz": "609a06921debc6f8b889ec7f4a4af6191e347cfcb6df0b58d11fa6805af3e7d6",
+    "results/overnight20261021/evaluations/new_1274f990dc1b8383/x-fact__test_filtered_10shot_scores.npz": "f922b7e9638a999a352ec6343ed12e0a1a135a05e255c969c64fdd1a8c51d794",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/AVeriTeC__dev_filtered_10shot_scores.npz": "4785c9148cd0242796ead0b36c7bb793d3c59d015aa28a32701c45ec1bfdf92c",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "5a69e08c2707ac0b4576ac4f9bae7a6c439eeb6d0b51c5db45ffd82e96fefe08",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "47161cc0db86d29ef1418721f7fb50fa1d557c2f6ec1f75e2629aa73d63d5510",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/geometry__cities_scores.npz": "b01ab5b45f30f03c3beaf0b4a666359221f93c135f5c600d7508b887dc3945cf",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/geometry__common_claim_true_false_scores.npz": "77cdc6e1cb41a66b4a3fcd57442348d61ccda98a67f55823a4bbe55356f329c7",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/geometry__companies_true_false_scores.npz": "975ccdcc7b64351c5e7dd772afbcd453171822a241356119c31933754f283eb0",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/geometry__counterfact_true_false_scores.npz": "b4406fed6320c58a941a520c816c50b67a081959f2ab199da075cda94b97678a",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/popqa__popqa_test_filtered_10shot_scores.npz": "915027c90a1bba298d2ef4ea4ac597272047c3af1a3d247ef00de96dba2896a1",
+    "results/overnight20261021/evaluations/new_15b713d26e416617/x-fact__test_filtered_10shot_scores.npz": "affc5f9e4e695c2dae325f5d550009a7590e689c165b48ef9dd4558f5d1c70d8",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/AVeriTeC__dev_filtered_10shot_scores.npz": "c7ce7b5991257ab65b8addf76f86d5846f3b83f8428e06f9d1f8fd80410b1567",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "6a226c15b28757b3fc692a50bfc2545d0da1a79cf67a593a1653eb824e9cdfb0",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "6235840bd4306ce163efd92d08443b798240ee39363560d557c55a3dd231d283",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/geometry__cities_scores.npz": "cbdc91ff47bdee7e94b043a5cd38c67f576a4f7eac18987767f0dbd9ccfbc14b",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/geometry__common_claim_true_false_scores.npz": "db3e08ded366fcc141d67a585a7fbf80ffee743730e7e1c3918a5da89076e671",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/geometry__companies_true_false_scores.npz": "54839090ff7b3b48abadfb2c38c7fa7cb310f1d366510f95c67d7d864fa7c557",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/geometry__counterfact_true_false_scores.npz": "a787d15f213bc5bb2394d480094e0dd9fd3579e58d12016a12f198a3b4460608",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/popqa__popqa_test_filtered_10shot_scores.npz": "47d356f7e42301e40ed8a5d229251f461932fbf967dbf0926afbd237224a1773",
+    "results/overnight20261021/evaluations/new_164b6596dfab856b/x-fact__test_filtered_10shot_scores.npz": "0dad2d57c5c69d9c029185137bbda1011fa8fdc2705c6e6ea92a90359ea9e58c",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/AVeriTeC__dev_filtered_10shot_scores.npz": "6c6cfb1c112e8c09b8dceb60a78e4096453b77aff55ff01617bff142d372a8ea",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "8f97b3e797e929bfce72747ebcf8b14b56c40c74f25bcebd63ca160c1023890b",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "c2e94ac0071e0892ff16930582c8d455783d720ad132591b82f75928e1a644f8",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/geometry__cities_scores.npz": "f531a2a1cce6cef030afde503513d7f1785162e6337cd3d6ac849338aed01ec9",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/geometry__common_claim_true_false_scores.npz": "c0b0658ec45044abb93f1ad6784353c9f540ba9a2d2da820a3223762667823e0",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/geometry__companies_true_false_scores.npz": "5975f16f64fa87e47da1bb430db1219f643b8d996e69ab25565caf6ce02c91ab",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/geometry__counterfact_true_false_scores.npz": "c0b21d18c18bc772ca851295c6c3be2a1ddc755bff37ef708477c9ee37770f7a",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/popqa__popqa_test_filtered_10shot_scores.npz": "a9793b01f3c66e46f473aaf704baaed2862d5e304d264848a4d3aa38e0ffc885",
+    "results/overnight20261021/evaluations/new_17338f7f31af8055/x-fact__test_filtered_10shot_scores.npz": "486a34ba29053e8d8379ff1aad1e9414bc51691a04c1496a6fb39c4e36f23e46",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/AVeriTeC__dev_filtered_10shot_scores.npz": "7ddb50767d7d73acae559220713cc4f2f37ef19e40f2354d11670a07d542cb95",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "b2917c3905a424c053416fe171ef536519a9d9a9e60c90da55f2a35f88266261",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "649d410427654362bbf1bcdfca2113df3c7e37d9a0b486051ae860ae7a474b02",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/geometry__cities_scores.npz": "0d6d3d9db5ee33cb8d582406ad3b7ded301a9e059686c9f347f3e0f773bbe6bd",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/geometry__common_claim_true_false_scores.npz": "093403a6f026665bb70e0ac0a867b891a22b9f6eceab366f510f887db70e49fd",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/geometry__companies_true_false_scores.npz": "2ec4bae445b28881097e4f056b8590f7e4595137b437d008a69f45fc3d0f3b94",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/geometry__counterfact_true_false_scores.npz": "c220434f88beb824da76ae95ecd47a728ee8e68aaa52743c356bd6066019cefc",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/popqa__popqa_test_filtered_10shot_scores.npz": "c44d2c08b307f938a75479cd5e2b3cf84316bf8f9960d7e53dcdf933ab73f3f3",
+    "results/overnight20261021/evaluations/new_1c557ba8c7763976/x-fact__test_filtered_10shot_scores.npz": "a3280a17363d3bfbbb1b18fa71717ae0f3b762460baeb4051f6f7901d4d3fd9a",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/AVeriTeC__dev_filtered_10shot_scores.npz": "07cedd8770361e008bb9d755a24170ddd76cd1293edebf3a4f4febb4494ce555",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "a4de4bae9d7ee0131d032a3ae7fa1262071b2928a7623425b7da6a4f8e73ab77",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "9fbe31d41c68483bd5862da3dd09134da117af118cc8384bba99fb5fd7d1c287",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/geometry__cities_scores.npz": "baf3d667bcb32cd8e4b54c3d5d38e91a872ca94d8dd4d7b980cebd3f5698c92d",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/geometry__common_claim_true_false_scores.npz": "120b32d5f18d272f3d77cfbe7f89cb7c5df987ee5997d8a1d4bbe82637f2446c",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/geometry__companies_true_false_scores.npz": "6e320675e960b726ea2cb52b6e24e39c8f00ddf2f8042c3fd46a67465ff5aa28",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/geometry__counterfact_true_false_scores.npz": "94cd91198a223f665dced3dc7afa75e01e4e79e7cf5374f6153ec59fbff8a539",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/popqa__popqa_test_filtered_10shot_scores.npz": "a41094e4a244ae50a4963b27e14edffcf8e3815b66ddc97c4982c5fda6423ed6",
+    "results/overnight20261021/evaluations/new_284ea98879011c01/x-fact__test_filtered_10shot_scores.npz": "1b82d84d9788e9222dc3ffa1661d5616503baed57260c824f21920b6a8e1e239",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/AVeriTeC__dev_filtered_10shot_scores.npz": "5c01b32d230c11e682c10fadb5192c2d1415dda217ceea79ff502b62ce20d912",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "8c0f8995f57b86a13643735a5c60082737d2a49cff81bbd47b1955e60e762e0b",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "4c9a8be535e926780f2c3f677c481b4f01f83cfce37026dd3748e1d3617fcdff",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/geometry__cities_scores.npz": "4070ef5bde63b903f4d5d34347ad6cd6d341c3143e994f09258f5252812dc646",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/geometry__common_claim_true_false_scores.npz": "4f62816e0f9c68097e3e5cc1ebc615a319a16da9fcf09f09b24429b98c4e6385",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/geometry__companies_true_false_scores.npz": "16761128ab04bf6d3b67d9c36ea2e4ca3232b05cc5ee35cd521cf123ba41ab6f",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/geometry__counterfact_true_false_scores.npz": "a727ac5b315856dad08434fd6d123e81d28a58431ca15f63acf8f1eb7be018bc",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/popqa__popqa_test_filtered_10shot_scores.npz": "4673e8328d1179e7cf4b9bfedff1b75582d0895329ab5cea4ce73fcea9394678",
+    "results/overnight20261021/evaluations/new_57761164f4eb09b0/x-fact__test_filtered_10shot_scores.npz": "6855536c37fe565de9da376a38aadfb2545834e18f4f4ecd38149f8e1feece8b",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/AVeriTeC__dev_filtered_10shot_scores.npz": "75306bc870e7418c2cf2198b5ef830af1f8cab7b12edab1a1a6a21c8f192e666",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "3635066d91d761858f14748610b645840b912fd5ad25d5410a2773001d5e75df",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "0bdbf684a40515e575f323e8c96704294f89ab2a492f055a6827441c8efb2b74",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/geometry__cities_scores.npz": "facce9ad5a4f887062fe4cd698db01ffd6390918d94d927eb6813f09769b3af8",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/geometry__common_claim_true_false_scores.npz": "57e5a4cdbfae6d56075fdf7aee6b6635653e5dd833bb218fa0044ecb91374af0",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/geometry__companies_true_false_scores.npz": "c235036af3a83d1b83381dcbd7f33f73f8f8cfe2372991fbc0ba475c1255a542",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/geometry__counterfact_true_false_scores.npz": "aad083765ae1c3db2a4a47fb25082391a5de935b7be1d396dd3e4bb7bc79be91",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/popqa__popqa_test_filtered_10shot_scores.npz": "6cddacb013b8c1e05b9bc65ffd11a03f91c8b7dcc7d15bdcc46e97082cb63775",
+    "results/overnight20261021/evaluations/new_5ba6da6e4e0d8490/x-fact__test_filtered_10shot_scores.npz": "cea838a9823cc654d14dc89df45cdf25f2e23f0fc1f226f420083e6d750ca9f5",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/AVeriTeC__dev_filtered_10shot_scores.npz": "8f02a06ed5616c3f02d4cc2f52b74cbb0e35dcd43abafc96f30e213dc2291b90",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "f5c155a9307754e63caa8f20751bd3ca6b7b5c52930727b834d438c3766fb323",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "9e9db484e622374c82e1b699aaabf630022930cb52298d4172a0a323d558c1ca",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/geometry__cities_scores.npz": "1fa30455c7810028df1244880e3e62436745d470cd28ea60ccd9d6f9fcf5a712",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/geometry__common_claim_true_false_scores.npz": "7c38c2f612a8a5b800656ddff35b3b17eec3899113287c7ed71f9b9a163cf840",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/geometry__companies_true_false_scores.npz": "784422016ca58cc38483ab13d27905a85c328f4a5c3433e43a39a6713a0acfc5",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/geometry__counterfact_true_false_scores.npz": "3366b9a44d82b5ac45dee6a56041e78635e5bf98df3d102759137065b2146202",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/popqa__popqa_test_filtered_10shot_scores.npz": "ed124e6effe14ffe5e285098a1f92b738364a5d0b27879333fbb6d53c2fb49d2",
+    "results/overnight20261021/evaluations/new_69d661662e2bcf6f/x-fact__test_filtered_10shot_scores.npz": "08bf846afa0e085f7486510e626ae80683d3729c2855a7776d794ada1fc9c9cb",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/AVeriTeC__dev_filtered_10shot_scores.npz": "59f82402822cbdbded7a3fa9b9e618f957006d729f35cc6d7777951c7896d66b",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "8aac4cdc1a28ad5ecb494e9b0d8fe2384f3e8ee4b202b797a4d893aa8581a75c",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "e8add9ecc9eaf944e292e8c82a04d136608fed80c0fddc52711c93ef865ae501",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/geometry__cities_scores.npz": "31e158664d1714151f3572411dfda1930b3a326b3903c63d3b3880138d501c3e",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/geometry__common_claim_true_false_scores.npz": "c64df4055f0b272d84a7a7cb64f1063833ff53a8a1174fc05c430b9a8ec12f12",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/geometry__companies_true_false_scores.npz": "cc3ca5a154e7069ca304c5f24028ed229b7925799cf530b05c9b11681307078b",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/geometry__counterfact_true_false_scores.npz": "773c18037244e6c67db6a31f764f8dee19962b7ab7e5cb11b6fc812ea6c98206",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/popqa__popqa_test_filtered_10shot_scores.npz": "8a74e19f8c1f35ba8e7db6123537329b21f5ecc40703a20341be07bf1964238c",
+    "results/overnight20261021/evaluations/new_7effd3f896ad01b3/x-fact__test_filtered_10shot_scores.npz": "595277d8114f2a13ac484191c01d6740a5324dd5ed157e7fd34ad71add21071d",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/AVeriTeC__dev_filtered_10shot_scores.npz": "41ed1bcb747d2c5eb88f19531985e5c333eca530639f87ac54a1231490773d85",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "96708aae5bfab504119f67f268ca0d06025c150a5742e2d78c9c92dfec05317d",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "01e7a40f7847fed219f267932f50b13f35ed23b80116e0f9104b636c74e798bf",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/geometry__cities_scores.npz": "ef5557ee06566f5603e3c9cd6e17c1205ddb59e72e5f7a83c51fd29e306de1e1",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/geometry__common_claim_true_false_scores.npz": "f04da3e9624604615ad40d4f1d4b07d806554338290d525d02cd24e37b9c347f",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/geometry__companies_true_false_scores.npz": "95a36fe91a00cfefb5b0e19a8071da38cfb772a9ea63d1d6291f19c15c5b9b9b",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/geometry__counterfact_true_false_scores.npz": "62fca20e82b03ab5297c052d35e7e1a18e8f6bc232ea9b31ac0f895c8960fceb",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/popqa__popqa_test_filtered_10shot_scores.npz": "6fb262463d3c9fd6e0456cd4fcf8d764b52ee2e243d733490805a4cb31a87ad4",
+    "results/overnight20261021/evaluations/new_8b82c0d3f99eda2e/x-fact__test_filtered_10shot_scores.npz": "7434fd5ae4ef347cb1c4936d63c5d3db431b51ea654e8113db7238593c439232",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/AVeriTeC__dev_filtered_10shot_scores.npz": "4b4e3d310e1fd7db22e5c2df64b4d1fc931dd12f5d4319fb17b1811a5292197b",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "8e49fcd0f2cdcec115ad1efe34eae51b583e259e97ddc5354e5112048dff503d",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "abd99a9957c7e28d85b2e0cbe948faa7c7492ec30b5b11a7982df52f8c9fefca",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/geometry__cities_scores.npz": "ce7a0d14fcda18bdeaf7936a6d733d0c448148ba09728c386a00d5b7fc6b2da8",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/geometry__common_claim_true_false_scores.npz": "35fa045e93fc5d9c8fe8439b373c535462a3abb5e34916a353ab7b9d79f56dcd",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/geometry__companies_true_false_scores.npz": "ec281bdb1845203ce1e63df4f7e9f7d482c4b2b80f111a3d6b872732cfc562be",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/geometry__counterfact_true_false_scores.npz": "a7d18369a571dec92bff787b1ea9f3c3f60df00d2224d55ef3d8c50b64cf5169",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/popqa__popqa_test_filtered_10shot_scores.npz": "94327614640c288c1f3eb65d1413b9ef5a6bea74a031a3e29742f48c55ca9d74",
+    "results/overnight20261021/evaluations/new_b665cde66586e115/x-fact__test_filtered_10shot_scores.npz": "c20a8ce14913d5de21a0cdc6920c2fe87582e5804b273d2bb6fba316c452b700",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/AVeriTeC__dev_filtered_10shot_scores.npz": "5918907d60b99f019c322c4a2152541ce71c4202e99c76a3ab5599aeee16f6e7",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "7a1a3dbc4b267546401264b64bdac051c3cd6c88c6a944180a9669a1345005d7",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "f96a8c72d25319e4fe702eda87b7981cf5b957f94f60246dc4c09a06ecf74e5c",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/geometry__cities_scores.npz": "e9277af3dc954cfe0c7f30d5b7536ae9f2c25a0a152e582f116a88b60f739b22",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/geometry__common_claim_true_false_scores.npz": "b201e3ff778719c4cd991d044487a5f588ffa1baa4502d858e316459fed88df2",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/geometry__companies_true_false_scores.npz": "034a41f71a2d2d9efb66e6a5b70d0c963fb9ce775805a4282e7cbb6602147ade",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/geometry__counterfact_true_false_scores.npz": "44d87f164e9af699a86184274e2829c9ec7c55b99e51c9657e05d8da20c15acd",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/popqa__popqa_test_filtered_10shot_scores.npz": "8bd935f960ff4dd8b876cd94b62eeee764900a82a06f9a50528a99b8ce501415",
+    "results/overnight20261021/evaluations/new_bf58d678457efb4c/x-fact__test_filtered_10shot_scores.npz": "f5ac89e43c8c996261bc81f25880098407c341f90ea845d27dcb0f76c99e2288",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/AVeriTeC__dev_filtered_10shot_scores.npz": "bdf0b35b85ba841345cda721bc679e5ac453f785ca06312bbda0cbd2ed1faa75",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "5563dec87a789f97dbd210d2df754076782f782802b4c5930e2e293940eece78",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "dbc75e49857cf3ace1487cd46aaace25d03947a2d168ae2cadc63928fc673136",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/geometry__cities_scores.npz": "afcfdca6c95072f44381dcac941fbbf1b647ed390c52d0960155d3d829305215",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/geometry__common_claim_true_false_scores.npz": "4cc141a367f3927b79d8d14bdc42c863b887eed95cabafeefd1b6e5a4d6cf72c",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/geometry__companies_true_false_scores.npz": "4b4984f1e7b2c5d71fb61f4ec1a25bb060462bb35040359644e742c5925d1daf",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/geometry__counterfact_true_false_scores.npz": "b149fb6f0b4682b18ce28a0121c94a854a51c3d9852170911585ad5e2c1d434b",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/popqa__popqa_test_filtered_10shot_scores.npz": "869bd3a8781130831d1ed58e6b04936d358f9a74d31aebb7fefd9bdd3625b6d8",
+    "results/overnight20261021/evaluations/new_ce0833784fad765f/x-fact__test_filtered_10shot_scores.npz": "544dab10945fc60c7abe382816cdce16db849d8887491aa60ae487e1b5b06272",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/AVeriTeC__dev_filtered_10shot_scores.npz": "d66a8e59fac69171c3e4adf632ac3d37d443551f82eea86579d2d47c07bf5cd4",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "da5990026915bda5aa46697a4372acbcc367b3315a4212538104d8b8cadefced",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "3e186eecfd370cb952fd5b20efbdcb0e8f4e8e52d7f4180d2f9a4382816aef36",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/geometry__cities_scores.npz": "5c2f8a21432e7df0ce6b9162a1777f3f2e7a1e7b0e9337796dcdff7d04636181",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/geometry__common_claim_true_false_scores.npz": "5c05e59e44d4966268394a1ac1f36a724b8fb277ecb3eda5cb9e8cdfcd3f5356",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/geometry__companies_true_false_scores.npz": "c4d4ad12f56760d06453725646db0a73badc19d2696f3c6e0dd7fbc126bb6ee3",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/geometry__counterfact_true_false_scores.npz": "46143f8207c9ebb2513e6ead5e863f4995befb14098cc7cb554d781fdd85ba10",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/popqa__popqa_test_filtered_10shot_scores.npz": "ad1bc4948e1565b6de72fb883dc56f90cb837fa5c8ba2fb5f8ae6b9e18252cad",
+    "results/overnight20261021/evaluations/new_d91df861e408ff5e/x-fact__test_filtered_10shot_scores.npz": "7a467e51734e3c0dc7d847c5a39188bbd54e27dfe2cdc2ba664423d1f74f40f5",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/AVeriTeC__dev_filtered_10shot_scores.npz": "4123040881ba3ac83646843f0f5af3dbc67892c9b1fee607e48d1ab9fcec19f9",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "e4b8b502b9265b5e0c57bb53f38782d99df83092585632c6410362a811cee504",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "bed7d2b85b57f7c63f91d7c058d2fc812abb7fbab4d66b7b3e72db5fd52a86c4",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/geometry__cities_scores.npz": "4965b882d777e3358378d8ef68baeb9992dc67805695c245f63a1ff01c22b3ba",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/geometry__common_claim_true_false_scores.npz": "ab70cc53392b5a922b041afe6c0ff59724d484c630886a27646f9126facd8054",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/geometry__companies_true_false_scores.npz": "8464b03e492f68966919e4be5345b654b3bab031a27456c5a258a3b98ccd955c",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/geometry__counterfact_true_false_scores.npz": "c4ed419fb897c2a7aacaf1ec078acc55c93de3c8064cc180e7a621221b8ea580",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/popqa__popqa_test_filtered_10shot_scores.npz": "0e378cf07b528cafd0c8f1ab5f0900e7afbd34b890b58c98005ba0c3dba5fce1",
+    "results/overnight20261021/evaluations/new_dade6b129a537ba7/x-fact__test_filtered_10shot_scores.npz": "74143e8ffb16217110bd9cbacfb792d1c808e9cf3651fc88909b95cd027c0703",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/AVeriTeC__dev_filtered_10shot_scores.npz": "069a9f2d085109e660a61964b6593d9e1526ab8ab6470241f7b2db488210b3a7",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "b2f3a732ccedf614db4e169380326ed62bf9e0bfb85f47eed1a6229739d0a700",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "237512b8d9c56846e739ad243ea497f27b8dda23524113bcb0887c61406369fd",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/geometry__cities_scores.npz": "866941d32124fd3879205f246ad118057d0a9459084e96704320141230370c10",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/geometry__common_claim_true_false_scores.npz": "f1036fb57f2de00bfd3855a26f2e73e94585067ed691d57b4f301bfa2b6697f7",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/geometry__companies_true_false_scores.npz": "1699c4e8e5d3e0c52898038e3490c7e546380c50c83ca4f2d8cdcbf440fedfde",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/geometry__counterfact_true_false_scores.npz": "3dc2b6006f9061a8ff1814e68f58cb3721a995ba3fdbdae1f15e03816d79a152",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/popqa__popqa_test_filtered_10shot_scores.npz": "1dcbc74bfd69632e13bfe1d203c0694ed59ad87c792097d3d5257d971ccedae9",
+    "results/overnight20261021/evaluations/new_ee3f55cc7412fb37/x-fact__test_filtered_10shot_scores.npz": "bd6da63e5188836ffd2f59789fda7524982f9552e118591e0c5e9ef3ca3a47d5",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/AVeriTeC__dev_filtered_10shot_scores.npz": "80df1c1d5c578dfcfe87893dfc123744db376490acc3e99daa92ef618151668a",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "41d9cced4e106d1f2fe3d6078051127364a6cc0ce544845f735dc3732e355368",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "c219d6610f9c40fa00db75beb31735f82ffa8f376e5972fa821721525d044fe5",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/geometry__cities_scores.npz": "9205c02fe398e097dbb20998b80d429d083852d367ce924ab63c18eeefe5d0ab",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/geometry__common_claim_true_false_scores.npz": "3721a62fbe3d9decce9e430ef5eb65536e5c6354d6e94c00a4b252bd8a90f002",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/geometry__companies_true_false_scores.npz": "25ace719b12d2a6d861a5efd3a812b86988f35b17d4564f8e7f1bda215af1b2e",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/geometry__counterfact_true_false_scores.npz": "3c11fa80b702c240d66a014ad2b04188a4ea78e0bb202f303160e18ef2874c19",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/popqa__popqa_test_filtered_10shot_scores.npz": "10be502e2f5a55f7b06ec5fb4f30271a4d2451e098e9a02df0f35add8027f186",
+    "results/overnight20261021/evaluations/new_f9a618c4b678fccb/x-fact__test_filtered_10shot_scores.npz": "80ba67a1912be1a85358581b8a3912ed63f5cf3d4de3cd535cbeb56a7bb89872",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/AVeriTeC__dev_filtered_10shot_scores.npz": "f4c2c9c8a1d324a5d12a9bdf4de242a8cd3cf1863ec7ec9521e6f8a299c9080c",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "41f517af1cfc056dbac1040797c83bb0e42356050b9b81c12c005cf8b4e5240b",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "e301276af6e86481d8839acd26cd3e4c8de81f298dcb98fe0a060a3e680dcba4",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/geometry__cities_scores.npz": "1f5138d29a0675c4d45236a54dcd6fe8828e7eacc450b14b6654a73b1901643c",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/geometry__common_claim_true_false_scores.npz": "75da9fd88fb0a32f775558adb4629ff8b18ec48b35abf091927981ed21e3bee1",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/geometry__companies_true_false_scores.npz": "3516394a8c045231f514b393f035d9b6d17f1e509aac8db0874554e396b83abf",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/geometry__counterfact_true_false_scores.npz": "4ad410a9f4b89b2dcc1047466dcd18a9ca9c10393a9dd045a3580b87cc2a2c36",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/popqa__popqa_test_filtered_10shot_scores.npz": "545c45e681711a3190c9d346732c969af4645c742cf74caceeb31ce8af7d977a",
+    "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0/x-fact__test_filtered_10shot_scores.npz": "d02fc46d6cd0bb0dfaac81d74b4b4b67a13c5dceb4bee2bd0c19c6b9c533e89d"
+  },
+  "extra_prediction_sha256": {
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/AVeriTeC__dev_filtered_10shot_scores.npz": "b4bd74b18c20d0be6f301cf35ecf6eaee0ceeed59537e57a0156fd18267be280",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "3183c21d5e2a2accb5ab7b788788c40e8f74698ffefd5d70c8c9e0c38d516cee",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "90a205b59d57032896e43a0c39ca6e21ba6fe0b1cfd465081f92f64ff4199125",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/geometry__cities_scores.npz": "2e26d656f8a6e61329fd919e73c910ccfa75149580eaa002002e5dd5d9b7468e",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/geometry__common_claim_true_false_scores.npz": "ae5811849095cc22b0e2c015dd4582ff622165ab9b3b5a8820b45068b21801b7",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/geometry__companies_true_false_scores.npz": "55b8f4bdfecfe77333f2a38e954968845b9ab79961501044a9373789ee142c4f",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/geometry__counterfact_true_false_scores.npz": "be079ac1d79c77e85c34722262c449dc30f89bab655313e286681f2ffdc59ba6",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/popqa__popqa_test_filtered_10shot_scores.npz": "7c648214b23ba0bc4da3340c93840a31f2f4d92d4e501f4241f37645b3051667",
+    "results/overnight20261021/shortlist_secondary/evaluations/new_7dbde918b9b2fa38/x-fact__test_filtered_10shot_scores.npz": "4913e07a6aabbd03f5c13eb9ea45a5e72eea8fc7216205a6858dfc074ed9ceff"
+  },
+  "baseline_exact_audit": {
+    "status": "passed",
+    "reference_directory": "/workspace/mod1/out/campaign/evaluation_with_4b",
+    "historical_manifest_sha256": "2eebcf28123f8a5d4a621027c917337ffc72b55936cee22b4b997e1435bd4ce8",
+    "labels": "is_hallu",
+    "expected_datasets": 9,
+    "datasets_checked": 9,
+    "raw_macro_auc_percent": 65.64388231516448,
+    "paper_macro_auc_percent": 68.71117305407847,
+    "paper_rounding_matches_68_7": true,
+    "row_identity_evidence": "Byte-identical historical source CSVs; exact rowwise labels, NLL predictions, claim-group IDs and train-disjoint masks",
+    "label_inversion_applied": false,
+    "per_dataset": [
+      {
+        "dataset": "AVeriTeC__dev_filtered_10shot",
+        "status": "passed",
+        "source_csv_sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+        "historical_csv_sha256": [
+          "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 427,
+        "historical_prediction_sha256": "50a7b060de4f8d78a786647ab4ec6d74b932a66d5dfbb5175892fc87c72320ff",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 63.76780435366837,
+        "historical_directed_auc_percent": 63.76780435366837,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 63.76780435366837
+      },
+      {
+        "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+        "status": "passed",
+        "source_csv_sha256": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+        "historical_csv_sha256": [
+          "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 2057,
+        "historical_prediction_sha256": "1052a839a46dcfface01759db8c943b86e6cb90cd7b78f3ab5526c0f16bbe8d6",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 36.19719167488705,
+        "historical_directed_auc_percent": 36.19719167488705,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 63.80280832511295
+      },
+      {
+        "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+        "status": "passed",
+        "source_csv_sha256": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+        "historical_csv_sha256": [
+          "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 46605,
+        "historical_prediction_sha256": "4b4f9390dbcb433b8b58f5266c9b026380545e8b6f2479066bb7362a024ba431",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 70.68591510605297,
+        "historical_directed_auc_percent": 70.68591510605297,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 70.68591510605297
+      },
+      {
+        "dataset": "geometry__cities",
+        "status": "passed",
+        "source_csv_sha256": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+        "historical_csv_sha256": [
+          "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 1496,
+        "historical_prediction_sha256": "c6229cff1100838d1429889c654cbdf7b90bdd49ba8a8fe37728ddabefebb301",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 91.93696559810117,
+        "historical_directed_auc_percent": 91.93696559810117,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 91.93696559810117
+      },
+      {
+        "dataset": "geometry__common_claim_true_false",
+        "status": "passed",
+        "source_csv_sha256": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+        "historical_csv_sha256": [
+          "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 4450,
+        "historical_prediction_sha256": "e11799ea2b6b8a6dae0bb2ab29eed4423dcc9da137b9082b9db8935db39182d6",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 63.26080040398939,
+        "historical_directed_auc_percent": 63.26080040398939,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 63.26080040398939
+      },
+      {
+        "dataset": "geometry__companies_true_false",
+        "status": "passed",
+        "source_csv_sha256": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+        "historical_csv_sha256": [
+          "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 1200,
+        "historical_prediction_sha256": "09556740a325df6d495238a02c8935e5f9b5c9e2da30a1a72ea6e32f104b33c9",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 72.58069444444443,
+        "historical_directed_auc_percent": 72.58069444444443,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 72.58069444444443
+      },
+      {
+        "dataset": "geometry__counterfact_true_false",
+        "status": "passed",
+        "source_csv_sha256": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+        "historical_csv_sha256": [
+          "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 31964,
+        "historical_prediction_sha256": "2c3d87872de478a2dfad213d9bb06781237682d76a6e70dd3cdb2d0de8d15982",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 68.08486277916116,
+        "historical_directed_auc_percent": 68.08486277916116,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 68.08486277916116
+      },
+      {
+        "dataset": "popqa__popqa_test_filtered_10shot",
+        "status": "passed",
+        "source_csv_sha256": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+        "historical_csv_sha256": [
+          "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 6974,
+        "historical_prediction_sha256": "bcb022f2db0c40f00ffaafb5d3364ffb26a218d26dc64c8a22e17ec677e16be7",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 74.05170876856083,
+        "historical_directed_auc_percent": 74.05170876856083,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 74.05170876856083
+      },
+      {
+        "dataset": "x-fact__test_filtered_10shot",
+        "status": "passed",
+        "source_csv_sha256": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13",
+        "historical_csv_sha256": [
+          "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13"
+        ],
+        "source_csv_bytes_match_historical_manifest": true,
+        "rows": 2315,
+        "historical_prediction_sha256": "cb628f8fcdfcccddd606d8ea0027f62c0b9c1e7ff172e46776cad54147229b9b",
+        "labels_identical_historical": true,
+        "labels_match_csv_order": true,
+        "nll_scores_exactly_identical": true,
+        "claim_group_ids_identical_historical": true,
+        "claim_group_ids_match_csv_order": true,
+        "duplicate_disjoint_mask_identical_historical": true,
+        "duplicate_disjoint_mask_matches_csv_order": true,
+        "nll_max_absolute_difference": 0.0,
+        "directed_auc_percent": 50.22899770761495,
+        "historical_directed_auc_percent": 50.22899770761495,
+        "directed_auc_exactly_identical": true,
+        "paper_auc_percent": 50.22899770761495
+      }
+    ]
+  },
+  "planned_additional_rank_slots": 24,
+  "unique_additional_sources": 24,
+  "limitations": "Exploratory retained collection; prior benchmark exposure, inherited split duplicates, no new blind test. Intervals condition on frozen programs."
+}

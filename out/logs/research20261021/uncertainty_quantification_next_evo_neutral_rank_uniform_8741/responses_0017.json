@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n\n1.  **Detector 1 (Mean NLL)**: Uses the average negative log-probability per sequence.\n    *   *Score*: 71.9969\n    *   *Observation*: This normalizes by sequence length. While robust to length variations, it may dilute the signal if hallucinations are concentrated in short bursts within a long sequence, or if the model is generally confident but wrong on specific atomic facts that don't drastically shift the overall mean.\n\n2.  **Detector 2 (Sum NLL)**: Uses the total negative log-probability (sum) per sequence.\n    *   *Score*: 74.3286\n    *   *Observation*: This outperforms the mean. Hallucinations often manifest as a cluster of low-probability tokens. The sum aggregates these \"costs\" without dilution from high-probability grounded tokens in the rest of the sequence. Since atomic claims are short (10-25 tokens), a single hallucination event can significantly impact the sum of a short sequence, making the sum a stronger discriminator than the mean for this specific task.\n\n### Proposed Detector\n\n**Signal**: Cumulative Negative Log-Likelihood (Sum of -log(p)).\n**Aggregation Principle**: Sequence-level summation.\n\n**Rationale**: The previous best result (Sum NLL) suggests that the \"cost\" of generating a hallucinated sequence accumulates additively. Unlike the mean, which averages out anomalies over the entire sequence length, the sum preserves the magnitude of the anomaly. For atomic claims, where the \"truth\" or \"hallucination\" is a distinct event within a short span, the total probability mass assigned to the generated path is a more direct indicator of plausibility than the average. We will refine the implementation to ensure strict determinism and proper handling of edge cases (empty sequences) while maintaining the sum-based logic that yielded the higher score.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by summing the negative log-probabilities across all generated tokens.\n        Hypothesis: Hallucinated sequences exhibit a higher cumulative probability cost (sum of -log(p)) \n        compared to grounded sequences, as the model assigns lower likelihoods to fabricated facts.\n        \"\"\"\n        # Extract list of log-prob arrays\n        logprobs_list = stats[\"sequence_logprobs\"]\n        \n        # Calculate sum of negative log-probs for each sequence\n        # Handle empty sequences by returning 0.0 to avoid NaN or inf\n        scores = []\n        for lp in logprobs_list:\n            if len(lp) == 0:\n                scores.append(0.0)\n            else:\n                scores.append(-np.sum(lp))\n        \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 692,
+      "prompt_tokens": 821,
+      "total_tokens": 1513,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.223236101010116
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Average Negative Log-Probability (NLL)**: This approach normalizes the uncertainty by sequence length. It achieved a score of **71.9969**. While it mitigates length bias, it dilutes the signal of highly improbable hallucinated tokens by averaging them with more probable grounded tokens.\n2.  **Total Negative Log-Probability (Sum NLL)**: This approach sums the uncertainty across the entire sequence. It achieved a higher score of **74.3286**. This suggests that hallucinations often manifest as clusters of low-probability tokens or that longer sequences containing hallucinations accumulate higher total uncertainty, making the sum a more discriminative feature than the mean for this specific task.\n\n### Proposed Detector\nBased on the superior performance of the sum metric, I will propose a detector that leverages the **maximum negative log-probability** within each sequence.\n\n**Signal**: The peak uncertainty (maximum negative log-probability) among all generated tokens in a sequence.\n**Aggregation Principle**: Sequence-level aggregation via `max`.\n\n**Hypothesis**: Hallucinated claims often contain at least one token that is extremely unlikely given the model's context (a \"hard\" hallucination), causing the maximum negative log-probability to spike significantly higher than in grounded sequences, even if the rest of the sequence is fluent. This peak signal is often more robust to noise than the sum, which can be skewed by long but generally coherent sequences.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the maximum negative log-probability \n        (peak uncertainty) within each generated sequence.\n        Hypothesis: Hallucinated claims frequently contain at least one token with \n        exceptionally low probability given the context, causing the max NLL to \n        spike significantly compared to grounded sequences, regardless of total sequence length.\n        \"\"\"\n        max_neg_logprobs = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            if len(seq_logprobs) == 0:\n                max_neg_logprobs.append(0.0)\n            else:\n                # Calculate negative log-prob for each token and take the maximum\n                neg_logprobs = -seq_logprobs\n                max_val = np.max(neg_logprobs)\n                max_neg_logprobs.append(max_val)\n        \n        return np.array(max_neg_logprobs, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 611,
+      "prompt_tokens": 821,
+      "total_tokens": 1432,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 7.194741577986861
+  }
+]

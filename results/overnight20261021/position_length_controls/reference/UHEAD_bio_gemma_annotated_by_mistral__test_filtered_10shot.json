@@ -1,0 +1,18 @@
+{
+  "status": "passed_reference",
+  "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+  "rows": 2057,
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "raw_sha256": "9e20c2fef8c2b830a62dbcc9bc63fe0dd52e44a7d3eed26748e4cc1589e9bd75",
+  "reference_npz_sha256": "9989ff87727d0833dbf004abf4c911a26fb380612ea49c45dcb54b766b8ee6cd",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "labels_groups_masks_exact": true,
+  "frozen_quadratic_sum_byte_exact": true,
+  "canonical_nll_byte_exact": true,
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum"
+  ],
+  "bootstrap_samples": 0,
+  "scores_sha256": "11cf52e5c4c5aa858dce3d1ba14218ad2a2191af08629ce57709ef4455d54f4c"
+}

@@ -12,6 +12,7 @@ background_raw_path: ""
 sample_size: 0        # 0 means use all available train samples
 val_size: 0.2         # fraction of (sampled) train data used for validation
 split_seed: 441
+split_strategy: stratified  # claim_group keeps repeated claims in one partition
 chunk_size: 512      # number of eval samples per chunk when building features
 
 # Supervision mode: when true, training statistics and labels are exposed
@@ -26,7 +27,6 @@ mem_limit_gb: 64
 
 programdatabaseConfig:
   temp: 40.0
-
 
 
 

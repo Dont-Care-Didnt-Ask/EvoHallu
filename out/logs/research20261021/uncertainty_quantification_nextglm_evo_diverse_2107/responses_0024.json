@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (Local Variance):** Uses a sliding window (size=5) to compute local variance of log-probabilities and returns the maximum average. It assumes hallucinations are characterized by high volatility in confidence at specific local segments.\n   - **Detector 2 (Total Uncertainty):** Uses the sum of negative log-probabilities (total perplexity). It assumes hallucinations are characterized by a global lack of confidence across the entire sequence.\n\n2. **Proposed Detector**\n   - **Signal:** \"Local Confidence Volatility\". The standard deviation of log-probabilities within a fixed-size sliding window.\n   - **Aggregation Principle:** Return the maximum local volatility value across the sequence.\n   - **Specific Change:** Unlike the first detector which used variance (which is sensitive to the mean), this detector uses standard deviation. This isolates the *volatility* of confidence from the average confidence level, making it more robust to sequences that are consistently low-confidence (which might be factual) versus sequences with erratic confidence (hallucinations).\n\n3. **Code**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the maximum local standard deviation of token surprisal.\n        \n        Aggregation Principle: \n        1. Apply a sliding window (size=5) to the log-probabilities of each sequence.\n        2. Calculate the standard deviation of log-probs within each window.\n        3. Return the maximum value found across all windows in the sequence.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by high volatility in confidence (high standard deviation) \n        at specific local segments, rather than a global average or total sum of uncertainty.\n        \"\"\"\n        scores = []\n        window_size = 5\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            n_tokens = len(seq_logprobs)\n            if n_tokens < window_size:\n                scores.append(0.0)\n                continue\n            \n            # Calculate local standard deviation for each window\n            # Using a loop for clarity and safety with arbitrary shapes\n            local_stds = []\n            for i in range(n_tokens - window_size + 1):\n                window = seq_logprobs[i : i + window_size]\n                local_stds.append(np.std(window))\n            \n            if not local_stds:\n                scores.append(0.0)\n            else:\n                # Max of the local standard deviations\n                scores.append(np.max(local_stds))\n                \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 602,
+      "prompt_tokens": 898,
+      "total_tokens": 1500,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 47.09840947500197
+  },
+  {
+    "content": "1. **Analysis of shown detectors**:\n   - **Detector 1 (Max Local Variance)**: Uses a sliding window (size=5) to calculate local variance of log-probabilities, then aggregates by taking the maximum of the averaged local variances. This focuses on identifying high volatility in confidence at specific local segments.\n   - **Detector 2 (Total Negative Log Prob)**: Sums the negative log-probabilities of all tokens in a sequence. This represents the total uncertainty or \"surprisal\" of the generated sequence.\n\n2. **Proposed detector**:\n   - **Signal**: **Trimmed Mean of Top-1 Confidence**. This measures the central tendency of the model's highest confidence (top-1 log-probability) while excluding the lowest 20% of values.\n   - **Aggregation Principle**: **Robust Central Tendency**. Instead of looking at extremes (max variance) or totals (sum), this uses a trimmed mean to filter out potential noise or low-confidence \"buffer\" tokens, focusing on the consistent confidence of the model's primary choices.\n   - **Structural Difference**: It shifts from analyzing the *distribution* of log-probabilities (variance) or the *magnitude* of uncertainty (sum) to analyzing the *consistency* of the model's best guess. It utilizes the `top_k_logits` and `top_k_indices` inputs to isolate the top-1 confidence.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the trimmed mean of the top-1 log-probability per token.\n        \n        Aggregation Principle:\n        1. Extract the log-probability of the top-1 token (index 0) for every generated token.\n        2. Sort these values in ascending order.\n        3. Trim the lowest 20% (p=0.2) and highest 20% of the values.\n        4. Return the mean of the remaining central values.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by a general lack of consistent confidence (low trimmed mean)\n        across the sequence, rather than localized volatility or total uncertainty.\n        \"\"\"\n        scores = []\n        trim_ratio = 0.2\n        for logits, indices in zip(stats[\"top_k_logits\"], stats[\"top_k_indices\"]):\n            # Extract top-1 log-probability\n            top1_logprobs = logits[:, 0]\n            \n            n = len(top1_logprobs)\n            if n == 0:\n                scores.append(0.0)\n                continue\n                \n            # Sort values\n            sorted_probs = np.sort(top1_logprobs)\n            \n            # Calculate trim count\n            k = int(n * trim_ratio)\n            if k > 0:\n                # Trim lowest and highest k\n                trimmed_probs = sorted_probs[k : n - k]\n            else:\n                trimmed_probs = sorted_probs\n            \n            if len(trimmed_probs) > 0:\n                scores.append(np.mean(trimmed_probs))\n            else:\n                # Fallback if trimming removes all data\n                scores.append(np.mean(top1_logprobs))\n                \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 735,
+      "prompt_tokens": 918,
+      "total_tokens": 1653,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 57.00007093697786
+  }
+]

@@ -1,0 +1,83 @@
+{
+  "utc": "2026-10-15T08:46:02.065225+00:00",
+  "runs": 100,
+  "candidates_per_run": 60,
+  "new_seeds": [
+    1049,
+    1098
+  ],
+  "original_four_controls_reproduced_exactly": true,
+  "feature_pool": [
+    "length",
+    "nll_sum",
+    "nll_mean",
+    "nll_std",
+    "nll_max",
+    "nll_q90",
+    "nll_q10",
+    "nll_position_slope",
+    "nll_exp_weighted",
+    "entropy_mean",
+    "entropy_std",
+    "entropy_last_minus_first",
+    "top1_mass_top512_mean",
+    "top1_top2_gap_mean",
+    "top512_entropy_mean",
+    "nll_last_quarter",
+    "nll_first_quarter"
+  ],
+  "feature_scales": [
+    30.0,
+    100.0,
+    5.0,
+    3.0,
+    15.0,
+    10.0,
+    2.0,
+    5.0,
+    5.0,
+    5.0,
+    3.0,
+    3.0,
+    1.0,
+    5.0,
+    6.0,
+    5.0,
+    5.0
+  ],
+  "outer_split_seed": 441,
+  "mode_summary": {
+    "independent": {
+      "n_seeds": 50,
+      "mean_percent": 79.38182427215334,
+      "sample_sd_pp": 1.0190089641560371,
+      "min_max_percent": [
+        76.05486669391833,
+        80.36630785302266
+      ]
+    },
+    "evolution": {
+      "n_seeds": 50,
+      "mean_percent": 79.89993527728573,
+      "sample_sd_pp": 0.7291833542987758,
+      "min_max_percent": [
+        77.4838760957442,
+        80.70695371758187
+      ]
+    }
+  },
+  "evolution_minus_independent_mean_pp": 0.5181110051323969,
+  "independent_seed_bootstrap_ci95_pp": [
+    0.1856989769269177,
+    0.8677783076713429
+  ],
+  "elapsed_seconds_including_feature_extraction": 28.488586593419313,
+  "held_out_datasets_read": false,
+  "primary_winners_changed": false,
+  "scope": "Validation-only seed variability of restricted fixed-feature search; no inference about LLM search or held-out gains",
+  "paired_seed_bootstrap_ci95_pp": [
+    0.21157188195484988,
+    0.840082947268019
+  ],
+  "paired_seed_difference_sd_pp": 1.1369574002547111
+}

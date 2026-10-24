@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (Count Low Confidence):** Uses a threshold on normalized probabilities. It assumes hallucinations are characterized by a high frequency of tokens the model is unsure about. The score is a raw count.\n   - **Detector 2 (Top-K Entropy):** Uses the Shannon entropy of the top-K distribution at each step. It assumes hallucinations are generated with high uncertainty (high entropy). The score is the negative entropy (so higher entropy = higher score).\n\n2. **Novel Detector Ideation**\n   - **Approach:** **Skewness of Log-Probability Distribution**.\n   - **Rationale:** While entropy measures average uncertainty, skewness measures the asymmetry of the distribution.\n   - **Hypothesis:** Factual claims tend to have a relatively smooth, normal-like distribution of confidence scores (low skew). Hallucinations often involve a few \"lucky\" tokens (high confidence) generated to fit the context, while the rest are generated with low confidence. This creates a right-skewed distribution (long tail of low probabilities). Calculating the skewness of the `sequence_logprobs` provides a scalar signal that captures this structural asymmetry.\n\n3. **Code**\n```python\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    Calculates the skewness of the sequence log-probability distribution.\n    \n    Hypothesis: Factual claims have a relatively symmetric distribution of confidence,\n    whereas hallucinations often exhibit a right-skewed distribution (high confidence\n    tokens followed by a long tail of low confidence tokens).\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\"sequence_logprobs\"],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n        scores = []\n\n        for log_probs in sequence_logprobs:\n            # Ensure float32 for scipy compatibility\n            log_probs = np.array(log_probs, dtype=np.float32)\n            \n            # Calculate skewness using scipy.stats.skew\n            # bias=False corrects for statistical bias in the sample estimate\n            score = skew(log_probs, axis=0, bias=False)\n            \n            scores.append(score)\n\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 499,
+      "prompt_tokens": 1160,
+      "total_tokens": 1659,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 38.78527231499902
+  },
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\nThe provided detectors utilize two primary approaches for unsupervised hallucination detection:\n\n*   **Token-Level Confidence (Baseline):** The first detector uses a simple count of low-probability tokens. This is a direct application of the LogProb baseline but adds a threshold-based filter to isolate \"low confidence\" events.\n*   **Top-K Entropy (Localized):** The second detector uses the Shannon entropy of the top-512 distribution at each step. It calculates the negative entropy as the score, effectively penalizing high uncertainty. This assumes that hallucinations are generated in a state of high uncertainty (high entropy).\n\n**Insight:** The current methods focus on the *marginal* distribution (probability of the specific token) or the *global* distribution (entropy of the top-K). A promising area for improvement is the *shape* of the log-probability distribution. While entropy measures spread, **skewness** measures asymmetry. Factual claims tend to follow a predictable distribution where high-confidence tokens are clustered. Hallucinations often result in a \"long tail\" of low probabilities or a \"heavy tail\" of very low probabilities, skewing the distribution negatively.\n\n### 2. Ideation of Novel Detector\n\n**Detector Name:** Distributional Skewness Detector\n\n**Approach:**\n1.  **Input:** Extract the `sequence_logprobs` (list of log-probabilities per sequence).\n2.  **Normalization:** Convert raw log-probabilities into probabilities ($p = \\frac{e^{x}}{\\sum e^{x}}$) to ensure they sum to 1.\n3.  **Statistical Feature:** Calculate the **negative skewness** of the probability distribution for each sequence using `scipy.stats.skew`.\n    *   A negative skew indicates a \"left tail\" (many low probability values), which is characteristic of model uncertainty or hallucination.\n4.  **Hypothesis:** Factual sequences have a distribution concentrated around high probabilities (low skew), while hallucinatory sequences exhibit a negative skew due to the presence of low-probability tokens.\n\n### 3. Code\n\n```python\nimport numpy as np\nfrom scipy import stats\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    Detector based on the Skewness of the Log-Probability Distribution.\n    \n    Computes the negative skewness of the probability distribution derived from\n    the sequence log-probabilities.\n    \n    Hypothesis: Factual claims are generated with a distribution concentrated\n    around high probabilities (low skew), whereas hallucinations often exhibit\n    a negative skew (left tail) due to a high frequency of low-confidence tokens.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\"sequence_logprobs\"],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n        scores = []\n        \n        for log_probs in sequence_logprobs:\n            # Convert list to numpy array\n            log_probs = np.array(log_probs, dtype=np.float32)\n            \n            # Normalize log probabilities to probabilities\n            # p = exp(x) / sum(exp(x))\n            log_sum_exp = np.logaddexp.reduce(log_probs)\n            probs = np.exp(log_probs - log_sum_exp)\n            \n            # Calculate skewness of the probability distribution\n            # axis=0 computes skewness over the sequence length\n            # bias=False uses the adjusted Fisher-Pearson standardized moment coefficient\n            skew = stats.skew(probs, axis=0, bias=False)\n            \n            # Score: Negative Skew\n            # We return -skew because negative skew (left tail) indicates hallucination\n            scores.append(-skew)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 823,
+      "prompt_tokens": 1160,
+      "total_tokens": 1983,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 63.253961467999034
+  }
+]

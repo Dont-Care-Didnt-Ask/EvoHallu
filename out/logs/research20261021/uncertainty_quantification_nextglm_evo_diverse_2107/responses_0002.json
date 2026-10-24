@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analyze shown detectors**: The provided implementation uses a \"Log-Likelihood Ratio\" approach. It calculates the negative log-probability of the actual tokens generated and divides it by the negative log-probability of the most likely token in the top-512 at the final generation step. This acts as a measure of \"surprisal\" relative to the model's maximum confidence. The current implementation is a simple ratio of sums (averages) per sequence.\n\n2. **Propose a detector**: I propose a **Refined Log-Likelihood Ratio with Top-1 Weighting**. The signal is the same: the ratio of actual generation cost to the cost of the best possible continuation. The aggregation principle changes from a simple average of the final step to a **weighted average of the final step's top-1 log-probability and the total sequence log-probability**.\n    *   *Specific Change*: Instead of using the total sum of log-probs for the numerator (which is dominated by early tokens), I will use the **final step's top-1 log-probability** for the numerator. This focuses the detector on the specific moment of generation, which is where hallucinations typically occur. The denominator remains the final step's top-512 max log-probability. This changes the signal from \"how much did I spend in total?\" to \"how much did I spend *right now* compared to the best option right now?\".\n\n3. **Code**:\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        top_k_logits = stats[\"top_k_logits\"]           # List[np.ndarray]\n        \n        scores = []\n        \n        for i, probs in enumerate(sequence_logprobs):\n            # 1. Extract final step top-1 log-probability (actual token)\n            # probs shape is (n_i - 1,). We take the last element.\n            actual_final_ll = -probs[-1]\n            \n            # 2. Extract final step top-512 max log-probability\n            # top_k_logits shape is (n_i, k). We take the last row (n_i-1).\n            final_logits = top_k_logits[i][-1, :]\n            max_top_k_ll = -np.max(final_logits)\n            \n            # 3. Compute Log-Likelihood Ratio\n            # Focus on the final step's confidence gap.\n            # If actual_final_ll is high (low prob), ratio is high (hallucination).\n            # If actual_final_ll is low (high prob), ratio is low (ground truth).\n            if max_top_k_ll > 0:\n                llr = actual_final_ll / max_top_k_ll\n            else:\n                llr = actual_final_ll\n                \n            scores.append(llr)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 680,
+      "prompt_tokens": 673,
+      "total_tokens": 1353,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 52.343341769010294
+  },
+  {
+    "content": "1. **Analysis of Shown Detectors**\nThe provided detector utilizes the **Log-Likelihood Ratio (LLR)** signal. It compares the negative log-likelihood of the actual generated tokens against the maximum negative log-likelihood available in the top-k vocabulary for the final token position. The aggregation principle is a simple element-wise ratio.\n\n2. **Proposed Detector**\n**Signal:** **Top-k Concentration (Entropy)**.\n**Aggregation Principle:** **Mean**.\n**Structural Difference:** Unlike the previous detector which compares the \"actual\" generation against the \"best possible\" alternative (a ratio), this detector analyzes the **shape** of the distribution itself. It measures the model's certainty by calculating the entropy of the top-k logits. High entropy (flat distribution) typically correlates with lower confidence and higher hallucination risk, whereas low entropy (peaked distribution) indicates high confidence.\n\n3. **Code**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Computes the Top-k Entropy for each sequence.\n        \n        Hypothesis: Hallucinations are more likely when the top-k distribution\n        is flat (high entropy), indicating low confidence in the generation.\n        \"\"\"\n        top_k_logits = stats[\"top_k_logits\"]  # List[np.ndarray], shape (n_i, k)\n        \n        scores = []\n        \n        for logits in top_k_logits:\n            # Apply softmax to convert logits to probabilities\n            # shape: (n_i, k)\n            exp_logits = np.exp(logits - np.max(logits, axis=1, keepdims=True))\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # Calculate entropy: -sum(p * log(p))\n            # Handle potential log(0) by adding a small epsilon\n            entropy = -np.sum(probs * np.log(probs + 1e-12), axis=1)\n            \n            # Aggregate over the sequence length (mean entropy)\n            scores.append(np.mean(entropy))\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 502,
+      "prompt_tokens": 693,
+      "total_tokens": 1195,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 38.77819529600674
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### 1. Analysis of Shown Detectors\n- **Detector 1 (Variance-based):** Uses a sliding window to calculate local variance of log-probabilities and returns the maximum value. The score is **69.56**.\n- **Detector 2 (Total Uncertainty):** Sums the negative log-probabilities (total uncertainty) for each sequence. The score is **74.33**.\n\n### 2. Proposed Detector\n**Approach:** Local-refinement of the Total Uncertainty method.\n**Signal:** The average local variance of log-probabilities (similar to Detector 1), but applied to the negative log-probabilities to align with the \"Total Uncertainty\" signal.\n**Aggregation Principle:** Calculate the sliding window variance of the negative log-probabilities and return the maximum value across the sequence.\n**Specific Change:** The aggregation principle is shifted from \"Global Sum\" (Detector 2) to \"Local Volatility\" (Detector 1), using the negative log-probabilities as the input signal. This allows the detector to capture localized spikes in uncertainty, which are often indicative of hallucinations, rather than just the overall length or complexity of the text.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the maximum average local variance of token uncertainty.\n        \n        Aggregation Principle:\n        1. Convert log-probabilities to negative log-probabilities (uncertainty).\n        2. Apply a sliding window (size=5) to the uncertainty values.\n        3. Calculate the variance of uncertainty within each window.\n        4. Return the maximum variance found across all windows.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by localized spikes in model uncertainty (high variance)\n        rather than a global measure of text complexity.\n        \"\"\"\n        scores = []\n        window_size = 5\n        \n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # Convert to uncertainty (negative log-prob)\n            uncertainty = -seq_logprobs\n            n_tokens = len(uncertainty)\n            \n            if n_tokens < window_size:\n                scores.append(0.0)\n                continue\n            \n            # Calculate local variance for each window\n            local_vars = []\n            for i in range(n_tokens - window_size + 1):\n                window = uncertainty[i : i + window_size]\n                local_vars.append(np.var(window))\n            \n            if not local_vars:\n                scores.append(0.0)\n            else:\n                # Max of the local variance\n                scores.append(np.max(local_vars))\n                \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 618,
+      "prompt_tokens": 898,
+      "total_tokens": 1516,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 47.990479547006544
+  },
+  {
+    "content": "### 1. Analysis of Shown Detectors\n- **Detector 1 (Variance-based):** Uses a sliding window (size=5) to calculate local variance of log-probabilities and returns the maximum of the average variances. This attempts to capture local volatility in confidence.\n- **Detector 2 (Sum-based):** Uses the negative sum of log-probabilities (Total Negative Log-Likelihood). This is a standard measure of model perplexity/uncertainty over the entire sequence.\n\n### 2. Proposed Detector\n- **Signal:** **Local Surprisal Volatility (Standard Deviation).**\n- **Aggregation Principle:** Calculate the standard deviation of log-probabilities within a fixed-size sliding window (size=5) for each sequence. Return the maximum standard deviation found across all windows.\n- **Structural Difference:** Unlike the first detector which calculates the **variance** (and then takes the max of the average variance), this detector calculates the **standard deviation** directly. Standard deviation is the square root of variance, providing a more interpretable scale in the same units as the log-probabilities. This focuses on the dispersion of confidence rather than the average volatility of the window.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the maximum local standard deviation of token surprisal.\n        \n        Aggregation Principle: \n        1. Apply a sliding window (size=5) to the log-probabilities of each sequence.\n        2. Calculate the standard deviation of log-probs within each window.\n        3. Return the maximum value found across all windows in the sequence.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by high dispersion in confidence (high standard deviation)\n        at specific local segments, distinct from the average uncertainty of the sequence.\n        \"\"\"\n        scores = []\n        window_size = 5\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            n_tokens = len(seq_logprobs)\n            if n_tokens < window_size:\n                scores.append(0.0)\n                continue\n            \n            # Calculate local standard deviation for each window\n            # Using a loop for clarity and safety with arbitrary window sizes\n            local_stds = []\n            for i in range(n_tokens - window_size + 1):\n                window = seq_logprobs[i : i + window_size]\n                local_stds.append(np.std(window))\n            \n            if not local_stds:\n                scores.append(0.0)\n            else:\n                # Max of the local standard deviations\n                scores.append(np.max(local_stds))\n                \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 623,
+      "prompt_tokens": 920,
+      "total_tokens": 1543,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 48.2913769739971
+  }
+]

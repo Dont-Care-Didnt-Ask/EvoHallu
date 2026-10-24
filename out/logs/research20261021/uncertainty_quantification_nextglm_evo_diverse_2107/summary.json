@@ -1,0 +1,58 @@
+{
+  "status": "finished",
+  "stop_reason": "round_budget",
+  "requests": 60,
+  "valid_candidates": 36,
+  "total_tokens": 94504,
+  "baseline_train": {
+    "score": 74.3286,
+    "metrics": {
+      "AUC": 74.33,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.75, 75.91)",
+      "Precision at median score threshold": 89.02,
+      "Recall at median score threshold": 58.19,
+      "Number of samples": 5605
+    },
+    "seconds": 2.0837604089756496
+  },
+  "baseline_val": {
+    "score": 75.7504,
+    "metrics": {
+      "AUC": 75.75,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.69, 78.81)",
+      "Precision at median score threshold": 90.73,
+      "Recall at median score threshold": 59.22,
+      "Number of samples": 1402
+    },
+    "seconds": 1.9671984949964099
+  },
+  "selected_candidate": "baseline",
+  "selected_validation_auc_percent": 75.7504,
+  "held_out_test_evaluated": false,
+  "elapsed_seconds": 2934.2295058630116,
+  "validation_shortlist": [
+    {
+      "rank": 1,
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_diverse_2107/validation_shortlist/rank_01_baseline.py",
+      "sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d"
+    },
+    {
+      "rank": 2,
+      "candidate": "9da06a76f6ced0f45e9b7a72fd51b426a0f85aa9a47b6c5a374ae58720c6c3af",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_diverse_2107/validation_shortlist/rank_02_9da06a76f6ce.py",
+      "sha256": "eb2df5e7587d7074f5042fa9d7a0f7ac698b7d545e71951ad92f95f90cdb789a"
+    },
+    {
+      "rank": 3,
+      "candidate": "90854b09c1c008aa6fecea780d650a1399f576d9b944d88fb9076284b5256fd7",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_diverse_2107/validation_shortlist/rank_03_90854b09c1c0.py",
+      "sha256": "fe47bf7bb86da52670aab20cf30fdecf4fdeb13770705c09995c8a56b17d85a2"
+    }
+  ]
+}

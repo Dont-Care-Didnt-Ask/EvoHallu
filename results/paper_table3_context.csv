@@ -1,0 +1,10 @@
+dataset,paper_table3_evo_anth1_auc_percent_rounded,paper_table3_logreg1_auc_percent_rounded,paper_table3_feature_basis,qwen38_evo1047_supplied_label_auc_percent,qwen38_evo1047_uhead_verified_auc_percent,logistic14_supplied_label_auc_percent,logistic14_uhead_verified_auc_percent
+PopQA,83,84,Evo-Anth-1 custom features; not our 14-feature pool,78.97267669237408,78.97267669237408,81.6698218038158,81.6698218038158
+AVeriTeC,68,65,Evo-Anth-1 custom features; not our 14-feature pool,65.59527008868584,65.59527008868584,65.74845471647407,65.74845471647407
+X-Fact,53,57,Evo-Anth-1 custom features; not our 14-feature pool,54.51935363731515,54.51935363731515,47.74590163934427,47.74590163934427
+UHEAD,68,69,Evo-Anth-1 custom features; not our 14-feature pool,40.07739334819092,59.92260665180908,39.520782336536236,60.479217663463764
+Cities,99,98,Evo-Anth-1 custom features; not our 14-feature pool,96.11387943607195,96.11387943607195,98.98803225714204,98.98803225714204
+Companies,89,87,Evo-Anth-1 custom features; not our 14-feature pool,86.47777777777776,86.47777777777776,87.46916666666667,87.46916666666667
+CommonClaim,69,67,Evo-Anth-1 custom features; not our 14-feature pool,68.99012750915288,68.99012750915288,69.46777427092539,69.46777427092539
+CounterFact,78,77,Evo-Anth-1 custom features; not our 14-feature pool,72.11287402682916,72.11287402682916,78.39598804223516,78.39598804223516
+WildHall,65,65,Evo-Anth-1 custom features; not our 14-feature pool,65.31312485566215,65.31312485566215,63.494897499844406,63.494897499844406

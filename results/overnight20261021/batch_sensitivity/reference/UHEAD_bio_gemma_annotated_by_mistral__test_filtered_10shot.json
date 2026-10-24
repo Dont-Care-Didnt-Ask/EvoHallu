@@ -1,0 +1,39 @@
+{
+  "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+  "rows": 2057,
+  "phase": "reference",
+  "status": "passed_reference",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "9e20c2fef8c2b830a62dbcc9bc63fe0dd52e44a7d3eed26748e4cc1589e9bd75",
+  "reference_npz_sha256": "96708aae5bfab504119f67f268ca0d06025c150a5742e2d78c9c92dfec05317d",
+  "labels_groups_masks_exact": true,
+  "original512_label_prevalence": {
+    "chunk_size": 512,
+    "chunks": 5,
+    "minimum": 0.6666666666666666,
+    "maximum": 0.7890625,
+    "last_chunk_rows": 9,
+    "prevalence_by_chunk": [
+      0.7890625,
+      0.7109375,
+      0.736328125,
+      0.7109375,
+      0.6666666666666666
+    ],
+    "order": "original CSV/cache row order; no label-based ordering"
+  },
+  "conditions": [
+    {
+      "case": "original_512",
+      "chunk_size": 512,
+      "directed_auc_percent": 38.96009158111383,
+      "paper_auc_percent": 61.03990841888617,
+      "spearman_vs_original512": 1.0,
+      "exact_original512_scores": true,
+      "maximum_absolute_score_difference": 0.0,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 1.467568185995333
+    }
+  ]
+}

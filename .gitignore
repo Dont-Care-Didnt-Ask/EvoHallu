@@ -8,3 +8,20 @@ data/uncertainty_quantification
 *.tex
 *.csv
 *.log
+.venv/
+.cache/
+.pytest_cache/
+results/private/
+data/claims/
+data/feature_cache_archive/
+data/cache_backup_manifest.json
+
+# Keep published result tables when importing this snapshot into another branch.
+!results/**/*.csv
+
+# Intermediate numerical-reference raw cache; compact audit is retained.
+results/overnight20261021/early_numeric_reference/scratch_anchor/
+
+# Transient orchestration locks and local shutdown cancellation marker.
+results/**/*.lock
+results/**/watchdog.cancel

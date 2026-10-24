@@ -1,0 +1,19 @@
+{
+  "created_utc": "2026-10-21T19:06:17.274349+00:00",
+  "status": "cpu_audit_and_reporting_changes_complete",
+  "tests_passed": 5,
+  "test_elapsed_seconds": 7.35,
+  "test_command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_overnight_report_matches.py tests/test_overnight_transfer_provenance.py -q",
+  "gpu_work_launched": false,
+  "execution_protocol_files_changed": false,
+  "existing_candidate_sources_changed": false,
+  "existing_result_scores_changed": false,
+  "files_sha256": {
+    "scripts/overnight_report.py": "a7d1e1fad202525f3e6041218083bde6eb5ee1689061a0e070c1e738db2a6f0d",
+    "scripts/overnight_transfer_eval.py": "8a1e3a8e01ae498528ac77b5f836ebcd20ed8d6a2e00c345047a6f705ef99bd7",
+    "tests/test_overnight_report_matches.py": "afaa6f3e2b0bc780b1ebccef1bc96e2c4bb92852c2d7c80e13db22779a5dd0b5",
+    "tests/test_overnight_transfer_provenance.py": "0a71dde0d8fafd8f81555dca0357f3d451edc057a9fb40922d673d9f607e6f06",
+    "results/overnight20261021/INTERPRETATION_CHECKLIST.md": "ca82a61c14fe7db69744f03e607fba9a0d025f4cfba9f33eb37b3c6bc542f70d",
+    "results/overnight20261021/grouped_control_interpretation_audit.json": "f89a1924cdca1d1139c5f67956f0edf6cd42c9f0a1f8ae3882bd25ab2f945d91"
+  }
+}

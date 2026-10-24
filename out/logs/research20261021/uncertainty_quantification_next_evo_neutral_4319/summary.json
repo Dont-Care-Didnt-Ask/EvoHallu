@@ -1,0 +1,58 @@
+{
+  "status": "finished",
+  "stop_reason": "round_budget",
+  "requests": 60,
+  "valid_candidates": 36,
+  "total_tokens": 130523,
+  "baseline_train": {
+    "score": 74.3286,
+    "metrics": {
+      "AUC": 74.33,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.75, 75.91)",
+      "Precision at median score threshold": 89.02,
+      "Recall at median score threshold": 58.19,
+      "Number of samples": 5605
+    },
+    "seconds": 2.2020347149809822
+  },
+  "baseline_val": {
+    "score": 75.7504,
+    "metrics": {
+      "AUC": 75.75,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.69, 78.81)",
+      "Precision at median score threshold": 90.73,
+      "Recall at median score threshold": 59.22,
+      "Number of samples": 1402
+    },
+    "seconds": 1.942577848007204
+  },
+  "selected_candidate": "baseline",
+  "selected_validation_auc_percent": 75.7504,
+  "held_out_test_evaluated": false,
+  "elapsed_seconds": 1490.276179656008,
+  "validation_shortlist": [
+    {
+      "rank": 1,
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319/validation_shortlist/rank_01_baseline.py",
+      "sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d"
+    },
+    {
+      "rank": 2,
+      "candidate": "d1be0234c85d474716a33f2cc3d1d5c6b644797c5c9e32364f0d68f0cdf5aaec",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319/validation_shortlist/rank_02_d1be0234c85d.py",
+      "sha256": "f3371a5fe4aae6909a4c085d1dd50b6bbb9cf9edc90f6d457b390568fbce4924"
+    },
+    {
+      "rank": 3,
+      "candidate": "9fd7b901da80d0a2928d401c5942e80c9911707ce1f8bd04f75301dd80866d10",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319/validation_shortlist/rank_03_9fd7b901da80.py",
+      "sha256": "c34d936fbf32744333048e89f78bbfe4840c6b48946e0e7042e3efcaf45785df"
+    }
+  ]
+}

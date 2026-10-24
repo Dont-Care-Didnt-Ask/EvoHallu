@@ -1,0 +1,185 @@
+{
+  "study": "fixed_screen_component_logistic_refit",
+  "source_ablation_manifest": "results/overnight20261021/screen_component_ablations/manifest.json",
+  "source_ablation_manifest_sha256": "cf29f4efb8587c5b4eabfd8285dfd2ef22ef71dde9862353595c0281a0981f18",
+  "selection": "All four source-validation screen winners; all eleven drops retained",
+  "components": [
+    {
+      "name": "original/normalized_slope",
+      "full": "new/screen_original__full",
+      "drop": "new/screen_original__drop_normalized_slope",
+      "expression": "0.7 * slope_score_norm"
+    },
+    {
+      "name": "original/inverse_tail_range",
+      "full": "new/screen_original__full",
+      "drop": "new/screen_original__drop_inverse_tail_range",
+      "expression": "0.3 * tail_collapse_norm"
+    },
+    {
+      "name": "neutral/total_nll",
+      "full": "new/screen_neutral__full",
+      "drop": "new/screen_neutral__drop_total_nll",
+      "expression": "total_neg_logprob"
+    },
+    {
+      "name": "neutral/weighted_gap",
+      "full": "new/screen_neutral__full",
+      "drop": "new/screen_neutral__drop_weighted_gap",
+      "expression": "ALPHA * weighted_drift"
+    },
+    {
+      "name": "neutral/tail_gap_variance",
+      "full": "new/screen_neutral__full",
+      "drop": "new/screen_neutral__drop_tail_gap_variance",
+      "expression": "BETA * tail_variance"
+    },
+    {
+      "name": "diverse/total_nll",
+      "full": "new/screen_diverse__full",
+      "drop": "new/screen_diverse__drop_total_nll",
+      "expression": "total_neg_logprob"
+    },
+    {
+      "name": "diverse/relative_gap_drift",
+      "full": "new/screen_diverse__full",
+      "drop": "new/screen_diverse__drop_relative_gap_drift",
+      "expression": "ALPHA * normalized_drift"
+    },
+    {
+      "name": "diverse/tail_gap_variance",
+      "full": "new/screen_diverse__full",
+      "drop": "new/screen_diverse__drop_tail_gap_variance",
+      "expression": "BETA * last_q_variance"
+    },
+    {
+      "name": "compositional/tail_surprisal_variance",
+      "full": "new/screen_compositional__full",
+      "drop": "new/screen_compositional__drop_tail_surprisal_variance",
+      "expression": "W_VAR * score_var"
+    },
+    {
+      "name": "compositional/tail_surprisal_mean",
+      "full": "new/screen_compositional__full",
+      "drop": "new/screen_compositional__drop_tail_surprisal_mean",
+      "expression": "W_MEAN * score_mean"
+    },
+    {
+      "name": "compositional/global_correlation",
+      "full": "new/screen_compositional__full",
+      "drop": "new/screen_compositional__drop_global_correlation",
+      "expression": "W_SLOPE * score_slope"
+    }
+  ],
+  "programs": [
+    {
+      "method": "new/screen_original__full",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_original__full/frozen_estimator.py",
+      "sha256": "624e5d7457cff945b4a47b947309e7f84c499431ba134408595e265a435e69d0",
+      "policy": "original",
+      "role": "full"
+    },
+    {
+      "method": "new/screen_original__drop_normalized_slope",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_original__drop_normalized_slope/frozen_estimator.py",
+      "sha256": "dafcc7ea47dd2157d89cc63fc78bad4d08d409aac5b4486b5e471ec538ea39bf",
+      "policy": "original",
+      "role": "drop_normalized_slope"
+    },
+    {
+      "method": "new/screen_original__drop_inverse_tail_range",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_original__drop_inverse_tail_range/frozen_estimator.py",
+      "sha256": "fc4b221503796464b7781384e27d73f522b5bef405dc4674891c30d66523145e",
+      "policy": "original",
+      "role": "drop_inverse_tail_range"
+    },
+    {
+      "method": "new/screen_neutral__full",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_neutral__full/frozen_estimator.py",
+      "sha256": "f307243eb19d36da7dff35740ba7c2b87d86ba3fcd37fff762b46069241eb53e",
+      "policy": "neutral",
+      "role": "full"
+    },
+    {
+      "method": "new/screen_neutral__drop_total_nll",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_neutral__drop_total_nll/frozen_estimator.py",
+      "sha256": "2a9bdc2c4b379174c179634e116dfc680e8a029c05e9bcde5f643839080bb813",
+      "policy": "neutral",
+      "role": "drop_total_nll"
+    },
+    {
+      "method": "new/screen_neutral__drop_weighted_gap",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_neutral__drop_weighted_gap/frozen_estimator.py",
+      "sha256": "a24af4b0e4e4822043fffcb3519f1fa7129d2ba5e2d92c427d9fd0feb18022de",
+      "policy": "neutral",
+      "role": "drop_weighted_gap"
+    },
+    {
+      "method": "new/screen_neutral__drop_tail_gap_variance",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_neutral__drop_tail_gap_variance/frozen_estimator.py",
+      "sha256": "1936a83918ccae32ff97189f1747ecfcd030615a8ed5f0a3e67e047fa5641aa9",
+      "policy": "neutral",
+      "role": "drop_tail_gap_variance"
+    },
+    {
+      "method": "new/screen_diverse__full",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_diverse__full/frozen_estimator.py",
+      "sha256": "d7d9834511f783cf6b429ddca86a309cc6376598ba2eea61f63f9bc184ecf8de",
+      "policy": "diverse",
+      "role": "full"
+    },
+    {
+      "method": "new/screen_diverse__drop_total_nll",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_diverse__drop_total_nll/frozen_estimator.py",
+      "sha256": "772038baf05027db6bca46d68ccb03b0931e440524e596b132142204be343629",
+      "policy": "diverse",
+      "role": "drop_total_nll"
+    },
+    {
+      "method": "new/screen_diverse__drop_relative_gap_drift",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_diverse__drop_relative_gap_drift/frozen_estimator.py",
+      "sha256": "bc55faacfffbf48794706296a3cc628d4ea9896233a2addfb3c7a6922f966ffa",
+      "policy": "diverse",
+      "role": "drop_relative_gap_drift"
+    },
+    {
+      "method": "new/screen_diverse__drop_tail_gap_variance",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_diverse__drop_tail_gap_variance/frozen_estimator.py",
+      "sha256": "a951191cf356ac766a4c6c2ff77d84f1b9d7ed2c0551b4f327f0bd1c8d2c1087",
+      "policy": "diverse",
+      "role": "drop_tail_gap_variance"
+    },
+    {
+      "method": "new/screen_compositional__full",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_compositional__full/frozen_estimator.py",
+      "sha256": "cfe0f01cc27a635a30d4c3152c1d6d6c6a68e3da5a7423e23c9d535719438f4f",
+      "policy": "compositional",
+      "role": "full"
+    },
+    {
+      "method": "new/screen_compositional__drop_tail_surprisal_variance",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_compositional__drop_tail_surprisal_variance/frozen_estimator.py",
+      "sha256": "8d66608c20952fa7375203815645666be0ce54b7d2c384dc55c39671ac702056",
+      "policy": "compositional",
+      "role": "drop_tail_surprisal_variance"
+    },
+    {
+      "method": "new/screen_compositional__drop_tail_surprisal_mean",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_compositional__drop_tail_surprisal_mean/frozen_estimator.py",
+      "sha256": "28cc6b8cf5cfdb5153e4fa57510b7bcf5910f7abcf9da958e5e17fde7f753c2d",
+      "policy": "compositional",
+      "role": "drop_tail_surprisal_mean"
+    },
+    {
+      "method": "new/screen_compositional__drop_global_correlation",
+      "file": "results/overnight20261021/screen_component_refit/components/screen_compositional__drop_global_correlation/frozen_estimator.py",
+      "sha256": "186184c49794c7d9d6261a98f4bb1284bdff94680cf98ffa681a5542959a19a0",
+      "policy": "compositional",
+      "role": "drop_global_correlation"
+    }
+  ],
+  "extra_feature": "float64_total_nll",
+  "source_pool_validation_informed": true,
+  "outer_validation_is_independent": false,
+  "held_out_scores_used_to_choose_features": false
+}

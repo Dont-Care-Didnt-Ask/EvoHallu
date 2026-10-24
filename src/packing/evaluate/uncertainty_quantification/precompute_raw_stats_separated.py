@@ -83,7 +83,13 @@ def _precompute_split(
     chat_template: Optional[str],
     top_k: int,
     layer_stride: int,
+    modalities: str = "all",
+    max_batch_tokens: int = 16384,
+    gc_interval: int = 1,
+    cuda_cache_interval: int = 1,
 ) -> Dict[str, Any]:
+    if batch_size <= 0 or max_batch_tokens < 0 or gc_interval < 0 or cuda_cache_interval < 0:
+        raise ValueError("Batch size must be positive and token budget nonnegative")
     print(f"{torch.cuda.is_available()=}")
     print(f"{torch.cuda.device_count()}")
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -99,12 +105,12 @@ def _precompute_split(
     # Chat-form texts (may be identical to raw texts if template is not used)
     rendered_texts = _apply_chat_template(tokenizer, texts, chat_template)
 
-    for start in tqdm(range(0, len(texts), batch_size), desc="Precomputing raw stats"):
+    progress = tqdm(total=len(texts), desc="Precomputing raw stats", unit="claims")
+    start = 0
+    batches_completed = 0
+    while start < len(texts):
         end = min(start + batch_size, len(texts))
-        batch_raw = texts[start:end]
         batch_chat = rendered_texts[start:end]
-        batch_labels = labels[start:end]
-        batch_ids = ids[start:end]
 
         # Tokenize chat-form inputs for the LM forward pass
         chat_inputs = tokenizer(
@@ -112,7 +118,18 @@ def _precompute_split(
             return_tensors="pt",
             padding=True,
             truncation=True,
-        ).to(device)
+        )
+        # A single long claim otherwise pads every row in its GPU batch.
+        # Keep row order and all tokens, shrinking only the forward microbatch.
+        while (modalities == "logits" and max_batch_tokens and end-start > 1
+               and chat_inputs["input_ids"].numel() > max_batch_tokens):
+            end = start + max(1, (end-start)//2)
+            batch_chat = rendered_texts[start:end]
+            chat_inputs = tokenizer(batch_chat, return_tensors="pt", padding=True, truncation=True)
+        chat_inputs = chat_inputs.to(device)
+        batch_raw = texts[start:end]
+        batch_labels = labels[start:end]
+        batch_ids = ids[start:end]
 
         # Tokenize raw claims without any special tokens for later alignment
         raw_inputs = tokenizer(
@@ -126,12 +143,12 @@ def _precompute_split(
         with torch.no_grad():
             outputs = model(
                 **chat_inputs,
-                output_hidden_states=True,
-                output_attentions=True,
+                output_hidden_states=modalities == "all",
+                output_attentions=modalities == "all",
             )
 
-        hidden_states = outputs.hidden_states  # tuple (layers + 1)
-        attentions = outputs.attentions  # tuple (layers)
+        hidden_states = outputs.hidden_states if modalities == "all" else ()
+        attentions = outputs.attentions if modalities == "all" else ()
         logits = outputs.logits  # [bs, seq_len, vocab]
 
         # Move vocab-related tensors to CPU / float16 to save space
@@ -162,7 +179,7 @@ def _precompute_split(
                 hs_layers.append(
                     h[i, :length].to(dtype=torch.float16, device="cpu")
                 )
-            hidden_i = torch.stack(hs_layers, dim=0)
+            hidden_i = torch.stack(hs_layers, dim=0) if hs_layers else None
 
             # Stack attentions into [num_layers, num_heads, length, length]
             attn_layers: List[torch.Tensor] = []
@@ -170,7 +187,7 @@ def _precompute_split(
                 attn_layers.append(
                     a[i, :, :length, :length].to(dtype=torch.float16, device="cpu")
                 )
-            attn_i = torch.stack(attn_layers, dim=0)
+            attn_i = torch.stack(attn_layers, dim=0) if attn_layers else None
 
             raw_logits_i = logits[i, :length]  # already on CPU, float16
             top_k_vals, top_k_inds = torch.topk(raw_logits_i, k=top_k, dim=-1)
@@ -199,13 +216,13 @@ def _precompute_split(
             }
 
             # Create separate samples for each output type
-            hidden_states_sample = common_fields.copy()
-            hidden_states_sample["hidden_states"] = hidden_i
-            hidden_states_samples.append(hidden_states_sample)
-
-            attentions_sample = common_fields.copy()
-            attentions_sample["attentions"] = attn_i
-            attentions_samples.append(attentions_sample)
+            if modalities == "all":
+                hidden_states_sample = common_fields.copy()
+                hidden_states_sample["hidden_states"] = hidden_i
+                hidden_states_samples.append(hidden_states_sample)
+                attentions_sample = common_fields.copy()
+                attentions_sample["attentions"] = attn_i
+                attentions_samples.append(attentions_sample)
 
             logits_sample = common_fields.copy()
             logits_sample["top_k_logits"] = top_k_vals
@@ -214,8 +231,16 @@ def _precompute_split(
 
         # Free CUDA memory between batches
         del outputs
-        torch.cuda.empty_cache()
-        gc.collect()
+        batches_completed += 1
+        if cuda_cache_interval and batches_completed % cuda_cache_interval == 0:
+            torch.cuda.empty_cache()
+        # Explicit collection scans the growing retained CPU cache. It does not
+        # change feature calculations; default 1 preserves historical behavior.
+        if gc_interval and batches_completed % gc_interval == 0:
+            gc.collect()
+        progress.update(end-start)
+        start = end
+    progress.close()
 
     config = model.config
     meta = {
@@ -224,6 +249,13 @@ def _precompute_split(
         "num_layers": int(getattr(config, "num_hidden_layers", 0)),
         "num_attention_heads": int(getattr(config, "num_attention_heads", 0)),
         "vocab_size": int(getattr(config, "vocab_size", 0)),
+        "modalities": modalities,
+        "model_dtype": str(getattr(model, "dtype", "unknown")),
+        "requested_forward_batch_size": batch_size,
+        "max_padded_forward_tokens": max_batch_tokens if modalities == "logits" else None,
+        "cpu_feature_threads": torch.get_num_threads(),
+        "cpu_gc_interval_batches": gc_interval,
+        "cuda_cache_cleanup_interval_batches": cuda_cache_interval,
     }
 
     return {
@@ -249,13 +281,15 @@ def save_outputs(output_path: Path, output_structs: Dict[str, Any]) -> None:
     
     # Save hidden states
     hidden_states_path = f"{base_path}_hidden_states{suffix}"
-    torch.save(output_structs["hidden_states_struct"], hidden_states_path)
-    print(f"Saved hidden states to: {hidden_states_path}")
+    if output_structs["hidden_states_struct"]["samples"]:
+        torch.save(output_structs["hidden_states_struct"], hidden_states_path)
+        print(f"Saved hidden states to: {hidden_states_path}")
     
     # Save attentions
     attentions_path = f"{base_path}_attentions{suffix}"
-    torch.save(output_structs["attentions_struct"], attentions_path)
-    print(f"Saved attentions to: {attentions_path}")
+    if output_structs["attentions_struct"]["samples"]:
+        torch.save(output_structs["attentions_struct"], attentions_path)
+        print(f"Saved attentions to: {attentions_path}")
     
     # Save logits
     logits_path = f"{base_path}_logits{suffix}"
@@ -336,6 +370,11 @@ def main() -> None:
         help="Stride for sampling layers. Larger stride means less layers are sampled.",
     )
 
+    ap.add_argument("--modalities", choices=["all", "logits"], default="all",
+                    help="Use logits to avoid retaining attention and hidden-state tensors.")
+    ap.add_argument("--dtype", choices=["float32", "bfloat16", "float16"], default="float32")
+    ap.add_argument("--max-batch-tokens", type=int, default=16384,
+                    help="Shrink logits-only forward batches above this padded token count; 0 disables.")
     args = ap.parse_args()
 
     df = _normalize_dataframe(args.data, text_col=args.text_col, label_col=args.label_col)
@@ -347,13 +386,15 @@ def main() -> None:
         args.model_id,
         cache_dir=args.cache_dir,
     )
+    tokenizer.padding_side = "right"
     if tokenizer.pad_token is None and tokenizer.eos_token is not None:
         tokenizer.pad_token = tokenizer.eos_token
 
     model = AutoModelForCausalLM.from_pretrained(
         args.model_id,
         cache_dir=args.cache_dir,
-        torch_dtype=torch.float32,
+        torch_dtype=getattr(torch, args.dtype),
+        attn_implementation="eager" if args.modalities == "all" else "sdpa",
     ).eval().to("cuda:0" if torch.cuda.is_available() else "cpu")
 
     output_structs = _precompute_split(
@@ -367,6 +408,8 @@ def main() -> None:
         chat_template=args.chat_template,
         top_k=args.top_k,
         layer_stride=args.layer_stride,
+        modalities=args.modalities,
+        max_batch_tokens=args.max_batch_tokens,
     )
 
     output_path = Path(args.output_path)

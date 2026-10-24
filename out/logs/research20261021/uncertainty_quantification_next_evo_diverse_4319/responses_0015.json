@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Max Local Variance Detector**: This approach looks for contiguous segments with high fluctuation in token surprisal (negative log-probability). The hypothesis is that hallucinations involve incoherent transitions causing local instability.\n    *   *Result*: 51.69 (Poor). This suggests that hallucinated text often maintains consistent low probabilities (the model \"hallucinates confidently\" or gets stuck in a low-probability loop) rather than fluctuating wildly. The signal of \"instability\" is weak or misaligned with the actual failure mode.\n2.  **Total Negative Log-Probability (Perplexity Proxy)**: This aggregates the total surprise across the entire sequence.\n    *   *Result*: 74.33 (Good). This indicates that hallucinated sequences, on average, are significantly less probable (more surprising) than grounded ones when viewed as a whole. The model struggles to assign high probability to the fabricated content compared to real content.\n\n### Proposed Detector\n**Approach**: **Global Mean Surprisal (Negative Log-Likelihood)**\n**Signal**: The average negative log-probability of the generated tokens.\n**Aggregation Principle**: Global mean (arithmetic average) of the sequence log-probabilities.\n\n**Rationale**: The successful \"Total Neg Log Prob\" detector worked well, but it is length-biased (longer sequences get higher scores regardless of quality). Averaging normalizes for sequence length, providing a robust per-token measure of the model's confidence in the generated content. Hallucinations typically manifest as a systematic drop in the average probability mass assigned to the tokens, rather than just a sum of errors.\n\n**Hypothesis for Future**: Incorporating the ratio of the *mean* log-probability to the *log-probability of the most likely token* (local consistency) might further distinguish between plausible but rare ground truth and completely fabricated tokens.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by computing the global mean negative log-probability \n        (average surprisal) across each sequence.\n        \n        Hypothesis: Incorporating the ratio of the mean log-probability to the \n        log-probability of the most likely token (local consistency) might further \n        distinguish between plausible but rare ground truth and completely fabricated tokens.\n        \"\"\"\n        # Calculate mean negative log-prob for each sequence\n        # sequence_logprobs is List[np.ndarray], shape (N, n_i-1)\n        neg_logprobs = -np.array(stats[\"sequence_logprobs\"], dtype=np.float32)\n        \n        # Compute mean along the token axis (axis=1)\n        # Result shape: (N,)\n        scores = np.mean(neg_logprobs, axis=1)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 695,
+      "prompt_tokens": 890,
+      "total_tokens": 1585,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.22122703801142
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Local Variance Detector**: Uses the maximum local variance of negative log-probabilities within sliding windows.\n    *   *Signal*: Fluctuation in confidence within short sequences.\n    *   *Aggregation*: Max over sliding windows.\n    *   *Result*: 51.69 (Poor). This suggests that hallucinated tokens do not necessarily appear in clusters of high-confidence fluctuation, or that the variance metric is too noisy for this specific task.\n\n2.  **Total Surprisal Detector**: Uses the sum of negative log-probabilities (total cross-entropy) for the entire sequence.\n    *   *Signal*: Overall difficulty of the sequence for the model.\n    *   *Aggregation*: Sum over the sequence.\n    *   *Result*: 74.33 (Good). This indicates that hallucinated sequences are generally harder for the model to generate (lower probability) than grounded ones, likely because they involve factually incorrect or nonsensical content that falls into the \"tails\" of the model's distribution.\n\n### Proposed Detector\nThe \"Total Surprisal\" approach works well but is sensitive to sequence length (longer sequences naturally have higher total surprisal). A more robust signal for atomic claims (10-25 tokens) is the **average surprisal per token** (mean negative log-probability). This normalizes the difficulty metric by sequence length, focusing purely on the *density* of uncertainty.\n\n**Signal Family**: Global Confidence Density (Mean Negative Log-Probability).\n**Aggregation Principle**: Arithmetic Mean of negative log-probabilities across the sequence.\n**Structural Difference**: Unlike the sum (which scales with length) or the max-variance (which looks for local instability), this approach measures the *average* confidence level of the generated tokens, assuming hallucinations are distributed as low-probability events throughout the claim rather than just at the end or in clusters.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by calculating the average negative log-probability (surprisal) \n        per token across the entire sequence.\n        \n        Hypothesis: Hallucinated claims consist of tokens that are collectively less probable \n        under the model's distribution compared to grounded claims, resulting in a higher \n        mean surprisal regardless of sequence length.\n        \"\"\"\n        # Calculate mean negative log-probability for each sequence\n        # sequence_logprobs: List[np.ndarray], shape (n_i-1,)\n        mean_surprisal = np.array([\n            -np.mean(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        return mean_surprisal\n```",
+    "usage": {
+      "completion_tokens": 678,
+      "prompt_tokens": 910,
+      "total_tokens": 1588,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 16.153727360011544
+  }
+]

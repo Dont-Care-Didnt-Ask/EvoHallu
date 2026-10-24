@@ -1,0 +1,14 @@
+{
+  "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+  "cpu_configuration_passed": true,
+  "architecture": [
+    "PixtralForConditionalGeneration"
+  ],
+  "quantization": "fp8",
+  "dtype": "torch.bfloat16",
+  "tokenizer_class": "MistralTokenizer",
+  "prompts_checked": 218,
+  "max_prompt_tokens": 3735,
+  "enable_thinking_false_changed_tokenization": 0,
+  "gpu_serving_verified": false
+}

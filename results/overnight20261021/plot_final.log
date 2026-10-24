@@ -1,0 +1,412 @@
+{
+  "source": {
+    "status": "plotted",
+    "metric": "paper_macro_auc_percent",
+    "nll": 68.71117305407847,
+    "groups": [
+      {
+        "phase": "prompt_screen",
+        "policy": "original",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 30,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next_prompt_original_2107__primary"
+        ],
+        "mean": 69.97286532835223,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "prompt_screen",
+        "policy": "neutral",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 30,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next_prompt_neutral_2107__primary"
+        ],
+        "mean": 73.136560859309,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "prompt_screen",
+        "policy": "diverse",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 30,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next_prompt_diverse_2107__primary"
+        ],
+        "mean": 73.00718514438294,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "prompt_screen",
+        "policy": "compositional",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 30,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next_prompt_compositional_2107__primary"
+        ],
+        "mean": 69.53768969833672,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "evolution_screen",
+        "policy": "original",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "planned_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "methods": [
+          "new/next_evo_original_2107__primary",
+          "new/next_evo_original_4319__primary",
+          "new/next_evo_original_8741__primary"
+        ],
+        "mean": 69.9433140411622,
+        "seed_sample_sd": 1.0594688656044124,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "evolution_screen",
+        "policy": "neutral",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "planned_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "methods": [
+          "new/next_evo_neutral_2107__primary",
+          "new/next_evo_neutral_4319__primary",
+          "new/next_evo_neutral_8741__primary"
+        ],
+        "mean": 68.71117305407847,
+        "seed_sample_sd": 0.0,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "evolution_screen",
+        "policy": "diverse",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "planned_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "methods": [
+          "new/next_evo_diverse_2107__primary",
+          "new/next_evo_diverse_4319__primary",
+          "new/next_evo_diverse_8741__primary"
+        ],
+        "mean": 70.35499489417691,
+        "seed_sample_sd": 1.648125241672298,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "evolution_screen",
+        "policy": "compositional",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "planned_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "methods": [
+          "new/next_evo_compositional_2107__primary",
+          "new/next_evo_compositional_4319__primary",
+          "new/next_evo_compositional_8741__primary"
+        ],
+        "mean": 70.00190645850319,
+        "seed_sample_sd": 0.9111477026097683,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "feedback_control",
+        "policy": "neutral",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "planned_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "methods": [
+          "new/next_fixed_neutral_2107__primary",
+          "new/next_fixed_neutral_4319__primary",
+          "new/next_fixed_neutral_8741__primary"
+        ],
+        "mean": 68.71117305407847,
+        "seed_sample_sd": 0.0,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "sampler_control",
+        "policy": "neutral",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "planned_seeds": [
+          2107,
+          4319,
+          8741
+        ],
+        "methods": [
+          "new/next_evo_neutral_rank_uniform_2107__primary",
+          "new/next_evo_neutral_rank_uniform_4319__primary",
+          "new/next_evo_neutral_rank_uniform_8741__primary"
+        ],
+        "mean": 68.92173887957007,
+        "seed_sample_sd": 0.36427882237217774,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "interface_control",
+        "policy": "neutral",
+        "writer": "Qwen/Qwen3.5-9B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next_evo_neutral_interface_2107__primary"
+        ],
+        "mean": 68.71117305407847,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "writer_confirmation",
+        "policy": "original",
+        "writer": "Qwen/Qwen3.8-27B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next27b_evo_original_2107__primary"
+        ],
+        "mean": 71.15468516741143,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "writer_generalization",
+        "policy": "original",
+        "writer": "zai-org/GLM-4.7-Flash",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/nextglm_evo_original_2107__primary"
+        ],
+        "mean": 70.67107183160111,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "writer_confirmation",
+        "policy": "diverse",
+        "writer": "Qwen/Qwen3.8-27B",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/next27b_evo_diverse_2107__primary"
+        ],
+        "mean": 72.30606535101663,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      },
+      {
+        "phase": "writer_generalization",
+        "policy": "diverse",
+        "writer": "zai-org/GLM-4.7-Flash",
+        "planned_requests": 60,
+        "evaluated_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "methods": [
+          "new/nextglm_evo_diverse_2107__primary"
+        ],
+        "mean": 68.71117305407847,
+        "seed_sample_sd": null,
+        "full_planned_request_budgets_verified": true
+      }
+    ],
+    "ignored_partial_or_unverified_primary_identities": [],
+    "incomplete_staged_methods": [],
+    "planned_groups_without_results": [],
+    "files": [
+      "/workspace/mod1/results/overnight20261021/figures/source_auc_all_seeds.png",
+      "/workspace/mod1/results/overnight20261021/figures/source_auc_all_seeds.pdf"
+    ]
+  },
+  "transfer": {
+    "status": "plotted",
+    "report": "/workspace/mod1/results/overnight20261021/transfer_llama32_1b/aa4771d92b2c7bca/transfer_report.json",
+    "coverage": 6,
+    "ignored_partial_or_unverified_primary_identities": [],
+    "prespecified_datasets": [
+      "AVeriTeC__dev_filtered_10shot",
+      "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "geometry__cities",
+      "geometry__common_claim_true_false",
+      "geometry__companies_true_false"
+    ],
+    "groups": [
+      {
+        "phase": "prompt_screen",
+        "policy": "original",
+        "writer": "Qwen/Qwen3.5-9B",
+        "methods": [
+          "new/next_prompt_original_2107__primary"
+        ],
+        "paired_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "source_mean": 70.36598116708748,
+        "target_mean": 69.30370500602996,
+        "target_minus_source_mean": -1.0622761610575253
+      },
+      {
+        "phase": "prompt_screen",
+        "policy": "neutral",
+        "writer": "Qwen/Qwen3.5-9B",
+        "methods": [
+          "new/next_prompt_neutral_2107__primary"
+        ],
+        "paired_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "source_mean": 74.26670417242555,
+        "target_mean": 71.15572672924843,
+        "target_minus_source_mean": -3.11097744317712
+      },
+      {
+        "phase": "prompt_screen",
+        "policy": "diverse",
+        "writer": "Qwen/Qwen3.5-9B",
+        "methods": [
+          "new/next_prompt_diverse_2107__primary"
+        ],
+        "paired_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "source_mean": 74.50216612892022,
+        "target_mean": 71.34938718308081,
+        "target_minus_source_mean": -3.1527789458394153
+      },
+      {
+        "phase": "prompt_screen",
+        "policy": "compositional",
+        "writer": "Qwen/Qwen3.5-9B",
+        "methods": [
+          "new/next_prompt_compositional_2107__primary"
+        ],
+        "paired_seeds": [
+          2107
+        ],
+        "planned_seeds": [
+          2107
+        ],
+        "source_mean": 70.49439056793405,
+        "target_mean": 66.93921859756743,
+        "target_minus_source_mean": -3.555171970366615
+      }
+    ],
+    "baseline_source": 71.00583137189487,
+    "baseline_target": 67.7913750268347,
+    "files": [
+      "/workspace/mod1/results/overnight20261021/figures/feature_model_transfer_matched6.png",
+      "/workspace/mod1/results/overnight20261021/figures/feature_model_transfer_matched6.pdf"
+    ]
+  }
+}

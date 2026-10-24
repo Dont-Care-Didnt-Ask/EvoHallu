@@ -1,0 +1,107 @@
+{
+  "chosen_C": 10.0,
+  "tuning": [
+    {
+      "C": 0.01,
+      "mean_auc": 78.98451975810063,
+      "fold_auc": [
+        79.50913242009132,
+        78.5848496914513,
+        78.85957716275924
+      ]
+    },
+    {
+      "C": 0.1,
+      "mean_auc": 79.22557351593206,
+      "fold_auc": [
+        79.92286548812531,
+        78.90771043916418,
+        78.84614462050669
+      ]
+    },
+    {
+      "C": 1.0,
+      "mean_auc": 79.266638548569,
+      "fold_auc": [
+        80.00864136118977,
+        78.98398808981254,
+        78.8072861947047
+      ]
+    },
+    {
+      "C": 10.0,
+      "mean_auc": 79.27424255824549,
+      "fold_auc": [
+        80.02713578735236,
+        78.99662107597862,
+        78.79897081140551
+      ]
+    },
+    {
+      "C": 100.0,
+      "mean_auc": 79.27418846032474,
+      "fold_auc": [
+        80.02793296089385,
+        78.99662107597862,
+        78.79801134410175
+      ]
+    }
+  ],
+  "inner_folds": [
+    {
+      "fit_samples": 3736,
+      "holdout_samples": 1870,
+      "shared_normalized_claims": 0
+    },
+    {
+      "fit_samples": 3738,
+      "holdout_samples": 1868,
+      "shared_normalized_claims": 0
+    },
+    {
+      "fit_samples": 3738,
+      "holdout_samples": 1868,
+      "shared_normalized_claims": 0
+    }
+  ],
+  "fit_samples": 5606,
+  "diagnostic_validation_samples": 1401,
+  "outer_shared_normalized_claims": 0,
+  "validation_used_for_hyperparameter_selection": false,
+  "held_out_inputs_read_before_model_frozen": false,
+  "feature_names": [
+    "diverse/total_nll",
+    "diverse/relative_gap_drift",
+    "diverse/tail_gap_variance"
+  ],
+  "original_effective_coefficients": [
+    1.0,
+    2.0,
+    2.5
+  ],
+  "scaler_mean": [
+    141.62638227830305,
+    -0.9035064773477914,
+    6.764308243260621
+  ],
+  "scaler_scale": [
+    15.187001598989518,
+    0.09443798983286429,
+    9.1419275755946
+  ],
+  "coefficients_standardized": [
+    0.9337490751298682,
+    0.23283094694346004,
+    0.8040027293082064
+  ],
+  "coefficients_raw": [
+    0.061483438257621315,
+    2.465437345241281,
+    0.08794674018798636
+  ],
+  "intercept_standardized": 1.6341977640405985,
+  "intercept_raw": -5.440839415118577,
+  "raw_coefficient_pearson": 0.19838656237436697,
+  "standardized_coefficient_cosine": 0.9473657881271588,
+  "frozen_evo_source_sha256": "d7d9834511f783cf6b429ddca86a309cc6376598ba2eea61f63f9bc184ecf8de"
+}

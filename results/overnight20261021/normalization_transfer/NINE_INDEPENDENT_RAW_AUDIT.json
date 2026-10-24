@@ -1,0 +1,70 @@
+{
+  "status": "independent_full_nine_raw_hashes_and_protected_artifacts_passed",
+  "created_utc": "2026-10-22T00:26:44.011126+00:00",
+  "formal_completion_sha256": "7c0d8f1daeed7a2309eeb696d1098ccd83d824c80df49b3c09abe3f2823a588c",
+  "cache_audit_sha256": "248dcade075ad0c80576b7359ef0d9679b65e0389481dca839dd62d48a494727",
+  "raw_caches_verified": 9,
+  "raw_bytes": 15852415996,
+  "protected_artifacts_verified": 62,
+  "sealed_six_verified": 21,
+  "formal_numerical_preflight_passed": true,
+  "all_historical_caches_unchanged": true,
+  "model_inference_launched": false,
+  "elapsed_seconds": 12.019448109000223,
+  "raw_caches": [
+    {
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt",
+      "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+      "raw_bytes": 91371710
+    },
+    {
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt",
+      "raw_sha256": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+      "raw_bytes": 330370352
+    },
+    {
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt",
+      "raw_sha256": "9aa596bb80778b1c4c5979a8cddc6c90d95e4108defb7a9f4d63b4428d0df3d3",
+      "raw_bytes": 7507614021
+    },
+    {
+      "dataset": "geometry__cities",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__cities.pt",
+      "raw_sha256": "aa15cb4b5b5d6937ef51f240b31fff4eae0f44e12adadfd720d8f7ccf3975ed2",
+      "raw_bytes": 226514189
+    },
+    {
+      "dataset": "geometry__common_claim_true_false",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__common_claim_true_false.pt",
+      "raw_sha256": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+      "raw_bytes": 744503079
+    },
+    {
+      "dataset": "geometry__companies_true_false",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__companies_true_false.pt",
+      "raw_sha256": "5655c3628d232149a22df2ca1f09e44ef728f740a87bb012db5f6ad6d04dbc96",
+      "raw_bytes": 201844417
+    },
+    {
+      "dataset": "geometry__counterfact_true_false",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__counterfact_true_false.pt",
+      "raw_sha256": "3558db4e70ef43e811f7cdcd8c50e242de00a5f7932cd2b3ac91eb0397f9586e",
+      "raw_bytes": 4772684845
+    },
+    {
+      "dataset": "popqa__popqa_test_filtered_10shot",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/popqa__popqa_test_filtered_10shot.pt",
+      "raw_sha256": "237d8b9d67874d62e429a26ae16822540ddd40e3d3917023ae45515ada36ebba",
+      "raw_bytes": 1068702495
+    },
+    {
+      "dataset": "x-fact__test_filtered_10shot",
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/x-fact__test_filtered_10shot.pt",
+      "raw_sha256": "f4388e107680efe747335d28efc98e093e57fb895735b6fb4b4b8f45ef86cd9b",
+      "raw_bytes": 908810888
+    }
+  ]
+}

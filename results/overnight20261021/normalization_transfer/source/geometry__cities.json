@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "dataset": "geometry__cities",
+  "phase": "source",
+  "rows": 1496,
+  "raw_sha256": "ec33dd2d2d765fbc9f2beda4519c8903034322516774c4a796e7bb5bee5731e2",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "7c8027a3f1c7315ac6759e68da22a851579484f4e585fa9492c479d4640f273c",
+  "bootstrap_sha256": "01c2819b502ca61110e4ed24c73e5b18df7732e3983ad3db17f6abe3506bc256",
+  "source_lp_only_saved_prediction_parity": true,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_512",
+      "score_sha256": "b7ec3a8745bb0de4caa2e3618d24aa0e0a2abc3468633e2b414d5ca02df771c9",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

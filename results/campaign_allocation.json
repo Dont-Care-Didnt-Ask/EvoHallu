@@ -1,0 +1,51 @@
+{
+  "gpu": "NVIDIA A100-SXM4-80GB",
+  "count": 1,
+  "max_hours": 12,
+  "requested_active_hours": 8,
+  "model_api_budget_usd": 0,
+  "first_successful_connection_utc": "2026-10-14T23:15:00+00:00",
+  "experiment_process_deadline_utc": "2026-10-15T10:45:00+00:00",
+  "client_timezone": "Etc/UTC",
+  "pod_stop_automated": true,
+  "status": "stopped",
+  "writer_models_planned": [
+    "Qwen/Qwen3.8-27B",
+    "poolside/Laguna-XS-2.1",
+    "Qwen/Qwen3.5-9B"
+  ],
+  "requested_rounds_per_main_run": 30,
+  "main_max_output_tokens": 4096,
+  "gpu_cost_per_hour_usd": 1.79,
+  "max_12h_gpu_cost_usd": 21.48,
+  "shutdown_attempt_scheduled": true,
+  "shutdown_attempt_deadline_utc": "2026-10-15T10:50:00+00:00",
+  "pod_management_read_verified": true,
+  "pod_management_stop_permission_verified": true,
+  "optional_writer_models": [
+    "Qwen/Qwen3.5-4B",
+    "mistralai/Devstral-Small-2-24B-Instruct-2512"
+  ],
+  "optional_writer_minimum_remaining_seconds": 3600,
+  "fallback_pod_stop_deadline_utc": "2026-10-15T10:55:00+00:00",
+  "provider_runtime_check": {
+    "utc": "2026-10-15T09:04:56+00:00",
+    "uptime_seconds": 35395,
+    "gpu_hourly_rate_usd": 1.79,
+    "estimated_gpu_cost_usd": 17.6,
+    "status": "RUNNING"
+  },
+  "stop_confirmation_utc": "2026-10-15T09:27:30.147736+00:00",
+  "provider_uptime_seconds_before_stop": 36654,
+  "gpu_hours_before_stop": 10.181666666666667,
+  "estimated_gpu_cost_usd": 18.23,
+  "gpu_runtime_released": true,
+  "stop_reason": "User requested finish ASAP; queued optional work cancelled",
+  "writer_models_completed": [
+    "Qwen/Qwen3.8-27B",
+    "poolside/Laguna-XS-2.1",
+    "Qwen/Qwen3.5-9B",
+    "Qwen/Qwen3.5-4B"
+  ],
+  "billing_note": "GPU-only estimate from provider uptime immediately before stop; excludes storage and final shutdown transition."
+}

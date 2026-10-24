@@ -1,0 +1,9 @@
+# This is a locally served model, with no external model API or API charges.
+scratch_path: .
+use_tgi: 0
+use_vllm: 0
+use_api: 1
+api_base_url: http://127.0.0.1:8000/v1
+api_key: EMPTY
+api_project: null
+api_model_name: ${model.hf_model_id}

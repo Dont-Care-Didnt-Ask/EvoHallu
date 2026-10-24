@@ -1,0 +1,7 @@
+{
+  "retrieved_at_utc": "2026-10-21T23:04:34.131283+00:00",
+  "model_id": "openai/gpt-oss-120b",
+  "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "api_url": "https://huggingface.co/api/models/openai/gpt-oss-120b?blobs=true",
+  "weights_downloaded": false
+}

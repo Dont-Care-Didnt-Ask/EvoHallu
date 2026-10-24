@@ -1,0 +1,8 @@
+<string>:59: RuntimeWarning: divide by zero encountered in log
+<string>:59: RuntimeWarning: invalid value encountered in multiply
+<string>:100: RuntimeWarning: divide by zero encountered in log
+<string>:100: RuntimeWarning: invalid value encountered in multiply
+<string>:46: RuntimeWarning: overflow encountered in power
+<string>:60: RuntimeWarning: invalid value encountered in multiply
+<string>:64: RuntimeWarning: invalid value encountered in multiply
+{"dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot", "rows": 46605, "methods": 24, "failed": {"new/next_evo_original_8741__valrank03": "ValueError: nonfinite scores or wrong output shape"}}

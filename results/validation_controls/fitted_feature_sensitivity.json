@@ -1,0 +1,694 @@
+{
+  "partition": "standard source-model validation",
+  "rows": 1402,
+  "fitted_models_changed": false,
+  "held_out_datasets_read": false,
+  "seed": 441,
+  "permutation_repeats": 40,
+  "uncertainty": "Standard deviation over permutations, not a confidence interval",
+  "limitation": "Marginal permutations break feature correlations and need not represent realizable inputs",
+  "models": {
+    "logistic_stratified": {
+      "validation_auc_percent": 81.63748467093608,
+      "features": [
+        "length",
+        "nll_sum",
+        "nll_mean",
+        "nll_std",
+        "nll_max",
+        "nll_q90",
+        "nll_q10",
+        "nll_position_slope",
+        "nll_exp_weighted",
+        "entropy_mean",
+        "entropy_std",
+        "entropy_last_minus_first",
+        "top1_mass_top512_mean",
+        "top1_top2_gap_mean",
+        "top512_entropy_mean",
+        "nll_last_quarter",
+        "nll_first_quarter"
+      ],
+      "validation_probability_auc_percent": 81.63748467093608,
+      "validation_probabilities_at_zero_or_one": 0,
+      "scoring": "raw decision function to avoid saturated-probability rank ties",
+      "sensitivity": {
+        "length": {
+          "mean_auc_decrease_pp": 4.848873881546062,
+          "permutation_sd_pp": 0.675649031771688,
+          "features": [
+            "length"
+          ]
+        },
+        "nll_sum": {
+          "mean_auc_decrease_pp": 0.18293392605712167,
+          "permutation_sd_pp": 0.21683317900010626,
+          "features": [
+            "nll_sum"
+          ]
+        },
+        "nll_mean": {
+          "mean_auc_decrease_pp": 13.27274095017485,
+          "permutation_sd_pp": 1.1216186426239525,
+          "features": [
+            "nll_mean"
+          ]
+        },
+        "nll_std": {
+          "mean_auc_decrease_pp": 1.7343487418812562,
+          "permutation_sd_pp": 0.43484269276013787,
+          "features": [
+            "nll_std"
+          ]
+        },
+        "nll_max": {
+          "mean_auc_decrease_pp": 0.19250039742015834,
+          "permutation_sd_pp": 0.07296783753913529,
+          "features": [
+            "nll_max"
+          ]
+        },
+        "nll_q90": {
+          "mean_auc_decrease_pp": -0.002810328382626681,
+          "permutation_sd_pp": 0.0029971905971670552,
+          "features": [
+            "nll_q90"
+          ]
+        },
+        "nll_q10": {
+          "mean_auc_decrease_pp": 0.2124423740745601,
+          "permutation_sd_pp": 0.0842088732976535,
+          "features": [
+            "nll_q10"
+          ]
+        },
+        "nll_position_slope": {
+          "mean_auc_decrease_pp": 5.853466923286532,
+          "permutation_sd_pp": 0.7837037659266674,
+          "features": [
+            "nll_position_slope"
+          ]
+        },
+        "nll_exp_weighted": {
+          "mean_auc_decrease_pp": 47.34440290457372,
+          "permutation_sd_pp": 1.3806662295089231,
+          "features": [
+            "nll_exp_weighted"
+          ]
+        },
+        "entropy_mean": {
+          "mean_auc_decrease_pp": 10.793534541490653,
+          "permutation_sd_pp": 0.9547716025468977,
+          "features": [
+            "entropy_mean"
+          ]
+        },
+        "entropy_std": {
+          "mean_auc_decrease_pp": 0.09597697233953845,
+          "permutation_sd_pp": 0.050328728698969795,
+          "features": [
+            "entropy_std"
+          ]
+        },
+        "entropy_last_minus_first": {
+          "mean_auc_decrease_pp": 0.22635208021072994,
+          "permutation_sd_pp": 0.1163306499126348,
+          "features": [
+            "entropy_last_minus_first"
+          ]
+        },
+        "top1_mass_top512_mean": {
+          "mean_auc_decrease_pp": 4.275879150202101,
+          "permutation_sd_pp": 0.5729162088205896,
+          "features": [
+            "top1_mass_top512_mean"
+          ]
+        },
+        "top1_top2_gap_mean": {
+          "mean_auc_decrease_pp": 0.2956522232819919,
+          "permutation_sd_pp": 0.17912031461791664,
+          "features": [
+            "top1_top2_gap_mean"
+          ]
+        },
+        "top512_entropy_mean": {
+          "mean_auc_decrease_pp": 30.68232076350091,
+          "permutation_sd_pp": 1.5313396291051526,
+          "features": [
+            "top512_entropy_mean"
+          ]
+        },
+        "nll_last_quarter": {
+          "mean_auc_decrease_pp": 0.010886474088188103,
+          "permutation_sd_pp": 0.049094126983833225,
+          "features": [
+            "nll_last_quarter"
+          ]
+        },
+        "nll_first_quarter": {
+          "mean_auc_decrease_pp": 0.24007017304808392,
+          "permutation_sd_pp": 0.13251064129803308,
+          "features": [
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: length": {
+          "mean_auc_decrease_pp": 4.848873881546062,
+          "permutation_sd_pp": 0.675649031771688,
+          "features": [
+            "length"
+          ]
+        },
+        "GROUP: likelihoods": {
+          "mean_auc_decrease_pp": 30.270664429758806,
+          "permutation_sd_pp": 1.7409085732476088,
+          "features": [
+            "nll_sum",
+            "nll_mean",
+            "nll_std",
+            "nll_max",
+            "nll_q90",
+            "nll_q10",
+            "nll_position_slope",
+            "nll_exp_weighted",
+            "nll_last_quarter",
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: full-vocabulary entropies": {
+          "mean_auc_decrease_pp": 11.0183253281555,
+          "permutation_sd_pp": 0.9518782576691601,
+          "features": [
+            "entropy_mean",
+            "entropy_std",
+            "entropy_last_minus_first"
+          ]
+        },
+        "GROUP: top-512 summaries": {
+          "mean_auc_decrease_pp": 27.711157855293617,
+          "permutation_sd_pp": 1.5375039149321335,
+          "features": [
+            "top1_mass_top512_mean",
+            "top1_top2_gap_mean",
+            "top512_entropy_mean"
+          ]
+        }
+      }
+    },
+    "qda_stratified": {
+      "validation_auc_percent": 80.24197211245855,
+      "features": [
+        "length",
+        "nll_sum",
+        "nll_mean",
+        "nll_std",
+        "nll_max",
+        "nll_q90",
+        "nll_q10",
+        "nll_position_slope",
+        "nll_exp_weighted",
+        "entropy_mean",
+        "entropy_std",
+        "entropy_last_minus_first",
+        "top1_mass_top512_mean",
+        "top1_top2_gap_mean",
+        "top512_entropy_mean",
+        "nll_last_quarter",
+        "nll_first_quarter"
+      ],
+      "validation_probability_auc_percent": 80.24197211245855,
+      "validation_probabilities_at_zero_or_one": 0,
+      "scoring": "raw decision function to avoid saturated-probability rank ties",
+      "sensitivity": {
+        "length": {
+          "mean_auc_decrease_pp": -0.12875704001453936,
+          "permutation_sd_pp": 0.09249958040110622,
+          "features": [
+            "length"
+          ]
+        },
+        "nll_sum": {
+          "mean_auc_decrease_pp": 0.7388395898623734,
+          "permutation_sd_pp": 0.22135624423567368,
+          "features": [
+            "nll_sum"
+          ]
+        },
+        "nll_mean": {
+          "mean_auc_decrease_pp": -0.07775951537448922,
+          "permutation_sd_pp": 0.28750706094253564,
+          "features": [
+            "nll_mean"
+          ]
+        },
+        "nll_std": {
+          "mean_auc_decrease_pp": -6.387109961203397e-05,
+          "permutation_sd_pp": 0.11091615972272903,
+          "features": [
+            "nll_std"
+          ]
+        },
+        "nll_max": {
+          "mean_auc_decrease_pp": 0.16299904619157257,
+          "permutation_sd_pp": 0.2099836205070028,
+          "features": [
+            "nll_max"
+          ]
+        },
+        "nll_q90": {
+          "mean_auc_decrease_pp": 0.06241625789162236,
+          "permutation_sd_pp": 0.14035847230140758,
+          "features": [
+            "nll_q90"
+          ]
+        },
+        "nll_q10": {
+          "mean_auc_decrease_pp": 0.29451673706680337,
+          "permutation_sd_pp": 0.08961463994029296,
+          "features": [
+            "nll_q10"
+          ]
+        },
+        "nll_position_slope": {
+          "mean_auc_decrease_pp": 3.718447676795198,
+          "permutation_sd_pp": 0.6022574903585494,
+          "features": [
+            "nll_position_slope"
+          ]
+        },
+        "nll_exp_weighted": {
+          "mean_auc_decrease_pp": 1.464684959349587,
+          "permutation_sd_pp": 0.5222216925799777,
+          "features": [
+            "nll_exp_weighted"
+          ]
+        },
+        "entropy_mean": {
+          "mean_auc_decrease_pp": -0.030658127810333502,
+          "permutation_sd_pp": 0.09571302849377801,
+          "features": [
+            "entropy_mean"
+          ]
+        },
+        "entropy_std": {
+          "mean_auc_decrease_pp": 0.15840742380886896,
+          "permutation_sd_pp": 0.03745573935228646,
+          "features": [
+            "entropy_std"
+          ]
+        },
+        "entropy_last_minus_first": {
+          "mean_auc_decrease_pp": 0.4130047236226508,
+          "permutation_sd_pp": 0.2653041749059072,
+          "features": [
+            "entropy_last_minus_first"
+          ]
+        },
+        "top1_mass_top512_mean": {
+          "mean_auc_decrease_pp": 0.04299944361174646,
+          "permutation_sd_pp": 0.13230198031526955,
+          "features": [
+            "top1_mass_top512_mean"
+          ]
+        },
+        "top1_top2_gap_mean": {
+          "mean_auc_decrease_pp": -0.005095494390703614,
+          "permutation_sd_pp": 0.09506275311879836,
+          "features": [
+            "top1_top2_gap_mean"
+          ]
+        },
+        "top512_entropy_mean": {
+          "mean_auc_decrease_pp": 0.03589555797792132,
+          "permutation_sd_pp": 0.132211882662703,
+          "features": [
+            "top512_entropy_mean"
+          ]
+        },
+        "nll_last_quarter": {
+          "mean_auc_decrease_pp": 2.5780575805059662,
+          "permutation_sd_pp": 0.5463781447275212,
+          "features": [
+            "nll_last_quarter"
+          ]
+        },
+        "nll_first_quarter": {
+          "mean_auc_decrease_pp": 0.022560691738195415,
+          "permutation_sd_pp": 0.09007822079012635,
+          "features": [
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: length": {
+          "mean_auc_decrease_pp": -0.12875704001453936,
+          "permutation_sd_pp": 0.09249958040110622,
+          "features": [
+            "length"
+          ]
+        },
+        "GROUP: likelihoods": {
+          "mean_auc_decrease_pp": 27.887527251669155,
+          "permutation_sd_pp": 2.0347515371830713,
+          "features": [
+            "nll_sum",
+            "nll_mean",
+            "nll_std",
+            "nll_max",
+            "nll_q90",
+            "nll_q10",
+            "nll_position_slope",
+            "nll_exp_weighted",
+            "nll_last_quarter",
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: full-vocabulary entropies": {
+          "mean_auc_decrease_pp": 0.5342817481945716,
+          "permutation_sd_pp": 0.32252861718456655,
+          "features": [
+            "entropy_mean",
+            "entropy_std",
+            "entropy_last_minus_first"
+          ]
+        },
+        "GROUP: top-512 summaries": {
+          "mean_auc_decrease_pp": 0.8467391674615007,
+          "permutation_sd_pp": 0.35265747912418166,
+          "features": [
+            "top1_mass_top512_mean",
+            "top1_top2_gap_mean",
+            "top512_entropy_mean"
+          ]
+        }
+      }
+    },
+    "logistic_documented_stratified": {
+      "validation_auc_percent": 81.60029749738837,
+      "features": [
+        "length",
+        "nll_sum",
+        "nll_mean",
+        "nll_std",
+        "nll_max",
+        "nll_q90",
+        "nll_q10",
+        "nll_position_slope",
+        "nll_exp_weighted",
+        "top1_mass_top512_mean",
+        "top1_top2_gap_mean",
+        "top512_entropy_mean",
+        "nll_last_quarter",
+        "nll_first_quarter"
+      ],
+      "validation_probability_auc_percent": 81.60029749738837,
+      "validation_probabilities_at_zero_or_one": 0,
+      "scoring": "raw decision function to avoid saturated-probability rank ties",
+      "sensitivity": {
+        "length": {
+          "mean_auc_decrease_pp": 3.872263478221366,
+          "permutation_sd_pp": 0.5984717806451355,
+          "features": [
+            "length"
+          ]
+        },
+        "nll_sum": {
+          "mean_auc_decrease_pp": -0.003654846255172761,
+          "permutation_sd_pp": 0.06917463599967698,
+          "features": [
+            "nll_sum"
+          ]
+        },
+        "nll_mean": {
+          "mean_auc_decrease_pp": 13.32806751601035,
+          "permutation_sd_pp": 1.1160967709586938,
+          "features": [
+            "nll_mean"
+          ]
+        },
+        "nll_std": {
+          "mean_auc_decrease_pp": 1.5772684175864036,
+          "permutation_sd_pp": 0.40167599291211226,
+          "features": [
+            "nll_std"
+          ]
+        },
+        "nll_max": {
+          "mean_auc_decrease_pp": 0.22795595448970643,
+          "permutation_sd_pp": 0.08174061267296291,
+          "features": [
+            "nll_max"
+          ]
+        },
+        "nll_q90": {
+          "mean_auc_decrease_pp": 0.006756142980417212,
+          "permutation_sd_pp": 0.005799208837344544,
+          "features": [
+            "nll_q90"
+          ]
+        },
+        "nll_q10": {
+          "mean_auc_decrease_pp": 0.20380558205022908,
+          "permutation_sd_pp": 0.08947505913292249,
+          "features": [
+            "nll_q10"
+          ]
+        },
+        "nll_position_slope": {
+          "mean_auc_decrease_pp": 5.429497660898389,
+          "permutation_sd_pp": 0.7538069727328701,
+          "features": [
+            "nll_position_slope"
+          ]
+        },
+        "nll_exp_weighted": {
+          "mean_auc_decrease_pp": 47.161312849162,
+          "permutation_sd_pp": 1.3934499550130641,
+          "features": [
+            "nll_exp_weighted"
+          ]
+        },
+        "top1_mass_top512_mean": {
+          "mean_auc_decrease_pp": 0.5840160444202119,
+          "permutation_sd_pp": 0.17380423644017853,
+          "features": [
+            "top1_mass_top512_mean"
+          ]
+        },
+        "top1_top2_gap_mean": {
+          "mean_auc_decrease_pp": 0.5863721783167475,
+          "permutation_sd_pp": 0.250893932221154,
+          "features": [
+            "top1_top2_gap_mean"
+          ]
+        },
+        "top512_entropy_mean": {
+          "mean_auc_decrease_pp": 2.012060282963156,
+          "permutation_sd_pp": 0.5019594239921438,
+          "features": [
+            "top512_entropy_mean"
+          ]
+        },
+        "nll_last_quarter": {
+          "mean_auc_decrease_pp": 0.011830347004579689,
+          "permutation_sd_pp": 0.026314440172078662,
+          "features": [
+            "nll_last_quarter"
+          ]
+        },
+        "nll_first_quarter": {
+          "mean_auc_decrease_pp": 0.23100047690420428,
+          "permutation_sd_pp": 0.13213027520475626,
+          "features": [
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: length": {
+          "mean_auc_decrease_pp": 3.872263478221366,
+          "permutation_sd_pp": 0.5984717806451355,
+          "features": [
+            "length"
+          ]
+        },
+        "GROUP: likelihoods": {
+          "mean_auc_decrease_pp": 30.05134526729345,
+          "permutation_sd_pp": 1.8558128004513577,
+          "features": [
+            "nll_sum",
+            "nll_mean",
+            "nll_std",
+            "nll_max",
+            "nll_q90",
+            "nll_q10",
+            "nll_position_slope",
+            "nll_exp_weighted",
+            "nll_last_quarter",
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: top-512 summaries": {
+          "mean_auc_decrease_pp": 1.8021940432393067,
+          "permutation_sd_pp": 0.5052759480042982,
+          "features": [
+            "top1_mass_top512_mean",
+            "top1_top2_gap_mean",
+            "top512_entropy_mean"
+          ]
+        }
+      }
+    },
+    "qda_documented_stratified": {
+      "validation_auc_percent": 80.21216559930963,
+      "features": [
+        "length",
+        "nll_sum",
+        "nll_mean",
+        "nll_std",
+        "nll_max",
+        "nll_q90",
+        "nll_q10",
+        "nll_position_slope",
+        "nll_exp_weighted",
+        "top1_mass_top512_mean",
+        "top1_top2_gap_mean",
+        "top512_entropy_mean",
+        "nll_last_quarter",
+        "nll_first_quarter"
+      ],
+      "validation_probability_auc_percent": 80.21216559930963,
+      "validation_probabilities_at_zero_or_one": 0,
+      "scoring": "raw decision function to avoid saturated-probability rank ties",
+      "sensitivity": {
+        "length": {
+          "mean_auc_decrease_pp": -0.11796282418131077,
+          "permutation_sd_pp": 0.07873177574149105,
+          "features": [
+            "length"
+          ]
+        },
+        "nll_sum": {
+          "mean_auc_decrease_pp": 0.8833727914793135,
+          "permutation_sd_pp": 0.25419611952790655,
+          "features": [
+            "nll_sum"
+          ]
+        },
+        "nll_mean": {
+          "mean_auc_decrease_pp": -0.0921659967297947,
+          "permutation_sd_pp": 0.28956888936372016,
+          "features": [
+            "nll_mean"
+          ]
+        },
+        "nll_std": {
+          "mean_auc_decrease_pp": -0.04913816596266357,
+          "permutation_sd_pp": 0.09892758492783114,
+          "features": [
+            "nll_std"
+          ]
+        },
+        "nll_max": {
+          "mean_auc_decrease_pp": 0.16718615161011946,
+          "permutation_sd_pp": 0.209859971953259,
+          "features": [
+            "nll_max"
+          ]
+        },
+        "nll_q90": {
+          "mean_auc_decrease_pp": 0.061692385429444885,
+          "permutation_sd_pp": 0.13829108292020875,
+          "features": [
+            "nll_q90"
+          ]
+        },
+        "nll_q10": {
+          "mean_auc_decrease_pp": 0.2918483444611003,
+          "permutation_sd_pp": 0.09021342746153597,
+          "features": [
+            "nll_q10"
+          ]
+        },
+        "nll_position_slope": {
+          "mean_auc_decrease_pp": 4.023098628332655,
+          "permutation_sd_pp": 0.6403076832096205,
+          "features": [
+            "nll_position_slope"
+          ]
+        },
+        "nll_exp_weighted": {
+          "mean_auc_decrease_pp": 1.5078263387382496,
+          "permutation_sd_pp": 0.537186524825669,
+          "features": [
+            "nll_exp_weighted"
+          ]
+        },
+        "top1_mass_top512_mean": {
+          "mean_auc_decrease_pp": 0.10641634873052919,
+          "permutation_sd_pp": 0.1622481853776351,
+          "features": [
+            "top1_mass_top512_mean"
+          ]
+        },
+        "top1_top2_gap_mean": {
+          "mean_auc_decrease_pp": 0.23077337966117523,
+          "permutation_sd_pp": 0.11976043209638353,
+          "features": [
+            "top1_top2_gap_mean"
+          ]
+        },
+        "top512_entropy_mean": {
+          "mean_auc_decrease_pp": 0.11762217831675914,
+          "permutation_sd_pp": 0.1663819231945802,
+          "features": [
+            "top512_entropy_mean"
+          ]
+        },
+        "nll_last_quarter": {
+          "mean_auc_decrease_pp": 2.7904360834809494,
+          "permutation_sd_pp": 0.5750504597945291,
+          "features": [
+            "nll_last_quarter"
+          ]
+        },
+        "nll_first_quarter": {
+          "mean_auc_decrease_pp": 0.08875953808421044,
+          "permutation_sd_pp": 0.09352031217908155,
+          "features": [
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: length": {
+          "mean_auc_decrease_pp": -0.11796282418131077,
+          "permutation_sd_pp": 0.07873177574149105,
+          "features": [
+            "length"
+          ]
+        },
+        "GROUP: likelihoods": {
+          "mean_auc_decrease_pp": 28.744421923967842,
+          "permutation_sd_pp": 2.0487975854251315,
+          "features": [
+            "nll_sum",
+            "nll_mean",
+            "nll_std",
+            "nll_max",
+            "nll_q90",
+            "nll_q10",
+            "nll_position_slope",
+            "nll_exp_weighted",
+            "nll_last_quarter",
+            "nll_first_quarter"
+          ]
+        },
+        "GROUP: top-512 summaries": {
+          "mean_auc_decrease_pp": 1.9006761820411515,
+          "permutation_sd_pp": 0.45491241373111624,
+          "features": [
+            "top1_mass_top512_mean",
+            "top1_top2_gap_mean",
+            "top512_entropy_mean"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "status": "finished",
+  "stop_reason": "round_budget",
+  "requests": 60,
+  "valid_candidates": 30,
+  "total_tokens": 107170,
+  "baseline_train": {
+    "score": 74.3286,
+    "metrics": {
+      "AUC": 74.33,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.75, 75.91)",
+      "Precision at median score threshold": 89.02,
+      "Recall at median score threshold": 58.19,
+      "Number of samples": 5605
+    },
+    "seconds": 2.00365382200107
+  },
+  "baseline_val": {
+    "score": 75.7504,
+    "metrics": {
+      "AUC": 75.75,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.69, 78.81)",
+      "Precision at median score threshold": 90.73,
+      "Recall at median score threshold": 59.22,
+      "Number of samples": 1402
+    },
+    "seconds": 1.8667882880254183
+  },
+  "selected_candidate": "baseline",
+  "selected_validation_auc_percent": 75.7504,
+  "held_out_test_evaluated": false,
+  "elapsed_seconds": 1486.0747666489915,
+  "validation_shortlist": [
+    {
+      "rank": 1,
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_fixed_neutral_4319/validation_shortlist/rank_01_baseline.py",
+      "sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d"
+    },
+    {
+      "rank": 2,
+      "candidate": "ba275bcf1598f49d14de93a7e918bd5134407f5756419c8b0bb0f818d470827c",
+      "validation_auc_percent": 72.8105,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_fixed_neutral_4319/validation_shortlist/rank_02_ba275bcf1598.py",
+      "sha256": "e1ba3186434ca0d2f8947e06b6640270498435ae06f97dccb7ee9476c2f488cd"
+    },
+    {
+      "rank": 3,
+      "candidate": "37aba4c852a496534a528b5fbfd4115f61a480d842ac529e662ee18c19b9244b",
+      "validation_auc_percent": 69.9242,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_fixed_neutral_4319/validation_shortlist/rank_03_37aba4c852a4.py",
+      "sha256": "16ae025e92ad2c15544782789b000c300414f9fa0b2939e5e09576b54f38a22d"
+    }
+  ]
+}

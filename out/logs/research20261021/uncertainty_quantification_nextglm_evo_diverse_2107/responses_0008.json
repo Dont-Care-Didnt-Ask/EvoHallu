@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\n*   **Detector 1 (LLR-based):** Attempts to use a Log-Likelihood Ratio (LLR) at the final token step. It compares the log-probability of the *actual* token against the *maximum* probability of the top-512 candidates. The score is 50.0, indicating that the signal is noisy or inverted (actual probability is often higher than top-512 max, leading to low scores for hallucinations).\n*   **Detector 2 (Summed Neg Log Prob):** Uses the total negative log-likelihood of the entire generated sequence. This is a standard confidence metric. The score is 74.33, which is higher, suggesting that overall sequence likelihood is a stronger signal for hallucination than the final-step gap.\n\n### 2. Proposed Detector\n\n*   **Signal:** **Cumulative Confidence Gap**.\n*   **Aggregation Principle:** Instead of summing the negative log-probabilities (which treats all tokens equally) or looking only at the final step (which misses early hallucinations), we sum the *gap* between the actual log-probability and the maximum possible log-probability for every token in the sequence.\n*   **Formula:** $Score = \\sum_{t=1}^{n-1} (\\text{max\\_top\\_k\\_logprob}(t) - \\text{actual\\_logprob}(t))$.\n*   **Hypothesis:** Hallucinations often involve tokens that are statistically unlikely relative to the model's own vocabulary distribution at that step. A higher cumulative gap indicates a higher likelihood that the model generated tokens that were \"surprising\" or \"hallucinated\" rather than probable continuations.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Computes a cumulative confidence gap score.\n        \n        Signal: The sum of the gap between the actual token log-probability\n        and the maximum possible log-probability (top-k) for every token.\n        \n        Hypothesis: Hallucinated tokens will consistently have a larger gap\n        between the actual log-prob and the model's own top-512 probability.\n        \"\"\"\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        top_k_logits = stats[\"top_k_logits\"]           # List[np.ndarray]\n        \n        scores = []\n        \n        for i, probs in enumerate(sequence_logprobs):\n            # probs shape: (n_i - 1,)\n            # top_k_logits shape: (n_i, k)\n            \n            # 1. Extract actual log-probs for all steps\n            actual_logprobs = probs\n            \n            # 2. Extract top-k logits for all steps (excluding the last generated token)\n            # top_k_logits[i] is (n_i, k). We take rows 0 to n_i-1.\n            step_logits = top_k_logits[i][:-1, :]\n            \n            # 3. Compute max log-prob for each step\n            # shape: (n_i - 1,)\n            max_logprobs = np.max(step_logits, axis=1)\n            \n            # 4. Compute the gap (Confidence Score) for each step\n            # Positive gap means the actual token was less likely than the top-k.\n            # Summing these gaps aggregates the \"surprise\" across the whole sequence.\n            step_gaps = max_logprobs - actual_logprobs\n            \n            # 5. Aggregate: Sum the gaps\n            # Using float64 here for precision before converting to float32\n            total_gap = np.sum(step_gaps, dtype=np.float64)\n            \n            scores.append(total_gap)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 856,
+      "prompt_tokens": 872,
+      "total_tokens": 1728,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 65.99124111401034
+  },
+  {
+    "content": "1. **Analyze shown detectors**\nThe provided detectors explore two distinct signal families:\n- **Detector 1 (LLR)**: Uses the ratio of the final step's actual log-probability to the model's maximum possible log-probability at that step. This focuses on the \"confidence gap\" or certainty of the final token.\n- **Detector 2 (Total NLL)**: Uses the sum of negative log-probabilities across the entire sequence. This represents the overall likelihood of the generated text under the model.\n\n2. **Propose a detector**\n- **Signal**: Positional Entropy / Uncertainty Decay.\n- **Aggregation Principle**: Calculate the mean entropy of the top-k logits at each position, then average these means across the sequence. This captures the average \"surprise\" of the model at each step, rather than the final outcome or the total likelihood.\n- **Structural Difference**: Unlike the previous detectors which focus on the **final step** (Detector 1) or the **sum of all steps** (Detector 2), this detector examines the **distribution of confidence** across the entire sequence, treating all positions equally.\n\n3. **Code**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        top_k_logits = stats[\"top_k_logits\"]  # List[np.ndarray], shape (n_i, k)\n        \n        scores = []\n        \n        for logits in top_k_logits:\n            # 1. Convert logits to probabilities\n            # k is 512, so we can safely use exp without underflow issues for typical values\n            probs = np.exp(logits)\n            \n            # 2. Normalize to get a distribution over the top-k candidates\n            probs = probs / np.sum(probs)\n            \n            # 3. Calculate entropy for this position\n            # Entropy measures uncertainty; higher entropy = lower confidence\n            entropy = -np.sum(probs * np.log(probs + 1e-12))\n            \n            scores.append(entropy)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 490,
+      "prompt_tokens": 891,
+      "total_tokens": 1381,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 38.306367381010205
+  }
+]

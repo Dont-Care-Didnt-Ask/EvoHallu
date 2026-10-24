@@ -1,0 +1,50 @@
+{
+  "status": "passed",
+  "actual_reference_parity_schema_checks": [
+    {
+      "scope": "source",
+      "policy": "original",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "source",
+      "policy": "neutral",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "source",
+      "policy": "diverse",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "source",
+      "policy": "compositional",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "target",
+      "policy": "original",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "target",
+      "policy": "neutral",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "target",
+      "policy": "diverse",
+      "status": "existing_actual_reference_schema_parity_passed"
+    },
+    {
+      "scope": "target",
+      "policy": "compositional",
+      "status": "existing_actual_reference_schema_parity_passed"
+    }
+  ],
+  "per_dataset_folding_before_macro_verified": true,
+  "whole_replicate_finite_filter_verified": true,
+  "missing_dataset_withholds_macro_verified": true,
+  "model_or_gpu_calls": false,
+  "fabricated_experiment_results_written": false
+}

@@ -1,0 +1,25 @@
+{"completed": "AVeriTeC__dev_filtered_10shot", "kind": "new"}
+{"completed": "geometry__cities", "kind": "new"}
+{"completed": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot", "kind": "new"}
+{"completed": "AVeriTeC__dev_filtered_10shot", "kind": "supervised"}
+{"completed": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot", "kind": "supervised"}
+{"completed": "geometry__companies_true_false", "kind": "new"}
+{"completed": "geometry__cities", "kind": "supervised"}
+{"completed": "geometry__common_claim_true_false", "kind": "supervised"}
+{"completed": "geometry__companies_true_false", "kind": "supervised"}
+{"completed": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot", "kind": "supervised"}
+{"completed": "geometry__common_claim_true_false", "kind": "new"}
+{"completed": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot", "kind": "new"}
+{
+  "executed": true,
+  "cohort_id": "08e3fe054d220c72",
+  "frozen_primary_methods": 27,
+  "available_target_caches": 6,
+  "planned_target_subset": 6,
+  "benchmark_datasets": 9,
+  "coverage": "six",
+  "completed_transfer_methods": 29,
+  "failures": [],
+  "output": "results/overnight20261021/transfer_llama32_1b/08e3fe054d220c72",
+  "commands": []
+}

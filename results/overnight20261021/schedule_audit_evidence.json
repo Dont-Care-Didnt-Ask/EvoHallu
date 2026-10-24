@@ -1,0 +1,83 @@
+{
+  "remote_snapshot_utc": "2026-10-21T19:55:35.711037+00:00",
+  "source_total_jobs": 19,
+  "source_complete_jobs": 6,
+  "source_active": {
+    "next_evo_diverse_2107": 52,
+    "next_evo_compositional_2107": 22
+  },
+  "source_pending_jobs": 11,
+  "source_remaining_requests": 706,
+  "rank_complete_jobs": 3,
+  "interface_pilot_requests": 52,
+  "all_persisted_requests": 546,
+  "all_reported_tokens": 1654371,
+  "source_forecast_utc": {
+    "0.8x_unstarted_policy_times": "2026-10-21T22:37:50.831037+00:00",
+    "observed_policy_times": "2026-10-21T23:14:26.711037+00:00",
+    "1.25x_unstarted_policy_times": "2026-10-22T00:03:04.211037+00:00"
+  },
+  "historical_27b": [
+    {
+      "run": "out/logs/mod1/uncertainty_quantification_qwen38_evo_1047",
+      "mode": "evolution",
+      "requests": 60,
+      "minutes": 74.27516058118393,
+      "generation_seconds_median": 112.48523764684796,
+      "round_max_generation_sum_minutes": 64.67187218153849,
+      "completion_tokens": 118370,
+      "configured_output_cap": 4096,
+      "evaluation_workers": 2,
+      "summary_sha256": "99d01321d388f1902690f936267e64fff43c10a6303464db8c0456ab0a0a75fc",
+      "ledger_sha256": "804c515baa0d07e56c3889eafe600d75b1ad2bf649602db66aed5995b5a49ee6"
+    },
+    {
+      "run": "out/logs/mod1/uncertainty_quantification_qwen38_evo_1048",
+      "mode": "evolution",
+      "requests": 60,
+      "minutes": 81.24814170192306,
+      "generation_seconds_median": 110.24343830440193,
+      "round_max_generation_sum_minutes": 61.53617352830867,
+      "completion_tokens": 113439,
+      "configured_output_cap": 4096,
+      "evaluation_workers": "not_explicit_in_saved_config",
+      "summary_sha256": "6c10a8787800252f26809e2fdf4e350de39dafff08465f1eac91c749248756f2",
+      "ledger_sha256": "0858c1a24390d8eb3587e2ee7de2d9fbf72d0760a85ea811bf33047a01edef9c"
+    },
+    {
+      "run": "out/logs/mod1/uncertainty_quantification_qwen38_independent_contract_1048",
+      "mode": "independent",
+      "requests": 60,
+      "minutes": 47.790968849727264,
+      "generation_seconds_median": 67.46388387307525,
+      "round_max_generation_sum_minutes": 40.32858463637531,
+      "completion_tokens": 74246,
+      "configured_output_cap": 4096,
+      "evaluation_workers": 2,
+      "summary_sha256": "d558ae61dafa108b70e7fc678e71be712666464d556fb127e26137a7c9309a92",
+      "ledger_sha256": "f33ee157fea69e2a9eaa0bb06344e11078eeb242fc83bdc1ad93ba9ac3f67973"
+    }
+  ],
+  "edits_to_execution_or_configs": false,
+  "gpu_or_llm_calls": 0,
+  "historical_27b_server": {
+    "mode": "eager",
+    "source": "configs/campaign/overnight.json",
+    "startup_seconds": 135.037162,
+    "startup_source": "out/campaign/state.json",
+    "hardware_source": "results/campaign_allocation.json",
+    "hardware": "one A100 SXM4 80GB"
+  },
+  "current_9b_compiled_startup": {
+    "started_utc": "2026-10-21T18:24:26.765409+00:00",
+    "application_ready_by_utc": "2026-10-21T18:26:44+00:00",
+    "engine_warmup_seconds": [
+      98.91,
+      98.11
+    ],
+    "reported_compile_seconds": [
+      0.46,
+      0.48
+    ]
+  }
+}

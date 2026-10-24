@@ -1,0 +1,53 @@
+{"starting": "supervised", "output": "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0"}
+Completed dataset popqa__popqa_test_filtered_10shot
+Completed dataset x-fact__test_filtered_10shot
+Completed dataset geometry__common_claim_true_false
+Completed dataset UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot
+Completed dataset geometry__counterfact_true_false
+Completed dataset geometry__cities
+Completed dataset geometry__companies_true_false
+Completed dataset AVeriTeC__dev_filtered_10shot
+Completed dataset WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot
+All nine frozen-estimator evaluations completed
+{
+  "staged_methods": 0,
+  "cohort_id": "4f53cda18c2baa0c",
+  "pending_jobs": 18,
+  "requested_jobs_without_selected_method": [],
+  "commands": [
+    {
+      "kind": "supervised",
+      "output": "results/overnight20261021/evaluations/supervised_b2f27a12db5177f0",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/evaluate_parallel.py",
+        "--workers",
+        "3",
+        "--bootstrap",
+        "500",
+        "--bootstrap-unit",
+        "claim",
+        "--resume",
+        "--cache-dir",
+        "/workspace/mod1/data/restored/mod1-eval-cache",
+        "--data-root",
+        "/workspace/mod1/data/claims",
+        "--model-id",
+        "/workspace/mod1-models/llama31",
+        "--output",
+        "/workspace/mod1/results/overnight20261021/evaluations/supervised_b2f27a12db5177f0",
+        "--frozen-glob",
+        "results/overnight20261021/no_frozen_for_supervised/*.py",
+        "--method-prefix",
+        "supervised/",
+        "--extra-fitted-models",
+        "/workspace/mod1/out/research20261021/supervised_grouped/models.joblib"
+      ],
+      "cohort_id": "b2f27a12db5177f0",
+      "roles": null,
+      "jobs": null,
+      "bootstrap_unit": "normalized claim",
+      "bootstrap_samples": 500
+    }
+  ]
+}

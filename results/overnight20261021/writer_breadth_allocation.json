@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-21T20:02:48.423637+00:00",
+  "prior_pid": 8675,
+  "pid": 11382,
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/overnight_followups.py",
+    "--execute",
+    "--reserve-transfer-minutes",
+    "45",
+    "--prioritize-novel-writer-after-utc",
+    "2026-10-21T22:45:00Z"
+  ],
+  "reason": "Prospective wall-clock allocation to novel GLM if source completion leaves insufficient time for both writers",
+  "threshold_utc": "2026-10-21T22:45:00Z",
+  "quality_gate": false,
+  "unchanged_source_requests": 1020,
+  "unchanged_rank_requests": 180,
+  "unchanged_feature_reserve_minutes": 45,
+  "reference": "schedule_audit.md"
+}

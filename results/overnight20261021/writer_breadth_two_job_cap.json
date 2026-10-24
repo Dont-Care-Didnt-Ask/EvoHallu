@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-21T20:42:44.840666+00:00",
+  "prior_waiting_followups_pid": 12569,
+  "followups_pid": 13855,
+  "maximum_confirmation_jobs": 2,
+  "prespecified_seed": 2107,
+  "reason": "Preserve time for novel GLM original/chosen pair instead of a second 27B seed; timing-only prospective allocation",
+  "quality_gate": false,
+  "source_and_feedback_jobs_unchanged": true
+}

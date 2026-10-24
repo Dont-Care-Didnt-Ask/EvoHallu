@@ -1,0 +1,56 @@
+{
+  "model": "VityaVitalich/Llama3.1-8b-instruct",
+  "revision": "247cb7c3baebabc46cff1fb97a3a5913e4c4511d",
+  "files": [
+    {
+      "file": "config.json",
+      "bytes": 915,
+      "sha256": "634fdfd32c6faf05e739b8b86f3c43dbf6b29a42b3b7b7346f5d4a2a97789e09"
+    },
+    {
+      "file": "generation_config.json",
+      "bytes": 184,
+      "sha256": "8c1b048a14a28895a3ea0e2adaec429f53ef0df35cc676ad95b77ae4a755490d"
+    },
+    {
+      "file": "model-00001-of-00004.safetensors",
+      "bytes": 4976698672,
+      "sha256": "2b1879f356aed350030bb40eb45ad362c89d9891096f79a3ab323d3ba5607668"
+    },
+    {
+      "file": "model-00002-of-00004.safetensors",
+      "bytes": 4999802720,
+      "sha256": "09d433f650646834a83c580877bd60c6d1f88f7755305c12576b5c7058f9af15"
+    },
+    {
+      "file": "model-00003-of-00004.safetensors",
+      "bytes": 4915916176,
+      "sha256": "fc1cdddd6bfa91128d6e94ee73d0ce62bfcdb7af29e978ddcab30c66ae9ea7fa"
+    },
+    {
+      "file": "model-00004-of-00004.safetensors",
+      "bytes": 1168138808,
+      "sha256": "92ecfe1a2414458b4821ac8c13cf8cb70aed66b5eea8dc5ad9eeb4ff309d6d7b"
+    },
+    {
+      "file": "model.safetensors.index.json",
+      "bytes": 23950,
+      "sha256": "146776fce3f6db1103aa6f249e65ee5544c5923ce6f971b092eee79aa6e5d37b"
+    },
+    {
+      "file": "special_tokens_map.json",
+      "bytes": 296,
+      "sha256": "6f38c73729248f6c127296386e3cdde96e254636cc58b4169d3fd32328d9a8ec"
+    },
+    {
+      "file": "tokenizer.json",
+      "bytes": 9085657,
+      "sha256": "79e3e522635f3171300913bb421464a87de6222182a0570b9b2ccba2a964b2b4"
+    },
+    {
+      "file": "tokenizer_config.json",
+      "bytes": 50870,
+      "sha256": "24e8a6dc2547164b7002e3125f10b415105644fcf02bf9ad8b674c87b1eaaed6"
+    }
+  ]
+}

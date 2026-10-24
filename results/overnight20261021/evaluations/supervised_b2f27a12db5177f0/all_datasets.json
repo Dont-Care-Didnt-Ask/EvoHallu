@@ -1,0 +1,542 @@
+{
+  "AVeriTeC__dev_filtered_10shot": {
+    "rows": 427,
+    "duplicate_disjoint_rows": 427,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.76780435366837,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.76780435366837,
+        "auc_ci95_percent": [
+          57.23204458167941,
+          70.23949108842564
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 65.97957538296157,
+        "gain_pp": 2.211771029293208,
+        "duplicate_disjoint_auc_percent": 65.97957538296157,
+        "auc_ci95_percent": [
+          59.36940994609097,
+          71.77349429507873
+        ],
+        "paired_gain_ci95_pp": [
+          -1.065914104909865,
+          6.0665399858712
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 66.44719161515721,
+        "gain_pp": 2.6793872614888414,
+        "duplicate_disjoint_auc_percent": 66.44719161515721,
+        "auc_ci95_percent": [
+          59.35552106180927,
+          72.37015805506438
+        ],
+        "paired_gain_ci95_pp": [
+          -0.2977335350901541,
+          6.003288234009201
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 419,
+    "bootstrap_unit": "claim"
+  },
+  "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {
+    "rows": 2057,
+    "duplicate_disjoint_rows": 2057,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 36.19719167488705,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 36.19719167488705,
+        "auc_ci95_percent": [
+          33.727009008119055,
+          38.4683483385775
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 39.18198092872017,
+        "gain_pp": 2.98478925383312,
+        "duplicate_disjoint_auc_percent": 39.18198092872017,
+        "auc_ci95_percent": [
+          36.543270765675885,
+          41.78501978174041
+        ],
+        "paired_gain_ci95_pp": [
+          0.951011391339863,
+          4.947848440187448
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 38.858524228806644,
+        "gain_pp": 2.661332553919593,
+        "duplicate_disjoint_auc_percent": 38.858524228806644,
+        "auc_ci95_percent": [
+          36.28066102440014,
+          41.50599820146434
+        ],
+        "paired_gain_ci95_pp": [
+          0.5897274745231751,
+          4.513476581805788
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2051,
+    "bootstrap_unit": "claim"
+  },
+  "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {
+    "rows": 46605,
+    "duplicate_disjoint_rows": 46599,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 70.68591510605297,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 70.6814726670195,
+        "auc_ci95_percent": [
+          70.04724940140954,
+          71.3095596991671
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 64.16697047764224,
+        "gain_pp": -6.518944628410739,
+        "duplicate_disjoint_auc_percent": 64.16156123611836,
+        "auc_ci95_percent": [
+          63.44894663798984,
+          64.87867204185156
+        ],
+        "paired_gain_ci95_pp": [
+          -6.950754881113583,
+          -6.132457744784458
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 63.57813178863545,
+        "gain_pp": -7.1077833174175264,
+        "duplicate_disjoint_auc_percent": 63.57270167247915,
+        "auc_ci95_percent": [
+          62.85021526971657,
+          64.34660029955914
+        ],
+        "paired_gain_ci95_pp": [
+          -7.588907073626267,
+          -6.648812791184174
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 46283,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__cities": {
+    "rows": 1496,
+    "duplicate_disjoint_rows": 1495,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 91.93696559810117,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 91.92635067900837,
+        "auc_ci95_percent": [
+          90.53825859295301,
+          93.26341852742824
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 98.91975749949957,
+        "gain_pp": 6.982791901398389,
+        "duplicate_disjoint_auc_percent": 98.91831139173449,
+        "auc_ci95_percent": [
+          98.49629451548077,
+          99.26359456886317
+        ],
+        "paired_gain_ci95_pp": [
+          5.668336572932891,
+          8.256125423277712
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 96.3308573307787,
+        "gain_pp": 4.393891732677524,
+        "duplicate_disjoint_auc_percent": 96.32648240018898,
+        "auc_ci95_percent": [
+          95.44945858166392,
+          97.19895489224584
+        ],
+        "paired_gain_ci95_pp": [
+          3.051094257190661,
+          5.500461484031238
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1496,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__common_claim_true_false": {
+    "rows": 4450,
+    "duplicate_disjoint_rows": 4450,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.26080040398939,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.26080040398939,
+        "auc_ci95_percent": [
+          61.68247129343744,
+          64.88894884275209
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 69.70352228254008,
+        "gain_pp": 6.4427218785506835,
+        "duplicate_disjoint_auc_percent": 69.70352228254008,
+        "auc_ci95_percent": [
+          68.25117052450818,
+          71.31515849305214
+        ],
+        "paired_gain_ci95_pp": [
+          5.49162817465809,
+          7.286856867567414
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 68.75105668476202,
+        "gain_pp": 5.490256280772632,
+        "duplicate_disjoint_auc_percent": 68.75105668476202,
+        "auc_ci95_percent": [
+          67.2472167607332,
+          70.30384817247113
+        ],
+        "paired_gain_ci95_pp": [
+          4.5315623289346005,
+          6.36482606672539
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 4447,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__companies_true_false": {
+    "rows": 1200,
+    "duplicate_disjoint_rows": 1200,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 72.58069444444443,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 72.58069444444443,
+        "auc_ci95_percent": [
+          69.65842172941194,
+          75.38574147158444
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 87.58888888888889,
+        "gain_pp": 15.008194444444456,
+        "duplicate_disjoint_auc_percent": 87.58888888888889,
+        "auc_ci95_percent": [
+          85.38738112744998,
+          89.50565688145372
+        ],
+        "paired_gain_ci95_pp": [
+          13.075957007853248,
+          16.81868234855094
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 83.20888888888886,
+        "gain_pp": 10.628194444444429,
+        "duplicate_disjoint_auc_percent": 83.20888888888886,
+        "auc_ci95_percent": [
+          80.71235313124757,
+          85.48241404773586
+        ],
+        "paired_gain_ci95_pp": [
+          8.71039388533422,
+          12.361054484843336
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1186,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__counterfact_true_false": {
+    "rows": 31964,
+    "duplicate_disjoint_rows": 31964,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 68.08486277916116,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 68.08486277916116,
+        "auc_ci95_percent": [
+          67.48551431303397,
+          68.65757659018908
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 78.321632946751,
+        "gain_pp": 10.236770167589837,
+        "duplicate_disjoint_auc_percent": 78.321632946751,
+        "auc_ci95_percent": [
+          77.79343997668136,
+          78.79196858143091
+        ],
+        "paired_gain_ci95_pp": [
+          9.880621251206408,
+          10.598694628795196
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 76.85710876149759,
+        "gain_pp": 8.772245982336424,
+        "duplicate_disjoint_auc_percent": 76.85710876149759,
+        "auc_ci95_percent": [
+          76.31035680495864,
+          77.32614071296234
+        ],
+        "paired_gain_ci95_pp": [
+          8.448282369183904,
+          9.110490955885165
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 31938,
+    "bootstrap_unit": "claim"
+  },
+  "popqa__popqa_test_filtered_10shot": {
+    "rows": 6974,
+    "duplicate_disjoint_rows": 6454,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 74.05170876856083,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 73.83072001100092,
+        "auc_ci95_percent": [
+          72.4306032260263,
+          75.34065956942705
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 81.65782120930359,
+        "gain_pp": 7.606112440742763,
+        "duplicate_disjoint_auc_percent": 81.02717151615768,
+        "auc_ci95_percent": [
+          80.4188999739452,
+          82.80142605456734
+        ],
+        "paired_gain_ci95_pp": [
+          6.6206840174928905,
+          8.776849390948312
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 80.49552224943557,
+        "gain_pp": 6.443813480874738,
+        "duplicate_disjoint_auc_percent": 79.76633194363684,
+        "auc_ci95_percent": [
+          79.19733563146345,
+          81.70594677887458
+        ],
+        "paired_gain_ci95_pp": [
+          5.362676721483877,
+          7.566102237492463
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 6686,
+    "bootstrap_unit": "claim"
+  },
+  "x-fact__test_filtered_10shot": {
+    "rows": 2315,
+    "duplicate_disjoint_rows": 2315,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 50.22899770761495,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 50.22899770761495,
+        "auc_ci95_percent": [
+          47.85887972459884,
+          52.86128885641865
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "supervised/logistic_documented_claim_group": {
+        "auc_percent": 50.01846108403486,
+        "gain_pp": -0.21053662358009317,
+        "duplicate_disjoint_auc_percent": 50.01846108403486,
+        "auc_ci95_percent": [
+          47.5187488816407,
+          52.371377603202106
+        ],
+        "paired_gain_ci95_pp": [
+          -1.9885949267797416,
+          1.4476186998900666
+        ]
+      },
+      "supervised/qda_documented_claim_group": {
+        "auc_percent": 52.68119152652295,
+        "gain_pp": 2.4521938189079995,
+        "duplicate_disjoint_auc_percent": 52.68119152652295,
+        "auc_ci95_percent": [
+          50.33658562020062,
+          55.109208183602796
+        ],
+        "paired_gain_ci95_pp": [
+          -0.7697330219546322,
+          5.7785285982920085
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2315,
+    "bootstrap_unit": "claim"
+  }
+}

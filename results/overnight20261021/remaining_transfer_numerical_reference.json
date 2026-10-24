@@ -1,0 +1,220 @@
+{
+  "status": "passed",
+  "started_utc": "2026-10-22T00:06:05.331948+00:00",
+  "cutoff_utc": "2026-10-22T00:09:05.331948+00:00",
+  "dataset": "AVeriTeC",
+  "rows": 427,
+  "gpu_index": 0,
+  "predeclared_guard": {
+    "observed_logprob_max_abs_difference_at_most": 0.1,
+    "canonical_nll_spearman_at_least": 0.999,
+    "require_exact_identity_shapes_dtypes": true,
+    "require_all_numeric_values_finite": true
+  },
+  "maximum_reference_gpu_seconds": 180,
+  "shared_missing_cache_cutoff_utc": "2026-10-22T00:40:58.932328+00:00",
+  "original_cache": {
+    "path": "/workspace/mod1/data/restored/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt",
+    "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+    "raw_bytes": 91371710,
+    "verified_before": true
+  },
+  "scratch_cache": "/workspace/mod1/data/restored/mod1-transfer-numerical-reference/20261022T000605331948Z_27557/AVeriTeC__dev_filtered_10shot.pt",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/evaluate_cached_claims.py",
+    "--mode",
+    "cache",
+    "--data-root",
+    "/workspace/mod1/data/claims",
+    "--cache-dir",
+    "/workspace/mod1/data/restored/mod1-transfer-numerical-reference/20261022T000605331948Z_27557",
+    "--output",
+    "/workspace/mod1/results/overnight20261021/numerical_reference/20261022T000605331948Z_27557/cache_metadata/dataset_0",
+    "--model-id",
+    "/workspace/mod1-models/Llama3.2-1B",
+    "--tokenizer-id",
+    "/workspace/mod1-models/llama31-tokenizer",
+    "--dataset-index",
+    "0",
+    "--dtype",
+    "float32",
+    "--batch-size",
+    "16",
+    "--max-batch-tokens",
+    "16384",
+    "--cpu-threads",
+    "12",
+    "--gc-interval",
+    "32",
+    "--cuda-cache-interval",
+    "32",
+    "--frozen-glob",
+    "out/overnight_no_selected_programs/*/frozen_estimator.py"
+  ],
+  "current_package_versions": {
+    "torch": "2.13.0",
+    "transformers": "5.17.0",
+    "numpy": "2.1.2",
+    "scipy": "1.18.1"
+  },
+  "quality_labels_used_for_numerical_guard": false,
+  "quality_auc_computed": false,
+  "rationale": "Gross-drift check, not bitwise certification: float16 feature quantization and backend/kernel variance permit small differences; require LP max abs <=0.1 and canonical NLL rank rho >=0.999 over all 427 rows. No test-quality AUC or label-based quality chooses these thresholds.",
+  "scratch_cache_inspection": {
+    "path": "/workspace/mod1/data/restored/mod1-transfer-numerical-reference/20261022T000605331948Z_27557/AVeriTeC__dev_filtered_10shot.pt",
+    "raw_sha256": "5c15deb768c77323faa4f3ea4cc30636a5474ff405bc586743801addbe854127",
+    "raw_bytes": 91371710,
+    "sample_count": 427,
+    "dataset_csv": "/workspace/mod1/data/claims/AVeriTeC/dev_filtered_10shot.csv",
+    "dataset_csv_sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+    "meta": {
+      "model_id": "/workspace/mod1-models/Llama3.2-1B",
+      "hidden_size": 2048,
+      "num_layers": 16,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12,
+      "cpu_gc_interval_batches": 32,
+      "cuda_cache_cleanup_interval_batches": 32
+    },
+    "claims_labels_match_csv_in_order": true,
+    "all_topk_widths_512": true,
+    "all_topk_logprob_length_offset_1": true,
+    "stored_sequence_logprobs_dtype": "float16",
+    "stored_topk_logits_dtype": "torch.float16"
+  },
+  "execution": {
+    "dataset_index": 0,
+    "elapsed_seconds": 33.036729970015585,
+    "command": [
+      "/workspace/mod1/.venv/bin/python",
+      "scripts/evaluate_cached_claims.py",
+      "--mode",
+      "cache",
+      "--data-root",
+      "/workspace/mod1/data/claims",
+      "--cache-dir",
+      "/workspace/mod1/data/restored/mod1-transfer-numerical-reference/20261022T000605331948Z_27557",
+      "--output",
+      "/workspace/mod1/results/overnight20261021/numerical_reference/20261022T000605331948Z_27557/cache_metadata/dataset_0",
+      "--model-id",
+      "/workspace/mod1-models/Llama3.2-1B",
+      "--tokenizer-id",
+      "/workspace/mod1-models/llama31-tokenizer",
+      "--dataset-index",
+      "0",
+      "--dtype",
+      "float32",
+      "--batch-size",
+      "16",
+      "--max-batch-tokens",
+      "16384",
+      "--cpu-threads",
+      "12",
+      "--gc-interval",
+      "32",
+      "--cuda-cache-interval",
+      "32",
+      "--frozen-glob",
+      "out/overnight_no_selected_programs/*/frozen_estimator.py"
+    ],
+    "gpu_index": 0,
+    "exit_code": 0
+  },
+  "comparison": {
+    "status": "passed",
+    "all_rows_compared": 427,
+    "all_claims_labels_ids_input_ids_attention_masks_shapes_dtypes_exact": true,
+    "all_compared_numeric_values_finite": true,
+    "predeclared_guard": {
+      "observed_logprob_max_abs_difference_at_most": 0.1,
+      "canonical_nll_spearman_at_least": 0.999,
+      "require_exact_identity_shapes_dtypes": true,
+      "require_all_numeric_values_finite": true
+    },
+    "guard_checks": {
+      "observed_logprob_gross_drift": true,
+      "canonical_nll_rank_preservation": true
+    },
+    "absolute_difference_summaries": {
+      "sequence_logprobs": {
+        "elements": 17215,
+        "max_abs_difference": 0.00390625,
+        "mean_abs_difference": 7.046941335624365e-06,
+        "p99_abs_difference": 0.0,
+        "p999_abs_difference": 0.001953125,
+        "exact_value_fraction": 0.994191112401975
+      },
+      "greedy_logprobs": {
+        "elements": 17642,
+        "max_abs_difference": 0.001953125,
+        "mean_abs_difference": 7.471439857599673e-06,
+        "p99_abs_difference": 0.0,
+        "p999_abs_difference": 0.0009765625,
+        "exact_value_fraction": 0.991214148055776
+      },
+      "token_entropies": {
+        "elements": 17642,
+        "max_abs_difference": 0.00390625,
+        "mean_abs_difference": 6.451751082787613e-05,
+        "p99_abs_difference": 0.001953125,
+        "p999_abs_difference": 0.00390625,
+        "exact_value_fraction": 0.9462079129350414
+      },
+      "top_k_logits": {
+        "elements": 9032704,
+        "max_abs_difference": 0.0,
+        "mean_abs_difference": 0.0,
+        "p99_abs_difference": 0.0,
+        "p999_abs_difference": 0.0,
+        "exact_value_fraction": 1.0
+      },
+      "top512_conditional_top1_mass": {
+        "elements": 17642,
+        "max_abs_difference": 0.0,
+        "mean_abs_difference": 0.0,
+        "p99_abs_difference": 0.0,
+        "p999_abs_difference": 0.0,
+        "exact_value_fraction": 1.0
+      },
+      "top512_conditional_top10_mass": {
+        "elements": 17642,
+        "max_abs_difference": 0.0,
+        "mean_abs_difference": 0.0,
+        "p99_abs_difference": 0.0,
+        "p999_abs_difference": 0.0,
+        "exact_value_fraction": 1.0
+      },
+      "top512_conditional_entropy": {
+        "elements": 17642,
+        "max_abs_difference": 0.0,
+        "mean_abs_difference": 0.0,
+        "p99_abs_difference": 0.0,
+        "p999_abs_difference": 0.0,
+        "exact_value_fraction": 1.0
+      }
+    },
+    "canonical_nll": {
+      "spearman_rho": 0.9999998843978325,
+      "max_abs_difference": 0.125,
+      "mean_abs_difference": 0.0005854800692759454,
+      "historical_float16_sum_then_float32_output": true
+    },
+    "topk_ids_descriptive": {
+      "rank_slot_match_fraction": 1.0,
+      "top1_id_match_fraction": 1.0,
+      "exact_512_rank_id_row_fraction": 1.0,
+      "logit_comparison": "rank-aligned sorted values; token IDs may differ around ties; not an equality requirement"
+    },
+    "quality_auc_computed": false,
+    "labels_used_for_guard": false,
+    "bitwise_parity_claimed": false
+  },
+  "historical_cache_unchanged": true,
+  "finished_utc": "2026-10-22T00:06:39.829141+00:00"
+}

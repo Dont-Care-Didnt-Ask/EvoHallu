@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1.  **Analyze shown detectors:**\n    The provided candidates rely solely on `sequence_logprobs`.\n    -   **Candidate 1 (Avg NLL):** Calculates the mean negative log-probability per sequence. It attempts to mitigate sequence-length bias but may underweight rare but highly confident tokens.\n    -   **Candidate 2 (Total NLL):** Sums the negative log-probabilities. It captures total uncertainty but is heavily biased towards longer sequences, making it difficult to compare samples of different lengths.\n\n2.  **Propose a detector:**\n    I will implement a **Weighted Variance of Log-Probabilities** detector.\n    -   **Signal:** The variance of the log-probabilities within a sequence. This captures the *fluctuation* in confidence. A hallucination often involves a model confidently predicting the wrong token or oscillating between low-confidence tokens, whereas coherent text tends to have consistent, higher log-probabilities.\n    -   **Aggregation Principle:** Calculate the variance of the log-probabilities for each sequence, scaled by the sequence length to normalize the variance magnitude.\n    -   **Specific Change:** Unlike the previous \"Local-refinement\" attempts which focused on averaging, this approach shifts the signal to **dispersion** (variance), which is a distinct statistical property not captured by the mean or sum.\n\n3.  **Code:**\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the variance of log-probabilities per sequence.\n        \n        Signal: Variance of the log-probability distribution.\n        Aggregation Principle: Computes the variance of the log-probs for each\n        sequence and scales it by the sequence length to normalize the magnitude.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by high variance in model confidence (fluctuating\n        predictions) rather than just low average confidence.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            length = len(seq_logprobs)\n            if length > 0:\n                # Calculate variance of the log-probabilities\n                var = np.var(seq_logprobs)\n                # Scale by length to normalize variance magnitude across different lengths\n                # This prevents the variance from growing simply because the sequence is longer.\n                score = var * length\n            else:\n                score = 0.0\n            scores.append(score)\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 581,
+      "prompt_tokens": 766,
+      "total_tokens": 1347,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 44.876190162001876
+  },
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (Average NLL):** Uses the average negative log-probability across the sequence. This mitigates length bias but averages out local spikes in uncertainty.\n   - **Detector 2 (Total NLL):** Uses the sum of negative log-probabilities. This is highly sensitive to sequence length and may over-weight long, coherent sentences over short, high-confidence hallucinations.\n\n2. **Proposed Detector**\n   - **Signal:** **Local Token Surprisal Variance**. This detector calculates the variance of the log-probabilities within a sliding window (e.g., 5 tokens) for each token in the sequence. It identifies regions where the model's confidence fluctuates significantly, which often indicates a transition from a known context to a hallucinated or uncertain region.\n   - **Aggregation Principle:** **Max-Mean Aggregation**. For each sequence, the detector takes the maximum average variance score observed in any window. This focuses on the most uncertain \"local\" region rather than the global average, effectively isolating the most hallucinated atomic claims within the text.\n\n3. **Structural Difference**\n   - Unlike the previous detectors which rely on global aggregation (sum or mean of the entire sequence), this approach uses **local windowing** to capture the *temporal dynamics* of uncertainty, specifically targeting the peaks of token-level volatility.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the maximum average local variance of token surprisal.\n        \n        Aggregation Principle: \n        1. Apply a sliding window (size=5) to the log-probabilities of each sequence.\n        2. Calculate the variance of log-probs within each window.\n        3. Average these variances per window.\n        4. Return the maximum value found across all windows in the sequence.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by high volatility in confidence (high variance) at specific\n        local segments, rather than a global average or total sum of uncertainty.\n        \"\"\"\n        scores = []\n        window_size = 5\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            n_tokens = len(seq_logprobs)\n            if n_tokens < window_size:\n                scores.append(0.0)\n                continue\n            \n            # Calculate local variance for each window\n            # We use a convolution-like approach for efficiency with numpy\n            # Pad with zeros to handle edges or just iterate. Iteration is safer for arbitrary shapes.\n            local_vars = []\n            for i in range(n_tokens - window_size + 1):\n                window = seq_logprobs[i : i + window_size]\n                local_vars.append(np.var(window))\n            \n            if not local_vars:\n                scores.append(0.0)\n            else:\n                # Max of the average local variance\n                scores.append(np.max(np.mean(local_vars)))\n                \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 687,
+      "prompt_tokens": 788,
+      "total_tokens": 1475,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 52.9999643570045
+  }
+]

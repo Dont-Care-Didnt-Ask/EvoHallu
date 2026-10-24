@@ -1,0 +1,114 @@
+{
+  "created_utc": "2026-10-21T18:20:44.115128+00:00",
+  "status": "prepared_only_no_model_calls",
+  "feature_model": "Llama3.1-8b-instruct",
+  "labels": "is_hallu",
+  "writer": "Qwen/Qwen3.5-9B",
+  "writer_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+  "seeds": [
+    2107,
+    4319,
+    8741
+  ],
+  "jobs": [
+    {
+      "id": "next_evo_neutral_rank_uniform_2107",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "parent_sampling": "rank_uniform",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_rank_uniform_2107",
+      "command": [
+        ".venv/bin/python",
+        "scripts/overnight_sampler_trial.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_rank_uniform_2107"
+      ],
+      "config_sha256": "69dd9b6fea125ed5106bb723eb01082a7963adc9743a42a89e7511e84a4dc3a8",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_rank_uniform_2107",
+      "intervention": "rank_uniform_parent_sampling"
+    },
+    {
+      "id": "next_evo_neutral_rank_uniform_4319",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "parent_sampling": "rank_uniform",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_rank_uniform_4319",
+      "command": [
+        ".venv/bin/python",
+        "scripts/overnight_sampler_trial.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_rank_uniform_4319"
+      ],
+      "config_sha256": "65345561bf04d6f9559cae2136f4414b9dfa4b6a4dfea864ee5e69a521ed81fb",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_rank_uniform_4319",
+      "intervention": "rank_uniform_parent_sampling"
+    },
+    {
+      "id": "next_evo_neutral_rank_uniform_8741",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "parent_sampling": "rank_uniform",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_rank_uniform_8741",
+      "command": [
+        ".venv/bin/python",
+        "scripts/overnight_sampler_trial.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_rank_uniform_8741"
+      ],
+      "config_sha256": "f2e2e0c25e892afd5e5d17c038eb55405888c446c02a31fbd451b7192d7d074e",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_rank_uniform_8741",
+      "intervention": "rank_uniform_parent_sampling"
+    }
+  ],
+  "training_csv_sha256": "b71e07ab49ea97d6a8311f52329390dc7bc3137fcbac07706ba1a0925c16544a",
+  "training_raw_path": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "study_source_sha256": {
+    "src/experiments/extension_trial.py": "5d9e7e93febe82f01cb6988ba7c8d139e1931fef72ce259469b6b4168c031f36",
+    "src/experiments/prompt_policies.py": "bb8d3092c22b0e1255c440a626c086cb692762669d60517e1563b921584d1daa",
+    "src/packing/funsearch/programs_database.py": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+    "src/packing/model/prompt.py": "1c60df86c1ae48c11815751299459d7679e995cae7892ff93288c5d87424b625",
+    "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+    "src/packing/evaluate/uncertainty_quantification/features.py": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+    "configs/config_uq_trial.yaml": "a8e5fb034dbcdfbff9de5eb7c75848ecfb81a1256d51f74e933fd727482db199",
+    "configs/config_uq.yaml": "b54cb74fc7886336c0aa7047ae78b63d9e870755be69975500153d1c63509949",
+    "configs/model/qwen35_9b.yaml": "16e49c2c7d01cf2097a9ae9c3e03c280f5a8d31d026c73be8993f42e52cfee47",
+    "configs/task/uncertainty_quantification.yaml": "40e1da09c9dc3c34af2315c194cdf75d7edd936c7f1ca88e596fd6fbd3bc55c7",
+    "scripts/overnight_sampler_trial.py": "26f712cf7207f756cbdc1fb3d205703fc582287478e726aebcadf6b2ae6156e7"
+  },
+  "requests_by_phase": {
+    "evolution_screen": 180
+  },
+  "later_design_only": [
+    "immutable wrapper + smoke/repair",
+    "two-stage sketch/implementation",
+    "90-round vs three-restart portfolios",
+    "supervised evolved features",
+    "new feature-model extraction",
+    "behaviour-aware novelty archive (rank fitness sampling alone is not novelty selection)"
+  ],
+  "study": "rank_uniform_parent_sampling_control",
+  "base_study_manifest": "results/next_experiments/run_manifest.json",
+  "base_study_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c",
+  "hypothesis": "Stronger linear rank-based score-group sampling improves neutral-prompt evolution compared with historical near-uniform softmax(score/40).",
+  "selection_intervention": {
+    "eligible_group_probability": "p_i = 0.8 * rank_i / sum(ranks) + 0.2 / n",
+    "rank": "ascending average fitness rank; best n, worst 1 for distinct scores",
+    "uniform_reserve": 0.2,
+    "quantile_gate_unchanged": true,
+    "island_selection_unchanged": true,
+    "within_score_group_short_source_preference_unchanged": true,
+    "baseline_arm": "neutral evolution with inherited parent weighting, seeds 2107/4319/8741",
+    "is_novelty_archive": false
+  },
+  "study_phase": "sampler_control"
+}

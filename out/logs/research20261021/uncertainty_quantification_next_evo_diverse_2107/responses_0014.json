@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Global Mean NLL**: Computes the average negative log-probability over the entire sequence. Score: ~72.0.\n    *   *Limitation*: Highly sensitive to sequence length and assumes hallucinations are distributed uniformly or that the total error scales linearly with length. It dilutes localized, severe hallucinations with long stretches of high-confidence correct text.\n2.  **Smoothed Local Mean NLL**: Applies a triangular kernel to smooth the NLL sequence before averaging. Score: ~72.05.\n    *   *Limitation*: While smoothing helps identify contiguous low-probability regions, the aggregation principle remains a global mean of the smoothed values. If a sequence is mostly correct but contains one sharp, severe hallucination spike, the smoothing window might average it down too much, or if the hallucination is spread out, the global mean still dominates. The marginal gain (0.05) suggests the current aggregation (global mean) is not fully exploiting the spatial structure of the error.\n\n### Proposed Improvement\n**Signal**: The ratio of the **local minimum NLL** (deepest uncertainty) to the **global mean NLL** within the sequence.\n**Aggregation Principle**: Instead of averaging confidence (which dilutes outliers), we compute a **confidence gap ratio**. Hallucinations often create \"islands\" of extremely low probability that are distinct from the surrounding context. By taking the ratio of the worst-case local error to the average error, we amplify sequences where the model is *significantly* more confident on average than at its most confused point. This is more robust to sequence length and highlights the severity of the lowest-confidence token relative to the context.\n\n### Python Code\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by computing the ratio of the minimum negative log-probability \n        to the mean negative log-probability within each sequence.\n        \n        Hypothesis: Hallucinated tokens often represent a distinct local minimum in model confidence \n        that is significantly lower than the sequence average; normalizing this minimum by the \n        mean amplifies the severity of such outliers while being robust to sequence length.\n        \"\"\"\n        scores = np.zeros(len(stats[\"sequence_logprobs\"]), dtype=np.float32)\n        \n        for i, seq_logprobs in enumerate(stats[\"sequence_logprobs\"]):\n            if len(seq_logprobs) == 0:\n                scores[i] = 0.0\n                continue\n            \n            neg_logprobs = -np.array(seq_logprobs, dtype=np.float32)\n            mean_nll = np.mean(neg_logprobs)\n            min_nll = np.min(neg_logprobs)\n            \n            # Avoid division by zero or division by very small numbers\n            if mean_nll > 1e-6:\n                scores[i] = min_nll / mean_nll\n            else:\n                scores[i] = 0.0\n                \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 728,
+      "prompt_tokens": 1221,
+      "total_tokens": 1949,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.559892680990743
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Mean NLL Detector**: Uses the global average negative log-probability. It assumes hallucinations lower the overall confidence of the entire sequence.\n2.  **Smoothed NLL Detector**: Applies a local triangular kernel to emphasize contiguous regions of low probability before averaging. It hypothesizes that hallucinations appear as \"islands\" of uncertainty within a sea of confidence.\n\nBoth approaches rely on **aggregating** the uncertainty signal across the entire sequence into a single scalar mean (or smoothed mean). They treat the sequence as a homogeneous bag of tokens or a smooth curve, potentially diluting strong local signals if the hallucination is short or if the surrounding context is very confident.\n\n### Proposed Detector\n**Signal**: **Maximum Local Uncertainty (Peak NLL)**.\nInstead of averaging, we identify the single most \"surprising\" token in the sequence. Hallucinations often manifest as specific factual errors that are highly improbable given the immediate context, even if the rest of the sentence is fluent.\n\n**Aggregation Principle**: **Max-Pooling over the sequence**.\nWe compute the negative log-probability for every token and take the maximum value. This is robust to the \"denominator problem\" where long, confident sequences dilute the signal of a short hallucination. It directly targets the point of highest divergence between the model's prediction and the actual token.\n\n**Structural Difference**:\nUnlike the shown methods which compute a global statistic (mean), this detector computes a **local extremum**. It is invariant to sequence length and ignores the volume of confident tokens, focusing exclusively on the worst-case prediction within the sequence.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by computing the maximum negative log-probability \n        (peak uncertainty) within each generated sequence.\n        \n        Hypothesis: Hallucinated tokens often represent specific factual errors \n        that are locally highly improbable given the immediate context, even if \n        the surrounding context is fluent; max-pooling isolates these peaks \n        without dilution from long confident sequences.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            if len(seq_logprobs) == 0:\n                scores.append(0.0)\n            else:\n                # Convert to negative log-probability\n                neg_logprobs = -np.array(seq_logprobs, dtype=np.float32)\n                # Take the maximum value as the sequence score\n                score = np.max(neg_logprobs)\n                scores.append(score)\n        \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 653,
+      "prompt_tokens": 1241,
+      "total_tokens": 1894,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 16.28190955199534
+  }
+]

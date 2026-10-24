@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "dataset": "x-fact__test_filtered_10shot",
+  "phase": "source",
+  "rows": 2315,
+  "raw_sha256": "62c6fc50d8c8761df2c03945f6d3a856918409c59efc7533a697525bb985f240",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "0bb7d28754d3d5afab908d7ab32deb42e66d8f23214ee758df4919c7025d6564",
+  "bootstrap_sha256": "e979ea9f2e89d22fe9e5f96c6db23867fd83eaa0d3206b57ba6df5b7ec4d192c",
+  "source_lp_only_saved_prediction_parity": true,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_512",
+      "score_sha256": "3c8f3157bdc9cf46f4d5cc93102ea09e1078c7a816de414c4bf9d1be27519189",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

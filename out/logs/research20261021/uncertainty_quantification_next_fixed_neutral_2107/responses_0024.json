@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as the sole signal.\n- **Approach**: It aggregates the negative log-probabilities of all generated tokens (excluding the first) into a single scalar per sequence.\n- **Limitation**: While effective to some degree (ROC-AUC ~74.3), this approach is sensitive to sequence length. Longer sequences naturally accumulate higher NLL scores even if the hallucination probability per token is low. Conversely, short hallucinated sequences might be missed. It also fails to distinguish between \"confidently wrong\" tokens and \"uncertainly wrong\" tokens, treating all low-probability events equally regardless of the model's confidence distribution.\n\n### Proposed Detector\n**Signal**: **Mean Per-Token Negative Log-Probability of the Top-1 Token**\n**Aggregation Principle**: **Sequence-Averaging**\n\n**Hypothesis**: Hallucinated tokens are often generated with significantly lower probability mass compared to factual tokens, which the model expects to be high-confidence. By focusing on the **Top-1 log-probability** (the logit of the most likely token) rather than the sum of all tokens, we isolate the model's specific confidence in its own choice. Averaging this metric across the sequence normalizes for length, preventing long sequences from dominating the score purely due to token count. This assumes that hallucinations introduce a systematic drop in the peak probability mass per token, whereas factual generation maintains higher peak confidence.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any, List\n\nclass HallucinationDetector:\n    \"\"\"\n    Detects hallucinations by averaging the negative log-probability of the top-1 token \n    across the generated sequence.\n    \n    Hypothesis: Hallucinated tokens exhibit a systematic reduction in the model's peak \n    confidence (top-1 log-prob) compared to factual tokens, independent of sequence length.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Extract sequence logprobs\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Calculate mean negative log-prob per sequence\n        # Input shape: List[np.ndarray], each inner array is (n_i - 1,)\n        # We compute -mean(log_probs) for each sequence\n        neg_logprobs = [-np.mean(lp) for lp in seq_logprobs]\n        \n        return np.array(neg_logprobs, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 595,
+      "prompt_tokens": 498,
+      "total_tokens": 1093,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 9.668480691994773
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector (`total_neg_logprob`) aggregates the sum of negative log-probabilities across the entire sequence.\n- **Approach**: Global perplexity approximation.\n- **Weakness**: It conflates model uncertainty with sequence length. A long, coherent hallucinated sequence might have a similar total negative log-prob to a short, highly probable truthful sequence. It lacks local sensitivity to sudden drops in confidence (sharp transitions) which often characterize hallucinations.\n- **Result**: 74.33 ROC-AUC indicates a baseline signal exists but is not discriminative enough on its own.\n\n### Proposed Detector\n**Signal**: Local Log-Probability Gradient (Drop Rate).\n**Hypothesis**: Hallucinations often manifest as a sudden, localized collapse in the model's confidence (a sharp drop in log-probability) when the model generates content that is not grounded in the context, whereas truthful reasoning tends to maintain smoother probability distributions.\n\n**Aggregation Principle**: \n1. Compute the difference between the top-1 log-probability of the *current* token and the top-1 log-probability of the *previous* token for each position in the sequence.\n2. Identify the maximum negative gradient (the steepest drop) in this sequence.\n3. Use this maximum drop as the single score for the sequence.\n\nThis approach is robust to sequence length and focuses specifically on the \"shock\" of generating low-probability tokens, which is a hallmark of hallucination in autoregressive models.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the maximum local drop in log-probability \n        within a sequence.\n        \n        Hypothesis: Hallucinations often involve a sudden, localized collapse in model \n        confidence (sharp negative gradient) when generating ungrounded content, \n        whereas truthful sequences maintain smoother probability distributions.\n        \"\"\"\n        scores = np.zeros(len(stats[\"sequence_logprobs\"]), dtype=np.float32)\n        \n        for i, seq_logprobs in enumerate(stats[\"sequence_logprobs\"]):\n            # seq_logprobs has shape (n_i - 1), representing log-probs for tokens 1 to n_i-1\n            # We calculate the gradient: current_logprob - previous_logprob\n            # A large negative value indicates a sharp drop in confidence.\n            \n            if len(seq_logprobs) < 2:\n                scores[i] = 0.0\n                continue\n            \n            # Compute differences: diff[t] = logprob[t] - logprob[t-1]\n            # We look for the most negative drop (maximum hallucination signal)\n            gradients = np.diff(seq_logprobs)\n            \n            # The score is the maximum negative gradient (largest drop)\n            # If all gradients are positive or zero, the max is >= 0, indicating stability\n            scores[i] = np.max(gradients)\n            \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 714,
+      "prompt_tokens": 498,
+      "total_tokens": 1212,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.369285613996908
+  }
+]

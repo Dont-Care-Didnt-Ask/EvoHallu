@@ -1,0 +1,22 @@
+{
+  "status": "passed_original_proxy_reference",
+  "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+  "rows": 46605,
+  "phase": "reference",
+  "parent_source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "2c78d90193e9ceb56a69a988a5383f71336f7e2b2b72fdd6123416b15727ed2d",
+  "reference_npz_sha256": "01e7a40f7847fed219f267932f50b13f35ed23b80116e0f9104b636c74e798bf",
+  "labels_groups_masks_exact": true,
+  "conditions": [
+    {
+      "case": "original_512",
+      "directed_auc_percent": 65.68062288910512,
+      "paper_auc_percent": 65.68062288910512,
+      "canonical_nll_byte_exact": true,
+      "original512_byte_exact": true,
+      "frozen_case_invariance_exact": false,
+      "spearman_vs_original512": 1.0,
+      "elapsed_seconds": 33.655352564994246
+    }
+  ]
+}

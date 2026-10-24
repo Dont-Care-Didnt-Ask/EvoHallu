@@ -1,0 +1,8 @@
+{
+  "pid": 1634254,
+  "started_utc": "2026-10-21T20:06:58.789368+00:00",
+  "local_only": true,
+  "helper": "scripts/overnight_cache_backup.py",
+  "no_gpu_work": true,
+  "no_pod_stop": true
+}

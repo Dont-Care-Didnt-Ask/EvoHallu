@@ -1,0 +1,23 @@
+{
+  "status": "complete_fixed_source9_position_length_diagnostic",
+  "started_utc": "2026-10-21T23:26:03.433572+00:00",
+  "cutoff_utc": "2026-10-21T23:56:03.433572+00:00",
+  "workers": 4,
+  "gpu_calls": 0,
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "phases": [
+    {
+      "phase": "reference",
+      "status": "complete",
+      "datasets": 9,
+      "finished_utc": "2026-10-21T23:26:28.464484+00:00"
+    },
+    {
+      "phase": "controls",
+      "status": "complete",
+      "datasets": 9,
+      "finished_utc": "2026-10-21T23:27:00.999552+00:00"
+    }
+  ],
+  "finished_utc": "2026-10-21T23:27:02.597757+00:00"
+}

@@ -1,0 +1,147 @@
+{
+  "events": [
+    {
+      "utc": "2026-10-21T20:26:09.941073+00:00",
+      "event": "controller_started",
+      "selected_jobs": 3,
+      "completed_skips": 0
+    },
+    {
+      "utc": "2026-10-21T20:26:09.946116+00:00",
+      "event": "batch_started",
+      "batch": "feedback_control",
+      "pending": 3
+    },
+    {
+      "utc": "2026-10-21T20:26:09.948566+00:00",
+      "event": "job_started",
+      "job": "next_fixed_neutral_2107",
+      "port": 18000,
+      "pid": 12571,
+      "max_seconds": 5400
+    },
+    {
+      "utc": "2026-10-21T20:26:09.951090+00:00",
+      "event": "job_started",
+      "job": "next_fixed_neutral_4319",
+      "port": 18001,
+      "pid": 12572,
+      "max_seconds": 5400
+    },
+    {
+      "utc": "2026-10-21T20:50:38.081644+00:00",
+      "event": "job_finished",
+      "job": "next_fixed_neutral_2107",
+      "port": 18000,
+      "status": "complete",
+      "exit_code": 0,
+      "elapsed_seconds": 1468.1278090190026,
+      "error": null
+    },
+    {
+      "utc": "2026-10-21T20:50:40.085245+00:00",
+      "event": "job_started",
+      "job": "next_fixed_neutral_8741",
+      "port": 18000,
+      "pid": 14359,
+      "max_seconds": 5400
+    },
+    {
+      "utc": "2026-10-21T20:51:08.095118+00:00",
+      "event": "job_finished",
+      "job": "next_fixed_neutral_4319",
+      "port": 18001,
+      "status": "complete",
+      "exit_code": 0,
+      "elapsed_seconds": 1498.1380138029926,
+      "error": null
+    },
+    {
+      "utc": "2026-10-21T21:15:48.214335+00:00",
+      "event": "job_finished",
+      "job": "next_fixed_neutral_8741",
+      "port": 18000,
+      "status": "complete",
+      "exit_code": 0,
+      "elapsed_seconds": 1508.12407799199,
+      "error": null
+    },
+    {
+      "utc": "2026-10-21T21:15:48.216561+00:00",
+      "event": "controller_stopped",
+      "failed_jobs": [],
+      "budget_stop": false,
+      "unfinished_jobs": []
+    }
+  ],
+  "jobs": {
+    "next_fixed_neutral_2107": {
+      "status": "complete",
+      "port": 18000,
+      "pid": 12571,
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_fixed_neutral_2107",
+        "cluster.api_base_url=http://127.0.0.1:18000/v1",
+        "trial.max_seconds=5400"
+      ],
+      "log": "/workspace/mod1/results/next_experiments/execution_logs/next_fixed_neutral_2107.parallel.log",
+      "max_seconds": 5400,
+      "exit_code": 0,
+      "elapsed_seconds": 1468.1278090190026,
+      "timed_out": false,
+      "error": null
+    },
+    "next_fixed_neutral_4319": {
+      "status": "complete",
+      "port": 18001,
+      "pid": 12572,
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_fixed_neutral_4319",
+        "cluster.api_base_url=http://127.0.0.1:18001/v1",
+        "trial.max_seconds=5400"
+      ],
+      "log": "/workspace/mod1/results/next_experiments/execution_logs/next_fixed_neutral_4319.parallel.log",
+      "max_seconds": 5400,
+      "exit_code": 0,
+      "elapsed_seconds": 1498.1380138029926,
+      "timed_out": false,
+      "error": null
+    },
+    "next_fixed_neutral_8741": {
+      "status": "complete",
+      "port": 18000,
+      "pid": 14359,
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_fixed_neutral_8741",
+        "cluster.api_base_url=http://127.0.0.1:18000/v1",
+        "trial.max_seconds=5400"
+      ],
+      "log": "/workspace/mod1/results/next_experiments/execution_logs/next_fixed_neutral_8741.parallel.log",
+      "max_seconds": 5400,
+      "exit_code": 0,
+      "elapsed_seconds": 1508.12407799199,
+      "timed_out": false,
+      "error": null
+    }
+  },
+  "manifest_sha256": "c06460d1620ef8d9d13476ec9bf147bf03b662201c2cc74c66f63c320ae5b291",
+  "deadline_utc": "2026-10-22T02:16:28+00:00",
+  "experiment_cutoff_utc": "2026-10-22T01:46:28+00:00",
+  "reserve_minutes": 30,
+  "controller_pid": 12570,
+  "ports": [
+    18000,
+    18001
+  ],
+  "running": [],
+  "updated_utc": "2026-10-21T21:15:48.216590+00:00"
+}

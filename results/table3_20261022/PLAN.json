@@ -1,0 +1,126 @@
+{
+  "created_utc": "2026-10-22T11:12:56.936720+00:00",
+  "study": "Per-formula coefficient refit: local analogue of paper Table 3",
+  "writers": "Four frozen Qwen3.5-9B historical-context screen winners; all four retained",
+  "source_feature_model": "Llama3.1-8B-Instruct",
+  "new_model_calls": false,
+  "gpu_used": false,
+  "original_artifacts_overwritten": false,
+  "policies": [
+    "original",
+    "neutral",
+    "diverse",
+    "compositional"
+  ],
+  "component_basis": "phi_j = (saved full output - saved drop-j output) / original effective coefficient a_j",
+  "original_effective_coefficients": {
+    "original": [
+      0.7,
+      0.3
+    ],
+    "neutral": [
+      1.0,
+      4.0,
+      2.0
+    ],
+    "diverse": [
+      1.0,
+      2.0,
+      2.5
+    ],
+    "compositional": [
+      0.4,
+      0.3,
+      3.0
+    ]
+  },
+  "fit_split": "Reuse exact saved claim-grouped 5606 fit / 1401 validation indices; no outer-validation refit",
+  "C_grid": [
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0
+  ],
+  "C_selection": "maximum mean directed AUROC of three StratifiedGroupKFold folds, shuffle=True, random_state=441, on fit rows only; earlier grid value wins ties",
+  "scaler": "StandardScaler fitted separately within each CV fold and on fit rows for final model",
+  "final_metric": "Both directed and per-dataset max(AUC,100-AUC), equal nine-dataset mean; train/validation directed only",
+  "evolution_reference": "Saved actual full-program scores, not reconstructed score, retained as primary Evo rows",
+  "precision_guard": "Reconstructed Evo score versus frozen scores: max absolute score error <= 1e-3 and AUROC error <= .001 percentage points for every training/validation/test set. Exported component differences preserve float32 cancellation; not exact algebraic feature extraction.",
+  "coefficient_comparison": "Original effective weights versus logistic raw-input weights (beta_standardized / scale); also z-scale vectors and positive-L1-normalized weights; do not correlate two-entry vectors",
+  "limitations": [
+    "New post-benchmark exploratory CPU follow-up, not result from previous GPU campaign",
+    "Candidate pool is validation-informed; outer validation is diagnostic",
+    "Same per-formula feature definitions; no 12-column pooling or unconditional extra NLL column",
+    "Inherited generated programs may already use rows now in grouped outer validation during discovery",
+    "Existing nine test sets already viewed; no confirmatory/SOTA interpretation",
+    "Reported weights depend on units, regularization, precision and correlated features"
+  ],
+  "inputs": [
+    {
+      "file": "results/overnight20261021/screen_component_refit/training_features_and_predictions.npz",
+      "sha256": "508f3f7c6baa2fc7ae8d66eb4fb524648e16144ef2487f660062a9f85d586acd",
+      "bytes": 379126
+    },
+    {
+      "file": "results/overnight20261021/screen_component_refit/component_pool.json",
+      "sha256": "e99a2ccb4992f996b2269b0bba3dc437a2cb98d987a7c78e9952417281aedc43",
+      "bytes": 8069
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/manifest.json",
+      "sha256": "cf29f4efb8587c5b4eabfd8285dfd2ef22ef71dde9862353595c0281a0981f18",
+      "bytes": 32831
+    },
+    {
+      "file": "data/claims/popqa/popqa_train_filtered_10shot.csv",
+      "sha256": "b71e07ab49ea97d6a8311f52329390dc7bc3137fcbac07706ba1a0925c16544a",
+      "bytes": 34214918
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/AVeriTeC__dev_filtered_10shot_scores.npz",
+      "sha256": "39309af04354f1a0bc5d586bd8b477fc5d536a55d36cf6481ed498f23f60e640",
+      "bytes": 33682
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz",
+      "sha256": "32631514edef4620f95a67ea181fb29e6d4d870f396bb4b97202576ff85556c3",
+      "bytes": 132897
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz",
+      "sha256": "ae56965f418d82a5080cde2f32f371cfbf2777965ae6b6868b5636cbe6aa1d46",
+      "bytes": 2839902
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/geometry__cities_scores.npz",
+      "sha256": "83f03a3758dabda4041b648a829f7680bd02f6619f94f7cdcc4553dfc82af0d8",
+      "bytes": 96267
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/geometry__common_claim_true_false_scores.npz",
+      "sha256": "456bb50f6e7855c3114b6f50d1af6201ee15581cedcf5fb610d9069d9361476b",
+      "bytes": 282170
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/geometry__companies_true_false_scores.npz",
+      "sha256": "26d8a2ae0550943e35ba17656a766b2b49cefbb5c1b7a508f2b7791fbfffdacf",
+      "bytes": 80857
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/geometry__counterfact_true_false_scores.npz",
+      "sha256": "c4e60d652c1e7c25c13024dcc5ae4071092f651e5024046db0392dbb56d09c18",
+      "bytes": 1956875
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/popqa__popqa_test_filtered_10shot_scores.npz",
+      "sha256": "d0e4f1f6ec34ab7bc7953c832564e6795f67100d1ffd72af070e7c0754758eb2",
+      "bytes": 436710
+    },
+    {
+      "file": "results/overnight20261021/screen_component_ablations/evaluations/source_nine/x-fact__test_filtered_10shot_scores.npz",
+      "sha256": "beedacc40648d6ce82e0ca5f06c4ca2ba4a852f21485a184579f7f1ee3cdd46d",
+      "bytes": 159334
+    }
+  ]
+}

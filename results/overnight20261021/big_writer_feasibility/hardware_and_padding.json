@@ -1,0 +1,697 @@
+{
+  "oss_harmony_version": "0.0.11",
+  "harmony_module_origin": "/workspace/mod1/.venv/lib/python3.12/site-packages/openai_harmony/__init__.py",
+  "extra_sources": [
+    {
+      "path": "vllm/model_executor/layers/quantization/utils/marlin_utils_fp4.py",
+      "sha256": "7c863610b4b9c2f22e84d8690628c763bd0c81aa800b9b51e4c610a37427ee14",
+      "excerpts": [
+        {
+          "line": 126,
+          "text": "def mxfp4_marlin_process_scales(marlin_scales, input_dtype=None):"
+        },
+        {
+          "line": 127,
+          "text": "    # fit the layout of fp8 dequantization"
+        },
+        {
+          "line": 128,
+          "text": "    if input_dtype is None or input_dtype.itemsize == 2:"
+        },
+        {
+          "line": 129,
+          "text": "        marlin_scales = marlin_scales.view(-1, 4)[:, [0, 2, 1, 3]].view("
+        },
+        {
+          "line": 130,
+          "text": "            marlin_scales.size(0), -1"
+        },
+        {
+          "line": 131,
+          "text": "        )"
+        },
+        {
+          "line": 132,
+          "text": ""
+        },
+        {
+          "line": 133,
+          "text": "    marlin_scales = marlin_scales.to(torch.float8_e8m0fnu)"
+        },
+        {
+          "line": 134,
+          "text": "    if input_dtype == torch.float8_e4m3fn:"
+        },
+        {
+          "line": 135,
+          "text": "        marlin_scales = marlin_scales.view(torch.uint8)"
+        },
+        {
+          "line": 136,
+          "text": "        assert marlin_scales.max() <= 249"
+        },
+        {
+          "line": 137,
+          "text": "        # exponent_bias (fp4->fp8) = 2 ** 3 - 2 ** 1 = 6"
+        },
+        {
+          "line": 138,
+          "text": "        marlin_scales = marlin_scales + 6"
+        },
+        {
+          "line": 139,
+          "text": "        marlin_scales = marlin_scales.view(torch.float8_e8m0fnu)"
+        },
+        {
+          "line": 140,
+          "text": "    return marlin_scales"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/layers/quantization/utils/marlin_utils_fp4.py",
+      "sha256": "7c863610b4b9c2f22e84d8690628c763bd0c81aa800b9b51e4c610a37427ee14",
+      "excerpts": [
+        {
+          "line": 560,
+          "text": "def prepare_moe_mxfp4_layer_for_marlin("
+        },
+        {
+          "line": 561,
+          "text": "    layer: torch.nn.Module,"
+        },
+        {
+          "line": 562,
+          "text": "    w13: torch.Tensor,"
+        },
+        {
+          "line": 563,
+          "text": "    w2: torch.Tensor,"
+        },
+        {
+          "line": 564,
+          "text": "    w13_scale: torch.Tensor,"
+        },
+        {
+          "line": 565,
+          "text": "    w2_scale: torch.Tensor,"
+        },
+        {
+          "line": 566,
+          "text": "    w13_bias: torch.Tensor | None,"
+        },
+        {
+          "line": 567,
+          "text": "    w2_bias: torch.Tensor | None,"
+        },
+        {
+          "line": 568,
+          "text": ") -> tuple["
+        },
+        {
+          "line": 569,
+          "text": "    torch.Tensor,"
+        },
+        {
+          "line": 570,
+          "text": "    torch.Tensor,"
+        },
+        {
+          "line": 571,
+          "text": "    torch.Tensor,"
+        },
+        {
+          "line": 572,
+          "text": "    torch.Tensor,"
+        },
+        {
+          "line": 573,
+          "text": "    torch.Tensor | None,"
+        },
+        {
+          "line": 574,
+          "text": "    torch.Tensor | None,"
+        },
+        {
+          "line": 575,
+          "text": "]:"
+        },
+        {
+          "line": 576,
+          "text": "    \"\"\"Pure-function version of prepare_moe_fp4_layer_for_marlin for MXFP4."
+        },
+        {
+          "line": 577,
+          "text": ""
+        },
+        {
+          "line": 578,
+          "text": "    Takes weight tensors as inputs and returns transformed tensors."
+        },
+        {
+          "line": 579,
+          "text": "    Does NOT modify the layer in-place."
+        },
+        {
+          "line": 580,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 581,
+          "text": "    input_dtype = get_marlin_input_dtype()"
+        },
+        {
+          "line": 582,
+          "text": "    if ("
+        },
+        {
+          "line": 583,
+          "text": "        input_dtype is not None"
+        },
+        {
+          "line": 584,
+          "text": "        and input_dtype.itemsize == 1"
+        },
+        {
+          "line": 585,
+          "text": "        and input_dtype != torch.float8_e4m3fn"
+        },
+        {
+          "line": 586,
+          "text": "    ):"
+        },
+        {
+          "line": 587,
+          "text": "        raise RuntimeError(\"MXFP4 weight + INT8 activation is not supported.\")"
+        },
+        {
+          "line": 588,
+          "text": ""
+        },
+        {
+          "line": 589,
+          "text": "    group_size = 32  # MXFP4 block size"
+        },
+        {
+          "line": 590,
+          "text": ""
+        },
+        {
+          "line": 591,
+          "text": "    # Derive dimensions from actual weight shapes to handle rounded/padded"
+        },
+        {
+          "line": 592,
+          "text": "    # sizes correctly (e.g., Mxfp4MoEMethod rounds up hidden_dim)."
+        },
+        {
+          "line": 593,
+          "text": "    # w13 shape: (E, 2*N, K//2)"
+        },
+        {
+          "line": 594,
+          "text": "    e = w13.shape[0]"
+        },
+        {
+          "line": 595,
+          "text": "    n = w13.shape[1] // 2  # intermediate_size_per_partition"
+        },
+        {
+          "line": 596,
+          "text": "    k = w13.shape[2] * 2  # hidden_size"
+        },
+        {
+          "line": 597,
+          "text": ""
+        },
+        {
+          "line": 598,
+          "text": "    param_dtype = layer.params_dtype"
+        },
+        {
+          "line": 599,
+          "text": "    is_a_8bit = input_dtype is not None and input_dtype.itemsize == 1"
+        },
+        {
+          "line": 600,
+          "text": ""
+        },
+        {
+          "line": 601,
+          "text": "    # WEIGHT: Repack weights to marlin format"
+        },
+        {
+          "line": 602,
+          "text": "    def repack_weight(weight: torch.Tensor, name: str) -> torch.Tensor:"
+        },
+        {
+          "line": 603,
+          "text": "        if \"w13\" in name:"
+        },
+        {
+          "line": 604,
+          "text": "            size_n, size_k = n * 2, k"
+        },
+        {
+          "line": 605,
+          "text": "        else:"
+        },
+        {
+          "line": 606,
+          "text": "            size_n, size_k = k, n"
+        },
+        {
+          "line": 607,
+          "text": ""
+        },
+        {
+          "line": 608,
+          "text": "        assert weight.shape == (e, size_n, size_k // 2)"
+        },
+        {
+          "line": 609,
+          "text": ""
+        },
+        {
+          "line": 610,
+          "text": "        return _repack_marlin_experts(weight, size_n, size_k, is_a_8bit)"
+        },
+        {
+          "line": 611,
+          "text": ""
+        },
+        {
+          "line": 612,
+          "text": "    w13 = repack_weight(w13, \"w13\")"
+        },
+        {
+          "line": 613,
+          "text": "    w2 = repack_weight(w2, \"w2\")"
+        },
+        {
+          "line": 614,
+          "text": ""
+        },
+        {
+          "line": 615,
+          "text": "    # WEIGHT SCALES: Permute scales"
+        },
+        {
+          "line": 616,
+          "text": "    def permute_scales(scales: torch.Tensor, name: str) -> torch.Tensor:"
+        },
+        {
+          "line": 617,
+          "text": "        scales = scales.view(torch.float8_e8m0fnu)"
+        },
+        {
+          "line": 618,
+          "text": "        scales = scales.to(param_dtype)"
+        },
+        {
+          "line": 619,
+          "text": ""
+        },
+        {
+          "line": 620,
+          "text": "        tensor_list = []"
+        },
+        {
+          "line": 621,
+          "text": "        if \"w13\" in name:"
+        },
+        {
+          "line": 622,
+          "text": "            size_n, size_k = n * 2, k"
+        },
+        {
+          "line": 623,
+          "text": "        else:"
+        },
+        {
+          "line": 624,
+          "text": "            size_n, size_k = k, n"
+        },
+        {
+          "line": 625,
+          "text": ""
+        },
+        {
+          "line": 626,
+          "text": "        for i in range(e):"
+        },
+        {
+          "line": 627,
+          "text": "            scale = scales[i].T"
+        },
+        {
+          "line": 628,
+          "text": "            marlin_scales = marlin_permute_scales("
+        },
+        {
+          "line": 629,
+          "text": "                s=scale,"
+        },
+        {
+          "line": 630,
+          "text": "                size_k=size_k,"
+        },
+        {
+          "line": 631,
+          "text": "                size_n=size_n,"
+        },
+        {
+          "line": 632,
+          "text": "                group_size=group_size,"
+        },
+        {
+          "line": 633,
+          "text": "                is_a_8bit=is_a_8bit,"
+        },
+        {
+          "line": 634,
+          "text": "            )"
+        },
+        {
+          "line": 635,
+          "text": "            marlin_scales = mxfp4_marlin_process_scales("
+        },
+        {
+          "line": 636,
+          "text": "                marlin_scales, input_dtype=input_dtype"
+        },
+        {
+          "line": 637,
+          "text": "            )"
+        },
+        {
+          "line": 638,
+          "text": "            tensor_list.append(marlin_scales)"
+        },
+        {
+          "line": 639,
+          "text": "        return torch.cat([x.unsqueeze(0) for x in tensor_list], 0)"
+        },
+        {
+          "line": 640,
+          "text": ""
+        },
+        {
+          "line": 641,
+          "text": "    w13_scale = permute_scales(w13_scale, \"w13\")"
+        },
+        {
+          "line": 642,
+          "text": "    w2_scale = permute_scales(w2_scale, \"w2\")"
+        },
+        {
+          "line": 643,
+          "text": ""
+        },
+        {
+          "line": 644,
+          "text": "    # BIAS: Permute bias"
+        },
+        {
+          "line": 645,
+          "text": "    def permute_bias(bias: torch.Tensor | None) -> torch.Tensor | None:"
+        },
+        {
+          "line": 646,
+          "text": "        if bias is None:"
+        },
+        {
+          "line": 647,
+          "text": "            return None"
+        },
+        {
+          "line": 648,
+          "text": "        bias = bias.to(param_dtype)"
+        },
+        {
+          "line": 649,
+          "text": "        tensor_list = []"
+        },
+        {
+          "line": 650,
+          "text": "        for i in range(e):"
+        },
+        {
+          "line": 651,
+          "text": "            tensor_list.append(marlin_permute_bias(bias[i]))"
+        },
+        {
+          "line": 652,
+          "text": "        return torch.cat([x.unsqueeze(0) for x in tensor_list], 0)"
+        },
+        {
+          "line": 653,
+          "text": ""
+        },
+        {
+          "line": 654,
+          "text": "    w13_bias = permute_bias(w13_bias)"
+        },
+        {
+          "line": 655,
+          "text": "    w2_bias = permute_bias(w2_bias)"
+        },
+        {
+          "line": 656,
+          "text": ""
+        },
+        {
+          "line": 657,
+          "text": "    return w13, w2, w13_scale, w2_scale, w13_bias, w2_bias"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+      "sha256": "20ff5a7f591b05fb9f18266db6dc04cebade3d7c143005bd74a1c9bc8449e4ce",
+      "excerpts": [
+        {
+          "line": 731,
+          "text": "def mxfp4_round_up_hidden_size_and_intermediate_size("
+        },
+        {
+          "line": 732,
+          "text": "    backend: Mxfp4MoeBackend,"
+        },
+        {
+          "line": 733,
+          "text": "    hidden_size: int,"
+        },
+        {
+          "line": 734,
+          "text": "    intermediate_size: int,"
+        },
+        {
+          "line": 735,
+          "text": "    activation: MoEActivation | None = None,"
+        },
+        {
+          "line": 736,
+          "text": ") -> tuple[int, int]:"
+        },
+        {
+          "line": 737,
+          "text": "    \"\"\"Round up hidden_size and intermediate_size based on backend requirements.\"\"\""
+        },
+        {
+          "line": 738,
+          "text": "    if backend in B12X_BACKENDS:"
+        },
+        {
+          "line": 739,
+          "text": "        # b12x plans for the exact model dimensions. B12xExperts validates the"
+        },
+        {
+          "line": 740,
+          "text": "        # required MXFP4 block alignment before selecting the backend."
+        },
+        {
+          "line": 741,
+          "text": "        return hidden_size, intermediate_size"
+        },
+        {
+          "line": 742,
+          "text": "    if backend == Mxfp4MoeBackend.EMULATION:"
+        },
+        {
+          "line": 743,
+          "text": "        # Emulation has no kernel tile; it only needs OCP MX block alignment so the"
+        },
+        {
+          "line": 744,
+          "text": "        # per-block scale buffers (`dim // OCP_MX_BLOCK_SIZE`) aren't floor-truncated"
+        },
+        {
+          "line": 745,
+          "text": "        # by a non-block-aligned TP/DP shard (e.g. 2880 // 4 = 720)."
+        },
+        {
+          "line": 746,
+          "text": "        intermediate_size = round_up(intermediate_size, OCP_MX_BLOCK_SIZE)"
+        },
+        {
+          "line": 747,
+          "text": "        hidden_size = round_up(hidden_size, OCP_MX_BLOCK_SIZE)"
+        },
+        {
+          "line": 748,
+          "text": "    elif backend == Mxfp4MoeBackend.DEEPGEMM_MXFP4:"
+        },
+        {
+          "line": 749,
+          "text": "        # DeepGEMM requires M/N/K alignment"
+        },
+        {
+          "line": 750,
+          "text": "        intermediate_size = round_up(intermediate_size, 128)"
+        },
+        {
+          "line": 751,
+          "text": "        hidden_size = round_up(hidden_size, 128)"
+        },
+        {
+          "line": 752,
+          "text": "    elif backend in (Mxfp4MoeBackend.MARLIN, Mxfp4MoeBackend.BATCHED_MARLIN):"
+        },
+        {
+          "line": 753,
+          "text": "        intermediate_size = round_up(intermediate_size, 128)"
+        },
+        {
+          "line": 754,
+          "text": "        if current_platform.is_xpu():"
+        },
+        {
+          "line": 755,
+          "text": "            hidden_size = round_up(hidden_size, 128)"
+        },
+        {
+          "line": 756,
+          "text": "        else:"
+        },
+        {
+          "line": 757,
+          "text": "            hidden_size = round_up(hidden_size, 256)"
+        },
+        {
+          "line": 758,
+          "text": "    elif backend in TRTLLM_BACKENDS:"
+        },
+        {
+          "line": 759,
+          "text": "        intermediate_size = round_up(intermediate_size, 128)"
+        },
+        {
+          "line": 760,
+          "text": "        hidden_size = round_up(hidden_size, 256)"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/models/gpt_oss.py",
+      "sha256": "4b1aa28a1768acdcdeaec512cf7173cc7eefce2f8fd09848c9d5be1f2de10992",
+      "excerpts": [
+        {
+          "line": 800,
+          "text": ""
+        },
+        {
+          "line": 801,
+          "text": "        intermediate_size = self.config.intermediate_size"
+        },
+        {
+          "line": 802,
+          "text": ""
+        },
+        {
+          "line": 803,
+          "text": "        moe_weight_dtype = _get_moe_weight_dtype(layer_id=0)"
+        },
+        {
+          "line": 804,
+          "text": ""
+        },
+        {
+          "line": 805,
+          "text": "        if _is_mxfp4(moe_weight_dtype):"
+        },
+        {
+          "line": 806,
+          "text": "            # MXFP4 requires OCP_MX_BLOCK_SIZE alignment"
+        },
+        {
+          "line": 807,
+          "text": "            intermediate_size_block = intermediate_size // OCP_MX_BLOCK_SIZE"
+        },
+        {
+          "line": 808,
+          "text": "            per_rank_intermediate_size_block = cdiv(intermediate_size_block, tp_size)"
+        },
+        {
+          "line": 809,
+          "text": "            per_rank_intermediate_size = ("
+        },
+        {
+          "line": 810,
+          "text": "                per_rank_intermediate_size_block * OCP_MX_BLOCK_SIZE"
+        },
+        {
+          "line": 811,
+          "text": "            )"
+        },
+        {
+          "line": 812,
+          "text": "        else:"
+        },
+        {
+          "line": 813,
+          "text": "            # FP8 and other formats don't need alignment"
+        },
+        {
+          "line": 814,
+          "text": "            per_rank_intermediate_size = cdiv(intermediate_size, tp_size)"
+        },
+        {
+          "line": 815,
+          "text": ""
+        },
+        {
+          "line": 816,
+          "text": "        tp_rank_start = tp_rank * per_rank_intermediate_size"
+        },
+        {
+          "line": 817,
+          "text": "        tp_rank_end = min((tp_rank + 1) * per_rank_intermediate_size, intermediate_size)"
+        }
+      ]
+    }
+  ],
+  "moe_binary": {
+    "path": "/workspace/mod1/.venv/lib/python3.12/site-packages/vllm/_moe_C_stable_libtorch.abi3.so",
+    "bytes": 45448928,
+    "sha256": "65be3121d8ae4008b52e958622dff7f9fdf2747652d4eb9527b08faefb825015",
+    "sm80_string_present": true,
+    "kernel_executed": false
+  },
+  "gpu_inventory": {
+    "returncode": 0,
+    "stdout": "0, NVIDIA A100-SXM4-80GB, 81920 MiB, 8.0, 595.91.07\n1, NVIDIA A100-SXM4-80GB, 81920 MiB, 8.0, 595.91.07\n"
+  },
+  "topology": {
+    "returncode": 0,
+    "stdout": "\t\u001b[4mGPU0\tGPU1\tNIC0\tNIC1\tNIC2\tNIC3\tNIC4\tNIC5\tNIC6\tNIC7\tNIC8\tNIC9\tNIC10\tCPU Affinity\tNUMA Affinity\tGPU NUMA ID\u001b[0m\nGPU0\t X \tNV12\tSYS\tSYS\tPXB\tPXB\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t16-31,144-159\t1\t\tN/A\nGPU1\tNV12\t X \tSYS\tSYS\tSYS\tSYS\tPXB\tPXB\tSYS\tSYS\tSYS\tSYS\tSYS\t112-127,240-254\t7\t\tN/A\nNIC0\tSYS\tSYS\t X \tPXB\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t\t\t\t\nNIC1\tSYS\tSYS\tPXB\t X \tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t\t\t\t\nNIC2\tPXB\tSYS\tSYS\tSYS\t X \tPXB\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t\t\t\t\nNIC3\tPXB\tSYS\tSYS\tSYS\tPXB\t X \tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t\t\t\t\nNIC4\tSYS\tPXB\tSYS\tSYS\tSYS\tSYS\t X \tPXB\tSYS\tSYS\tSYS\tSYS\tSYS\t\t\t\t\nNIC5\tSYS\tPXB\tSYS\tSYS\tSYS\tSYS\tPXB\t X \tSYS\tSYS\tSYS\tSYS\tSYS\t\t\t\t\nNIC6\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t X \tPXB\tSYS\tSYS\tSYS\t\t\t\t\nNIC7\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tPXB\t X \tSYS\tSYS\tSYS\t\t\t\t\nNIC8\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t X \tPIX\tSYS\t\t\t\t\nNIC9\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tPIX\t X \tSYS\t\t\t\t\nNIC10\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\tSYS\t X \t\t\t\t\n\nLegend:\n\n  X    = Self\n  SYS  = Connection traversing PCIe as well as the SMP interconnect between NUMA nodes (e.g., QPI/UPI)\n  NODE = Connection traversing PCIe as well as the interconnect between PCIe Host Bridges within a NUMA node\n  PHB  = Connection traversing PCIe as well as a PCIe Host Bridge (typically the CPU)\n  PXB  = Connection traversing multiple PCIe bridges (without traversing the PCIe Host Bridge)\n  PIX  = Connection traversing at most a single PCIe bridge\n  NV#  = Connection traversing a bonded set of # NVLinks\n\nNIC Legend:\n\n  NIC0: mlx5_0\n  NIC1: mlx5_1\n  NIC2: mlx5_2\n  NIC3: mlx5_3\n  NIC4: mlx5_6\n  NIC5: mlx5_7\n  NIC6: mlx5_8\n  NIC7: mlx5_9\n  NIC8: mlx5_10\n  NIC9: mlx5_11\n  NIC10: mlx5_bond_0\n\n"
+  },
+  "cuobjdump_present": false,
+  "harmony_extensions": [
+    {
+      "file": "openai_harmony.abi3.so",
+      "bytes": 6412776,
+      "sha256": "00fa2470c1d578c2c3e5c9be5d854dca2521ed16b6b1232f4e90fc4cecbf2ebe"
+    }
+  ]
+}

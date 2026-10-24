@@ -1,0 +1,214 @@
+{
+  "status": "predeclared_exploratory_cpu_diagnostic",
+  "created_utc": "2026-10-21T23:26:02.894385+00:00",
+  "source": "/workspace/mod1/results/overnight20261021/frozen/next27b_evo_diverse_2107__primary/frozen_estimator.py",
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "primary": "new/next27b_evo_diverse_2107__primary",
+  "baseline": "original/SequenceLogProb",
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum",
+    "lp_total_length",
+    "float32_nll_sum",
+    "float32_nll_mean",
+    "float32_quadratic_mean"
+  ],
+  "controls": [
+    "lp_total_length",
+    "float32_nll_sum",
+    "float32_nll_mean",
+    "float32_quadratic_mean"
+  ],
+  "contrasts": [
+    [
+      "float32_nll_sum",
+      "float32_nll_mean"
+    ],
+    [
+      "frozen_quadratic_sum",
+      "float32_quadratic_mean"
+    ],
+    [
+      "float32_quadratic_mean",
+      "float32_nll_mean"
+    ]
+  ],
+  "formula_contract": {
+    "lp_total_length": "len(full cached sequence_logprobs); no claim crop",
+    "float32_nll_sum": "sum(-asarray(lp,float32),dtype=float32)",
+    "float32_nll_mean": "mean(-asarray(lp,float32),dtype=float32)",
+    "float32_quadratic_mean": "same frozen float32 quadratic weighted sum divided AFTER summation by sum(same weights,dtype=float32)",
+    "weights": "n=1:[1]float32; n>1:(arange(n,float32)/(n-1))**2; n=0 score0 for every control",
+    "storage": "float32 output then float64 evaluator promotion; length follows same output storage"
+  },
+  "source9_only": true,
+  "scoring_chunk_size": 512,
+  "workers": 4,
+  "bootstrap_samples": 500,
+  "bootstrap_unit": "normalized_claim",
+  "bootstrap_seed": "441+int(SHA256(dataset_name)[:8],16)",
+  "bootstrap_protocol": "Shared claim-group multiplicities across all six methods and both all-row/strict scopes; fold per dataset per replicate before equal-weight nine-dataset macro. Strict scope uses the same full-cohort multiplicities restricted to its rows.",
+  "full_reference_gate": "All nine frozen-program/NLL/labels/group-ID/strict-mask arrays byte-exact before any controls execute",
+  "feature_protocol": "Existing make_all_stats chunked dependency gate, required_stats=[sequence_logprobs]; no top-k pack, GPU, raw feature extraction or scratch cache",
+  "maximum_wall_seconds": 1800,
+  "hard_stop_utc": "2026-10-22T02:00:00+00:00",
+  "gpu_calls": 0,
+  "fitting": false,
+  "new_generation": false,
+  "primary_replacement": false,
+  "all_variants_retained": true,
+  "training_csv": "/workspace/mod1/data/claims/popqa/popqa_train_filtered_10shot.csv",
+  "training_csv_sha256": "b71e07ab49ea97d6a8311f52329390dc7bc3137fcbac07706ba1a0925c16544a",
+  "protected_source_sha256": {
+    "/workspace/mod1/results/overnight20261021/frozen/next27b_evo_diverse_2107__primary/frozen_estimator.py": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+    "/workspace/mod1/scripts/overnight_position_length_controls.py": "de8dad4dc7548b4bc364a3bbcdca784d8418a2d4aee3729c87d12f4288d167fe",
+    "/workspace/mod1/results/feature_cache_validation.json": "69002174df28234f1b488562612a8e046e86ac0af3947c9f524d2fa112bd5293",
+    "/workspace/mod1/scripts/evaluate_cached_claims.py": "8d742f36bb111686b031f10f5c5f33c559e75f71c6c4963917e2e5aa1ef70221",
+    "/workspace/mod1/src/packing/evaluate/uncertainty_quantification/features.py": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+    "/workspace/mod1/src/packing/evaluate/uncertainty_quantification/found_formulas.py": "ac1ed0b7fa2884c9f326a861f68777db75fba7b18bcd8ef565b78fa225dabebc",
+    "/workspace/mod1/src/packing/evaluate/uncertainty_quantification/estimator_base.py": "67f791cf66e84968e318aa6b113f043eba268785dc198f8d9c4aaa023d8c6dd5"
+  },
+  "datasets": [
+    {
+      "index": 0,
+      "name": "AVeriTeC__dev_filtered_10shot",
+      "csv": "/workspace/mod1/data/claims/AVeriTeC/dev_filtered_10shot.csv",
+      "csv_sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/AVeriTeC__dev_filtered_10shot.pt",
+      "raw_sha256": "c44e37b47a29cf487d41a9152f28a424e8d01777d0ab778c485951d527738e7f",
+      "raw_bytes": 91374334,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/AVeriTeC__dev_filtered_10shot_scores.npz",
+      "reference_npz_sha256": "eef92dcce24e14e618a6e7d2254d0e3b1aeb9783e6cf8780fa2d9a1f1cce2180",
+      "rows": 427
+    },
+    {
+      "index": 1,
+      "name": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "csv": "/workspace/mod1/data/claims/UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv",
+      "csv_sha256": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt",
+      "raw_sha256": "9e20c2fef8c2b830a62dbcc9bc63fe0dd52e44a7d3eed26748e4cc1589e9bd75",
+      "raw_bytes": 330383664,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz",
+      "reference_npz_sha256": "9989ff87727d0833dbf004abf4c911a26fb380612ea49c45dcb54b766b8ee6cd",
+      "rows": 2057
+    },
+    {
+      "index": 2,
+      "name": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "csv": "/workspace/mod1/data/claims/WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv",
+      "csv_sha256": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt",
+      "raw_sha256": "2c78d90193e9ceb56a69a988a5383f71336f7e2b2b72fdd6123416b15727ed2d",
+      "raw_bytes": 7507921149,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz",
+      "reference_npz_sha256": "f6f73744cf9022936baf41c4ab4400cbbf9ed41b86bf9bec3d3b063e64fbab55",
+      "rows": 46605
+    },
+    {
+      "index": 3,
+      "name": "geometry__cities",
+      "csv": "/workspace/mod1/data/claims/geometry/cities.csv",
+      "csv_sha256": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/geometry__cities.pt",
+      "raw_sha256": "ec33dd2d2d765fbc9f2beda4519c8903034322516774c4a796e7bb5bee5731e2",
+      "raw_bytes": 226519181,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/geometry__cities_scores.npz",
+      "reference_npz_sha256": "0d6298a697493b385bc27bfb0589af5213634bd158246ec693d6d172919e528b",
+      "rows": 1496
+    },
+    {
+      "index": 4,
+      "name": "geometry__common_claim_true_false",
+      "csv": "/workspace/mod1/data/claims/geometry/common_claim_true_false.csv",
+      "csv_sha256": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/geometry__common_claim_true_false.pt",
+      "raw_sha256": "7c090c050b81ec242b81bebae9164b3da320e87a65b35fc3e25b1b3a550685f7",
+      "raw_bytes": 744533735,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/geometry__common_claim_true_false_scores.npz",
+      "reference_npz_sha256": "add60b0650fc41794763c3e50dca223675559186807e2aed490780d309c9d2ee",
+      "rows": 4450
+    },
+    {
+      "index": 5,
+      "name": "geometry__companies_true_false",
+      "csv": "/workspace/mod1/data/claims/geometry/companies_true_false.csv",
+      "csv_sha256": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/geometry__companies_true_false.pt",
+      "raw_sha256": "58058cb635b3bad846e59c520e4fa3f48462203d4445a8da14d5ac21b4cf2b24",
+      "raw_bytes": 201853121,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/geometry__companies_true_false_scores.npz",
+      "reference_npz_sha256": "d69e2dab4d601449ca9fc1f2db4bf2b3c8063a45d21312bee10734e296ca19cf",
+      "rows": 1200
+    },
+    {
+      "index": 6,
+      "name": "geometry__counterfact_true_false",
+      "csv": "/workspace/mod1/data/claims/geometry/counterfact_true_false.csv",
+      "csv_sha256": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/geometry__counterfact_true_false.pt",
+      "raw_sha256": "a5ac1d32045e3bed4c5f6b65918f7ae22a1c010cfa3ac78708c0cdba1b900f14",
+      "raw_bytes": 4772906485,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/geometry__counterfact_true_false_scores.npz",
+      "reference_npz_sha256": "3810ea8f940223cd29cdd55f4fdde7286928f04a44db0b31757787d366b5a5e7",
+      "rows": 31964
+    },
+    {
+      "index": 7,
+      "name": "popqa__popqa_test_filtered_10shot",
+      "csv": "/workspace/mod1/data/claims/popqa/popqa_test_filtered_10shot.csv",
+      "csv_sha256": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/popqa__popqa_test_filtered_10shot.pt",
+      "raw_sha256": "8f78c1e2111a48e7d58d5fd6213b408c1413746d34a39e1bec591edcbc14dad9",
+      "raw_bytes": 1068750047,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/popqa__popqa_test_filtered_10shot_scores.npz",
+      "reference_npz_sha256": "4d74a0fa971ac7facbd8d9787de35507271eeca944aaa9e6543f041afe1ebe09",
+      "rows": 6974
+    },
+    {
+      "index": 8,
+      "name": "x-fact__test_filtered_10shot",
+      "csv": "/workspace/mod1/data/claims/x-fact/test_filtered_10shot.csv",
+      "csv_sha256": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13",
+      "cache": "/workspace/mod1/data/restored/mod1-eval-cache/x-fact__test_filtered_10shot.pt",
+      "raw_sha256": "62c6fc50d8c8761df2c03945f6d3a856918409c59efc7533a697525bb985f240",
+      "raw_bytes": 908815112,
+      "reference_npz": "/workspace/mod1/results/overnight20261021/evaluations/new_737a227bb0f74317/x-fact__test_filtered_10shot_scores.npz",
+      "reference_npz_sha256": "daef23e2a1253f2f184d9e628b8631b1cf70d32444cd714948947972b5985abd",
+      "rows": 2315
+    }
+  ],
+  "historical_context_file": "/workspace/mod1/results/next_experiments/paper_reporting.json",
+  "historical_context_sha256": "6790858694b35ef4f77570e8580b62278e9bc6cb0da80b6e677155d96e7266dc",
+  "historical_context": {
+    "alignment/ClaimLength": {
+      "raw_macro_auc_percent": 49.368038700219536,
+      "direction_invariant_macro_auc_percent": 54.63369356324781
+    },
+    "alignment/ClaimOnlyMeanSurprisal": {
+      "raw_macro_auc_percent": 66.3389614523798,
+      "direction_invariant_macro_auc_percent": 66.9372020882515
+    },
+    "original/Perplexity": {
+      "raw_macro_auc_percent": 64.17472363290479,
+      "direction_invariant_macro_auc_percent": 64.17472363290479
+    },
+    "original/ExpWeightedNegLogProb": {
+      "raw_macro_auc_percent": 69.79713233614491,
+      "direction_invariant_macro_auc_percent": 70.60597705825552
+    },
+    "new/ablation_qwen_linear_position_nll": {
+      "raw_macro_auc_percent": 69.79260638209647,
+      "direction_invariant_macro_auc_percent": 72.00030931721162
+    }
+  },
+  "limitations": [
+    "Designed after viewing existing benchmark scores: exploratory, not independent confirmation.",
+    "No best variant selection, fitting, candidate promotion or new winner replaces any primary.",
+    "Claim-only historical controls use a different token span; historical Perplexity has float16 reduction/exp ties.",
+    "Historical exponential weights sum to one; historical linear-position ablation is accumulated, not normalized.",
+    "The 14-feature head jointly uses length/NLLsum/NLLmean/exponentialmean; it does not establish standalone performance.",
+    "AUROC is nonlinear; the fixed contrasts are sensitivity checks, not a causal additive decomposition.",
+    "Claim bootstrap is conditional on one frozen selected candidate, not writer/search-seed uncertainty."
+  ]
+}

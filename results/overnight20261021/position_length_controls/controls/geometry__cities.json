@@ -1,0 +1,23 @@
+{
+  "status": "complete_four_controls",
+  "dataset": "geometry__cities",
+  "rows": 1496,
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "raw_sha256": "ec33dd2d2d765fbc9f2beda4519c8903034322516774c4a796e7bb5bee5731e2",
+  "reference_npz_sha256": "0d6298a697493b385bc27bfb0589af5213634bd158246ec693d6d172919e528b",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "labels_groups_masks_exact": true,
+  "frozen_quadratic_sum_byte_exact": true,
+  "canonical_nll_byte_exact": true,
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum",
+    "lp_total_length",
+    "float32_nll_sum",
+    "float32_nll_mean",
+    "float32_quadratic_mean"
+  ],
+  "bootstrap_samples": 500,
+  "scores_sha256": "be71ea41ab2e0caf34b6c7ab602e4d083719dd8d31c329b2bb993a9a524eaba3",
+  "bootstrap_sha256": "cd43b4d834e14cf5db4efccae1fb9dd33d236f1387df63b5b20e0cad85a7aaf2"
+}

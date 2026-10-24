@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-21T19:31:41.262052+00:00",
+  "stopped_verified_waiting_followups_pid": 6002,
+  "pilot_sequence_pid": 8675,
+  "pilot_manifest_sha256": "8901cf6f8a4be3becceed0f65005d2d0cf98d1b29212e62b73c312d611fb4ace",
+  "ports": [
+    18000
+  ],
+  "rank_gpu0_job_confirmed_complete": true,
+  "main_source_controller_continues": true,
+  "followups_resumes_only_after_pilot_terminal": true
+}

@@ -1,0 +1,16 @@
+{
+  "checked_utc": "2026-10-15",
+  "fact_checker": {
+    "url": "https://raw.githubusercontent.com/IINemo/lm-polygraph/4d635e81128411d792acd584f78b0f849a21cd0b/src/lm_polygraph/generation_metrics/openai_fact_check.py",
+    "commit": "4d635e81128411d792acd584f78b0f849a21cd0b",
+    "sha256": "d71415af076a0b7cec44a248b730800c9d54a8be4526471f48d1869326c76ae6",
+    "false_label": 1,
+    "true_label": 0
+  },
+  "uhead_exporter": {
+    "url": "https://github.com/IINemo/llm-uncertainty-head/blob/fc213edc26526b446e76e8253f7fe3b964a54be7/luh/cli/generate_dataset/run_extract_verify_claims.py",
+    "commit": "fc213edc26526b446e76e8253f7fe3b964a54be7",
+    "annotation_field": "verified",
+    "annotation_producer": "OpenAIFactCheck"
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "status": "complete_three_new_cache_archives",
+  "source_receipt": "/workspace/mod1/results/overnight20261021/remaining_transfer_completion.json",
+  "source_receipt_sha256": "7c0d8f1daeed7a2309eeb696d1098ccd83d824c80df49b3c09abe3f2823a588c",
+  "deadline_utc": "2026-10-22T02:06:00+00:00",
+  "output_directory": "/workspace/mod1/data/feature_cache_archive/overnight20261021",
+  "workers": 2,
+  "xz_threads_per_file": 4,
+  "original_raw_files_removed": false,
+  "archives": [
+    {
+      "source": "/workspace/mod1/data/restored/mod1-transfer-cache/popqa__popqa_test_filtered_10shot.pt",
+      "raw_sha256": "237d8b9d67874d62e429a26ae16822540ddd40e3d3917023ae45515ada36ebba",
+      "raw_bytes": 1068702495,
+      "archive": "/workspace/mod1/data/feature_cache_archive/overnight20261021/popqa__popqa_test_filtered_10shot.pt.xz",
+      "archive_sha256": "6ddceca321656b4b36c862ec2bf6c33d47c05e72b99e3c60db2c11f9cb2c97fa",
+      "archive_bytes": 135891168,
+      "source_unchanged": true,
+      "roundtrip_raw_sha256_verified": true,
+      "reused_existing_archive": false,
+      "elapsed_seconds": 105.48623117199168,
+      "compression": "xz -T4 -6",
+      "command": [
+        "/usr/bin/xz",
+        "-T4",
+        "-6",
+        "--stdout",
+        "--",
+        "/workspace/mod1/data/restored/mod1-transfer-cache/popqa__popqa_test_filtered_10shot.pt"
+      ]
+    },
+    {
+      "source": "/workspace/mod1/data/restored/mod1-transfer-cache/x-fact__test_filtered_10shot.pt",
+      "raw_sha256": "f4388e107680efe747335d28efc98e093e57fb895735b6fb4b4b8f45ef86cd9b",
+      "raw_bytes": 908810888,
+      "archive": "/workspace/mod1/data/feature_cache_archive/overnight20261021/x-fact__test_filtered_10shot.pt.xz",
+      "archive_sha256": "1e2b9f0047df7e9865949d2bafe73b461dacf39370ee3b0a3b86766bf355200c",
+      "archive_bytes": 183969988,
+      "source_unchanged": true,
+      "roundtrip_raw_sha256_verified": true,
+      "reused_existing_archive": false,
+      "elapsed_seconds": 123.08001843802049,
+      "compression": "xz -T4 -6",
+      "command": [
+        "/usr/bin/xz",
+        "-T4",
+        "-6",
+        "--stdout",
+        "--",
+        "/workspace/mod1/data/restored/mod1-transfer-cache/x-fact__test_filtered_10shot.pt"
+      ]
+    },
+    {
+      "source": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__counterfact_true_false.pt",
+      "raw_sha256": "3558db4e70ef43e811f7cdcd8c50e242de00a5f7932cd2b3ac91eb0397f9586e",
+      "raw_bytes": 4772684845,
+      "archive": "/workspace/mod1/data/feature_cache_archive/overnight20261021/geometry__counterfact_true_false.pt.xz",
+      "archive_sha256": "6bb56750763640bd696c3c04d564223a2312f0332b176e1f2a0bf01ef663de3f",
+      "archive_bytes": 442485400,
+      "source_unchanged": true,
+      "roundtrip_raw_sha256_verified": true,
+      "reused_existing_archive": false,
+      "elapsed_seconds": 373.34256862601615,
+      "compression": "xz -T4 -6",
+      "command": [
+        "/usr/bin/xz",
+        "-T4",
+        "-6",
+        "--stdout",
+        "--",
+        "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__counterfact_true_false.pt"
+      ]
+    }
+  ],
+  "planned": [
+    {
+      "source": "/workspace/mod1/data/restored/mod1-transfer-cache/popqa__popqa_test_filtered_10shot.pt",
+      "raw_bytes": 1068702495,
+      "raw_sha256": "237d8b9d67874d62e429a26ae16822540ddd40e3d3917023ae45515ada36ebba",
+      "archive": "/workspace/mod1/data/feature_cache_archive/overnight20261021/popqa__popqa_test_filtered_10shot.pt.xz",
+      "command": [
+        "/usr/bin/xz",
+        "-T4",
+        "-6",
+        "--stdout",
+        "--",
+        "/workspace/mod1/data/restored/mod1-transfer-cache/popqa__popqa_test_filtered_10shot.pt"
+      ]
+    },
+    {
+      "source": "/workspace/mod1/data/restored/mod1-transfer-cache/x-fact__test_filtered_10shot.pt",
+      "raw_bytes": 908810888,
+      "raw_sha256": "f4388e107680efe747335d28efc98e093e57fb895735b6fb4b4b8f45ef86cd9b",
+      "archive": "/workspace/mod1/data/feature_cache_archive/overnight20261021/x-fact__test_filtered_10shot.pt.xz",
+      "command": [
+        "/usr/bin/xz",
+        "-T4",
+        "-6",
+        "--stdout",
+        "--",
+        "/workspace/mod1/data/restored/mod1-transfer-cache/x-fact__test_filtered_10shot.pt"
+      ]
+    },
+    {
+      "source": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__counterfact_true_false.pt",
+      "raw_bytes": 4772684845,
+      "raw_sha256": "3558db4e70ef43e811f7cdcd8c50e242de00a5f7932cd2b3ac91eb0397f9586e",
+      "archive": "/workspace/mod1/data/feature_cache_archive/overnight20261021/geometry__counterfact_true_false.pt.xz",
+      "command": [
+        "/usr/bin/xz",
+        "-T4",
+        "-6",
+        "--stdout",
+        "--",
+        "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__counterfact_true_false.pt"
+      ]
+    }
+  ],
+  "started_utc": "2026-10-22T00:21:31.111640+00:00",
+  "finished_utc": "2026-10-22T00:29:29.949197+00:00",
+  "total_archive_bytes": 762346556
+}

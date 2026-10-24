@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\nThe provided baseline detector, `HallucinationDetector`, relies on the **Total Negative Log Probability** (or average log-probability) of the entire generated sequence. The score of ~74.3 suggests that while higher likelihood generally correlates with factual accuracy, it is not sufficient on its own. This is likely because:\n*   **Model Calibration:** The model may produce high-likelihood text that is grammatically correct but factually incorrect (overconfidence in hallucinations).\n*   **Sequence Length Variance:** Long sequences tend to have lower average probabilities simply due to the accumulation of tokens, independent of their factual accuracy.\n\n### 2. Ideation of Novel Detector\n\nBased on the **EXPECTED STRUCTURE**, this detector focuses on the **local consistency** of the generation process.\n*   **Hypothesis:** A model generating a factual, grounded sequence will exhibit a relatively smooth and predictable decline in log-probability as it continues. In contrast, a hallucinating sequence often contains \"surprise\" tokens (low probability) or abrupt shifts in probability distribution (high variance/skew) that deviate from a smooth trajectory.\n*   **Approach:** We calculate the **LogProb Variance** (standard deviation) of the log-probability sequence. We hypothesize that hallucinations will have higher local variance (more erratic probability fluctuations) compared to grounded text.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    A detector based on the variance of log-probability fluctuations.\n    \n    Hypothesis: Grounded text exhibits a smoother probability trajectory, \n    whereas hallucinations often contain abrupt shifts or \"surprise\" tokens \n    that increase local variance.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\"sequence_logprobs\"],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, List[np.ndarray]]) -> np.ndarray:\n        # Extract logprobs list of shape (N, n_i-1)\n        logprobs_list = stats[\"sequence_logprobs\"]\n        \n        # Calculate variance for each sequence\n        # Using ddof=1 for sample variance\n        variances = np.array([np.var(seq, ddof=1) for seq in logprobs_list], dtype=np.float32)\n        \n        return variances\n```",
+    "usage": {
+      "completion_tokens": 509,
+      "prompt_tokens": 492,
+      "total_tokens": 1001,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 39.530050108995056
+  },
+  {
+    "content": "### 1. Analysis of Shown Detectors\nThe provided baseline detector (`total_neg_logprob`) relies on the **magnitude** of the log-probability sum. It assumes that hallucinations are characterized by lower overall confidence (more negative log-probs) compared to factual generations. This is a strong but simplistic approach that treats all tokens equally and does not capture the distributional properties of the confidence scores.\n\n### 2. Ideation of Novel Detector\nTo improve upon the baseline, we introduce **LogProbSlope**. This detector measures the **trend** of confidence across the token sequence.\n*   **Hypothesis:** Factual generations typically exhibit a consistent or stable confidence level, whereas hallucinations often exhibit a \"volatility\" or \"erratic\" drop in confidence (a negative slope) as the model generates increasingly implausible tokens.\n*   **Implementation:** We calculate the negative Pearson correlation coefficient between the token position index and the log-probability value. A strong negative correlation (high score) indicates that the model became more confident as it generated nonsense, which is a strong signal of hallucination.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the LogProbSlope for each sequence.\n        \n        Approach:\n        1. Computes the negative Pearson correlation between token position and log-probability.\n        2. A strong negative correlation indicates the model's confidence dropped as it generated\n           tokens, which is characteristic of hallucinations.\n        \n        Future Hypothesis:\n        Combining this slope metric with the kurtosis of the log-probability distribution\n        (to capture tail heaviness) may better distinguish between \"low confidence\" factual\n        text and \"low confidence\" hallucinations.\n        \"\"\"\n        slopes = []\n        \n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # seq_logprobs is (n_i - 1,)\n            if len(seq_logprobs) < 2:\n                slopes.append(0.0)\n                continue\n            \n            # Create position indices (0 to n-2)\n            positions = np.arange(len(seq_logprobs))\n            \n            # Calculate Pearson correlation coefficient\n            # scipy.stats.pearsonr returns (r, p-value). We only need r.\n            r, _ = pearsonr(positions, seq_logprobs)\n            \n            # We return the negative slope: high negative correlation = high score\n            slopes.append(-r)\n            \n        return np.array(slopes, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 590,
+      "prompt_tokens": 492,
+      "total_tokens": 1082,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 45.74370701299631
+  }
+]

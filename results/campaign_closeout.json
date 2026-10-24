@@ -1,0 +1,115 @@
+{
+  "closed_utc": "2026-10-15T09:27:30.147736+00:00",
+  "status": "finished_on_user_request",
+  "primary_evaluation": "out/campaign/evaluation_with_4b",
+  "primary_datasets": 9,
+  "primary_claims": 97488,
+  "primary_methods": 58,
+  "primary_scoring_failures": 0,
+  "feature_model": "VityaVitalich/Llama3.1-8b-instruct",
+  "completed_writer_models": [
+    "Qwen/Qwen3.8-27B",
+    "poolside/Laguna-XS-2.1",
+    "Qwen/Qwen3.5-9B",
+    "Qwen/Qwen3.5-4B"
+  ],
+  "provider_control_plane_responses": [
+    {
+      "verified_current_pod": {
+        "id": "xixr7wlfvh1lf6",
+        "name": "technical_teal_swallow",
+        "desiredStatus": "RUNNING",
+        "costPerHr": 1.79,
+        "runtime": {
+          "uptimeInSeconds": 36654
+        }
+      }
+    },
+    {
+      "podStop": {
+        "id": "xixr7wlfvh1lf6",
+        "desiredStatus": "EXITED"
+      }
+    },
+    {
+      "stopped_pod": {
+        "id": "xixr7wlfvh1lf6",
+        "name": "technical_teal_swallow",
+        "desiredStatus": "EXITED",
+        "costPerHr": 1.79,
+        "runtime": null
+      },
+      "gpu_runtime_released": true
+    }
+  ],
+  "provider_uptime_seconds_before_stop": 36654,
+  "estimated_gpu_cost_usd": 18.23,
+  "hosted_model_api_spending_usd": 0,
+  "stopped_optional_work": {
+    "feature_transfer": {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "completed_feature_datasets": 6,
+      "completed_feature_claims": 56235,
+      "complete_quality_benchmark": false,
+      "preserved_archives": {
+        "data/feature_cache_archive/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt.gz": {
+          "source": "/dev/shm/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt",
+          "raw_bytes": 91371710,
+          "gzip_bytes": 36228361,
+          "gzip_sha256": "3c7f4d5722f2abef158661f0a5932a4c4ae9a47638c41688693ef31aa2618917",
+          "utc": "2026-10-15T08:53:49.648579+00:00"
+        },
+        "data/feature_cache_archive/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt.gz": {
+          "source": "/dev/shm/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt",
+          "raw_bytes": 330370352,
+          "gzip_bytes": 133065419,
+          "gzip_sha256": "63306ff418639280c1fa52ca484389b6d972d482d5f392ba9cbe242f08716332",
+          "utc": "2026-10-15T08:55:57.573963+00:00"
+        },
+        "data/feature_cache_archive/mod1-transfer-cache/geometry__cities.pt.gz": {
+          "source": "/dev/shm/mod1-transfer-cache/geometry__cities.pt",
+          "raw_bytes": 226514189,
+          "gzip_bytes": 91607199,
+          "gzip_sha256": "ef1e7e406da37bc8d259bc891c6473b83727448dd0b5925548bcc4a51404cc8a",
+          "utc": "2026-10-15T09:14:11.289382+00:00"
+        },
+        "data/feature_cache_archive/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt.gz": {
+          "source": "/dev/shm/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt",
+          "raw_bytes": 7507614021,
+          "gzip_bytes": 3019608066,
+          "gzip_sha256": "6caf54ce93e91607021aeff93c71ed7bdd0ab9fd1a2d9ce647d4ceb7d3707e52",
+          "utc": "2026-10-15T09:16:30.603908+00:00"
+        },
+        "data/feature_cache_archive/mod1-transfer-cache/geometry__companies_true_false.pt.gz": {
+          "source": "/dev/shm/mod1-transfer-cache/geometry__companies_true_false.pt",
+          "raw_bytes": 201844417,
+          "gzip_bytes": 80629712,
+          "gzip_sha256": "f6caa06e4d9a0472cec84b076baf8cb3904c991742271ae5e57a459213235591",
+          "utc": "2026-10-15T09:18:36.144329+00:00"
+        },
+        "data/feature_cache_archive/mod1-transfer-cache/geometry__common_claim_true_false.pt.gz": {
+          "source": "/dev/shm/mod1-transfer-cache/geometry__common_claim_true_false.pt",
+          "raw_bytes": 744503079,
+          "gzip_bytes": 298596499,
+          "gzip_sha256": "cd76233a5e1e31207b523247a58796ec84f3f1002ba60b32712d5e8478eb5df2",
+          "utc": "2026-10-15T09:18:50.317233+00:00"
+        }
+      }
+    },
+    "devstral_native_retry": "cancelled before execution; initial six requests failed request protocol and generated zero tokens",
+    "qwen35_4b_structured": "cancelled before execution",
+    "target_addition_scoring": "cancelled before execution"
+  },
+  "controller_interrupt_note": "SIGTERM/KeyboardInterrupt at closure was intentional; completed source and supplementary cohorts are unaffected.",
+  "package_exclusions": [
+    "raw input CSVs",
+    "large raw feature archives",
+    "model weights",
+    "credentials"
+  ],
+  "cost_note": "GPU-only estimate from provider uptime immediately before stop; excludes storage and final shutdown transition.",
+  "writer_requests_including_protocol_failures": 676,
+  "valid_writer_candidates": 463,
+  "reported_writer_input_output_tokens": 1784975,
+  "final_validation": "results/final_validation.json"
+}

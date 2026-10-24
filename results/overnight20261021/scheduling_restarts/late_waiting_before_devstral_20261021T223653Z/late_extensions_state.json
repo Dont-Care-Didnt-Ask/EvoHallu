@@ -1,0 +1,16 @@
+{
+  "started_utc": "2026-10-21T18:56:57.665612+00:00",
+  "pid": 5640,
+  "events": [
+    {
+      "utc": "2026-10-21T18:56:57.665703+00:00",
+      "event": "waiting_for_marker",
+      "path": "/workspace/mod1/results/overnight20261021/generation_complete.json",
+      "deadline_utc": "2026-10-22T01:46:28+00:00"
+    }
+  ],
+  "glm_cutoff_utc": "2026-10-22T01:10:00+00:00",
+  "transfer_cutoff_utc": "2026-10-22T02:01:28+00:00",
+  "cpu_finish_utc": "2026-10-22T02:06:28+00:00",
+  "hard_deadline_utc": "2026-10-22T02:16:28+00:00"
+}

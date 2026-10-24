@@ -1,0 +1,12 @@
+{
+  "status": "incomplete_secondary_shortlist",
+  "finished_utc": "2026-10-21T22:17:16.802618+00:00",
+  "deadline_utc": "2026-10-22T02:06:00Z",
+  "active_started_utc": "2026-10-21T22:08:55.022514+00:00",
+  "effective_active_deadline_utc": "2026-10-21T23:08:55.022514+00:00",
+  "max_active_seconds": 3600,
+  "helper_sha256": "ea031e91bf51ca4de848c5ce15ca38a1769c860d430905dbc6ea1f77e030ee07",
+  "cpu_only": true,
+  "primary_registry_modified": false,
+  "own_registry_sha256": "e28011fdd40d1ce8cb81e1b9ada8df251aadd0c89481fb919bffade7d48d6d34"
+}

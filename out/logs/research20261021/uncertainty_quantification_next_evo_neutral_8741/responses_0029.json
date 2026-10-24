@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Detector 1 (Surprise + Variance)**: Combines total cumulative surprise (sum of negative log-probs) with the variance of log-probabilities weighted by sequence length.\n    *   *Result*: 54.83.\n    *   *Critique*: The hypothesis that hallucinations have higher intra-sequence variance is likely flawed. Hallucinations often consist of fluent, confident (low entropy) fabricated details, leading to low variance, whereas factual reasoning or uncertainty might introduce higher variance. Adding a noisy variance term degrades performance.\n2.  **Detector 2 (Total Surprise Only)**: Uses only the sum of negative log-probabilities.\n    *   *Result*: 74.33.\n    *   *Critique*: This is the superior approach. It suggests that the primary signal for hallucination in this context is the model's overall \"surprise\" or lack of confidence in the generated sequence compared to its training distribution. Hallucinated content often lies in the tail of the probability distribution (low probability tokens), inflating the negative log-sum.\n\n### Proposed Detector\nBuilding on the success of Detector 2, I will refine the signal to be more robust to sequence length variations by normalizing the total surprise by the sequence length (average surprise per token). This prevents very long sequences from automatically scoring higher just due to length, focusing instead on the *density* of low-probability tokens which characterizes hallucination.\n\n**Signal Family**: Normalized Cumulative Surprise (Average Negative Log-Probability).\n**Aggregation Principle**: Per-sequence mean of negative log-probabilities.\n**Hypothesis**: Hallucinated atomic claims contain a higher density of tokens with low generation probability (high surprise) per token compared to factual claims, regardless of the specific length of the claim.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the average surprise per token in the generated sequence.\n        \n        Signal: Mean of negative log-probabilities across the sequence.\n        Aggregation Principle: Per-sequence aggregation of average negative log-probability.\n        \n        Hypothesis: Hallucinated claims exhibit a higher average density of low-probability tokens \n        (high surprise) per token compared to factual claims, as the model struggles to assign \n        high confidence to fabricated details.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        scores = []\n        \n        for lp in seq_logprobs:\n            if len(lp) == 0:\n                scores.append(0.0)\n                continue\n            \n            # Calculate total negative log-probability\n            total_neg_logprob = -np.sum(lp)\n            \n            # Normalize by sequence length to get average surprise per token\n            avg_surprise = total_neg_logprob / len(lp)\n            \n            scores.append(avg_surprise)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 717,
+      "prompt_tokens": 898,
+      "total_tokens": 1615,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.474179943004856
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n\n1.  **Detector 1 (Surprise + Variance):** Combines total cumulative surprise (sum of negative log-probs) with the variance of log-probabilities weighted by sequence length.\n    *   *Result:* 54.83\n    *   *Critique:* While theoretically sound for detecting \"oscillation,\" the variance term might be too noisy or dominated by the length scaling, leading to poor discriminative power compared to the simpler baseline.\n\n2.  **Detector 2 (Total Negative Log-Likelihood):** Uses only the sum of negative log-probabilities per sequence.\n    *   *Result:* 74.33\n    *   *Critique:* This significantly outperforms the complex detector. It suggests that for atomic claims, the primary signal for hallucination is the **overall improbability** of the generated sequence. Hallucinated facts often force the model into low-probability regions that are not easily \"averaged out\" by variance metrics. The simpler the feature, the better it generalizes in this specific setting.\n\n### Proposed Detector Strategy\n\nGiven that the raw cumulative surprise (negative log-likelihood) is the strongest signal, I will refine Detector 2 by normalizing it by the sequence length.\n*   **Signal:** Average Negative Log-Probability (ANLP).\n*   **Aggregation Principle:** Per-sequence mean of the negative log-probabilities.\n*   **Rationale:** Raw sums are biased by sequence length (longer sequences naturally have higher sums). Atomic claims vary in length; normalizing allows the detector to identify sequences that are *unusually surprising* relative to their own length, rather than just long sequences that happen to be low probability. This reduces the variance in the target distribution and improves ROC-AUC.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations using the average negative log-probability per token.\n        \n        Signal: Mean of negative log-probabilities across the sequence.\n        Aggregation Principle: Per-sequence averaging to normalize for sequence length.\n        \n        Hypothesis: Hallucinated atomic claims exhibit a higher average token-level surprise \n        (negative log-probability) than factual claims, regardless of the claim's length.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        scores = []\n        \n        for lp in seq_logprobs:\n            if len(lp) == 0:\n                scores.append(0.0)\n            else:\n                # Calculate mean negative log-probability\n                score = -np.mean(lp)\n                scores.append(score)\n        \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 659,
+      "prompt_tokens": 898,
+      "total_tokens": 1557,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 7.795093625987647
+  }
+]

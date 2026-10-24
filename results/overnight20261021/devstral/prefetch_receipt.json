@@ -1,0 +1,105 @@
+{
+  "status": "ready_native_checkpoint",
+  "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+  "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+  "path": "/dev/shm/overnight-models/Devstral-Small-2-24B",
+  "native_files": [
+    {
+      "file": "CHAT_SYSTEM_PROMPT.txt",
+      "bytes": 2367,
+      "sha256": "35e9942fc2a95dca58e4ce6484515f16a798f718aad0ce0b2e83ba0887f53b29",
+      "published_git_blob_sha1": "1392a509a427ef57d8ba43608925e55b424cf2aa",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "VIBE_SYSTEM_PROMPT.txt",
+      "bytes": 1809,
+      "sha256": "c55c3592065d1786b75e82fc0fe05ac4c4940b473e77799c8abb75e439a15556",
+      "published_git_blob_sha1": "ce24962642faa5680cd421e65d94a4d67c905433",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "chat_template.jinja",
+      "bytes": 11362,
+      "sha256": "a0c0ed8a45c2c75c85fd756316a10419b90eb4f3dbe64d00f5c0b8ad4de5209a",
+      "published_git_blob_sha1": "30350c5745f683c099079f355710bf625ec70424",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "config.json",
+      "bytes": 1822,
+      "sha256": "8d570ae877badd9ff5442afdc726385aba07f5757ba875a7491bde9549457e72",
+      "published_git_blob_sha1": "88664799f03f24dde112fe0005bb4529abf2198d",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "consolidated-00001-of-00002.safetensors",
+      "bytes": 19839869982,
+      "sha256": "dfa96c3ccb824ac308eeeaa86fd1ce01aca4e3311e1aaa27a498ec3b7302e165",
+      "published_sha256": "dfa96c3ccb824ac308eeeaa86fd1ce01aca4e3311e1aaa27a498ec3b7302e165",
+      "verification": "published_lfs_sha256"
+    },
+    {
+      "file": "consolidated-00002-of-00002.safetensors",
+      "bytes": 5953165906,
+      "sha256": "b783163b5ee6fb9595fde29d6072e81be8fcc24ea576d09ecc3dc7611ababb97",
+      "published_sha256": "b783163b5ee6fb9595fde29d6072e81be8fcc24ea576d09ecc3dc7611ababb97",
+      "verification": "published_lfs_sha256"
+    },
+    {
+      "file": "consolidated.safetensors.index.json",
+      "bytes": 101411,
+      "sha256": "ae098214199fb7fe4948768c0a640f0cea32d1effb827c09b0ae1314b02ef714",
+      "published_git_blob_sha1": "54437e69136d9f46c140dd9cec6162e1bb87bc44",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "generation_config.json",
+      "bytes": 175,
+      "sha256": "c5ee59a086c5504838db2a66cafdf04d10aac11cb021dd4e92a15946645c2dda",
+      "published_git_blob_sha1": "319bf12a84cdcdc5445cc039d4f3d0ef20ab4f9a",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "params.json",
+      "bytes": 1185,
+      "sha256": "1618da0d6f897e074ff7ec4b1047b5d2e8a1a4aa1fab41e26fc88f3b5b94d2aa",
+      "published_git_blob_sha1": "b96ca6fc9cf937078113af615ddc15c89ff0f4d3",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "processor_config.json",
+      "bytes": 976,
+      "sha256": "ece2373c2ae391bce18785a1810543bc6173a1f28b6767cffab2c35dbea5f002",
+      "published_git_blob_sha1": "a37d728b12fd27ac60a437894bd51de83449bf30",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    },
+    {
+      "file": "tekken.json",
+      "bytes": 16753784,
+      "sha256": "600bb27946565481ecf51ba8aee252e49b9a68507866080ac9c30185bb312843",
+      "published_sha256": "600bb27946565481ecf51ba8aee252e49b9a68507866080ac9c30185bb312843",
+      "verification": "published_lfs_sha256"
+    },
+    {
+      "file": "tokenizer.json",
+      "bytes": 17077420,
+      "sha256": "99cf274236c60277fcfad861a5a1007518687ad06ba8938760f50b55ffa0b1ef",
+      "published_sha256": "99cf274236c60277fcfad861a5a1007518687ad06ba8938760f50b55ffa0b1ef",
+      "verification": "published_lfs_sha256"
+    },
+    {
+      "file": "tokenizer_config.json",
+      "bytes": 21177,
+      "sha256": "4a05af595aa11c3436d3b68a616219ae99b303426f708a12b31bc9ce32530728",
+      "published_git_blob_sha1": "2b58a126f960d39faf6d80a62d24f5f8499c39a1",
+      "verification": "published_git_blob_sha1_plus_recorded_sha256"
+    }
+  ],
+  "weight_bytes": 25793035888,
+  "total_file_bytes": 25827009376,
+  "precision": "published FP8 weights / BF16 activations / A100 Marlin weight-only FP8; no native FP8 compute",
+  "download_manifest_sha256": "83b25c3150759eb81c033ebfc748c43f94751591bab85fd4a1fc4e6ae130f573",
+  "download_metadata_sha256": "d5957397bc2f3f55c83fd5c4a0fa604790e186e583e496228a76a2b5b1d447ff",
+  "verified_utc": "2026-10-21T22:33:31.180488+00:00"
+}

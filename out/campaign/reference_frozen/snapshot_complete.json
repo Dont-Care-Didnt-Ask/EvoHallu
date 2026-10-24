@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-15T07:07:10.085565+00:00",
+  "cohort_selected_before_held_out_scoring": true,
+  "methods": [
+    "ablation_laguna_slope_only",
+    "ablation_laguna_slope_range",
+    "ablation_laguna_slope_variance",
+    "ablation_qwen_linear_position_nll",
+    "uncertainty_quantification_laguna_evo_1047",
+    "uncertainty_quantification_laguna_evo_1048",
+    "uncertainty_quantification_laguna_independent_1048",
+    "uncertainty_quantification_laguna_seeded_1048",
+    "uncertainty_quantification_linear_evolution_1047",
+    "uncertainty_quantification_linear_evolution_1048",
+    "uncertainty_quantification_linear_independent_1047",
+    "uncertainty_quantification_linear_independent_1048",
+    "uncertainty_quantification_qwen38_evo_1047",
+    "uncertainty_quantification_qwen38_evo_1048",
+    "uncertainty_quantification_qwen38_independent_contract_1048",
+    "uncertainty_quantification_qwen38_pilot_1046"
+  ]
+}

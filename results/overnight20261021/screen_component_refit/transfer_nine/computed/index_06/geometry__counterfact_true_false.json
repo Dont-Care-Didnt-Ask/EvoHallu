@@ -1,0 +1,49 @@
+{
+  "rows": 31964,
+  "duplicate_disjoint_rows": 31964,
+  "failed": {},
+  "methods": {
+    "original/SequenceLogProb": {
+      "auc_percent": 58.99723023246604,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 58.99723023246604,
+      "auc_ci95_percent": [
+        58.38619548906059,
+        59.591259971100015
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/screen_component_logistic": {
+      "auc_percent": 67.51122692606206,
+      "gain_pp": 8.513996693596027,
+      "duplicate_disjoint_auc_percent": 67.51122692606206,
+      "auc_ci95_percent": [
+        66.95691599451783,
+        68.06529877229124
+      ],
+      "paired_gain_ci95_pp": [
+        8.153443328902672,
+        8.83710731810769
+      ]
+    }
+  },
+  "feature_model_metadata": {
+    "model_id": "/workspace/mod1-models/Llama3.2-1B",
+    "hidden_size": 2048,
+    "num_layers": 16,
+    "num_attention_heads": 32,
+    "vocab_size": 128256,
+    "modalities": "logits",
+    "model_dtype": "torch.float32",
+    "requested_forward_batch_size": 16,
+    "max_padded_forward_tokens": 16384,
+    "cpu_feature_threads": 12,
+    "cpu_gc_interval_batches": 32,
+    "cuda_cache_cleanup_interval_batches": 32
+  },
+  "unique_normalized_claims": 31938,
+  "bootstrap_unit": "claim"
+}

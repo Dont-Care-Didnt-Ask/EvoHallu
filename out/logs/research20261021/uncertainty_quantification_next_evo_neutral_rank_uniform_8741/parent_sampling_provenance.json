@@ -1,0 +1,15 @@
+{
+  "parent_sampling": "rank_uniform",
+  "uniform_reserve": 0.2,
+  "formula": "p_i = 0.8 * ascending_average_rank(fitness_i) / sum(ranks) + 0.2 / n_eligible_groups",
+  "eligibility": "Unchanged Island.get_prompt percentile gate",
+  "island_selection": "Unchanged ProgramsDatabase.get_prompt",
+  "within_score_group": "Unchanged shorter-source softmax at temperature 1.0",
+  "original_temperature_used_for_parent_weights": false,
+  "wrapper_sha256": "26f712cf7207f756cbdc1fb3d205703fc582287478e726aebcadf6b2ae6156e7",
+  "inherited_database_sha256": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+  "training_fitness": "directed AUROC",
+  "validation_selection": "unchanged directed AUROC",
+  "label_field": "is_hallu",
+  "test_labels_used": false
+}

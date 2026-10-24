@@ -1,0 +1,8 @@
+{
+  "status": "partial_or_protocol_pending",
+  "full_paired_comparisons_available": false,
+  "saved_requests": 52,
+  "valid_requests": 33,
+  "protocol_errors": 0,
+  "output": "/root/evohallu/mod1/results/overnight20261021/prompt_screen_analysis"
+}

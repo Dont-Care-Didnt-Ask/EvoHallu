@@ -1,0 +1,8 @@
+{
+  "verified_utc": "2026-10-22T11:19:50.021063+00:00",
+  "training_feature_blocks_exact": 4,
+  "held_out_feature_blocks_exact": 36,
+  "producer_hash_matches_executed_result": true,
+  "same_per_formula_feature_set": true,
+  "all_checks_passed": true
+}

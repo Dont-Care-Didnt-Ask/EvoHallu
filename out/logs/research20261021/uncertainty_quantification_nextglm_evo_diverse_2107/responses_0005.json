@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (LLR Final Step):** Uses a Log-Likelihood Ratio comparing the actual final token's probability to the model's top-512 probability at that step. It achieves 50.0 ROC-AUC. The signal is likely weak because it only looks at the final token, ignoring the context of the entire sentence.\n   - **Detector 2 (Summed NLL):** Calculates the sum of log probabilities (Negative Log-Likelihood) for the entire sequence. It achieves 74.3 ROC-AUC. This is a strong baseline, suggesting that the model's overall confidence across the sentence is a strong indicator of truthfulness.\n\n2. **Proposed Detector**\n   - **Signal:** The \"Local-Refinement\" of Detector 2.\n   - **Aggregation Principle:** Instead of summing the log probabilities (which assumes all tokens contribute equally to the \"truthfulness\" signal), we apply a **Weighted Sum** using the token's top-1 probability as a weight.\n   - **Formula:** $Score = \\sum_{t} (LogProb_t \\times Top1Prob_t)$.\n   - **Rationale:** This down-weights tokens that the model is \"guessing\" (low confidence) and up-weights tokens it is \"sure\" about. This filters out noise from the sequence and focuses the detector on the confident parts of the sentence.\n\n3. **Code**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates a Weighted Log-Likelihood score.\n        \n        Approach:\n        1. Extract log probabilities for the sequence.\n        2. Extract the top-1 log probability for each token (diagonal of top_k_logits).\n        3. Compute the weighted sum: Sum(LogProb * Top1Prob).\n        \n        Hypothesis:\n        The detector's performance is driven by the model's overall confidence\n        (weighted by local certainty). This focuses the signal on tokens the model\n        is confident about, filtering out low-confidence noise.\n        \"\"\"\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        top_k_logits = stats[\"top_k_logits\"]           # List[np.ndarray]\n        \n        scores = []\n        \n        for i, probs in enumerate(sequence_logprobs):\n            # 1. Get actual log probabilities for the sequence (shape: n_i - 1)\n            # probs shape is (n_i - 1,)\n            \n            # 2. Extract Top-1 log probabilities for each step\n            # top_k_logits shape is (n_i, k). We take the diagonal.\n            final_logits = top_k_logits[i]\n            top1_logprobs = np.diag(final_logits)\n            \n            # 3. Compute Weighted Sum\n            # Weights are the top-1 probabilities (p). Values are log probabilities (log p).\n            # This effectively calculates the entropy-weighted average of the log-likelihood.\n            weighted_score = np.sum(probs * top1_logprobs)\n            \n            scores.append(weighted_score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 728,
+      "prompt_tokens": 935,
+      "total_tokens": 1663,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 56.73352186399279
+  },
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (LLR Ratio):** Uses a Log-Likelihood Ratio (LLR) approach comparing the final token's actual log-probability against the maximum top-512 log-probability. It assumes hallucinations occur when the model selects a token with low probability relative to its own alternatives.\n   - **Detector 2 (Sequence NLL):** Uses the sum of log-probabilities (Negative Log-Likelihood) across the entire sequence. It assumes hallucinations correlate with lower overall sequence confidence.\n\n2. **Proposed Detector**\n   - **Signal:** **Top-1 Log-Probability Gap (Confidence Gap).**\n   - **Aggregation Principle:** **Per-Token Instantaneous Confidence.**\n   - **Structural Difference:** Unlike the LLR detector which compares the actual token against the top-k *alternatives* (a relative ratio), this detector measures the absolute confidence of the *actual token* itself. It assumes that hallucinations are more likely when the model generates a token with low absolute probability, even if the alternatives are also low. It aggregates this per-step metric by taking the mean of the gaps over the sequence length.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average confidence gap between the actual token and\n        its own top-1 probability.\n\n        Approach:\n        1. Extract the log-probability of the actual token at each step.\n        2. Extract the log-probability of the model's top-1 prediction at each step.\n        3. Compute the absolute difference (gap) at each step.\n        4. Aggregate by taking the mean gap across the sequence.\n\n        Hypothesis:\n        Hallucinations are more likely when the model generates tokens with\n        low absolute probability, even if the alternatives are equally low.\n        \"\"\"\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        top_k_logits = stats[\"top_k_logits\"]           # List[np.ndarray]\n        \n        gaps = []\n        \n        for i, probs in enumerate(sequence_logprobs):\n            # 1. Actual token log-probabilities (shape: n_i-1)\n            actual_logprobs = probs\n            \n            # 2. Top-1 log-probabilities (shape: n_i-1)\n            # top_k_logits is (n_i, k). We take the last row (n_i-1) and the first column (k=1).\n            final_logits = top_k_logits[i][-1, 0]\n            top1_logprobs = -final_logits\n            \n            # 3. Compute the gap (absolute difference) at each step\n            step_gaps = np.abs(actual_logprobs - top1_logprobs)\n            \n            # 4. Aggregate by mean\n            gaps.append(np.mean(step_gaps))\n            \n        return np.array(gaps, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 684,
+      "prompt_tokens": 955,
+      "total_tokens": 1639,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 53.37896897702012
+  }
+]

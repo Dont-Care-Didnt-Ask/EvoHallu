@@ -1,0 +1,7 @@
+{
+  "base_vocabulary_identical": true,
+  "merges_identical": false,
+  "added_token_identities_identical": true,
+  "reference_base_vocab_size": 128000,
+  "target_base_vocab_size": 128000
+}

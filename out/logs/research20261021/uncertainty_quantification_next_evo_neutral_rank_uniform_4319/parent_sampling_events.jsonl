@@ -1,0 +1,30 @@
+{"eligible_scores": [74.3286], "probabilities": [1.0], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286], "probabilities": [1.0], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655], "probabilities": [0.6333333333333333, 0.3666666666666667], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286], "probabilities": [1.0], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286], "probabilities": [1.0], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655], "probabilities": [0.6333333333333333, 0.3666666666666667], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969], "probabilities": [0.4666666666666667, 0.2, 0.3333333333333333], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965], "probabilities": [0.29000000000000004, 0.13, 0.36999999999999994, 0.21000000000000002], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845], "probabilities": [0.3699999999999999, 0.13, 0.29000000000000004, 0.21000000000000002], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845], "probabilities": [0.3699999999999999, 0.13, 0.29000000000000004, 0.21000000000000002], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0], "probabilities": [0.25333333333333335, 0.14666666666666667, 0.3066666666666666, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0], "probabilities": [0.25333333333333335, 0.14666666666666667, 0.3066666666666666, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0], "probabilities": [0.25333333333333335, 0.14666666666666667, 0.3066666666666666, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0], "probabilities": [0.25333333333333335, 0.14666666666666667, 0.3066666666666666, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0, 71.9975, 75.2107], "probabilities": [0.17142857142857143, 0.08571428571428572, 0.22857142857142854, 0.1142857142857143, 0.05714285714285715, 0.14285714285714288, 0.20000000000000004], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0, 71.9975, 75.2107], "probabilities": [0.17142857142857143, 0.08571428571428572, 0.22857142857142854, 0.1142857142857143, 0.05714285714285715, 0.14285714285714288, 0.20000000000000004], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 75.658, 71.9965, 50.0, 71.9975, 75.2107], "probabilities": [0.17142857142857143, 0.08571428571428572, 0.22857142857142854, 0.1142857142857143, 0.05714285714285715, 0.14285714285714288, 0.20000000000000004], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 75.658, 75.2107], "probabilities": [0.2, 0.46666666666666673, 0.3333333333333333], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 75.658, 75.2107], "probabilities": [0.2, 0.46666666666666673, 0.3333333333333333], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845], "probabilities": [0.3699999999999999, 0.13, 0.29000000000000004, 0.21000000000000002], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [75.658, 75.2107, 74.4724], "probabilities": [0.4666666666666667, 0.3333333333333333, 0.2], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845], "probabilities": [0.3699999999999999, 0.13, 0.29000000000000004, 0.21000000000000002], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845, 31.3221], "probabilities": [0.30666666666666653, 0.14666666666666667, 0.25333333333333335, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [75.658, 75.2107, 74.4724], "probabilities": [0.4666666666666667, 0.3333333333333333, 0.2], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [75.658, 75.2107, 74.4724], "probabilities": [0.4666666666666667, 0.3333333333333333, 0.2], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845, 31.3221], "probabilities": [0.30666666666666653, 0.14666666666666667, 0.25333333333333335, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [75.658, 75.2107, 74.4724], "probabilities": [0.4666666666666667, 0.3333333333333333, 0.2], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845, 31.3221], "probabilities": [0.30666666666666653, 0.14666666666666667, 0.25333333333333335, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [75.658, 75.2107, 74.4724], "probabilities": [0.4666666666666667, 0.3333333333333333, 0.2], "inherited_temperature": 40.0, "uniform_reserve": 0.2}
+{"eligible_scores": [74.3286, 50.0655, 71.9969, 68.8845, 31.3221], "probabilities": [0.30666666666666653, 0.14666666666666667, 0.25333333333333335, 0.20000000000000004, 0.09333333333333334], "inherited_temperature": 40.0, "uniform_reserve": 0.2}

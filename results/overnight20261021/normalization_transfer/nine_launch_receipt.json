@@ -1,0 +1,27 @@
+{
+  "status": "launched_waiting_for_formal_nine_guard",
+  "started_utc": "2026-10-21T23:46:53.215408+00:00",
+  "pid": 26354,
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/overnight_normalization_transfer.py",
+    "--execute",
+    "--coverage",
+    "nine",
+    "--wait"
+  ],
+  "log": "results/overnight20261021/normalization_transfer/nine_wait.log",
+  "helper_sha256": "9ac58405f403ecdaaa61bb2f87baf3602d103ce68108276a2a3d6b6e4c01ac02",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "six_seal_sha256": "34a341a4097cfff88a713ab506d5e08f99a5686d6b74adafc86e77b98ccaa0ed",
+  "six_status": "complete_exploratory_six",
+  "six_active_seconds": 331.97844392299885,
+  "remaining_cumulative_active_seconds": 868.0215560770012,
+  "workers": 4,
+  "threads_per_worker": 1,
+  "CUDA_VISIBLE_DEVICES": "",
+  "hard_stop_utc": "2026-10-22T02:03:00+00:00",
+  "gpu_calls": 0,
+  "target_fit": false,
+  "source_artifacts_modified": false
+}

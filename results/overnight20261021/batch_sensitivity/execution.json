@@ -1,0 +1,23 @@
+{
+  "status": "complete_fixed_five_case_diagnostic",
+  "started_utc": "2026-10-21T22:18:03.239448+00:00",
+  "cutoff_utc": "2026-10-21T22:48:03.239448+00:00",
+  "workers": 4,
+  "phases": [
+    {
+      "phase": "reference",
+      "status": "complete",
+      "datasets": 9,
+      "finished_utc": "2026-10-21T22:19:01.788150+00:00"
+    },
+    {
+      "phase": "variants",
+      "status": "complete",
+      "datasets": 9,
+      "finished_utc": "2026-10-21T22:21:02.148984+00:00"
+    }
+  ],
+  "plan_sha256": "9be91ae1c55eeea698ce75db689e16feb2bdccbcd458ba8bbd3e45e72bc2f4c9",
+  "gpu_calls": 0,
+  "finished_utc": "2026-10-21T22:21:02.156026+00:00"
+}

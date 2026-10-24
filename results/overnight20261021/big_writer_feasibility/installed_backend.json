@@ -1,0 +1,3663 @@
+{
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "packages": {
+    "vllm": "0.31.0",
+    "torch": "2.13.0",
+    "transformers": "5.17.0",
+    "triton": "3.7.1",
+    "openai-harmony": null,
+    "oss-harmony": "0.0.11"
+  },
+  "openai_harmony_spec_found": true,
+  "files": [
+    {
+      "path": "vllm/model_executor/layers/quantization/mxfp4.py",
+      "sha256": "111fd1fb271573af7543acf7d3caefdcf71e0435989911a3f74d70585753faea",
+      "bytes": 33388,
+      "lines": 902,
+      "excerpts": [
+        {
+          "line": 49,
+          "text": "class Mxfp4Config(QuantizationConfig):"
+        },
+        {
+          "line": 50,
+          "text": "    \"\"\"Canonical base config for MXFP4 quantization."
+        },
+        {
+          "line": 51,
+          "text": ""
+        },
+        {
+          "line": 52,
+          "text": "    Subclasses override get_name() and override_quantization_method() to"
+        },
+        {
+          "line": 53,
+          "text": "    register themselves as the handler for a specific checkpoint format."
+        },
+        {
+          "line": 54,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 55,
+          "text": ""
+        },
+        {
+          "line": 56,
+          "text": "    def __init__(self, ignored_layers: list[str] | None = None):"
+        },
+        {
+          "line": 57,
+          "text": "        super().__init__()"
+        },
+        {
+          "line": 58,
+          "text": "        self.ignored_layers = ignored_layers"
+        },
+        {
+          "line": 59,
+          "text": ""
+        },
+        {
+          "line": 60,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 61,
+          "text": "    def from_config(cls, config):"
+        },
+        {
+          "line": 62,
+          "text": "        return cls()"
+        },
+        {
+          "line": 63,
+          "text": ""
+        },
+        {
+          "line": 64,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 65,
+          "text": "    def get_min_capability(cls) -> int:"
+        },
+        {
+          "line": 66,
+          "text": "        return 80"
+        },
+        {
+          "line": 67,
+          "text": ""
+        },
+        {
+          "line": 68,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 69,
+          "text": "    def get_name(cls) -> QuantizationMethods:"
+        },
+        {
+          "line": 70,
+          "text": "        return \"mxfp4\""
+        },
+        {
+          "line": 71,
+          "text": ""
+        },
+        {
+          "line": 72,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 73,
+          "text": "    def get_supported_act_dtypes(cls) -> list[torch.dtype]:"
+        },
+        {
+          "line": 74,
+          "text": "        return [torch.bfloat16]"
+        },
+        {
+          "line": 75,
+          "text": ""
+        },
+        {
+          "line": 76,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 77,
+          "text": "    def get_config_filenames(cls) -> list[str]:"
+        },
+        {
+          "line": 78,
+          "text": "        return []"
+        },
+        {
+          "line": 79,
+          "text": ""
+        },
+        {
+          "line": 80,
+          "text": "    def _make_moe_method(self, moe: FusedMoEConfig) -> FusedMoEMethodBase:"
+        },
+        {
+          "line": 81,
+          "text": "        \"\"\"MoE method for RoutedExperts. Subclasses override to pick a"
+        },
+        {
+          "line": 82,
+          "text": "        checkpoint-specific kernel family.\"\"\""
+        },
+        {
+          "line": 83,
+          "text": "        return Mxfp4MoEMethod(moe)"
+        },
+        {
+          "line": 84,
+          "text": ""
+        },
+        {
+          "line": 85,
+          "text": "    def get_quant_method("
+        },
+        {
+          "line": 86,
+          "text": "        self, layer: torch.nn.Module, prefix: str"
+        },
+        {
+          "line": 87,
+          "text": "    ) -> \"QuantizeMethodBase | None\":"
+        },
+        {
+          "line": 88,
+          "text": "        if isinstance(layer, LinearBase):"
+        },
+        {
+          "line": 89,
+          "text": "            if self.ignored_layers and is_layer_skipped("
+        },
+        {
+          "line": 90,
+          "text": "                prefix=prefix,"
+        },
+        {
+          "line": 91,
+          "text": "                ignored_layers=self.ignored_layers,"
+        },
+        {
+          "line": 92,
+          "text": "                fused_mapping=self.packed_modules_mapping,"
+        },
+        {
+          "line": 93,
+          "text": "            ):"
+        },
+        {
+          "line": 94,
+          "text": "                return UnquantizedLinearMethod()"
+        },
+        {
+          "line": 95,
+          "text": "            logger.debug_once("
+        },
+        {
+          "line": 96,
+          "text": "                \"MXFP4 linear layer is not implemented - falling back to \""
+        },
+        {
+          "line": 97,
+          "text": "                \"UnquantizedLinearMethod.\","
+        },
+        {
+          "line": 98,
+          "text": "            )"
+        },
+        {
+          "line": 99,
+          "text": "            return UnquantizedLinearMethod()"
+        },
+        {
+          "line": 100,
+          "text": "        elif isinstance(layer, RoutedExperts):"
+        },
+        {
+          "line": 101,
+          "text": "            return self._make_moe_method(layer.moe_config)"
+        },
+        {
+          "line": 102,
+          "text": "        elif isinstance(layer, Attention):"
+        },
+        {
+          "line": 103,
+          "text": "            logger.debug_once("
+        },
+        {
+          "line": 104,
+          "text": "                \"MXFP4 attention layer is not implemented. \""
+        },
+        {
+          "line": 105,
+          "text": "                \"Skipping quantization for this layer.\","
+        },
+        {
+          "line": 106,
+          "text": "            )"
+        },
+        {
+          "line": 107,
+          "text": "        return None"
+        },
+        {
+          "line": 108,
+          "text": ""
+        },
+        {
+          "line": 109,
+          "text": ""
+        },
+        {
+          "line": 110,
+          "text": "class GptOssMxfp4Config(Mxfp4Config):"
+        },
+        {
+          "line": 111,
+          "text": "    \"\"\"MXFP4 config for GPT-OSS checkpoints."
+        },
+        {
+          "line": 112,
+          "text": ""
+        },
+        {
+          "line": 113,
+          "text": "    Checkpoints carry ``\"quant_method\": \"mxfp4\"`` in their JSON config."
+        },
+        {
+          "line": 114,
+          "text": "    override_quantization_method() maps that to the canonical internal name"
+        },
+        {
+          "line": 115,
+          "text": "    so that the rest of the loading path uses \"gpt_oss_mxfp4\" consistently."
+        },
+        {
+          "line": 116,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 117,
+          "text": ""
+        },
+        {
+          "line": 118,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 119,
+          "text": "    def get_name(cls) -> QuantizationMethods:"
+        },
+        {
+          "line": 120,
+          "text": "        return \"gpt_oss_mxfp4\""
+        },
+        {
+          "line": 121,
+          "text": ""
+        },
+        {
+          "line": 122,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 123,
+          "text": "    def override_quantization_method("
+        },
+        {
+          "line": 124,
+          "text": "        cls, hf_quant_cfg, user_quant, hf_config=None"
+        },
+        {
+          "line": 125,
+          "text": "    ) -> QuantizationMethods | None:"
+        },
+        {
+          "line": 126,
+          "text": "        # Match both \"mxfp4\" (original checkpoint value) and \"gpt_oss_mxfp4\""
+        },
+        {
+          "line": 127,
+          "text": "        # (already normalized by verify_and_update_model_config) so that"
+        },
+        {
+          "line": 128,
+          "text": "        # explicit --quantization mxfp4 from the user doesn't cause a mismatch."
+        },
+        {
+          "line": 129,
+          "text": "        if not ("
+        },
+        {
+          "line": 130,
+          "text": "            isinstance(hf_quant_cfg, dict)"
+        },
+        {
+          "line": 131,
+          "text": "            and hf_quant_cfg.get(\"quant_method\") in (\"mxfp4\", \"gpt_oss_mxfp4\")"
+        },
+        {
+          "line": 132,
+          "text": "        ):"
+        },
+        {
+          "line": 133,
+          "text": "            return None"
+        },
+        {
+          "line": 134,
+          "text": "        # Require explicit confirmation that this is a GPT-OSS model."
+        },
+        {
+          "line": 135,
+          "text": "        # Do NOT fall back to returning the override when hf_config is None,"
+        },
+        {
+          "line": 136,
+          "text": "        # as that would silently claim all mxfp4 checkpoints."
+        },
+        {
+          "line": 137,
+          "text": "        model_type = getattr(hf_config, \"model_type\", None)"
+        },
+        {
+          "line": 138,
+          "text": "        if model_type != \"gpt_oss\":"
+        },
+        {
+          "line": 139,
+          "text": "            return None"
+        },
+        {
+          "line": 140,
+          "text": "        return \"gpt_oss_mxfp4\""
+        },
+        {
+          "line": 141,
+          "text": ""
+        },
+        {
+          "line": 142,
+          "text": "    def _make_moe_method(self, moe: FusedMoEConfig) -> FusedMoEMethodBase:"
+        },
+        {
+          "line": 143,
+          "text": "        return GptOssMxfp4MoEMethod(moe)"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/layers/fused_moe/oracle/mxfp4.py",
+      "sha256": "20ff5a7f591b05fb9f18266db6dc04cebade3d7c143005bd74a1c9bc8449e4ce",
+      "bytes": 73386,
+      "lines": 2035,
+      "excerpts": [
+        {
+          "line": 235,
+          "text": "    elif backend == Mxfp4MoeBackend.MARLIN:"
+        },
+        {
+          "line": 236,
+          "text": "        from vllm.model_executor.layers.fused_moe.experts.marlin_moe import ("
+        },
+        {
+          "line": 237,
+          "text": "            MarlinExperts,"
+        },
+        {
+          "line": 238,
+          "text": "        )"
+        },
+        {
+          "line": 239,
+          "text": ""
+        },
+        {
+          "line": 240,
+          "text": "        return [MarlinExperts]"
+        },
+        {
+          "line": 241,
+          "text": ""
+        },
+        {
+          "line": 242,
+          "text": "    elif backend == Mxfp4MoeBackend.BATCHED_MARLIN:"
+        },
+        {
+          "line": 243,
+          "text": "        from vllm.model_executor.layers.fused_moe.experts.marlin_moe import ("
+        },
+        {
+          "line": 244,
+          "text": "            BatchedMarlinExperts,"
+        },
+        {
+          "line": 245,
+          "text": "        )"
+        },
+        {
+          "line": 246,
+          "text": ""
+        },
+        {
+          "line": 247,
+          "text": "        return [BatchedMarlinExperts]"
+        },
+        {
+          "line": 342,
+          "text": "def _get_priority_backends_for_gpt_oss() -> list[Mxfp4MoeBackend]:"
+        },
+        {
+          "line": 343,
+          "text": "    \"\"\"Available backends in priority order, BF16-act variant before"
+        },
+        {
+          "line": 344,
+          "text": "    activation-quantized variant within each vendor family.\"\"\""
+        },
+        {
+          "line": 345,
+          "text": "    _AVAILABLE_BACKENDS = ["
+        },
+        {
+          "line": 346,
+          "text": "        Mxfp4MoeBackend.FLASHINFER_TRTLLM_MXFP4_BF16,"
+        },
+        {
+          "line": 347,
+          "text": "        Mxfp4MoeBackend.FLASHINFER_TRTLLM_MXFP4_MXFP8,"
+        },
+        {
+          "line": 348,
+          "text": "        Mxfp4MoeBackend.AITER_MXFP4_BF16,"
+        },
+        {
+          "line": 349,
+          "text": "        Mxfp4MoeBackend.AITER_TRITON_MXFP4_BF16,"
+        },
+        {
+          "line": 350,
+          "text": "        Mxfp4MoeBackend.AITER_MXFP4_FP8,"
+        },
+        {
+          "line": 351,
+          "text": "        Mxfp4MoeBackend.AITER_MXFP4_MXFP4,"
+        },
+        {
+          "line": 352,
+          "text": "        Mxfp4MoeBackend.TRITON,"
+        },
+        {
+          "line": 353,
+          "text": "        Mxfp4MoeBackend.FLASHINFER_CUTLASS_MXFP4_BF16,"
+        },
+        {
+          "line": 354,
+          "text": "        Mxfp4MoeBackend.FLASHINFER_CUTLASS_MXFP4_MXFP8,"
+        },
+        {
+          "line": 355,
+          "text": "        # TRITON_UNFUSED has bug with MTP support"
+        },
+        {
+          "line": 356,
+          "text": "        # TODO re-enable after kernel is fixed"
+        },
+        {
+          "line": 357,
+          "text": "        # TRITON_UNFUSED"
+        },
+        {
+          "line": 358,
+          "text": "        Mxfp4MoeBackend.MARLIN,"
+        },
+        {
+          "line": 359,
+          "text": "        Mxfp4MoeBackend.BATCHED_MARLIN,"
+        },
+        {
+          "line": 360,
+          "text": "        Mxfp4MoeBackend.XPU,"
+        },
+        {
+          "line": 361,
+          "text": "        Mxfp4MoeBackend.CPU,"
+        },
+        {
+          "line": 362,
+          "text": "        Mxfp4MoeBackend.EMULATION,"
+        },
+        {
+          "line": 363,
+          "text": "    ]"
+        },
+        {
+          "line": 364,
+          "text": "    return _AVAILABLE_BACKENDS"
+        },
+        {
+          "line": 534,
+          "text": "def select_mxfp4_moe_backend("
+        },
+        {
+          "line": 535,
+          "text": "    config: FusedMoEConfig,"
+        },
+        {
+          "line": 536,
+          "text": "    activation_key: QuantKey | None = None,"
+        },
+        {
+          "line": 537,
+          "text": ") -> tuple[Mxfp4MoeBackend, type[mk.FusedMoEExperts] | None]:"
+        },
+        {
+          "line": 538,
+          "text": "    \"\"\"Select the primary MXFP4 MoE backend."
+        },
+        {
+          "line": 539,
+          "text": ""
+        },
+        {
+          "line": 540,
+          "text": "    Args:"
+        },
+        {
+          "line": 541,
+          "text": "        config: MoE configuration"
+        },
+        {
+          "line": 542,
+          "text": "        activation_key: Optional activation quantization key. If provided,"
+        },
+        {
+          "line": 543,
+          "text": "            overrides the default activation key for backend selection."
+        },
+        {
+          "line": 544,
+          "text": "            Use kFp8StaticTensorSym for W4A8 scheme."
+        },
+        {
+          "line": 545,
+          "text": ""
+        },
+        {
+          "line": 546,
+          "text": "    Note: Shape-specific fallbacks may still occur at runtime."
+        },
+        {
+          "line": 547,
+          "text": ""
+        },
+        {
+          "line": 548,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 549,
+          "text": "    runner_backend = config.moe_backend"
+        },
+        {
+          "line": 550,
+          "text": "    requested_activation_key = _resolve_activation_key(activation_key)"
+        },
+        {
+          "line": 551,
+          "text": ""
+        },
+        {
+          "line": 552,
+          "text": "    activation_format = ("
+        },
+        {
+          "line": 553,
+          "text": "        mk.FusedMoEActivationFormat.BatchedExperts"
+        },
+        {
+          "line": 554,
+          "text": "        if config.moe_parallel_config.use_batched_activation_format"
+        },
+        {
+          "line": 555,
+          "text": "        else mk.FusedMoEActivationFormat.Standard"
+        },
+        {
+          "line": 556,
+          "text": "    )"
+        },
+        {
+          "line": 557,
+          "text": ""
+        },
+        {
+          "line": 558,
+          "text": "    if runner_backend != \"auto\":"
+        },
+        {
+          "line": 559,
+          "text": "        requested_backends = _get_requested_backends("
+        },
+        {
+          "line": 560,
+          "text": "            runner_backend, requested_activation_key"
+        },
+        {
+          "line": 561,
+          "text": "        )"
+        },
+        {
+          "line": 562,
+          "text": "        if activation_format == mk.FusedMoEActivationFormat.BatchedExperts:"
+        },
+        {
+          "line": 563,
+          "text": "            requested_backends = ["
+        },
+        {
+          "line": 564,
+          "text": "                Mxfp4MoeBackend.BATCHED_MARLIN if b == Mxfp4MoeBackend.MARLIN else b"
+        },
+        {
+          "line": 565,
+          "text": "                for b in requested_backends"
+        },
+        {
+          "line": 566,
+          "text": "            ]"
+        },
+        {
+          "line": 567,
+          "text": "        if not requested_backends:"
+        },
+        {
+          "line": 568,
+          "text": "            raise ValueError("
+        },
+        {
+          "line": 569,
+          "text": "                f\"moe_backend={runner_backend!r} does not support \""
+        },
+        {
+          "line": 570,
+          "text": "                f\"activation={requested_activation_key}\""
+        },
+        {
+          "line": 571,
+          "text": "            )"
+        },
+        {
+          "line": 572,
+          "text": "        last_error: Exception | None = None"
+        },
+        {
+          "line": 573,
+          "text": "        for requested_backend in requested_backends:"
+        },
+        {
+          "line": 574,
+          "text": "            act_key = ("
+        },
+        {
+          "line": 575,
+          "text": "                requested_activation_key"
+        },
+        {
+          "line": 576,
+          "text": "                if requested_backend == Mxfp4MoeBackend.EMULATION"
+        },
+        {
+          "line": 577,
+          "text": "                else _backend_activation_key(requested_backend)"
+        },
+        {
+          "line": 578,
+          "text": "            )"
+        },
+        {
+          "line": 579,
+          "text": "            try:"
+        },
+        {
+          "line": 580,
+          "text": "                return _return_or_raise("
+        },
+        {
+          "line": 581,
+          "text": "                    requested_backend,"
+        },
+        {
+          "line": 582,
+          "text": "                    config,"
+        },
+        {
+          "line": 583,
+          "text": "                    kMxfp4Static,"
+        },
+        {
+          "line": 584,
+          "text": "                    act_key,"
+        },
+        {
+          "line": 585,
+          "text": "                    activation_format,"
+        },
+        {
+          "line": 586,
+          "text": "                )"
+        },
+        {
+          "line": 587,
+          "text": "            except ValueError as e:"
+        },
+        {
+          "line": 588,
+          "text": "                last_error = e"
+        },
+        {
+          "line": 589,
+          "text": "        assert last_error is not None"
+        },
+        {
+          "line": 590,
+          "text": "        raise last_error"
+        },
+        {
+          "line": 591,
+          "text": ""
+        },
+        {
+          "line": 592,
+          "text": "    if _requires_qwen38_tep8_emulation(config, requested_activation_key):"
+        },
+        {
+          "line": 593,
+          "text": "        backend = Mxfp4MoeBackend.EMULATION"
+        },
+        {
+          "line": 594,
+          "text": "        logger.warning_once("
+        },
+        {
+          "line": 595,
+          "text": "            \"Using OCP MX emulation for the Qwen3.8 Flash Next TEP8 routed \""
+        },
+        {
+          "line": 596,
+          "text": "            \"experts on gfx950 because the native AITER W4A4 kernel is not \""
+        },
+        {
+          "line": 597,
+          "text": "            \"numerically reliable for this shape. Performance will be lower.\""
+        },
+        {
+          "line": 598,
+          "text": "        )"
+        },
+        {
+          "line": 599,
+          "text": "        return _return_or_raise("
+        },
+        {
+          "line": 600,
+          "text": "            backend,"
+        },
+        {
+          "line": 601,
+          "text": "            config,"
+        },
+        {
+          "line": 602,
+          "text": "            kMxfp4Static,"
+        },
+        {
+          "line": 603,
+          "text": "            requested_activation_key,"
+        },
+        {
+          "line": 604,
+          "text": "            activation_format,"
+        },
+        {
+          "line": 605,
+          "text": "        )"
+        },
+        {
+          "line": 606,
+          "text": ""
+        },
+        {
+          "line": 607,
+          "text": "    # Select kernels in order of backend."
+        },
+        {
+          "line": 608,
+          "text": "    AVAILABLE_BACKENDS = _filter_by_activation("
+        },
+        {
+          "line": 609,
+          "text": "        _get_priority_backends_for_gpt_oss(), requested_activation_key"
+        },
+        {
+          "line": 610,
+          "text": "    )"
+        },
+        {
+          "line": 611,
+          "text": ""
+        },
+        {
+          "line": 612,
+          "text": "    unsupported_reasons = []"
+        },
+        {
+          "line": 613,
+          "text": "    for backend in AVAILABLE_BACKENDS:"
+        },
+        {
+          "line": 614,
+          "text": "        # Use requested_activation_key if provided, otherwise use backend default"
+        },
+        {
+          "line": 615,
+          "text": "        act_key = ("
+        },
+        {
+          "line": 616,
+          "text": "            requested_activation_key"
+        },
+        {
+          "line": 617,
+          "text": "            if requested_activation_key is not None"
+        },
+        {
+          "line": 618,
+          "text": "            else _backend_activation_key(backend)"
+        },
+        {
+          "line": 619,
+          "text": "        )"
+        },
+        {
+          "line": 620,
+          "text": "        for k_cls in backend_to_kernel_cls(backend):"
+        },
+        {
+          "line": 621,
+          "text": "            supported, reason = k_cls.is_supported_config("
+        },
+        {
+          "line": 622,
+          "text": "                k_cls, config, kMxfp4Static, act_key, activation_format"
+        },
+        {
+          "line": 623,
+          "text": "            )"
+        },
+        {
+          "line": 624,
+          "text": "            if supported:"
+        },
+        {
+          "line": 625,
+          "text": "                logger.info_once(_make_log_backend(backend))"
+        },
+        {
+          "line": 626,
+          "text": "                return backend, k_cls"
+        },
+        {
+          "line": 627,
+          "text": "            else:"
+        },
+        {
+          "line": 628,
+          "text": "                logger.debug_once(_make_log_unsupported(backend, reason))"
+        },
+        {
+          "line": 629,
+          "text": "                unsupported_reasons.append((backend, reason))"
+        },
+        {
+          "line": 630,
+          "text": ""
+        },
+        {
+          "line": 631,
+          "text": "    if current_platform.is_xpu():"
+        },
+        {
+          "line": 632,
+          "text": "        backend = Mxfp4MoeBackend.XPU"
+        },
+        {
+          "line": 633,
+          "text": "        logger.info_once(_make_log_backend(backend))"
+        },
+        {
+          "line": 634,
+          "text": "        return _return_or_raise("
+        },
+        {
+          "line": 635,
+          "text": "            Mxfp4MoeBackend.XPU,"
+        },
+        {
+          "line": 636,
+          "text": "            config,"
+        },
+        {
+          "line": 637,
+          "text": "            kMxfp4Static,"
+        },
+        {
+          "line": 638,
+          "text": "            None,"
+        },
+        {
+          "line": 639,
+          "text": "            activation_format,"
+        },
+        {
+          "line": 640,
+          "text": "        )"
+        },
+        {
+          "line": 641,
+          "text": ""
+        },
+        {
+          "line": 642,
+          "text": "    unsupported_log = \"; \".join("
+        },
+        {
+          "line": 643,
+          "text": "        ["
+        },
+        {
+          "line": 644,
+          "text": "            f\"backend: {backend.value}, reason: {reason}\""
+        },
+        {
+          "line": 645,
+          "text": "            for backend, reason in unsupported_reasons"
+        },
+        {
+          "line": 646,
+          "text": "        ]"
+        },
+        {
+          "line": 647,
+          "text": "    )"
+        },
+        {
+          "line": 648,
+          "text": "    raise NotImplementedError("
+        },
+        {
+          "line": 649,
+          "text": "        \"No MXFP4 MoE backend supports the deployment configuration. \""
+        },
+        {
+          "line": 650,
+          "text": "        f\"weight_key=kMxfp4Static, activation_key={activation_key}. \""
+        },
+        {
+          "line": 862,
+          "text": "    elif mxfp4_backend in ("
+        },
+        {
+          "line": 863,
+          "text": "        Mxfp4MoeBackend.MARLIN,"
+        },
+        {
+          "line": 864,
+          "text": "        Mxfp4MoeBackend.BATCHED_MARLIN,"
+        },
+        {
+          "line": 865,
+          "text": "    ):"
+        },
+        {
+          "line": 866,
+          "text": "        from vllm.model_executor.layers.quantization.utils.marlin_utils_fp4 import ("
+        },
+        {
+          "line": 867,
+          "text": "            prepare_moe_mxfp4_layer_for_marlin,"
+        },
+        {
+          "line": 868,
+          "text": "        )"
+        },
+        {
+          "line": 869,
+          "text": ""
+        },
+        {
+          "line": 870,
+          "text": "        return prepare_moe_mxfp4_layer_for_marlin("
+        },
+        {
+          "line": 871,
+          "text": "            layer,"
+        },
+        {
+          "line": 872,
+          "text": "            w13_weight,"
+        },
+        {
+          "line": 873,
+          "text": "            w2_weight,"
+        },
+        {
+          "line": 874,
+          "text": "            w13_weight_scale,"
+        },
+        {
+          "line": 875,
+          "text": "            w2_weight_scale,"
+        },
+        {
+          "line": 876,
+          "text": "            w13_bias,"
+        },
+        {
+          "line": 877,
+          "text": "            w2_bias,"
+        },
+        {
+          "line": 878,
+          "text": "        )"
+        },
+        {
+          "line": 1940,
+          "text": "            w1_scale=w1_scale,"
+        },
+        {
+          "line": 1941,
+          "text": "            w2_scale=w2_scale,"
+        },
+        {
+          "line": 1942,
+          "text": "            gemm1_alpha=gemm1_alpha,"
+        },
+        {
+          "line": 1943,
+          "text": "            gemm1_beta=gemm1_beta,"
+        },
+        {
+          "line": 1944,
+          "text": "            gemm1_clamp_limit=swiglu_limit,"
+        },
+        {
+          "line": 1945,
+          "text": "        )"
+        },
+        {
+          "line": 1946,
+          "text": "    elif mxfp4_backend in ("
+        },
+        {
+          "line": 1947,
+          "text": "        Mxfp4MoeBackend.B12X_MXFP4_BF16,"
+        },
+        {
+          "line": 1948,
+          "text": "        Mxfp4MoeBackend.MARLIN,"
+        },
+        {
+          "line": 1949,
+          "text": "        Mxfp4MoeBackend.BATCHED_MARLIN,"
+        },
+        {
+          "line": 1950,
+          "text": "        Mxfp4MoeBackend.TRITON,"
+        },
+        {
+          "line": 1951,
+          "text": "        Mxfp4MoeBackend.TRITON_UNFUSED,"
+        },
+        {
+          "line": 1952,
+          "text": "        Mxfp4MoeBackend.FLASHINFER_TRTLLM_MXFP4_BF16,"
+        },
+        {
+          "line": 1953,
+          "text": "        Mxfp4MoeBackend.FLASHINFER_CUTLASS_MXFP4_BF16,"
+        },
+        {
+          "line": 1954,
+          "text": "        Mxfp4MoeBackend.AITER_MXFP4_BF16,"
+        },
+        {
+          "line": 1955,
+          "text": "        Mxfp4MoeBackend.AITER_TRITON_MXFP4_BF16,"
+        },
+        {
+          "line": 1956,
+          "text": "        Mxfp4MoeBackend.CPU,"
+        },
+        {
+          "line": 1957,
+          "text": "    ):"
+        },
+        {
+          "line": 1958,
+          "text": "        return mxfp4_w4a16_moe_quant_config("
+        },
+        {
+          "line": 1959,
+          "text": "            w1_bias=w1_bias,"
+        },
+        {
+          "line": 1960,
+          "text": "            w2_bias=w2_bias,"
+        },
+        {
+          "line": 1961,
+          "text": "            w1_scale=w1_scale,"
+        },
+        {
+          "line": 1962,
+          "text": "            w2_scale=w2_scale,"
+        },
+        {
+          "line": 1963,
+          "text": "            gemm1_alpha=gemm1_alpha,"
+        },
+        {
+          "line": 1964,
+          "text": "            gemm1_beta=gemm1_beta,"
+        },
+        {
+          "line": 1965,
+          "text": "            gemm1_clamp_limit=swiglu_limit,"
+        },
+        {
+          "line": 1966,
+          "text": "        )"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/layers/fused_moe/experts/marlin_moe.py",
+      "sha256": "e048731e130ecc3100be0ab4a168777a7697131b41538f9d9b6a73c4f66e14ff",
+      "bytes": 36249,
+      "lines": 1007,
+      "excerpts": [
+        {
+          "line": 560,
+          "text": ""
+        },
+        {
+          "line": 561,
+          "text": "class MarlinExpertsBase(mk.FusedMoEExpertsModular):"
+        },
+        {
+          "line": 562,
+          "text": "    def __init__("
+        },
+        {
+          "line": 563,
+          "text": "        self,"
+        },
+        {
+          "line": 564,
+          "text": "        moe_config: FusedMoEConfig,"
+        },
+        {
+          "line": 565,
+          "text": "        quant_config: FusedMoEQuantConfig,"
+        },
+        {
+          "line": 566,
+          "text": "        max_num_tokens: int | None = None,"
+        },
+        {
+          "line": 567,
+          "text": "        num_dispatchers: int | None = None,"
+        },
+        {
+          "line": 568,
+          "text": "    ):"
+        },
+        {
+          "line": 569,
+          "text": "        # TODO (varun) : Enable activation quantization"
+        },
+        {
+          "line": 570,
+          "text": "        assert ("
+        },
+        {
+          "line": 571,
+          "text": "            quant_config.use_mxfp4_w4a16"
+        },
+        {
+          "line": 572,
+          "text": "            or quant_config.use_nvfp4_w4a16"
+        },
+        {
+          "line": 573,
+          "text": "            or quant_config.use_int4_w4a16"
+        },
+        {
+          "line": 574,
+          "text": "            or quant_config.use_int8_w8a16"
+        },
+        {
+          "line": 575,
+          "text": "            or quant_config.use_fp8_w8a16"
+        },
+        {
+          "line": 576,
+          "text": "        ), \"Supports only {mxfp,nvfp,int}4_w4a16, int8_w8a16 or fp8_w8a16\""
+        },
+        {
+          "line": 577,
+          "text": "        self.input_dtype = get_marlin_input_dtype()"
+        },
+        {
+          "line": 578,
+          "text": ""
+        },
+        {
+          "line": 579,
+          "text": "        super().__init__("
+        },
+        {
+          "line": 580,
+          "text": "            moe_config=moe_config,"
+        },
+        {
+          "line": 581,
+          "text": "            quant_config=quant_config,"
+        },
+        {
+          "line": 582,
+          "text": "            max_num_tokens=max_num_tokens,"
+        },
+        {
+          "line": 583,
+          "text": "            num_dispatchers=num_dispatchers,"
+        },
+        {
+          "line": 584,
+          "text": "        )"
+        },
+        {
+          "line": 585,
+          "text": ""
+        },
+        {
+          "line": 586,
+          "text": "    @staticmethod"
+        },
+        {
+          "line": 587,
+          "text": "    def _supports_current_device() -> bool:"
+        },
+        {
+          "line": 588,
+          "text": "        p = current_platform"
+        },
+        {
+          "line": 589,
+          "text": "        return p.is_cuda() and p.has_device_capability((7, 5))"
+        },
+        {
+          "line": 590,
+          "text": ""
+        },
+        {
+          "line": 591,
+          "text": "    @staticmethod"
+        },
+        {
+          "line": 592,
+          "text": "    def _supports_no_act_and_mul() -> bool:"
+        },
+        {
+          "line": 593,
+          "text": "        return True"
+        },
+        {
+          "line": 594,
+          "text": ""
+        },
+        {
+          "line": 595,
+          "text": "    @staticmethod"
+        },
+        {
+          "line": 596,
+          "text": "    def _supports_quant_scheme("
+        },
+        {
+          "line": 597,
+          "text": "        weight_key: QuantKey | None,"
+        },
+        {
+          "line": 598,
+          "text": "        activation_key: QuantKey | None,"
+        },
+        {
+          "line": 599,
+          "text": "    ) -> bool:"
+        },
+        {
+          "line": 600,
+          "text": "        # TODO(rob): add int4, int8 as integrations"
+        },
+        {
+          "line": 601,
+          "text": "        # are migrated to use the oracle one-by-one."
+        },
+        {
+          "line": 602,
+          "text": "        SUPPORTED_W = ["
+        },
+        {
+          "line": 603,
+          "text": "            kFp8Static128BlockSym,"
+        },
+        {
+          "line": 604,
+          "text": "            kFp8StaticChannelSym,"
+        },
+        {
+          "line": 605,
+          "text": "            kFp8StaticTensorSym,"
+        },
+        {
+          "line": 606,
+          "text": "            kMxfp4Static,"
+        },
+        {
+          "line": 607,
+          "text": "            kMxfp8Static,"
+        },
+        {
+          "line": 608,
+          "text": "            kNvfp4Static,"
+        },
+        {
+          "line": 609,
+          "text": "            kInt4Static,"
+        },
+        {
+          "line": 610,
+          "text": "            kInt8Static,"
+        },
+        {
+          "line": 611,
+          "text": "            kInt4Static32,"
+        },
+        {
+          "line": 612,
+          "text": "            kInt4StaticAsym,"
+        },
+        {
+          "line": 613,
+          "text": "            kInt4Static32Asym,"
+        },
+        {
+          "line": 614,
+          "text": "        ]"
+        },
+        {
+          "line": 615,
+          "text": "        return weight_key in SUPPORTED_W"
+        },
+        {
+          "line": 616,
+          "text": ""
+        },
+        {
+          "line": 617,
+          "text": "    @staticmethod"
+        },
+        {
+          "line": 618,
+          "text": "    def _supports_activation(activation: MoEActivation) -> bool:"
+        },
+        {
+          "line": 619,
+          "text": "        # Marlin uses apply_moe_activation() callback for activation,"
+        },
+        {
+          "line": 620,
+          "text": "        # so any activation supported there can be used here."
+        },
+        {
+          "line": 621,
+          "text": "        return apply_moe_activation_supported(activation)"
+        },
+        {
+          "line": 622,
+          "text": ""
+        },
+        {
+          "line": 623,
+          "text": "    @staticmethod"
+        },
+        {
+          "line": 624,
+          "text": "    def _supports_parallel_config(moe_parallel_config: FusedMoEParallelConfig) -> bool:"
+        },
+        {
+          "line": 625,
+          "text": "        # One-sided FI-NVL all2all pairs with MarlinExperts fine (the"
+        },
+        {
+          "line": 626,
+          "text": "        # compressed-tensors MXFP4 path runs this exact combo); only the"
+        },
+        {
+          "line": 627,
+          "text": "        # two-sided kernels are unsupported here."
+        },
+        {
+          "line": 628,
+          "text": "        return not moe_parallel_config.use_fi_nvl_two_sided_kernels"
+        },
+        {
+          "line": 629,
+          "text": ""
+        },
+        {
+          "line": 630,
+          "text": "    @property"
+        },
+        {
+          "line": 631,
+          "text": "    def quant_type_id(self) -> int:"
+        },
+        {
+          "line": 632,
+          "text": "        if self.quant_config.use_int4_w4a16:"
+        },
+        {
+          "line": 633,
+          "text": "            if self.w1_zp is not None or self.w2_zp is not None:"
+        },
+        {
+          "line": 634,
+          "text": "                return scalar_types.uint4.id"
+        },
+        {
+          "line": 635,
+          "text": "            return scalar_types.uint4b8.id"
+        },
+        {
+          "line": 636,
+          "text": "        elif self.quant_config.use_int8_w8a16:"
+        },
+        {
+          "line": 637,
+          "text": "            return scalar_types.uint8b128.id"
+        },
+        {
+          "line": 638,
+          "text": "        elif self.quant_config.use_mxfp4_w4a16 or self.quant_config.use_nvfp4_w4a16:"
+        },
+        {
+          "line": 639,
+          "text": "            return scalar_types.float4_e2m1f.id"
+        },
+        {
+          "line": 640,
+          "text": "        elif ("
+        },
+        {
+          "line": 641,
+          "text": "            self.quant_config.use_fp8_w8a16"
+        },
+        {
+          "line": 642,
+          "text": "            and current_platform.fp8_dtype() == torch.float8_e4m3fn"
+        },
+        {
+          "line": 643,
+          "text": "        ):"
+        },
+        {
+          "line": 644,
+          "text": "            return scalar_types.float8_e4m3fn.id"
+        },
+        {
+          "line": 645,
+          "text": "        else:"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/layers/quantization/utils/marlin_utils_fp4.py",
+      "sha256": "7c863610b4b9c2f22e84d8690628c763bd0c81aa800b9b51e4c610a37427ee14",
+      "bytes": 27394,
+      "lines": 768,
+      "excerpts": [
+        {
+          "line": 1,
+          "text": "# SPDX-License-Identifier: Apache-2.0"
+        },
+        {
+          "line": 2,
+          "text": "# SPDX-FileCopyrightText: Copyright contributors to the vLLM project"
+        },
+        {
+          "line": 3,
+          "text": ""
+        },
+        {
+          "line": 4,
+          "text": ""
+        },
+        {
+          "line": 5,
+          "text": "import torch"
+        },
+        {
+          "line": 6,
+          "text": ""
+        },
+        {
+          "line": 7,
+          "text": "import vllm._custom_ops as ops"
+        },
+        {
+          "line": 8,
+          "text": "from vllm.logger import init_logger"
+        },
+        {
+          "line": 9,
+          "text": "from vllm.model_executor.layers.fused_moe.routed_experts import RoutedExperts"
+        },
+        {
+          "line": 10,
+          "text": "from vllm.model_executor.layers.quantization.utils.marlin_utils import ("
+        },
+        {
+          "line": 11,
+          "text": "    USE_FP32_REDUCE_DEFAULT,"
+        },
+        {
+          "line": 12,
+          "text": "    get_marlin_input_dtype,"
+        },
+        {
+          "line": 13,
+          "text": "    marlin_pad_dim,"
+        },
+        {
+          "line": 14,
+          "text": "    marlin_pad_qweight,"
+        },
+        {
+          "line": 15,
+          "text": "    marlin_pad_scales,"
+        },
+        {
+          "line": 16,
+          "text": "    marlin_padded_nk,"
+        },
+        {
+          "line": 17,
+          "text": "    marlin_permute_bias,"
+        },
+        {
+          "line": 18,
+          "text": "    marlin_permute_scales,"
+        },
+        {
+          "line": 19,
+          "text": "    marlin_quant_input,"
+        },
+        {
+          "line": 20,
+          "text": "    marlin_repacked_nk,"
+        },
+        {
+          "line": 21,
+          "text": "    marlin_unpad_output,"
+        },
+        {
+          "line": 22,
+          "text": "    should_use_atomic_add_reduce,"
+        },
+        {
+          "line": 23,
+          "text": ")"
+        },
+        {
+          "line": 24,
+          "text": "from vllm.platforms import current_platform"
+        },
+        {
+          "line": 25,
+          "text": "from vllm.scalar_type import scalar_types"
+        },
+        {
+          "line": 26,
+          "text": "from vllm.utils.math_utils import round_up"
+        },
+        {
+          "line": 27,
+          "text": ""
+        },
+        {
+          "line": 28,
+          "text": "FP4_MARLIN_SUPPORTED_GROUP_SIZES = [16]"
+        },
+        {
+          "line": 29,
+          "text": ""
+        },
+        {
+          "line": 30,
+          "text": "logger = init_logger(__name__)"
+        },
+        {
+          "line": 31,
+          "text": ""
+        },
+        {
+          "line": 32,
+          "text": ""
+        },
+        {
+          "line": 33,
+          "text": "def is_fp4_marlin_supported():"
+        },
+        {
+          "line": 34,
+          "text": "    return current_platform.is_cuda() and current_platform.has_device_capability(75)"
+        },
+        {
+          "line": 35,
+          "text": ""
+        },
+        {
+          "line": 36,
+          "text": ""
+        },
+        {
+          "line": 37,
+          "text": "def _nvfp4_compute_scale_factor("
+        },
+        {
+          "line": 38,
+          "text": "    marlin_scales: torch.Tensor,"
+        },
+        {
+          "line": 39,
+          "text": "    a_dtype: torch.dtype | None = None,"
+        },
+        {
+          "line": 40,
+          "text": ") -> float:"
+        },
+        {
+          "line": 41,
+          "text": "    \"\"\"Compute the power-of-2 scale_factor needed so that all non-zero"
+        },
+        {
+          "line": 42,
+          "text": "    values in marlin_scales * 2^7 are >= 2 after rescaling."
+        },
+        {
+          "line": 43,
+          "text": "    Returns a Python float (power of 2, >= 1.0).\"\"\""
+        },
+        {
+          "line": 44,
+          "text": "    # Since half has a smaller dynamic range compared to bfloat16,"
+        },
+        {
+          "line": 45,
+          "text": "    # no rescaling is applied here if active dtype is half."
+        },
+        {
+          "line": 46,
+          "text": "    if a_dtype is not None and a_dtype == torch.half:"
+        },
+        {
+          "line": 47,
+          "text": "        return 1.0"
+        },
+        {
+          "line": 48,
+          "text": ""
+        },
+        {
+          "line": 49,
+          "text": "    ws_float = marlin_scales.float() * (2**7)"
+        },
+        {
+          "line": 50,
+          "text": "    nonzero_mask = ws_float > 0"
+        },
+        {
+          "line": 51,
+          "text": "    if nonzero_mask.any():"
+        },
+        {
+          "line": 52,
+          "text": "        max_val = ws_float[nonzero_mask].max()"
+        },
+        {
+          "line": 53,
+          "text": "        if max_val < 448 * (2**7):"
+        },
+        {
+          "line": 54,
+          "text": "            sf = (448 * (2**7) / max_val).log2().floor().exp2()"
+        },
+        {
+          "line": 55,
+          "text": "            return sf.item()"
+        },
+        {
+          "line": 56,
+          "text": "    return 1.0"
+        },
+        {
+          "line": 57,
+          "text": ""
+        },
+        {
+          "line": 58,
+          "text": ""
+        },
+        {
+          "line": 59,
+          "text": "def nvfp4_marlin_process_scales("
+        },
+        {
+          "line": 60,
+          "text": "    marlin_scales: torch.Tensor,"
+        },
+        {
+          "line": 61,
+          "text": "    scale_factor: float | None = None,"
+        },
+        {
+          "line": 62,
+          "text": "    a_dtype: torch.dtype | None = None,"
+        },
+        {
+          "line": 63,
+          "text": ") -> tuple[torch.Tensor, float]:"
+        },
+        {
+          "line": 64,
+          "text": "    \"\"\"Process NVFP4 weight scales into the special S0E5M3 format for Marlin."
+        },
+        {
+          "line": 65,
+          "text": ""
+        },
+        {
+          "line": 66,
+          "text": "    Args:"
+        },
+        {
+          "line": 67,
+          "text": "        marlin_scales: Weight scales tensor in half precision, already"
+        },
+        {
+          "line": 68,
+          "text": "            permuted for the Marlin kernel layout."
+        },
+        {
+          "line": 69,
+          "text": "        scale_factor: Optional power-of-2 rescaling factor. If None, the"
+        },
+        {
+          "line": 70,
+          "text": "            factor is computed automatically so that every non-zero scale"
+        },
+        {
+          "line": 71,
+          "text": "            satisfies ``scale * 2^7 >= 2`` (i.e., the MSB of the S0E5M3"
+        },
+        {
+          "line": 72,
+          "text": "            representation is always 1). When provided (e.g., for MoE"
+        },
+        {
+          "line": 73,
+          "text": "            layers where all experts must share the same factor), the"
+        },
+        {
+          "line": 74,
+          "text": "            given value is used directly. The caller is responsible for"
+        },
+        {
+          "line": 75,
+          "text": "            dividing ``global_scale`` by the returned ``scale_factor`` to"
+        },
+        {
+          "line": 76,
+          "text": "            preserve numerical correctness."
+        },
+        {
+          "line": 77,
+          "text": "        a_dtype: dtype of the activations the scales will be used with. None"
+        },
+        {
+          "line": 78,
+          "text": "            keeps the dtype of ``marlin_scales``."
+        },
+        {
+          "line": 79,
+          "text": ""
+        },
+        {
+          "line": 80,
+          "text": "    Returns:"
+        },
+        {
+          "line": 81,
+          "text": "        A tuple of (processed_scales, scale_factor)."
+        },
+        {
+          "line": 82,
+          "text": ""
+        },
+        {
+          "line": 83,
+          "text": "    \"\"\""
+        },
+        {
+          "line": 84,
+          "text": "    if not (marlin_scales >= 0).all():"
+        },
+        {
+          "line": 85,
+          "text": "        logger.warning_once("
+        },
+        {
+          "line": 86,
+          "text": "            \"NVFP4 Marlin assumes the scales to be >=0, but has encountered \""
+        },
+        {
+          "line": 87,
+          "text": "            \"negative scales. Accuracy will likely be degraded. This is \""
+        },
+        {
+          "line": 88,
+          "text": "            \"because it changes the scales from FP8-S1E4M3 to a special \""
+        },
+        {
+          "line": 89,
+          "text": "            \"FP8-S0E5M3 format to speedup the dequantization.\""
+        },
+        {
+          "line": 90,
+          "text": "        )"
+        },
+        {
+          "line": 91,
+          "text": ""
+        },
+        {
+          "line": 92,
+          "text": "    # convert to half first, we would convert to fp8 later"
+        },
+        {
+          "line": 93,
+          "text": "    marlin_scales = marlin_scales.to(torch.half)"
+        },
+        {
+          "line": 94,
+          "text": ""
+        },
+        {
+          "line": 95,
+          "text": "    # fit the layout of fp8 dequantization"
+        },
+        {
+          "line": 96,
+          "text": "    marlin_scales = marlin_scales.view(-1, 4)[:, [0, 2, 1, 3]].view("
+        },
+        {
+          "line": 97,
+          "text": "        marlin_scales.size(0), -1"
+        },
+        {
+          "line": 98,
+          "text": "    )"
+        },
+        {
+          "line": 99,
+          "text": ""
+        },
+        {
+          "line": 100,
+          "text": "    # We assume that weight_scale (FP8-S1E4M3) is always greater"
+        }
+      ]
+    },
+    {
+      "path": "vllm/model_executor/models/gpt_oss.py",
+      "sha256": "4b1aa28a1768acdcdeaec512cf7173cc7eefce2f8fd09848c9d5be1f2de10992",
+      "bytes": 58440,
+      "lines": 1487,
+      "excerpts": [
+        {
+          "line": 330,
+          "text": "                shard_id,"
+        },
+        {
+          "line": 331,
+          "text": "                expert_id,"
+        },
+        {
+          "line": 332,
+          "text": "                False,"
+        },
+        {
+          "line": 333,
+          "text": "            )"
+        },
+        {
+          "line": 334,
+          "text": "            return None"
+        },
+        {
+          "line": 335,
+          "text": ""
+        },
+        {
+          "line": 336,
+          "text": "        expert_id = self._map_global_expert_id_to_local_expert_id(expert_id)"
+        },
+        {
+          "line": 337,
+          "text": "        if expert_id == -1:"
+        },
+        {
+          "line": 338,
+          "text": "            return False if return_success else None"
+        },
+        {
+          "line": 339,
+          "text": ""
+        },
+        {
+          "line": 340,
+          "text": "        expert_data = param.data[expert_id]"
+        },
+        {
+          "line": 341,
+          "text": "        weight_dtype = getattr(self.quant_method, \"weight_dtype\", \"\")"
+        },
+        {
+          "line": 342,
+          "text": "        quant_method_name = self.quant_method.__class__.__name__"
+        },
+        {
+          "line": 343,
+          "text": ""
+        },
+        {
+          "line": 344,
+          "text": "        if weight_name.endswith(\"_bias\"):"
+        },
+        {
+          "line": 345,
+          "text": "            self._load_expert_bias(expert_data, loaded_weight, shard_id)"
+        },
+        {
+          "line": 346,
+          "text": "        elif weight_dtype in ("
+        },
+        {
+          "line": 347,
+          "text": "            \"gpt_oss_mxfp4\","
+        },
+        {
+          "line": 348,
+          "text": "            \"mxfp4\","
+        },
+        {
+          "line": 349,
+          "text": "        ) or quant_method_name in ("
+        },
+        {
+          "line": 350,
+          "text": "            \"CompressedTensorsW4A4Nvfp4MoEMethod\","
+        },
+        {
+          "line": 351,
+          "text": "            \"Nvfp4OnlineMoEMethod\","
+        },
+        {
+          "line": 352,
+          "text": "            \"CompressedTensorsWNA16MoEMethod\","
+        },
+        {
+          "line": 353,
+          "text": "        ):"
+        },
+        {
+          "line": 354,
+          "text": "            self._load_packed_expert(expert_data, loaded_weight, weight_name, shard_id)"
+        },
+        {
+          "line": 355,
+          "text": "        else:"
+        },
+        {
+          "line": 356,
+          "text": "            self._load_unquantized_expert(expert_data, loaded_weight, shard_id)"
+        },
+        {
+          "line": 357,
+          "text": "        return True if return_success else None"
+        },
+        {
+          "line": 358,
+          "text": ""
+        },
+        {
+          "line": 359,
+          "text": ""
+        },
+        {
+          "line": 360,
+          "text": "class MLPBlock(torch.nn.Module):"
+        },
+        {
+          "line": 361,
+          "text": "    def __init__("
+        },
+        {
+          "line": 362,
+          "text": "        self,"
+        },
+        {
+          "line": 363,
+          "text": "        vllm_config: VllmConfig,"
+        },
+        {
+          "line": 364,
+          "text": "        layer_idx: int,"
+        },
+        {
+          "line": 365,
+          "text": "        prefix: str = \"\","
+        },
+        {
+          "line": 366,
+          "text": "    ):"
+        },
+        {
+          "line": 367,
+          "text": "        super().__init__()"
+        },
+        {
+          "line": 368,
+          "text": ""
+        },
+        {
+          "line": 369,
+          "text": "        config = vllm_config.model_config.hf_config"
+        },
+        {
+          "line": 370,
+          "text": "        quant_config = vllm_config.quant_config"
+        },
+        {
+          "line": 1340,
+          "text": "    def load_weights(self, weights: Iterable[tuple[str, torch.Tensor]]) -> set[str]:"
+        },
+        {
+          "line": 1341,
+          "text": "        stacked_params_mapping = ["
+        },
+        {
+          "line": 1342,
+          "text": "            # (param_name, shard_name, shard_id)"
+        },
+        {
+          "line": 1343,
+          "text": "            (\".qkv_proj\", \".q_proj\", \"q\"),"
+        },
+        {
+          "line": 1344,
+          "text": "            (\".qkv_proj\", \".k_proj\", \"k\"),"
+        },
+        {
+          "line": 1345,
+          "text": "            (\".qkv_proj\", \".v_proj\", \"v\"),"
+        },
+        {
+          "line": 1346,
+          "text": "        ]"
+        },
+        {
+          "line": 1347,
+          "text": ""
+        },
+        {
+          "line": 1348,
+          "text": "        tp_rank = get_tensor_model_parallel_rank()"
+        },
+        {
+          "line": 1349,
+          "text": "        tp_size = get_tensor_model_parallel_world_size()"
+        },
+        {
+          "line": 1350,
+          "text": ""
+        },
+        {
+          "line": 1351,
+          "text": "        # Attention heads per rank"
+        },
+        {
+          "line": 1352,
+          "text": "        heads_per_rank = self.config.num_attention_heads // tp_size"
+        },
+        {
+          "line": 1353,
+          "text": "        head_start = tp_rank * heads_per_rank"
+        },
+        {
+          "line": 1354,
+          "text": ""
+        },
+        {
+          "line": 1355,
+          "text": "        ep_size = get_ep_group().world_size"
+        },
+        {
+          "line": 1356,
+          "text": "        ep_rank = get_ep_group().rank_in_group"
+        },
+        {
+          "line": 1357,
+          "text": "        num_experts = self.config.num_local_experts"
+        },
+        {
+          "line": 1358,
+          "text": "        experts_per_rank = num_experts // ep_size"
+        },
+        {
+          "line": 1359,
+          "text": "        ep_rank_start = ep_rank * experts_per_rank"
+        },
+        {
+          "line": 1360,
+          "text": "        ep_rank_end = (ep_rank + 1) * experts_per_rank"
+        },
+        {
+          "line": 1361,
+          "text": ""
+        },
+        {
+          "line": 1362,
+          "text": "        quant_method = ("
+        },
+        {
+          "line": 1363,
+          "text": "            self.config.quantization_config[\"quant_method\"]"
+        },
+        {
+          "line": 1364,
+          "text": "            if hasattr(self.config, \"quantization_config\")"
+        },
+        {
+          "line": 1365,
+          "text": "            else None"
+        },
+        {
+          "line": 1366,
+          "text": "        )"
+        },
+        {
+          "line": 1367,
+          "text": "        # Normalize the checkpoint's quant_method to the internal name."
+        },
+        {
+          "line": 1368,
+          "text": "        # Note: there are three places where \"mxfp4\" -> \"gpt_oss_mxfp4\""
+        },
+        {
+          "line": 1369,
+          "text": "        # normalization occurs, each serving a different data path:"
+        },
+        {
+          "line": 1370,
+          "text": "        #   1. GptOssMxfp4Config.override_quantization_method() \u2014 sets"
+        },
+        {
+          "line": 1371,
+          "text": "        #      ModelConfig.quantization (used to select the QuantizationConfig"
+        },
+        {
+          "line": 1372,
+          "text": "        #      class at model init time), reading from model_arch_config which"
+        },
+        {
+          "line": 1373,
+          "text": "        #      is a snapshot taken before verify_and_update_model_config runs."
+        },
+        {
+          "line": 1374,
+          "text": "        #   2. GptOssForCausalLMConfig.verify_and_update_model_config() \u2014"
+        },
+        {
+          "line": 1375,
+          "text": "        #      patches hf_config.quantization_config in-place (a separate copy"
+        },
+        {
+          "line": 1376,
+          "text": "        #      of the dict from model_arch_config) for later hf_config lookups."
+        },
+        {
+          "line": 1377,
+          "text": "        #   3. Here \u2014 reads directly from self.config (the raw HF config) which"
+        },
+        {
+          "line": 1378,
+          "text": "        #      may still carry the original \"mxfp4\" string from the checkpoint."
+        },
+        {
+          "line": 1379,
+          "text": "        if quant_method == \"mxfp4\":"
+        },
+        {
+          "line": 1380,
+          "text": "            quant_method = \"gpt_oss_mxfp4\""
+        },
+        {
+          "line": 1381,
+          "text": ""
+        },
+        {
+          "line": 1382,
+          "text": "        if quant_method == \"gpt_oss_mxfp4\":"
+        },
+        {
+          "line": 1383,
+          "text": "            return self._load_weights_mxfp4("
+        },
+        {
+          "line": 1384,
+          "text": "                ep_rank_end,"
+        },
+        {
+          "line": 1385,
+          "text": "                ep_rank_start,"
+        },
+        {
+          "line": 1386,
+          "text": "                heads_per_rank,"
+        },
+        {
+          "line": 1387,
+          "text": "                head_start,"
+        },
+        {
+          "line": 1388,
+          "text": "                weights,"
+        },
+        {
+          "line": 1389,
+          "text": "                stacked_params_mapping,"
+        },
+        {
+          "line": 1390,
+          "text": "            )"
+        },
+        {
+          "line": 1391,
+          "text": "        elif quant_method == \"quark\":"
+        },
+        {
+          "line": 1392,
+          "text": "            return self._load_weights_quark("
+        },
+        {
+          "line": 1393,
+          "text": "                ep_rank_end,"
+        },
+        {
+          "line": 1394,
+          "text": "                ep_rank_start,"
+        },
+        {
+          "line": 1395,
+          "text": "                heads_per_rank,"
+        },
+        {
+          "line": 1396,
+          "text": "                head_start,"
+        },
+        {
+          "line": 1397,
+          "text": "                weights,"
+        },
+        {
+          "line": 1398,
+          "text": "                stacked_params_mapping,"
+        },
+        {
+          "line": 1399,
+          "text": "            )"
+        },
+        {
+          "line": 1400,
+          "text": "        else:"
+        }
+      ]
+    },
+    {
+      "path": "vllm/platforms/cuda.py",
+      "sha256": "27bd20e6fe42dd70b72fe58ce12cb615a2385776f0ac705349646c67ca68bb26",
+      "bytes": 40367,
+      "lines": 1064,
+      "excerpts": [
+        {
+          "line": 82,
+          "text": "@cache"
+        },
+        {
+          "line": 83,
+          "text": "def _get_backend_priorities("
+        },
+        {
+          "line": 84,
+          "text": "    use_mla: bool,"
+        },
+        {
+          "line": 85,
+          "text": "    device_capability: DeviceCapability,"
+        },
+        {
+          "line": 86,
+          "text": "    num_heads: int | None = None,"
+        },
+        {
+          "line": 87,
+          "text": "    kv_cache_dtype: CacheDType | None = None,"
+        },
+        {
+          "line": 88,
+          "text": "    use_non_causal: bool = False,"
+        },
+        {
+          "line": 89,
+          "text": "    head_size: int | None = None,"
+        },
+        {
+          "line": 93,
+          "text": "    from vllm.utils.torch_utils import is_quantized_kv_cache"
+        },
+        {
+          "line": 94,
+          "text": ""
+        },
+        {
+          "line": 95,
+          "text": "    if use_mla:"
+        },
+        {
+          "line": 96,
+          "text": "        if device_capability.major == 10:"
+        },
+        {
+          "line": 97,
+          "text": "            # Sparse MLA backend priorities"
+        },
+        {
+          "line": 98,
+          "text": "            # See https://github.com/vllm-project/vllm/issues/35807 for"
+        },
+        {
+          "line": 99,
+          "text": "            # benchmark results"
+        },
+        {
+          "line": 100,
+          "text": "            if kv_cache_dtype is not None and is_quantized_kv_cache(kv_cache_dtype):"
+        },
+        {
+          "line": 129,
+          "text": "                AttentionBackendEnum.TRITON_MLA,"
+        },
+        {
+          "line": 130,
+          "text": "                *sparse_backends,"
+        },
+        {
+          "line": 131,
+          "text": "            ]"
+        },
+        {
+          "line": 132,
+          "text": "        elif device_capability.major == 12:"
+        },
+        {
+          "line": 133,
+          "text": "            return ["
+        },
+        {
+          "line": 134,
+          "text": "                AttentionBackendEnum.TRITON_MLA,"
+        },
+        {
+          "line": 135,
+          "text": "                AttentionBackendEnum.FLASHINFER_MLA_SPARSE_SM120,"
+        },
+        {
+          "line": 136,
+          "text": "            ]"
+        },
+        {
+          "line": 155,
+          "text": "        # SM100f defaults to FlashInfer for TRTLLM causal attention, but its non-causal"
+        },
+        {
+          "line": 156,
+          "text": "        # cutlass path (used for dflash attention) is known to have problems."
+        },
+        {
+          "line": 157,
+          "text": "        # So prefer FlashAttention when non-causal on SM100f."
+        },
+        {
+          "line": 158,
+          "text": "        if device_capability.major == 10 and not use_non_causal:"
+        },
+        {
+          "line": 159,
+          "text": "            return ["
+        },
+        {
+          "line": 160,
+          "text": "                *([AttentionBackendEnum.TRITON_FLASHINFER] if use_mm_prefix else []),"
+        },
+        {
+          "line": 161,
+          "text": "                AttentionBackendEnum.FLASHINFER,"
+        },
+        {
+          "line": 162,
+          "text": "                AttentionBackendEnum.FLASH_ATTN,"
+        },
+        {
+          "line": 163,
+          "text": "                AttentionBackendEnum.TRITON_ATTN,"
+        },
+        {
+          "line": 164,
+          "text": "                AttentionBackendEnum.FLEX_ATTENTION,"
+        },
+        {
+          "line": 165,
+          "text": "                AttentionBackendEnum.TURBOQUANT,"
+        },
+        {
+          "line": 166,
+          "text": "            ]"
+        },
+        {
+          "line": 167,
+          "text": "        else:"
+        },
+        {
+          "line": 168,
+          "text": "            return ["
+        },
+        {
+          "line": 169,
+          "text": "                *("
+        },
+        {
+          "line": 170,
+          "text": "                    [AttentionBackendEnum.TRITON_FLASH_ATTN]"
+        },
+        {
+          "line": 171,
+          "text": "                    if device_capability.major == 9 and use_mm_prefix"
+        },
+        {
+          "line": 172,
+          "text": "                    else []"
+        },
+        {
+          "line": 173,
+          "text": "                ),"
+        },
+        {
+          "line": 174,
+          "text": "                AttentionBackendEnum.FLASH_ATTN,"
+        },
+        {
+          "line": 175,
+          "text": "                AttentionBackendEnum.FLASHINFER,"
+        },
+        {
+          "line": 176,
+          "text": "                AttentionBackendEnum.TRITON_ATTN,"
+        },
+        {
+          "line": 177,
+          "text": "                AttentionBackendEnum.FLEX_ATTENTION,"
+        },
+        {
+          "line": 178,
+          "text": "                AttentionBackendEnum.TURBOQUANT,"
+        },
+        {
+          "line": 179,
+          "text": "            ]"
+        },
+        {
+          "line": 180,
+          "text": ""
+        },
+        {
+          "line": 253,
+          "text": ""
+        },
+        {
+          "line": 254,
+          "text": "    @property"
+        },
+        {
+          "line": 255,
+          "text": "    def supported_dtypes(self) -> list[torch.dtype]:"
+        },
+        {
+          "line": 256,
+          "text": "        if self.has_device_capability(80):"
+        },
+        {
+          "line": 257,
+          "text": "            # Ampere and Hopper or later NVIDIA GPUs."
+        },
+        {
+          "line": 258,
+          "text": "            return [torch.bfloat16, torch.float16, torch.float32]"
+        },
+        {
+          "line": 259,
+          "text": "        if self.has_device_capability(60):"
+        },
+        {
+          "line": 260,
+          "text": "            # Pascal, Volta and Turing NVIDIA GPUs, BF16 is not supported"
+        },
+        {
+          "line": 261,
+          "text": "            return [torch.float16, torch.float32]"
+        },
+        {
+          "line": 262,
+          "text": "        # Kepler and Maxwell NVIDIA GPUs, only FP32 is supported,"
+        },
+        {
+          "line": 263,
+          "text": "        # though vLLM doesn't support these GPUs."
+        },
+        {
+          "line": 277,
+          "text": "        torch.cuda.manual_seed_all(seed)"
+        },
+        {
+          "line": 278,
+          "text": ""
+        },
+        {
+          "line": 279,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 280,
+          "text": "    def get_device_capability(cls, device_id: int = 0) -> DeviceCapability | None:"
+        },
+        {
+          "line": 281,
+          "text": "        raise NotImplementedError"
+        },
+        {
+          "line": 282,
+          "text": ""
+        },
+        {
+          "line": 283,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 284,
+          "text": "    def get_cuda_runtime_major(cls) -> int:"
+        },
+        {
+          "line": 374,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 375,
+          "text": "    def get_valid_backends("
+        },
+        {
+          "line": 376,
+          "text": "        cls,"
+        },
+        {
+          "line": 377,
+          "text": "        device_capability: DeviceCapability,"
+        },
+        {
+          "line": 378,
+          "text": "        attn_selector_config: AttentionSelectorConfig,"
+        },
+        {
+          "line": 379,
+          "text": "        num_heads: int | None = None,"
+        },
+        {
+          "line": 380,
+          "text": "    ) -> tuple["
+        },
+        {
+          "line": 381,
+          "text": "        list[_BackendCandidate],"
+        },
+        {
+          "line": 386,
+          "text": ""
+        },
+        {
+          "line": 387,
+          "text": "        backend_priorities = _get_backend_priorities("
+        },
+        {
+          "line": 388,
+          "text": "            use_mla=attn_selector_config.use_mla,"
+        },
+        {
+          "line": 389,
+          "text": "            device_capability=device_capability,"
+        },
+        {
+          "line": 390,
+          "text": "            num_heads=num_heads,"
+        },
+        {
+          "line": 391,
+          "text": "            kv_cache_dtype=attn_selector_config.kv_cache_dtype,"
+        },
+        {
+          "line": 392,
+          "text": "            use_non_causal=attn_selector_config.use_non_causal,"
+        },
+        {
+          "line": 393,
+          "text": "            head_size=attn_selector_config.head_size,"
+        },
+        {
+          "line": 397,
+          "text": "            try:"
+        },
+        {
+          "line": 398,
+          "text": "                backend_class = _get_attn_backend_class(backend)"
+        },
+        {
+          "line": 399,
+          "text": "                invalid_reasons_i = backend_class.validate_configuration("
+        },
+        {
+          "line": 400,
+          "text": "                    device_capability=device_capability,"
+        },
+        {
+          "line": 401,
+          "text": "                    **attn_selector_config._asdict(),"
+        },
+        {
+          "line": 402,
+          "text": "                )"
+        },
+        {
+          "line": 403,
+          "text": "            except (ImportError, OSError) as e:"
+        },
+        {
+          "line": 404,
+          "text": "                logger.debug("
+        },
+        {
+          "line": 427,
+          "text": "        # index_kpool) is virtually split into pool pages, so block_size"
+        },
+        {
+          "line": 428,
+          "text": "        # must be a multiple of index_kpool times a legal pool page."
+        },
+        {
+          "line": 429,
+          "text": "        page = min(PAGED_MQA_PAGE_SIZES)"
+        },
+        {
+          "line": 430,
+          "text": "        if cls.is_device_capability_family(120):"
+        },
+        {
+          "line": 431,
+          "text": "            # On sm120 the DeepGEMM paged-MQA kernel only accepts block_kv"
+        },
+        {
+          "line": 432,
+          "text": "            # 64 for the fp8 indexer cache, so align to the largest pool"
+        },
+        {
+          "line": 433,
+          "text": "            # page here to make the page split land on 64 not the min 32."
+        },
+        {
+          "line": 434,
+          "text": "            page = max(PAGED_MQA_PAGE_SIZES)"
+        },
+        {
+          "line": 441,
+          "text": "        attn_selector_config: AttentionSelectorConfig,"
+        },
+        {
+          "line": 442,
+          "text": "        num_heads: int | None = None,"
+        },
+        {
+          "line": 443,
+          "text": "    ) -> str:"
+        },
+        {
+          "line": 444,
+          "text": "        device_capability = cls.get_device_capability()"
+        },
+        {
+          "line": 445,
+          "text": "        assert device_capability is not None"
+        },
+        {
+          "line": 446,
+          "text": ""
+        },
+        {
+          "line": 447,
+          "text": "        # First try checking just the selected backend, if there is one."
+        },
+        {
+          "line": 448,
+          "text": "        if selected_backend is not None:"
+        },
+        {
+          "line": 449,
+          "text": "            try:"
+        },
+        {
+          "line": 450,
+          "text": "                backend_class = _get_attn_backend_class(selected_backend)"
+        },
+        {
+          "line": 451,
+          "text": "                invalid_reasons = backend_class.validate_configuration("
+        },
+        {
+          "line": 452,
+          "text": "                    device_capability=device_capability,"
+        },
+        {
+          "line": 453,
+          "text": "                    **attn_selector_config._asdict(),"
+        },
+        {
+          "line": 454,
+          "text": "                )"
+        },
+        {
+          "line": 455,
+          "text": "            except (ImportError, OSError) as e:"
+        },
+        {
+          "line": 456,
+          "text": "                raise ValueError("
+        },
+        {
+          "line": 469,
+          "text": "        # No selected backend or the selected backend is invalid,"
+        },
+        {
+          "line": 470,
+          "text": "        # so we try finding a valid backend."
+        },
+        {
+          "line": 471,
+          "text": "        valid_backends_priorities, all_invalid_reasons = cls.get_valid_backends("
+        },
+        {
+          "line": 472,
+          "text": "            device_capability=device_capability,"
+        },
+        {
+          "line": 473,
+          "text": "            attn_selector_config=attn_selector_config,"
+        },
+        {
+          "line": 474,
+          "text": "            num_heads=num_heads,"
+        },
+        {
+          "line": 475,
+          "text": "        )"
+        },
+        {
+          "line": 476,
+          "text": "        reasons_str = ("
+        },
+        {
+          "line": 537,
+          "text": ""
+        },
+        {
+          "line": 538,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 539,
+          "text": "    def get_supported_vit_attn_backends(cls) -> list[AttentionBackendEnum]:"
+        },
+        {
+          "line": 540,
+          "text": "        if cls.has_device_capability(80):"
+        },
+        {
+          "line": 541,
+          "text": "            return ["
+        },
+        {
+          "line": 542,
+          "text": "                AttentionBackendEnum.FLASH_ATTN,"
+        },
+        {
+          "line": 543,
+          "text": "                AttentionBackendEnum.TRITON_ATTN,"
+        },
+        {
+          "line": 544,
+          "text": "                AttentionBackendEnum.TORCH_SDPA,"
+        },
+        {
+          "line": 545,
+          "text": "                AttentionBackendEnum.FLASHINFER,"
+        },
+        {
+          "line": 546,
+          "text": "            ]"
+        },
+        {
+          "line": 547,
+          "text": "        else:"
+        },
+        {
+          "line": 548,
+          "text": "            return ["
+        },
+        {
+          "line": 549,
+          "text": "                AttentionBackendEnum.FLASH_ATTN,"
+        },
+        {
+          "line": 550,
+          "text": "                AttentionBackendEnum.TORCH_SDPA,"
+        },
+        {
+          "line": 551,
+          "text": "                AttentionBackendEnum.TRITON_ATTN,"
+        },
+        {
+          "line": 552,
+          "text": "                AttentionBackendEnum.FLASHINFER,"
+        },
+        {
+          "line": 553,
+          "text": "            ]"
+        },
+        {
+          "line": 554,
+          "text": ""
+        },
+        {
+          "line": 555,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 567,
+          "text": "            logger.info_once(f\"Using backend {backend} for vit attention\")"
+        },
+        {
+          "line": 568,
+          "text": "            return backend"
+        },
+        {
+          "line": 569,
+          "text": ""
+        },
+        {
+          "line": 570,
+          "text": "        cc = cls.get_device_capability()"
+        },
+        {
+          "line": 571,
+          "text": "        for vit_attn_backend in cls.get_supported_vit_attn_backends():"
+        },
+        {
+          "line": 572,
+          "text": "            if vit_attn_backend == AttentionBackendEnum.TORCH_SDPA:"
+        },
+        {
+          "line": 573,
+          "text": "                return vit_attn_backend"
+        },
+        {
+          "line": 574,
+          "text": "            try:"
+        },
+        {
+          "line": 603,
+          "text": ""
+        },
+        {
+          "line": 604,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 605,
+          "text": "    def supports_fp8(cls) -> bool:"
+        },
+        {
+          "line": 606,
+          "text": "        return cls.has_device_capability(89)"
+        },
+        {
+          "line": 607,
+          "text": ""
+        },
+        {
+          "line": 608,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 609,
+          "text": "    def use_custom_allreduce(cls) -> bool:"
+        },
+        {
+          "line": 610,
+          "text": "        return True"
+        },
+        {
+          "line": 655,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 656,
+          "text": "    def check_if_supports_dtype(cls, dtype: torch.dtype):"
+        },
+        {
+          "line": 657,
+          "text": "        if dtype == torch.bfloat16:  # noqa: SIM102"
+        },
+        {
+          "line": 658,
+          "text": "            if not cls.has_device_capability(80):"
+        },
+        {
+          "line": 659,
+          "text": "                capability = cls.get_device_capability()"
+        },
+        {
+          "line": 660,
+          "text": "                gpu_name = cls.get_device_name()"
+        },
+        {
+          "line": 661,
+          "text": ""
+        },
+        {
+          "line": 662,
+          "text": "                if capability is None:"
+        },
+        {
+          "line": 663,
+          "text": "                    compute_str = \"does not have a compute capability\""
+        },
+        {
+          "line": 709,
+          "text": "    def support_deep_gemm(cls) -> bool:"
+        },
+        {
+          "line": 710,
+          "text": "        \"\"\"Currently, only Hopper and Blackwell GPUs are supported.\"\"\""
+        },
+        {
+          "line": 711,
+          "text": "        return ("
+        },
+        {
+          "line": 712,
+          "text": "            cls.is_device_capability(90)"
+        },
+        {
+          "line": 713,
+          "text": "            or cls.is_device_capability_family(100)"
+        },
+        {
+          "line": 714,
+          "text": "            or cls.is_device_capability_family(120)"
+        },
+        {
+          "line": 715,
+          "text": "        )"
+        },
+        {
+          "line": 716,
+          "text": ""
+        },
+        {
+          "line": 717,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 718,
+          "text": "    def is_integrated_gpu(cls, device_id: int = 0) -> bool:"
+        },
+        {
+          "line": 755,
+          "text": "    def is_arch_support_pdl(cls) -> bool:"
+        },
+        {
+          "line": 756,
+          "text": "        try:"
+        },
+        {
+          "line": 757,
+          "text": "            device = torch.cuda.current_device()"
+        },
+        {
+          "line": 758,
+          "text": "            major, _ = torch.cuda.get_device_capability(device)"
+        },
+        {
+          "line": 759,
+          "text": "        except Exception:"
+        },
+        {
+          "line": 760,
+          "text": "            return False"
+        },
+        {
+          "line": 761,
+          "text": "        return major >= 9"
+        },
+        {
+          "line": 762,
+          "text": ""
+        },
+        {
+          "line": 778,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 779,
+          "text": "    @cache"
+        },
+        {
+          "line": 780,
+          "text": "    @with_nvml_context"
+        },
+        {
+          "line": 781,
+          "text": "    def get_device_capability(cls, device_id: int = 0) -> DeviceCapability | None:"
+        },
+        {
+          "line": 782,
+          "text": "        try:"
+        },
+        {
+          "line": 783,
+          "text": "            physical_device_id = cls.visible_device_id_to_physical_device_id(device_id)"
+        },
+        {
+          "line": 784,
+          "text": "            handle = pynvml.nvmlDeviceGetHandleByIndex(physical_device_id)"
+        },
+        {
+          "line": 785,
+          "text": "            major, minor = pynvml.nvmlDeviceGetCudaComputeCapability(handle)"
+        },
+        {
+          "line": 788,
+          "text": "            return None"
+        },
+        {
+          "line": 789,
+          "text": ""
+        },
+        {
+          "line": 790,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 791,
+          "text": "    def has_device_capability("
+        },
+        {
+          "line": 792,
+          "text": "        cls,"
+        },
+        {
+          "line": 793,
+          "text": "        capability: tuple[int, int] | int,"
+        },
+        {
+          "line": 794,
+          "text": "        device_id: int = 0,"
+        },
+        {
+          "line": 795,
+          "text": "    ) -> bool:"
+        },
+        {
+          "line": 796,
+          "text": "        # No @with_nvml_context here: the base implementation only reads"
+        },
+        {
+          "line": 797,
+          "text": "        # get_device_capability(), which is cached and brings its own NVML"
+        },
+        {
+          "line": 798,
+          "text": "        # context. Wrapping this method as well cost an nvmlInit()/"
+        },
+        {
+          "line": 799,
+          "text": "        # nvmlShutdown() pair on every call, including calls made per attention"
+        },
+        {
+          "line": 800,
+          "text": "        # layer per step from the Triton reshape-and-cache path."
+        },
+        {
+          "line": 801,
+          "text": "        try:"
+        },
+        {
+          "line": 802,
+          "text": "            return super().has_device_capability(capability, device_id)"
+        },
+        {
+          "line": 803,
+          "text": "        except RuntimeError:"
+        },
+        {
+          "line": 804,
+          "text": "            return False"
+        },
+        {
+          "line": 805,
+          "text": ""
+        },
+        {
+          "line": 806,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 1017,
+          "text": "class NonNvmlCudaPlatform(CudaPlatformBase):"
+        },
+        {
+          "line": 1018,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 1019,
+          "text": "    @cache"
+        },
+        {
+          "line": 1020,
+          "text": "    def get_device_capability(cls, device_id: int = 0) -> DeviceCapability:"
+        },
+        {
+          "line": 1021,
+          "text": "        major, minor = torch.cuda.get_device_capability(device_id)"
+        },
+        {
+          "line": 1022,
+          "text": "        return DeviceCapability(major=major, minor=minor)"
+        },
+        {
+          "line": 1023,
+          "text": ""
+        },
+        {
+          "line": 1024,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 1025,
+          "text": "    def get_device_name(cls, device_id: int = 0) -> str:"
+        }
+      ]
+    },
+    {
+      "path": "vllm/v1/attention/backends/triton_attn.py",
+      "sha256": "d4089a21fe947648c253f1ede264a60ea4e7534f2ef8812a5547c1483bc27374",
+      "bytes": 32565,
+      "lines": 849,
+      "excerpts": [
+        {
+          "line": 321,
+          "text": ""
+        },
+        {
+          "line": 322,
+          "text": "    @staticmethod"
+        },
+        {
+          "line": 323,
+          "text": "    def get_name() -> str:"
+        },
+        {
+          "line": 324,
+          "text": "        return \"TRITON_ATTN\""
+        },
+        {
+          "line": 325,
+          "text": ""
+        },
+        {
+          "line": 326,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 327,
+          "text": "    def supports_rswa(cls) -> bool:"
+        },
+        {
+          "line": 328,
+          "text": "        return True"
+        },
+        {
+          "line": 356,
+          "text": "        return True"
+        },
+        {
+          "line": 357,
+          "text": ""
+        },
+        {
+          "line": 358,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 359,
+          "text": "    def supports_sink(cls) -> bool:"
+        },
+        {
+          "line": 360,
+          "text": "        return True"
+        },
+        {
+          "line": 361,
+          "text": ""
+        },
+        {
+          "line": 362,
+          "text": "    @classmethod"
+        },
+        {
+          "line": 363,
+          "text": "    def supports_attn_type(cls, attn_type: str) -> bool:"
+        },
+        {
+          "line": 461,
+          "text": "        logits_soft_cap: float | None = None,"
+        },
+        {
+          "line": 462,
+          "text": "        attn_type: AttentionType = AttentionType.DECODER,"
+        },
+        {
+          "line": 463,
+          "text": "        kv_sharing_target_layer_name: int | None = None,"
+        },
+        {
+          "line": 464,
+          "text": "        sinks: torch.Tensor | None = None,"
+        },
+        {
+          "line": 465,
+          "text": "        use_alibi_sqrt: bool = False,"
+        },
+        {
+          "line": 466,
+          "text": "        chunk_lookback: int = -1,"
+        },
+        {
+          "line": 467,
+          "text": "    ) -> None:"
+        },
+        {
+          "line": 468,
+          "text": "        self.num_heads = num_heads"
+        },
+        {
+          "line": 480,
+          "text": "            self.sliding_window = (sliding_window - 1, 0)"
+        },
+        {
+          "line": 481,
+          "text": "        self.kv_cache_dtype = kv_cache_dtype"
+        },
+        {
+          "line": 482,
+          "text": "        if current_platform.is_cuda():"
+        },
+        {
+          "line": 483,
+          "text": "            cap = current_platform.get_device_capability()"
+        },
+        {
+          "line": 484,
+          "text": "            cap_str = cap.as_version_str() if cap is not None else \"unknown\""
+        },
+        {
+          "line": 485,
+          "text": "            dev = current_platform.get_device_name()"
+        },
+        {
+          "line": 486,
+          "text": "            if self.kv_cache_dtype.startswith(\"fp8\") and not ("
+        },
+        {
+          "line": 487,
+          "text": "                current_platform.has_device_capability(89)"
+        },
+        {
+          "line": 488,
+          "text": "            ):"
+        },
+        {
+          "line": 489,
+          "text": "                suggested = ("
+        },
+        {
+          "line": 490,
+          "text": "                    \"float16\" if (cap is None or cap.to_int() < 80) else \"bfloat16\""
+        },
+        {
+          "line": 491,
+          "text": "                )"
+        },
+        {
+          "line": 495,
+          "text": "                    f\"requires SM89+. Re-run with --kv-cache-dtype {suggested}.\""
+        },
+        {
+          "line": 496,
+          "text": "                )"
+        },
+        {
+          "line": 497,
+          "text": "            if self.kv_cache_dtype == \"bfloat16\" and not ("
+        },
+        {
+          "line": 498,
+          "text": "                current_platform.has_device_capability(80)"
+        },
+        {
+          "line": 499,
+          "text": "            ):"
+        },
+        {
+          "line": 500,
+          "text": "                raise ValueError("
+        },
+        {
+          "line": 501,
+          "text": "                    f\"bfloat16 KV cache is not supported on {dev} (compute capability \""
+        },
+        {
+          "line": 502,
+          "text": "                    f\"{cap_str}); bfloat16 requires SM80+. Re-run with \""
+        },
+        {
+          "line": 513,
+          "text": "        self.attn_type = attn_type"
+        },
+        {
+          "line": 514,
+          "text": "        self.fp8_dtype = current_platform.fp8_dtype()"
+        },
+        {
+          "line": 515,
+          "text": ""
+        },
+        {
+          "line": 516,
+          "text": "        self.sinks = sinks"
+        },
+        {
+          "line": 517,
+          "text": "        if sinks is not None:"
+        },
+        {
+          "line": 518,
+          "text": "            assert sinks.shape[0] == num_heads, ("
+        },
+        {
+          "line": 519,
+          "text": "                \"Sinks must have the same number of heads as the number of \""
+        },
+        {
+          "line": 520,
+          "text": "                f\"heads in the layer. Sinks shape: {sinks.shape}, \""
+        },
+        {
+          "line": 521,
+          "text": "                f\"num_heads: {num_heads}.\""
+        },
+        {
+          "line": 522,
+          "text": "            )"
+        },
+        {
+          "line": 523,
+          "text": "        self.use_alibi_sqrt = use_alibi_sqrt"
+        },
+        {
+          "line": 524,
+          "text": "        self.chunk_lookback = chunk_lookback"
+        },
+        {
+          "line": 684,
+          "text": "            softmax_segm_output=softmax_segm_output,"
+        },
+        {
+          "line": 685,
+          "text": "            softmax_segm_max=softmax_segm_max,"
+        },
+        {
+          "line": 686,
+          "text": "            softmax_segm_expsum=softmax_segm_expsum,"
+        },
+        {
+          "line": 687,
+          "text": "            sinks=self.sinks,"
+        },
+        {
+          "line": 688,
+          "text": "            output_scale=output_scale,"
+        },
+        {
+          "line": 689,
+          "text": "            mm_prefix_range=mm_prefix_range_tensor,"
+        },
+        {
+          "line": 690,
+          "text": "            rswa_prefix_lens=attn_metadata.rswa_prefix_lens,"
+        },
+        {
+          "line": 691,
+          "text": "            rswa_window=attn_metadata.rswa_window,"
+        },
+        {
+          "line": 757,
+          "text": "            softmax_scale=self.scale,"
+        },
+        {
+          "line": 758,
+          "text": "            sliding_window_q=self.sliding_window[0],"
+        },
+        {
+          "line": 759,
+          "text": "            sliding_window_k=self.sliding_window[1],"
+        },
+        {
+          "line": 760,
+          "text": "            sinks=self.sinks,"
+        },
+        {
+          "line": 761,
+          "text": "        )"
+        },
+        {
+          "line": 762,
+          "text": "        return output"
+        },
+        {
+          "line": 763,
+          "text": ""
+        },
+        {
+          "line": 764,
+          "text": "    def do_kv_cache_update("
+        }
+      ]
+    },
+    {
+      "path": "vllm/v1/attention/backends/registry.py",
+      "sha256": "74375cf729d2504159285b8fd920e00ddd7af2778c806dbf3e78a9b74b96b731",
+      "bytes": 12278,
+      "lines": 327,
+      "excerpts": [
+        {
+          "line": 45,
+          "text": "    FLASH_ATTN_DIFFKV = ("
+        },
+        {
+          "line": 46,
+          "text": "        \"vllm.v1.attention.backends.flash_attn_diffkv.FlashAttentionDiffKVBackend\""
+        },
+        {
+          "line": 47,
+          "text": "    )"
+        },
+        {
+          "line": 48,
+          "text": "    TRITON_ATTN = \"vllm.v1.attention.backends.triton_attn.TritonAttentionBackend\""
+        },
+        {
+          "line": 49,
+          "text": "    TRITON_ATTN_DIFFKV = ("
+        },
+        {
+          "line": 50,
+          "text": "        \"vllm.v1.attention.backends.triton_attn_diffkv.TritonAttentionDiffKVBackend\""
+        },
+        {
+          "line": 51,
+          "text": "    )"
+        },
+        {
+          "line": 52,
+          "text": "    TRITON_FLASH_ATTN = ("
+        },
+        {
+          "line": 53,
+          "text": "        \"vllm.v1.attention.backends.triton_flash_attn.TritonFlashAttentionBackend\""
+        }
+      ]
+    }
+  ],
+  "binaries": [
+    {
+      "name": "_C_stable_libtorch.abi3.so",
+      "bytes": 78649088
+    },
+    {
+      "name": "_deepselect_C.abi3.so",
+      "bytes": 4414144
+    },
+    {
+      "name": "_flashkda_C.abi3.so",
+      "bytes": 5421232
+    },
+    {
+      "name": "_flashmla_C.abi3.so",
+      "bytes": 3583528
+    },
+    {
+      "name": "_flashmla_extension_C.abi3.so",
+      "bytes": 214040
+    },
+    {
+      "name": "_moe_C_stable_libtorch.abi3.so",
+      "bytes": 45448928
+    },
+    {
+      "name": "_qutlass_C.abi3.so",
+      "bytes": 1426016
+    },
+    {
+      "name": "_rust_tool_parser.abi3.so",
+      "bytes": 1073992
+    },
+    {
+      "name": "cumem_allocator.abi3.so",
+      "bytes": 27264
+    },
+    {
+      "name": "fs_io_C.abi3.so",
+      "bytes": 27592
+    },
+    {
+      "name": "spinloop.abi3.so",
+      "bytes": 16872
+    }
+  ],
+  "retrieved_at_utc": "2026-10-21T23:05:27.877704+00:00",
+  "inspection_only": true,
+  "harmony_distribution_note": "The openai_harmony import is provided by oss-harmony, not an installed distribution named openai-harmony."
+}

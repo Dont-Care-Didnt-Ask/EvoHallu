@@ -1,0 +1,21 @@
+{
+  "status": "completed_nine_outputs_backed_up_and_sha256_verified",
+  "created_utc": "2026-10-22T00:42:00.700585+00:00",
+  "local_repository": "/root/evohallu/mod1",
+  "remote_repository": "/workspace/mod1",
+  "remote_hash_manifest_sha256": "57cbf8d55e0be2b61e5194b535c3b351192f3fb511e09f410c4837b3d7b3afae",
+  "verified_scientific_files": 94,
+  "verified_scientific_bytes": 3837284,
+  "protected_artifacts_exact": 62,
+  "sealed_six_artifacts_exact": 21,
+  "copied_six_target_files_exact": 18,
+  "completed_target_datasets": 9,
+  "target_rows": 97488,
+  "strict_target_rows": 96961,
+  "report_sha256": "2eb402b54129089a36bded5fbd921f317075d6a010b99ca0b010de3168572f41",
+  "independent_result_audit_sha256": "e12f9c14308dd103d67cd33f58c9a66a792809eb099da0dbd8dcb0c23a9a92a9",
+  "independent_raw_audit_sha256": "6a73372496274173d2651c83601067d05217bd03161e2955bbc327487e896b56",
+  "interpretation_sha256": "81126a28af59bcb627d253910e9171b0080ebb1039cced3af39c74b85a4cee9b",
+  "model_inference_launched_for_audit": false,
+  "old_six_backup_validation_preserved": true
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as the signal. It aggregates log-probabilities across the entire sequence by summing them (equivalent to summing log-probabilities of all tokens).\n- **Approach**: Global perplexity proxy.\n- **Weakness**: This metric is highly sensitive to sequence length. Longer sequences naturally accumulate higher negative log-probabilities even if the model is confident at every step. Without normalization by length, this detector confuses \"long sequence\" with \"hallucination,\" likely limiting its discriminative power (ROC-AUC ~74.3).\n\n### Proposed Detector\n**Signal**: **Average Log-Probability per Token**.\n**Aggregation Principle**: **Mean Aggregation** across the sequence dimension.\n\n**Hypothesis**: Hallucinations often manifest as the model generating tokens with significantly lower confidence (lower log-probability) than the surrounding context or than its own average confidence on truthful sequences. Normalizing by sequence length removes the length bias inherent in the total sum, allowing the detector to focus purely on the *density* of low-confidence tokens. This should improve separation between hallucinated and non-hallucinated sequences of varying lengths.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations using the average log-probability per token.\n        \n        Signal: Mean of sequence_logprobs (which are already negative log-probs).\n        Aggregation: Arithmetic mean across the sequence dimension.\n        \n        Hypothesis: Hallucinated sequences contain a higher density of low-confidence tokens \n        compared to truthful sequences, regardless of total sequence length. \n        Normalizing by length prevents long truthful sequences from being misclassified \n        as hallucinations due to accumulated error.\n        \"\"\"\n        # sequence_logprobs is a list of 1D arrays. \n        # We compute the mean for each sequence individually.\n        # Note: The input arrays have length n_i - 1 (excluding first generated token).\n        # We assume n_i - 1 > 0 for all valid samples.\n        \n        avg_neg_logprobs = np.array([\n            np.mean(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        return avg_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 583,
+      "prompt_tokens": 498,
+      "total_tokens": 1081,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.855509876011638
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as the signal. It aggregates the log-probabilities of all generated tokens (excluding the first) by summing them up (and negating) to produce a single scalar per sequence.\n- **Approach**: Global probability mass estimation.\n- **Hypothesis**: Hallucinated sequences are less probable under the model's distribution than grounded ones, leading to higher total NLL.\n- **Limitation**: This approach is sensitive to sequence length. Longer sequences naturally accumulate higher NLL even if they are factually correct, potentially confounding the detector's ability to distinguish hallucinations from valid long answers unless normalized.\n\n### Proposed Detector\n**Signal**: **Mean Log-Probability (MLP)** of the generated tokens.\n**Aggregation Principle**: Instead of summing probabilities, we calculate the **average** log-probability per token for each sequence. This normalizes the score by sequence length, making the metric robust to variations in output length. The hypothesis is that hallucinated content often introduces tokens that are semantically plausible but statistically unlikely in the specific context, or conversely, that the model \"guesses\" high-frequency but contextually wrong tokens, both of which should manifest as a lower average log-probability compared to coherent, grounded generation.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Calculate mean log-probability for each sequence to normalize by length\n        # sequence_logprobs is a list of arrays, each of shape (n_i - 1,)\n        # We compute the mean of these arrays for each sample\n        means = np.array([np.mean(seq) for seq in stats[\"sequence_logprobs\"]], dtype=np.float32)\n        return means\n\n    \"\"\"\n    Approach: Mean Log-Probability (MLP).\n    Hypothesis: Hallucinated sequences contain tokens that are statistically less probable in their specific context compared to grounded sequences, resulting in a lower average log-probability per token.\n    \"\"\"\n```",
+    "usage": {
+      "completion_tokens": 514,
+      "prompt_tokens": 498,
+      "total_tokens": 1012,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 7.407544064015383
+  }
+]

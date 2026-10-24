@@ -1,0 +1,58 @@
+{"starting": "new", "output": "results/overnight20261021/evaluations/new_f9a618c4b678fccb"}
+Completed dataset popqa__popqa_test_filtered_10shot
+Completed dataset x-fact__test_filtered_10shot
+Completed dataset geometry__common_claim_true_false
+Completed dataset UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot
+Completed dataset geometry__counterfact_true_false
+Completed dataset geometry__companies_true_false
+Completed dataset geometry__cities
+Completed dataset AVeriTeC__dev_filtered_10shot
+Completed dataset WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot
+All nine frozen-estimator evaluations completed
+{
+  "staged_methods": 36,
+  "cohort_id": "25ca2518f3662bd0",
+  "pending_jobs": 3,
+  "requested_jobs_without_selected_method": [],
+  "commands": [
+    {
+      "kind": "new",
+      "output": "results/overnight20261021/evaluations/new_f9a618c4b678fccb",
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/evaluate_parallel.py",
+        "--workers",
+        "3",
+        "--bootstrap",
+        "500",
+        "--bootstrap-unit",
+        "claim",
+        "--resume",
+        "--cache-dir",
+        "/workspace/mod1/data/restored/mod1-eval-cache",
+        "--data-root",
+        "/workspace/mod1/data/claims",
+        "--model-id",
+        "/workspace/mod1-models/llama31",
+        "--output",
+        "/workspace/mod1/results/overnight20261021/evaluations/new_f9a618c4b678fccb",
+        "--frozen-glob",
+        "results/overnight20261021/frozen/next_evo_compositional_4319__primary/frozen_estimator.py",
+        "--method-prefix",
+        "new/",
+        "--extra-frozen-glob",
+        "results/overnight20261021/frozen/next_evo_compositional_4319__trainbest/frozen_estimator.py"
+      ],
+      "cohort_id": "f9a618c4b678fccb",
+      "roles": [
+        "primary",
+        "trainbest"
+      ],
+      "jobs": [
+        "next_evo_compositional_4319"
+      ],
+      "bootstrap_unit": "normalized claim",
+      "bootstrap_samples": 500
+    }
+  ]
+}

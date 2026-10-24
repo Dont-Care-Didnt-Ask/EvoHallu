@@ -1,0 +1,39 @@
+{
+  "dataset": "x-fact__test_filtered_10shot",
+  "rows": 2315,
+  "phase": "reference",
+  "status": "passed_reference",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "62c6fc50d8c8761df2c03945f6d3a856918409c59efc7533a697525bb985f240",
+  "reference_npz_sha256": "7434fd5ae4ef347cb1c4936d63c5d3db431b51ea654e8113db7238593c439232",
+  "labels_groups_masks_exact": true,
+  "original512_label_prevalence": {
+    "chunk_size": 512,
+    "chunks": 5,
+    "minimum": 0.5280898876404494,
+    "maximum": 0.669921875,
+    "last_chunk_rows": 267,
+    "prevalence_by_chunk": [
+      0.646484375,
+      0.65625,
+      0.611328125,
+      0.669921875,
+      0.5280898876404494
+    ],
+    "order": "original CSV/cache row order; no label-based ordering"
+  },
+  "conditions": [
+    {
+      "case": "original_512",
+      "chunk_size": 512,
+      "directed_auc_percent": 54.92268819068534,
+      "paper_auc_percent": 54.92268819068534,
+      "spearman_vs_original512": 1.0,
+      "exact_original512_scores": true,
+      "maximum_absolute_score_difference": 0.0,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 3.3959882270137314
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+model_name: glm47_flash
+hf_model_id: zai-org/GLM-4.7-Flash
+revision: 7dd20894a642a0aa287e9827cb1a1f7f91386b67
+temperature: 0.7
+topk: 20
+topp: 0.8
+max_tokens: 4096
+repetition_penalty: 1.0
+supports_chat_template_kwargs: true

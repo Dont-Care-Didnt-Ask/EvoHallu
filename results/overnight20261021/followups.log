@@ -1,0 +1,84 @@
+{"utc": "2026-10-21T19:58:38.428534+00:00", "event": "gpu_feature_window_reserved", "reserved_gpu_feature_transfer_minutes": 45.0, "confirmation_generation_cutoff_utc": "2026-10-22T01:01:28+00:00", "planned_gpu_feature_window": {"start_utc": "2026-10-22T01:01:28+00:00", "end_utc": "2026-10-22T01:46:28+00:00", "purpose": "Full nine-dataset feature transfer after writer generation"}, "scope": "27B confirmation only; source 9B and sampler retain the global experiment cutoff"}
+{"utc": "2026-10-21T19:58:38.429276+00:00", "event": "waiting_for_controller_terminal", "state": "/workspace/mod1/results/next_experiments/parallel_execution_state.json", "manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c", "observation_deadline_utc": "2026-10-22T01:47:58+00:00", "no_generation_budget_extension": true}
+{"utc": "2026-10-21T20:02:48.322192+00:00", "event": "followups_error", "error": "KeyboardInterrupt('Received signal 15')"}
+{"utc": "2026-10-21T20:02:48.324110+00:00", "event": "generation_marker_withheld", "reason": "source_or_sampler_controller_not_confirmed_stopped", "source_stopped": false, "sampler_terminal": false}
+Traceback (most recent call last):
+  File "/workspace/mod1/scripts/overnight_followups.py", line 567, in <module>
+    try:
+         
+  File "/workspace/mod1/scripts/overnight_followups.py", line 481, in main
+    atomic(OUT / "followups_state.json", state)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 348, in wait_source
+    except BaseException:
+        ^^^^^^^^^^^^^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 140, in wait_controller_terminal
+    time.sleep(min(poll_seconds, max(.1, (observation_deadline - now()).total_seconds())))
+  File "/workspace/mod1/scripts/overnight_followups.py", line 473, in interrupted
+    return 0
+    ^^^^^^^^^
+KeyboardInterrupt: Received signal 15
+{"utc": "2026-10-21T20:02:48.497019+00:00", "event": "gpu_feature_window_reserved", "reserved_gpu_feature_transfer_minutes": 45.0, "confirmation_generation_cutoff_utc": "2026-10-22T01:01:28+00:00", "planned_gpu_feature_window": {"start_utc": "2026-10-22T01:01:28+00:00", "end_utc": "2026-10-22T01:46:28+00:00", "purpose": "Full nine-dataset feature transfer after writer generation"}, "scope": "27B confirmation only; source 9B and sampler retain the global experiment cutoff"}
+{"utc": "2026-10-21T20:02:48.498223+00:00", "event": "waiting_for_controller_terminal", "state": "/workspace/mod1/results/next_experiments/parallel_execution_state.json", "manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c", "observation_deadline_utc": "2026-10-22T01:47:58+00:00", "no_generation_budget_extension": true}
+{"utc": "2026-10-21T20:26:08.123874+00:00", "event": "followups_error", "error": "KeyboardInterrupt('Received signal 15')"}
+{"utc": "2026-10-21T20:26:08.126885+00:00", "event": "generation_marker_withheld", "reason": "source_or_sampler_controller_not_confirmed_stopped", "source_stopped": false, "sampler_terminal": false}
+Traceback (most recent call last):
+  File "/workspace/mod1/scripts/overnight_followups.py", line 592, in <module>
+    count = confirmation_job_count(confirmation_minutes_remaining(args.reserve_transfer_minutes))
+             ^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 500, in main
+    except (ValueError, TypeError):
+                    ^^^^^^^^^^^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 358, in wait_source
+    state = wait_controller_terminal(SOURCE_STATE, SOURCE, event, poll_seconds)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 140, in wait_controller_terminal
+    time.sleep(min(poll_seconds, max(.1, (observation_deadline - now()).total_seconds())))
+  File "/workspace/mod1/scripts/overnight_followups.py", line 492, in interrupted
+    args = parser.parse_args()
+            ^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt: Received signal 15
+{"utc": "2026-10-21T20:26:08.291734+00:00", "event": "gpu_feature_window_reserved", "reserved_gpu_feature_transfer_minutes": 45.0, "confirmation_generation_cutoff_utc": "2026-10-22T01:01:28+00:00", "planned_gpu_feature_window": {"start_utc": "2026-10-22T01:01:28+00:00", "end_utc": "2026-10-22T01:46:28+00:00", "purpose": "Full nine-dataset feature transfer after writer generation"}, "scope": "27B confirmation only; source 9B and sampler retain the global experiment cutoff"}
+{"utc": "2026-10-21T20:26:08.292561+00:00", "event": "waiting_for_controller_terminal", "state": "/workspace/mod1/results/next_experiments/parallel_execution_state.json", "manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c", "observation_deadline_utc": "2026-10-22T01:47:58+00:00", "no_generation_budget_extension": true}
+{"utc": "2026-10-21T20:42:44.639057+00:00", "event": "followups_error", "error": "KeyboardInterrupt('Received signal 15')"}
+{"utc": "2026-10-21T20:42:44.738153+00:00", "event": "generation_marker_withheld", "reason": "source_or_sampler_controller_not_confirmed_stopped", "source_stopped": false, "sampler_terminal": false}
+Traceback (most recent call last):
+  File "/workspace/mod1/scripts/overnight_followups.py", line 637, in <module>
+    event("generation_complete", outcome=outcome, marker=str(marker))
+         ^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 545, in main
+    try:
+         
+  File "/workspace/mod1/scripts/overnight_followups.py", line 358, in wait_source
+    if len(read(SOURCE)["jobs"]) != 19:
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/mod1/scripts/overnight_followups.py", line 140, in wait_controller_terminal
+    time.sleep(min(poll_seconds, max(.1, (observation_deadline - now()).total_seconds())))
+  File "/workspace/mod1/scripts/overnight_followups.py", line 537, in interrupted
+    python = sys.executable
+        ^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt: Received signal 15
+{"utc": "2026-10-21T20:42:44.925448+00:00", "event": "gpu_feature_window_reserved", "reserved_gpu_feature_transfer_minutes": 45.0, "confirmation_generation_cutoff_utc": "2026-10-22T01:01:28+00:00", "planned_gpu_feature_window": {"start_utc": "2026-10-22T01:01:28+00:00", "end_utc": "2026-10-22T01:46:28+00:00", "purpose": "Full nine-dataset feature transfer after writer generation"}, "scope": "27B confirmation only; source 9B and sampler retain the global experiment cutoff"}
+{"utc": "2026-10-21T20:42:44.926949+00:00", "event": "waiting_for_controller_terminal", "state": "/workspace/mod1/results/next_experiments/parallel_execution_state.json", "manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c", "observation_deadline_utc": "2026-10-22T01:47:58+00:00", "no_generation_budget_extension": true}
+{"utc": "2026-10-21T22:07:45.044581+00:00", "event": "controller_terminal_observed", "state": "/workspace/mod1/results/next_experiments/parallel_execution_state.json", "evidence": "recorded_controller_stopped_event"}
+{"utc": "2026-10-21T22:07:45.046977+00:00", "event": "waiting_for_controller_terminal", "state": "/workspace/mod1/results/next_experiments/feedback_overlap_state.json", "manifest_sha256": "c06460d1620ef8d9d13476ec9bf147bf03b662201c2cc74c66f63c320ae5b291", "observation_deadline_utc": "2026-10-22T01:47:58+00:00", "no_generation_budget_extension": true}
+{"utc": "2026-10-21T22:07:45.048086+00:00", "event": "controller_terminal_observed", "state": "/workspace/mod1/results/next_experiments/feedback_overlap_state.json", "evidence": "recorded_controller_stopped_event"}
+{"utc": "2026-10-21T22:07:45.061175+00:00", "event": "existing_feedback_overlap_outcome", "existing_controller_terminal": true, "terminal_evidence": "recorded_controller_stopped_event", "manifest_sha256": "c06460d1620ef8d9d13476ec9bf147bf03b662201c2cc74c66f63c320ae5b291", "parent_source_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c", "complete_jobs": ["next_fixed_neutral_2107", "next_fixed_neutral_4319", "next_fixed_neutral_8741"], "expected_jobs": 3, "artifact_errors": [], "analysis_identities": "Unchanged original source feedback_control jobs"}
+{"utc": "2026-10-21T22:07:45.116522+00:00", "event": "source_controller_stopped", "unfinished_jobs": [], "artifact_errors": [], "terminal_evidence": "recorded_controller_stopped_event"}
+{"utc": "2026-10-21T22:07:45.117785+00:00", "event": "waiting_for_controller_terminal", "state": "/workspace/mod1/results/next_experiments/sampler_execution_state.json", "manifest_sha256": "5dd44749b9df9be59d3efacbbb9f303ba22381bf565c8dc9de015c9d11182a3d", "observation_deadline_utc": "2026-10-22T01:47:58+00:00", "no_generation_budget_extension": true}
+{"utc": "2026-10-21T22:07:45.118608+00:00", "event": "controller_terminal_observed", "state": "/workspace/mod1/results/next_experiments/sampler_execution_state.json", "evidence": "recorded_controller_stopped_event"}
+{"utc": "2026-10-21T22:07:45.128418+00:00", "event": "existing_sampler_outcome", "existing_controller_terminal": true, "complete_jobs": ["next_evo_neutral_rank_uniform_2107", "next_evo_neutral_rank_uniform_4319", "next_evo_neutral_rank_uniform_8741"], "expected_jobs": 3, "artifact_errors": []}
+{"utc": "2026-10-21T22:07:45.129216+00:00", "event": "sampler_controller_not_relaunched", "exit_code": 0, "reason": "existing_terminal_full_or_partial_results_preserved"}
+{"utc": "2026-10-21T22:07:45.129967+00:00", "event": "sampler_control_completed", "exit_code": 0, "full_budget_jobs": 3}
+{"utc": "2026-10-21T22:07:45.130869+00:00", "event": "stage_started", "stage": "prepare_27b_confirmation", "command": ["/workspace/mod1/.venv/bin/python", "scripts/overnight_prepare_confirmation.py", "--prepare"], "log": "/workspace/mod1/results/overnight20261021/followup_logs/prepare_27b_confirmation.log"}
+{"utc": "2026-10-21T22:07:46.197726+00:00", "event": "stage_finished", "stage": "prepare_27b_confirmation", "exit_code": 0}
+{"utc": "2026-10-21T22:07:48.200764+00:00", "event": "managed_servers_stopped", "model": "Qwen/Qwen3.5-9B", "metadata_sha256": "684bea82098bb6fe4bc3e54cfe98dca9cca72c852dcc78c5b3bd69397a462494", "pids": [2986, 2987]}
+{"utc": "2026-10-21T22:07:48.202771+00:00", "event": "stage_started", "stage": "start_27b_compiled", "command": ["/workspace/mod1/.venv/bin/python", "scripts/overnight_start_servers.py", "--model-path", "/workspace/models/Qwen3.8-27B", "--model-id", "Qwen/Qwen3.8-27B", "--revision", "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0", "--tag", "qwen27b", "--gpu-memory-utilization", ".90", "--ports", "18000", "18001"], "log": "/workspace/mod1/results/overnight20261021/followup_logs/start_27b_compiled.log"}
+{"utc": "2026-10-21T22:07:48.268160+00:00", "event": "stage_finished", "stage": "start_27b_compiled", "exit_code": 0}
+{"utc": "2026-10-21T22:10:48.323118+00:00", "event": "27b_servers_ready", "eager": false}
+{"utc": "2026-10-21T22:10:48.328932+00:00", "event": "confirmation_budget_selected", "jobs": 2, "maximum_confirmation_jobs": 2, "remaining_minutes": 170.66118568333334, "manifest": "/workspace/mod1/results/next_experiments/confirmation27b_seed2107_manifest.json", "manifest_sha256": "913c91fe20781e3c98a0552334489e61d9b15ba4e7e08325c32b4742cf2d969f", "analysis_manifest": "/workspace/mod1/results/overnight20261021/analysis_manifest.json", "reserved_gpu_feature_transfer_minutes": 45.0, "confirmation_generation_cutoff_utc": "2026-10-22T01:01:28+00:00", "planned_gpu_feature_window": {"start_utc": "2026-10-22T01:01:28+00:00", "end_utc": "2026-10-22T01:46:28+00:00", "purpose": "Full nine-dataset feature transfer after writer generation"}, "scope": "27B confirmation only; source 9B and sampler retain the global experiment cutoff"}
+{"utc": "2026-10-21T22:10:48.330006+00:00", "event": "stage_started", "stage": "27b_confirmation", "command": ["/workspace/mod1/.venv/bin/python", "scripts/run_overnight_parallel.py", "--execute", "--manifest", "/workspace/mod1/results/next_experiments/confirmation27b_seed2107_manifest.json", "--phase", "all", "--state", "/workspace/mod1/results/next_experiments/confirmation27b_execution_state.json", "--deadline-utc", "2026-10-22T01:31:28+00:00", "--reserve-minutes", "30", "--ports", "18000", "18001"], "log": "/workspace/mod1/results/overnight20261021/followup_logs/27b_confirmation.log"}
+{"utc": "2026-10-21T23:09:31.650967+00:00", "event": "stage_finished", "stage": "27b_confirmation", "exit_code": 0}
+{"utc": "2026-10-21T23:09:31.656551+00:00", "event": "managed_servers_stopped", "model": "Qwen/Qwen3.5-9B", "metadata_sha256": "684bea82098bb6fe4bc3e54cfe98dca9cca72c852dcc78c5b3bd69397a462494", "pids": []}
+{"utc": "2026-10-21T23:09:33.659023+00:00", "event": "managed_servers_stopped", "model": "Qwen/Qwen3.8-27B", "metadata_sha256": "71e4b6bf5ca028bb5facb8388a728b94ffe07708a93fe3acdcb7b9188c73e670", "pids": [19037, 19038]}
+{"utc": "2026-10-21T23:09:33.662020+00:00", "event": "generation_complete", "outcome": "completed", "marker": "/workspace/mod1/results/overnight20261021/generation_complete.json"}

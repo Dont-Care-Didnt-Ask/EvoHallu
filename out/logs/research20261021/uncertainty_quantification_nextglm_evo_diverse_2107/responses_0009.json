@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of shown detectors:**\n   - The first detector uses the **Average Negative Log-Likelihood (NLL)**, aggregating the log-probabilities by taking the mean. This mitigates length bias compared to the total sum.\n   - The second detector uses the **Total Negative Log-Likelihood**, summing the log-probabilities. This is a strong baseline but is highly susceptible to sequence length, potentially penalizing long, coherent texts more than short, confident ones.\n\n2. **Proposed detector:**\n   - **Signal:** **Entropy of the Top-K Logits**.\n   - **Aggregation Principle:** Calculate the entropy per token and average it across the sequence. This measures the uncertainty of the model's prediction distribution at each step, rather than the confidence of the specific token selected.\n   - **Rationale:** While NLL measures the confidence of the *selected* token, Top-K Entropy measures the *breadth* of the model's output distribution. A high entropy indicates the model is uncertain about which token to pick, often preceding a hallucination where the model generates a low-probability token. Averaging across the sequence addresses length bias.\n\n3. **Code:**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average entropy of the top-k logits per sequence.\n        \n        Signal: Top-k Entropy.\n        Aggregation Principle: Mean entropy across sequence length.\n        \n        This detector measures the uncertainty of the model's output distribution.\n        High entropy indicates the model is uncertain which token to generate,\n        often correlating with hallucinations. Averaging mitigates length bias.\n        \n        Hypothesis for future: Hallinations are preceded by high entropy in the\n        top-k distribution, signaling the model is unsure of the next token.\n        \"\"\"\n        scores = []\n        for logits in stats[\"top_k_logits\"]:\n            # Calculate softmax probabilities for the top-k logits\n            # Using stable softmax formula\n            max_logit = np.max(logits, axis=1, keepdims=True)\n            exp_logits = np.exp(logits - max_logit)\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # Calculate entropy: -sum(p * log(p))\n            # Clip probs to avoid log(0) for numerical stability\n            entropy = -np.sum(probs * np.log(probs + 1e-10), axis=1)\n            \n            # Average entropy across the sequence length\n            avg_entropy = np.mean(entropy)\n            scores.append(avg_entropy)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 607,
+      "prompt_tokens": 766,
+      "total_tokens": 1373,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 47.14505735898274
+  },
+  {
+    "content": "1. **Analyze shown detectors**: The existing detectors utilize \"sequence_logprobs\" to compute total negative log-likelihood (NLL) and average NLL. Both use a standard arithmetic mean aggregation principle. The structural difference is the aggregation level (sequence-level sum vs. token-level mean).\n\n2. **Propose a detector**: I propose a detector based on the **Kullback-Leibler (KL) Divergence** between the top-k distribution and the uniform distribution. This measures the \"flatness\" of the model's probability mass. The signal is the **entropy** of the top-k distribution. The aggregation principle is the **median** of the per-token entropies. This approach is structurally different from the previous mean/sum aggregations, utilizing a robust quantile measure to reduce the influence of outliers.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the entropy of the top-k distribution per token.\n        \n        Signal: Top-k Entropy (uncertainty of the model's top predictions).\n        Aggregation Principle: Median of token-wise entropies.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by a high degree of ambiguity in the model's top predictions,\n        which is best identified by the median rather than the mean of token entropies.\n        \"\"\"\n        scores = []\n        for logits, indices in zip(stats[\"top_k_logits\"], stats[\"top_k_indices\"]):\n            # Compute softmax probabilities for the top-k logits\n            # Shift logits for numerical stability\n            exp_logits = np.exp(logits - np.max(logits, axis=1, keepdims=True))\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # Calculate entropy: -sum(p * log(p))\n            # Add a small epsilon to avoid log(0)\n            entropy = -np.sum(probs * np.log(probs + 1e-12), axis=1)\n            \n            # Aggregate using median to be robust against sequence-length or outlier bias\n            seq_score = np.median(entropy)\n            scores.append(seq_score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 523,
+      "prompt_tokens": 786,
+      "total_tokens": 1309,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 40.81750855600694
+  }
+]

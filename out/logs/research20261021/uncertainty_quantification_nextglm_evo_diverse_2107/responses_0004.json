@@ -1,0 +1,25 @@
+[
+  {
+    "error": "APITimeoutError: Request timed out.",
+    "usage": {},
+    "generation_seconds": 180.10440125199966
+  },
+  {
+    "content": "1. **Analyze shown detectors**\nThe provided detectors utilize the \"Log-Likelihood Ratio\" (LLR) and \"Negative Log-Likelihood\" (NLL) families.\n- **Detector 1** calculates a ratio between the final step's actual log-probability and the maximum log-probability of the final step's top-512 candidates. This is a \"local\" uncertainty signal focused on the final token's confidence gap.\n- **Detector 2** calculates the cumulative negative log-probability of the entire generated sequence. This is a \"global\" signal measuring overall sequence perplexity.\n\n2. **Propose a detector**\nI propose a detector based on **Trimmed Mean Uncertainty**.\n- **Signal**: Instead of using the raw log-probabilities, I will use the log-probabilities of the tokens *not* selected by the model (i.e., the tokens in the top-512 that were skipped). This measures the \"missed\" probability mass.\n- **Aggregation Principle**: A trimmed mean. I will discard the lowest 10% of these skipped log-probabilities (which likely correspond to very unlikely tokens) and average the remaining values. This reduces the influence of extreme outliers and focuses on the tokens that were \"close\" to being selected, which is often where hallucinations occur.\n\n3. **Code block**",
+    "usage": {
+      "completion_tokens": 279,
+      "prompt_tokens": 892,
+      "total_tokens": 1171,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 21.925176888005808
+  }
+]

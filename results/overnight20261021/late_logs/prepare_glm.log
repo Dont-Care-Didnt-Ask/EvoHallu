@@ -1,0 +1,21 @@
+{
+  "event": "glm_preparation_plan",
+  "ready": true,
+  "selected_policy": "diverse",
+  "writer": "zai-org/GLM-4.7-Flash",
+  "revision": "7dd20894a642a0aa287e9827cb1a1f7f91386b67",
+  "jobs": 4,
+  "requests": 240,
+  "seeds": [
+    2107,
+    4319
+  ],
+  "missing_discovery_jobs": [],
+  "automatic_inference": false,
+  "writer_cutoff_utc": "2026-10-22T01:10:00+00:00"
+}
+Prepared immutable optional manifest: /workspace/mod1/results/next_experiments/glm47_manifest.json
+Prepared immutable optional manifest: /workspace/mod1/results/next_experiments/glm47_seed2107_manifest.json
+Prepared immutable optional manifest: /workspace/mod1/results/next_experiments/glm47_seed4319_manifest.json
+.venv/bin/python scripts/run_overnight_parallel.py --execute --manifest results/next_experiments/glm47_seed2107_manifest.json --state results/next_experiments/glm47_seed2107_execution_state.json --ports 18000 18001 --deadline-utc 2026-10-22T01:40:00+00:00 --reserve-minutes 30
+.venv/bin/python scripts/run_overnight_parallel.py --execute --manifest results/next_experiments/glm47_seed4319_manifest.json --state results/next_experiments/glm47_seed4319_execution_state.json --ports 18000 18001 --deadline-utc 2026-10-22T01:40:00+00:00 --reserve-minutes 30

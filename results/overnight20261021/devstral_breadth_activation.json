@@ -1,0 +1,21 @@
+{
+  "status": "replaced_verified_waiting_controller",
+  "utc": "2026-10-21T22:36:54.026299+00:00",
+  "old_pid": 5640,
+  "old_process_group": 5639,
+  "new_pid": 21679,
+  "old_helper_sha256": "3d60617112316636a196bda8137a40250024811913a463449e1cfbd639ccd775",
+  "new_helper_sha256": "ea1a246351edeb3250880ffd0d50a51c8d1ac628da6d62e576b796af5ef32fb4",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/overnight_late_extensions.py",
+    "--execute",
+    "--prefer-devstral-breadth"
+  ],
+  "archive": "results/overnight20261021/scheduling_restarts/late_waiting_before_devstral_20261021T223653Z",
+  "replacement_signal": "SIGKILL to verified waiting PID only, no children; avoids old finally creating terminal markers",
+  "source_or_writer_jobs_interrupted": false,
+  "early_markers_created": false,
+  "hard_deadline_unchanged": "2026-10-22T02:16:28Z",
+  "validation": "36 focused late/Devstral tests passed in0.88s"
+}

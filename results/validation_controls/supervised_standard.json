@@ -1,0 +1,84 @@
+{
+  "features": [
+    "length",
+    "nll_sum",
+    "nll_mean",
+    "nll_std",
+    "nll_max",
+    "nll_q90",
+    "nll_q10",
+    "nll_position_slope",
+    "nll_exp_weighted",
+    "entropy_mean",
+    "entropy_std",
+    "entropy_last_minus_first",
+    "top1_mass_top512_mean",
+    "top1_top2_gap_mean",
+    "top512_entropy_mean",
+    "nll_last_quarter",
+    "nll_first_quarter"
+  ],
+  "fit_samples": 5605,
+  "validation_samples": 1402,
+  "split_seed": 441,
+  "split_strategy": "stratified",
+  "test_labels_used": false,
+  "models": {
+    "logistic": {
+      "chosen_parameter": 100.0,
+      "inner_auc": 0.8280277267990798,
+      "train_auc": 0.8317667764596933,
+      "validation_auc": 0.8163748467093608,
+      "tuning": [
+        {
+          "parameter": 0.01,
+          "inner_auc": 0.8210740544490491
+        },
+        {
+          "parameter": 0.1,
+          "inner_auc": 0.8234656277130218
+        },
+        {
+          "parameter": 1.0,
+          "inner_auc": 0.8256206759790828
+        },
+        {
+          "parameter": 10.0,
+          "inner_auc": 0.8278373862052488
+        },
+        {
+          "parameter": 100.0,
+          "inner_auc": 0.8280277267990798
+        }
+      ]
+    },
+    "qda": {
+      "chosen_parameter": 0.6,
+      "inner_auc": 0.8163724614249421,
+      "train_auc": 0.8180270242822973,
+      "validation_auc": 0.8024197211245855,
+      "tuning": [
+        {
+          "parameter": 0.01,
+          "inner_auc": 0.8115842814662907
+        },
+        {
+          "parameter": 0.1,
+          "inner_auc": 0.8138931548309403
+        },
+        {
+          "parameter": 0.3,
+          "inner_auc": 0.8163490564589528
+        },
+        {
+          "parameter": 0.6,
+          "inner_auc": 0.8163724614249421
+        },
+        {
+          "parameter": 0.9,
+          "inner_auc": 0.8058472718290792
+        }
+      ]
+    }
+  }
+}

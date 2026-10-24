@@ -1,0 +1,7 @@
+{
+  "status": "passed",
+  "actual_saved_prompts_verified": 60,
+  "contract_sha256": "bd227c8acf9f9217de300efda4f13961f3e1d3165214dcabec3f96ca12868201",
+  "prompt_hashes_match_ledgers": true,
+  "runtime_hook_restored": true
+}

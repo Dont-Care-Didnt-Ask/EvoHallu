@@ -1,0 +1,368 @@
+{
+  "created_utc": "2026-10-21T15:02:13.373300+00:00",
+  "status": "prepared_only_no_model_calls",
+  "feature_model": "Llama3.1-8b-instruct",
+  "labels": "is_hallu",
+  "writer": "Qwen/Qwen3.5-9B",
+  "writer_revision": "c202236235762e1c871ad0ccb60c8ee5ba337b9a",
+  "seeds": [
+    2107,
+    4319,
+    8741
+  ],
+  "contexts_sha256": "300edccba376a78c755fae59f8be787bff07fde9932de234bb5bc8bee87535ba",
+  "jobs": [
+    {
+      "id": "next_prompt_original_2107",
+      "phase": "prompt_screen",
+      "mode": "frozen_context",
+      "prompt_policy": "original",
+      "seed": 2107,
+      "requests": 30,
+      "config": "next_experiments/next_prompt_original_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_prompt_original_2107"
+      ],
+      "config_sha256": "7a6cca5de0496d61e9237f1d82b26fbe8ab6866b2b9a367e0a4ac71a0be538a7",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_prompt_original_2107"
+    },
+    {
+      "id": "next_prompt_neutral_2107",
+      "phase": "prompt_screen",
+      "mode": "frozen_context",
+      "prompt_policy": "neutral",
+      "seed": 2107,
+      "requests": 30,
+      "config": "next_experiments/next_prompt_neutral_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_prompt_neutral_2107"
+      ],
+      "config_sha256": "39023c200c203789e7b58878f16ec9328eb1f81c712ad77c3ef03f31c4b4a36f",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_prompt_neutral_2107"
+    },
+    {
+      "id": "next_prompt_diverse_2107",
+      "phase": "prompt_screen",
+      "mode": "frozen_context",
+      "prompt_policy": "diverse",
+      "seed": 2107,
+      "requests": 30,
+      "config": "next_experiments/next_prompt_diverse_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_prompt_diverse_2107"
+      ],
+      "config_sha256": "73e87936649ae1d3af81f5cc3dc274fe5ccd6ae2262bf12e28d8f4b299e1a282",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_prompt_diverse_2107"
+    },
+    {
+      "id": "next_prompt_compositional_2107",
+      "phase": "prompt_screen",
+      "mode": "frozen_context",
+      "prompt_policy": "compositional",
+      "seed": 2107,
+      "requests": 30,
+      "config": "next_experiments/next_prompt_compositional_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_prompt_compositional_2107"
+      ],
+      "config_sha256": "c1589f764c73780586720d481fe86b468cf06bceaa34ac7372acc5b2a57f8b14",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_prompt_compositional_2107"
+    },
+    {
+      "id": "next_evo_original_2107",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "original",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_evo_original_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_original_2107"
+      ],
+      "config_sha256": "df81e7035981a59cf3dd836cfdde7db927cfd937b6c8293e61444f87b2b9a02d",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_original_2107"
+    },
+    {
+      "id": "next_evo_neutral_2107",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_2107"
+      ],
+      "config_sha256": "5f1169a43bf7daaa2aa3d312f615a7529da9fd61a246faad9d17ccbee98f33e8",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_2107"
+    },
+    {
+      "id": "next_evo_diverse_2107",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "diverse",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_evo_diverse_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_diverse_2107"
+      ],
+      "config_sha256": "df1090b54f6eeb3c1efabb649d9dd9523a1a2961732f0dd0250789682627ba0c",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_2107"
+    },
+    {
+      "id": "next_evo_original_4319",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "original",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_evo_original_4319",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_original_4319"
+      ],
+      "config_sha256": "4c2bb10bd47595763ba14937fa2ed7fda1784488ecfeb51065ff7a0211a7d0b9",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_original_4319"
+    },
+    {
+      "id": "next_evo_neutral_4319",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_4319",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_4319"
+      ],
+      "config_sha256": "1aeffd78b3c3bb1b938438ed1b4c78badb6582c3db53a5766280063a9e347091",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319"
+    },
+    {
+      "id": "next_evo_diverse_4319",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "diverse",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_evo_diverse_4319",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_diverse_4319"
+      ],
+      "config_sha256": "7146a60c0b36183465bb33b8e6b6f92bd6b63d32e2811e193ed5cdf5af68f698",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_4319"
+    },
+    {
+      "id": "next_evo_original_8741",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "original",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_evo_original_8741",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_original_8741"
+      ],
+      "config_sha256": "dd2bd50166445cd8630868e5377a97ae74a2d92febe0db24de8d4df575c76a7a",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_original_8741"
+    },
+    {
+      "id": "next_evo_neutral_8741",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "neutral",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_evo_neutral_8741",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_neutral_8741"
+      ],
+      "config_sha256": "f4eb436ecf45074524970687505bb418023bab1693a111fdca45eba7a263f5ea",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_8741"
+    },
+    {
+      "id": "next_evo_diverse_8741",
+      "phase": "evolution_screen",
+      "mode": "evolution",
+      "prompt_policy": "diverse",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_evo_diverse_8741",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_diverse_8741"
+      ],
+      "config_sha256": "ddcae2768ee9cb32ac67bbadf1ee70680953b03e16b7fd9268fffda5dc576583",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_8741"
+    },
+    {
+      "id": "next_evo_compositional_2107",
+      "phase": "compositional_control",
+      "mode": "evolution",
+      "prompt_policy": "compositional",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_evo_compositional_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_compositional_2107"
+      ],
+      "config_sha256": "5b8ff8aedfdbf6062aec5462594a608a7e0203edfa8443865d382b46496f6ad5",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_2107"
+    },
+    {
+      "id": "next_evo_compositional_4319",
+      "phase": "compositional_control",
+      "mode": "evolution",
+      "prompt_policy": "compositional",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_evo_compositional_4319",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_compositional_4319"
+      ],
+      "config_sha256": "5dcb325993eaa9431c6663cbadc9a8f838fa76aeea4938a727c3bedf28ef6947",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319"
+    },
+    {
+      "id": "next_evo_compositional_8741",
+      "phase": "compositional_control",
+      "mode": "evolution",
+      "prompt_policy": "compositional",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_evo_compositional_8741",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_compositional_8741"
+      ],
+      "config_sha256": "a7c96f63a74d754f4e7160b21d92e2827fb21f19e052cb488776e839b8bae623",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_8741"
+    },
+    {
+      "id": "next_fixed_neutral_2107",
+      "phase": "feedback_control",
+      "mode": "baseline_seeded",
+      "prompt_policy": "neutral",
+      "seed": 2107,
+      "requests": 60,
+      "config": "next_experiments/next_fixed_neutral_2107",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_fixed_neutral_2107"
+      ],
+      "config_sha256": "c0de93cc872a097c291080f9ffedce74753f7b997129be97cedbd59417476a85",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_fixed_neutral_2107"
+    },
+    {
+      "id": "next_fixed_neutral_4319",
+      "phase": "feedback_control",
+      "mode": "baseline_seeded",
+      "prompt_policy": "neutral",
+      "seed": 4319,
+      "requests": 60,
+      "config": "next_experiments/next_fixed_neutral_4319",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_fixed_neutral_4319"
+      ],
+      "config_sha256": "7cff22dc3ebe26b45270a9700b4147fb2ed7d0e47ce3b74e3c3b6ef0e4924686",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_fixed_neutral_4319"
+    },
+    {
+      "id": "next_fixed_neutral_8741",
+      "phase": "feedback_control",
+      "mode": "baseline_seeded",
+      "prompt_policy": "neutral",
+      "seed": 8741,
+      "requests": 60,
+      "config": "next_experiments/next_fixed_neutral_8741",
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_fixed_neutral_8741"
+      ],
+      "config_sha256": "69dadb364646932f783cb95381df1aecfb7ab4fb41ec0d14bbf33ecf78d94c89",
+      "expected_logs": "out/logs/research20261021/uncertainty_quantification_next_fixed_neutral_8741"
+    }
+  ],
+  "training_csv_sha256": "b71e07ab49ea97d6a8311f52329390dc7bc3137fcbac07706ba1a0925c16544a",
+  "training_raw_path": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "study_source_sha256": {
+    "src/experiments/extension_trial.py": "5d9e7e93febe82f01cb6988ba7c8d139e1931fef72ce259469b6b4168c031f36",
+    "src/experiments/prompt_policies.py": "bb8d3092c22b0e1255c440a626c086cb692762669d60517e1563b921584d1daa",
+    "src/packing/funsearch/programs_database.py": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+    "src/packing/model/prompt.py": "1c60df86c1ae48c11815751299459d7679e995cae7892ff93288c5d87424b625",
+    "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+    "src/packing/evaluate/uncertainty_quantification/features.py": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+    "configs/config_uq_trial.yaml": "a8e5fb034dbcdfbff9de5eb7c75848ecfb81a1256d51f74e933fd727482db199",
+    "configs/config_uq.yaml": "b54cb74fc7886336c0aa7047ae78b63d9e870755be69975500153d1c63509949",
+    "configs/model/qwen35_9b.yaml": "16e49c2c7d01cf2097a9ae9c3e03c280f5a8d31d026c73be8993f42e52cfee47",
+    "configs/task/uncertainty_quantification.yaml": "40e1da09c9dc3c34af2315c194cdf75d7edd936c7f1ca88e596fd6fbd3bc55c7"
+  },
+  "requests_by_phase": {
+    "prompt_screen": 120,
+    "evolution_screen": 540,
+    "feedback_control": 180,
+    "compositional_control": 180
+  },
+  "later_design_only": [
+    "immutable wrapper + smoke/repair",
+    "behaviour-aware archive + rank parent sampling",
+    "two-stage sketch/implementation",
+    "90-round vs three-restart portfolios",
+    "supervised evolved features",
+    "new feature-model extraction"
+  ]
+}

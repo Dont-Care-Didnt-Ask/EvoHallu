@@ -1,0 +1,19 @@
+{
+  "active_seconds": 532.5737831910083,
+  "attempts": [
+    {
+      "coverage": "six",
+      "started_utc": "2026-10-21T23:40:45.925105+00:00",
+      "deadline_utc": "2026-10-22T00:00:45.925094+00:00",
+      "status": "complete_exploratory_six",
+      "finished_utc": "2026-10-21T23:46:17.903538+00:00"
+    },
+    {
+      "coverage": "nine",
+      "started_utc": "2026-10-22T00:20:54.772179+00:00",
+      "deadline_utc": "2026-10-22T00:35:22.793719+00:00",
+      "status": "partial_or_external_reference_pending",
+      "finished_utc": "2026-10-22T00:24:15.367503+00:00"
+    }
+  ]
+}

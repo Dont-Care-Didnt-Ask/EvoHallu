@@ -1,0 +1,14 @@
+Absolute deadline: 2026-10-22T02:16:28+00:00; generation cutoff: 2026-10-22T01:46:28+00:00
+Batch evolution_four_policies: 3 jobs, 180 requests
+next_evo_neutral_rank_uniform_2107 .venv/bin/python scripts/overnight_sampler_trial.py --config-name next_experiments/next_evo_neutral_rank_uniform_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+next_evo_neutral_rank_uniform_4319 .venv/bin/python scripts/overnight_sampler_trial.py --config-name next_experiments/next_evo_neutral_rank_uniform_4319 cluster.api_base_url=http://127.0.0.1:18001/v1 trial.max_seconds=5400
+next_evo_neutral_rank_uniform_8741 .venv/bin/python scripts/overnight_sampler_trial.py --config-name next_experiments/next_evo_neutral_rank_uniform_8741 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+{"utc": "2026-10-21T19:04:11.398588+00:00", "event": "controller_started", "selected_jobs": 3, "completed_skips": 0}
+{"utc": "2026-10-21T19:04:11.433155+00:00", "event": "batch_started", "batch": "evolution_four_policies", "pending": 3}
+{"utc": "2026-10-21T19:04:11.435591+00:00", "event": "job_started", "job": "next_evo_neutral_rank_uniform_2107", "port": 18000, "pid": 6224, "max_seconds": 5400}
+{"utc": "2026-10-21T19:04:11.437823+00:00", "event": "job_started", "job": "next_evo_neutral_rank_uniform_4319", "port": 18001, "pid": 6225, "max_seconds": 5400}
+{"utc": "2026-10-21T19:26:17.556329+00:00", "event": "job_finished", "job": "next_evo_neutral_rank_uniform_4319", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1326.1084843039862, "error": null}
+{"utc": "2026-10-21T19:26:19.569201+00:00", "event": "job_started", "job": "next_evo_neutral_rank_uniform_8741", "port": 18001, "pid": 8172, "max_seconds": 5400}
+{"utc": "2026-10-21T19:27:21.580363+00:00", "event": "job_finished", "job": "next_evo_neutral_rank_uniform_2107", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1390.139819806005, "error": null}
+{"utc": "2026-10-21T19:46:59.687450+00:00", "event": "job_finished", "job": "next_evo_neutral_rank_uniform_8741", "port": 18001, "status": "complete", "exit_code": 0, "elapsed_seconds": 1240.1137691859913, "error": null}
+{"utc": "2026-10-21T19:46:59.689202+00:00", "event": "controller_stopped", "failed_jobs": [], "budget_stop": false, "unfinished_jobs": []}

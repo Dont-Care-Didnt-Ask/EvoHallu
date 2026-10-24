@@ -1,0 +1,26 @@
+{
+  "status": "six_results_immutable",
+  "files": {
+    "results/overnight20261021/normalization_transfer/six/TRANSFER_REPORT.json": "73ed2b571552ab0fa136396017e51d0c0fce8c954677c9fe68d0cb61e49ad63f",
+    "results/overnight20261021/normalization_transfer/six/TRANSFER_REPORT.md": "b225b0bab3c9072c82ab366569ae01c8788c89ded83ffc52a23ece17dcf2fedb",
+    "results/overnight20261021/normalization_transfer/six/cache_audit.json": "d4465fe8991e69be83386b58ce6478de96bcc187fe7c887a7bbd2dd6d6889ad1",
+    "results/overnight20261021/normalization_transfer/six/target/AVeriTeC__dev_filtered_10shot.json": "ad4607835edc5ac31b893def065ce42d5f5ba9dd79ec766a24f77021b60a3b8f",
+    "results/overnight20261021/normalization_transfer/six/target/AVeriTeC__dev_filtered_10shot_bootstrap.npz": "1d7ba62eb01170b285bea5f58dfa8f1453083c1d8bd5a1878acd829bd9b908a4",
+    "results/overnight20261021/normalization_transfer/six/target/AVeriTeC__dev_filtered_10shot_scores.npz": "e3fca8ab655a77367c647a8d92654772e68b92cdc3c401f5fe7f8cdcd3f35f07",
+    "results/overnight20261021/normalization_transfer/six/target/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.json": "3090f650a92b0d4e7094a1fe01142c2d9e8e84e4148814b538e857d9fd5286ef",
+    "results/overnight20261021/normalization_transfer/six/target/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz": "f9da5a83a2390588727b444ec5d1c442ad5db73b36f9cc9e5b7496121f1e5539",
+    "results/overnight20261021/normalization_transfer/six/target/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "a0d79d465fb62ed5d49b69df540617413b128c906126fbff5fc07cadc7178356",
+    "results/overnight20261021/normalization_transfer/six/target/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.json": "4f1d459fe6a9ed8ddc464db45db1b229c88788339951dbcdbcc42d4c4c754a73",
+    "results/overnight20261021/normalization_transfer/six/target/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_bootstrap.npz": "f131283e8895e601e07274356b1ff4879518b34d91587818fa0f431f94233fa8",
+    "results/overnight20261021/normalization_transfer/six/target/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot_scores.npz": "51d0332479b0c155cef4371000c9aec39e207bb99b3e990a6197daa69c30d464",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__cities.json": "f95398454d0ac37ab24e01a4eb598524c6f2377aaa17d2d48de82ad4377fbc5e",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__cities_bootstrap.npz": "be2189cc20f0fe31c344d8e57417af25bb9305926c1885ee897cd82a8e70206d",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__cities_scores.npz": "50c042a139ff8e026a251875452107273fde325b6be11fd44fcc7f74e7473d73",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__common_claim_true_false.json": "d4c1aa3c25e68f8d8863603b4b064b9a5660679cc244ce8d1a84fe6adbdb8a40",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__common_claim_true_false_bootstrap.npz": "d6b0ad1b04ccaa808e3d2e22da5300c22fa0f5909b801a465633dec02cf0c395",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__common_claim_true_false_scores.npz": "f99ce8ed6eeb42c32c0dfd77f97049e6d3b155fbbfb282c815d7d47ec3efb834",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__companies_true_false.json": "2040ef87167765ab74a68b967ed3fd92718878b276df2e81b4ca6f213b44b98b",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__companies_true_false_bootstrap.npz": "3ad57c9cac8f29fb295eba3e9ce1760890e83ae23ab7dc956c1885c94495f8ee",
+    "results/overnight20261021/normalization_transfer/six/target/geometry__companies_true_false_scores.npz": "fb5e8595dd051a8540991b4dac9da4864996ff8a1438ffb396aa6c0db7882e26"
+  }
+}

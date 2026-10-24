@@ -1,0 +1,9 @@
+<string>:69: RuntimeWarning: divide by zero encountered in log
+<string>:69: RuntimeWarning: invalid value encountered in multiply
+<string>:103: RuntimeWarning: divide by zero encountered in log
+<string>:103: RuntimeWarning: invalid value encountered in multiply
+<string>:69: RuntimeWarning: divide by zero encountered in log
+<string>:69: RuntimeWarning: invalid value encountered in multiply
+<string>:103: RuntimeWarning: divide by zero encountered in log
+<string>:103: RuntimeWarning: invalid value encountered in multiply
+{"dataset": "AVeriTeC__dev_filtered_10shot", "rows": 427, "methods": 3, "failed": {}}

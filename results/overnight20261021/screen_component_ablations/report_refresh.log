@@ -1,0 +1,1 @@
+{"status": "complete", "coverage": {"source_nine": {"fully_scored_datasets": 9, "expected_datasets": 9, "complete_500_bootstrap_datasets": 9}, "target_six": {"fully_scored_datasets": 6, "expected_datasets": 6, "complete_500_bootstrap_datasets": 6}}, "integrity_errors": 0, "output": "results/overnight20261021/screen_component_ablations/ABLATION_REPORT.md"}

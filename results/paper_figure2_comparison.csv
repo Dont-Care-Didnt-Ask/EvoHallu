@@ -1,0 +1,19 @@
+paper_method,paper_figure_2_auc_percent,local_method,identity_status,supplied_label_auc_percent,uhead_verified_auc_percent,uhead_verified_minus_published_pp,paper_source
+Sequence Probability,68.7,original/SequenceLogProb,ranking-equivalent baseline,65.64388231516448,68.71117305407847,0.011173054078469136,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Perplexity,64.2,original/Perplexity,ranking-equivalent baseline,64.17472363290479,64.16761960146845,-0.03238039853155783,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Mean Token Entropy,59.9,original/MeanTokenEntropy,same named baseline; remaining extraction differences possible,58.41996535859058,59.80066431409497,-0.09933568590502517,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+RAUQ,61.8,,not evaluated: attention statistics not cached,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+AttentionScore,56.0,,not evaluated: attention statistics not cached,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-1,70.8,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-3,70.6,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-5,70.6,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-7,68.7,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-9,68.7,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-11,64.5,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-13,63.8,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Gpt-15,62.0,,no certified paper-ID to repository-class mapping,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Anth-1,73.4,,historical Claude implementation/population unavailable,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Anth-8,72.7,,historical Claude implementation/population unavailable,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Anth-15,71.9,,historical Claude implementation/population unavailable,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Anth-22,71.6,,historical Claude implementation/population unavailable,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4
+Evo-Anth-30,71.0,,historical Claude implementation/population unavailable,,,,https://aclanthology.org/2026.acl-srw.115.pdf#page=4

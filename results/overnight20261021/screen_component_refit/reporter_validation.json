@@ -1,0 +1,31 @@
+{
+  "created_utc": "2026-10-21T19:42:19.910991+00:00",
+  "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest tests/test_component_refit_report.py -q",
+  "passed": 2,
+  "elapsed_seconds": 8.03,
+  "real_fitting_or_detector_scoring": false,
+  "raw_caches_opened": false,
+  "gpu_calls": 0,
+  "synthetic_checks": [
+    "no incomplete dataset macro",
+    "finite-complete bootstrap replicate accounting",
+    "paired same-six transfer and gain-change confidence intervals",
+    "source-target row identity mismatch rejected",
+    "exact source/reference NLL and row fields required",
+    "protocol gating",
+    "incomplete NPZ copy remains pending",
+    "normalized CSV claim group and strict mask construction"
+  ],
+  "local_real_artifact_smoke": {
+    "status": "partial_pending",
+    "fit_audit": "passed",
+    "integrity_errors": 0,
+    "source9_verified": 0,
+    "target6_verified": 0
+  },
+  "sha256": {
+    "scripts/overnight_component_refit_report.py": "97b7a193fdf08dbcd26c1a3feab8a5ba17eae82fc1078e795779856cd732b45c",
+    "tests/test_component_refit_report.py": "bd2e4ca188eb42cec39b805405992b771ba4081baf40078aef808b268cb5b7ad",
+    "scripts/overnight_component_model.py": "e86f98e49d710317e685af1a57f5ee68ba4b1fd48ac5a919091f0cc0eb564a01"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "dataset": "geometry__cities",
+  "rows": 1496,
+  "phase": "reference",
+  "status": "passed_reference",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "ec33dd2d2d765fbc9f2beda4519c8903034322516774c4a796e7bb5bee5731e2",
+  "reference_npz_sha256": "ef5557ee06566f5603e3c9cd6e17c1205ddb59e72e5f7a83c51fd29e306de1e1",
+  "labels_groups_masks_exact": true,
+  "original512_label_prevalence": {
+    "chunk_size": 512,
+    "chunks": 3,
+    "minimum": 0.5,
+    "maximum": 0.5,
+    "last_chunk_rows": 472,
+    "prevalence_by_chunk": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "order": "original CSV/cache row order; no label-based ordering"
+  },
+  "conditions": [
+    {
+      "case": "original_512",
+      "chunk_size": 512,
+      "directed_auc_percent": 91.12231547942463,
+      "paper_auc_percent": 91.12231547942463,
+      "spearman_vs_original512": 1.0,
+      "exact_original512_scores": true,
+      "maximum_absolute_score_difference": 0.0,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 1.0081234279787168
+    }
+  ]
+}

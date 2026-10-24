@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-22T00:05:40.921141+00:00",
+  "done": [
+    "next_evo_neutral_rank_uniform_4319",
+    "next_evo_neutral_rank_uniform_2107",
+    "next_evo_neutral_2107",
+    "next_evo_original_2107",
+    "next_evo_neutral_rank_uniform_8741",
+    "next_evo_diverse_2107",
+    "next_evo_neutral_interface_2107",
+    "next_evo_compositional_2107",
+    "next_evo_original_4319",
+    "next_evo_neutral_4319",
+    "next_evo_diverse_4319",
+    "next_fixed_neutral_2107",
+    "next_fixed_neutral_4319",
+    "next_fixed_neutral_8741",
+    "next_evo_original_8741",
+    "next_evo_compositional_4319",
+    "next_evo_neutral_8741",
+    "next_evo_diverse_8741",
+    "next_evo_compositional_8741",
+    "next27b_evo_diverse_2107",
+    "next27b_evo_original_2107",
+    "nextglm_evo_diverse_2107",
+    "nextglm_evo_original_2107"
+  ],
+  "failures": [],
+  "supervised": true
+}

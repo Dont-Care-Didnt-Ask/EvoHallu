@@ -1,0 +1,323 @@
+{
+  "created_utc": "2026-10-21T20:03:13.738450+00:00",
+  "scope": "Saved selected winners, all source training/validation LP arithmetic, and fixed512training probe only",
+  "raw_training_cache": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+  "raw_sample_count": 7007,
+  "split": "historical_stratified_seed441",
+  "training_rows": 5605,
+  "validation_rows": 1402,
+  "probe_rows": 512,
+  "stored_lp_dtypes": [
+    "float16"
+  ],
+  "no_test_raws_or_labels_opened": true,
+  "new_candidates_scored_or_ranked": false,
+  "gpu_or_llm_calls": 0,
+  "topk_arrays_materialized": false,
+  "original2107_entropy_ratio_gate": {
+    "all_rows": 7007,
+    "gate_true": 0,
+    "gate_false": 7007,
+    "max_lp_exact_zero": 7007,
+    "training_gate_true": 0,
+    "validation_gate_true": 0
+  },
+  "runs": [
+    {
+      "job": "next_evo_neutral_rank_uniform_2107",
+      "selected_candidate": "ed89b715b3f3a5dd4a64d697b296d4ec8e68d072d1312dca7a28cdc307f5c147",
+      "selected_validation_auc_percent": 75.7622,
+      "baseline_validation_auc_percent": 75.7504,
+      "frozen_source_sha256": "a40d46aa5836b0cbd42c37d8ee924eb62f19ab7fd87cbd1e81135be4d3ea888f",
+      "splits": {
+        "train": {
+          "rows": 5605,
+          "saved_prediction_sha256": "96ff77b914cbc2468e0247c27d5b4c22446dd105ade993062d4fe672f443618d",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 5603,
+          "spearman_vs_canonical": 0.9999924095390137,
+          "canonical_unique_scores": 619,
+          "selected_unique_scores": 5393,
+          "saved_directed_auc_percent": 74.32608848494145,
+          "canonical_directed_auc_percent": 74.32858297398488,
+          "fixed512_probe": {
+            "saved_predictions_equal_lp_arithmetic": true,
+            "max_abs_saved_minus_formula": 0.0,
+            "spearman_vs_canonical": 0.9999812242873303
+          }
+        },
+        "val": {
+          "rows": 1402,
+          "saved_prediction_sha256": "e53c3f90bcf28f5d518d76ef881eb67680f05f118d8683cee0885e46a5d26565",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 1402,
+          "spearman_vs_canonical": 0.9999902676643132,
+          "canonical_unique_scores": 418,
+          "selected_unique_scores": 1390,
+          "saved_directed_auc_percent": 75.76219512195121,
+          "canonical_directed_auc_percent": 75.75041445246853
+        }
+      }
+    },
+    {
+      "job": "next_evo_neutral_rank_uniform_4319",
+      "selected_candidate": "c7d956c0e1eb17916f5d414aba6383c66606ec98152489fcec734e231aa35254",
+      "selected_validation_auc_percent": 76.9672,
+      "baseline_validation_auc_percent": 75.7504,
+      "frozen_source_sha256": "ee6d696e7d9b0a87bf9c9875b98f9d5bccb94b9dfd8907e7ac37f32db7c9a3b2",
+      "splits": {
+        "train": {
+          "rows": 5605,
+          "saved_prediction_sha256": "8215a1c98cf3232f24c75b80130feb4bd3db3348d305bf67074eb7ed81ffb9cc",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 5605,
+          "spearman_vs_canonical": 0.9854076872828342,
+          "canonical_unique_scores": 619,
+          "selected_unique_scores": 526,
+          "saved_directed_auc_percent": 75.65803910790682,
+          "canonical_directed_auc_percent": 74.32858297398488,
+          "fixed512_probe": {
+            "saved_predictions_equal_lp_arithmetic": true,
+            "max_abs_saved_minus_formula": 0.0,
+            "spearman_vs_canonical": 0.9822043512411486
+          }
+        },
+        "val": {
+          "rows": 1402,
+          "saved_prediction_sha256": "6de0e0320719a69f582487d28df2a3e9d10b6f2bf46b5d3ce80aca992efba951",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 1402,
+          "spearman_vs_canonical": 0.9856233219210342,
+          "canonical_unique_scores": 418,
+          "selected_unique_scores": 384,
+          "saved_directed_auc_percent": 76.9672298678294,
+          "canonical_directed_auc_percent": 75.75041445246853
+        }
+      }
+    },
+    {
+      "job": "next_evo_neutral_rank_uniform_8741",
+      "selected_candidate": "baseline",
+      "selected_validation_auc_percent": 75.7504,
+      "baseline_validation_auc_percent": 75.7504,
+      "frozen_source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "splits": {
+        "train": {
+          "rows": 5605,
+          "saved_prediction_sha256": "dcf3e0e8974487d596ca105b15f20c86a5b2e0c8d664a06deccb6a07dee2a779",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 0,
+          "spearman_vs_canonical": 0.9999999999999999,
+          "canonical_unique_scores": 619,
+          "selected_unique_scores": 619,
+          "saved_directed_auc_percent": 74.32858297398488,
+          "canonical_directed_auc_percent": 74.32858297398488,
+          "fixed512_probe": {
+            "saved_predictions_equal_lp_arithmetic": true,
+            "max_abs_saved_minus_formula": 0.0,
+            "spearman_vs_canonical": 0.9999999999999998
+          }
+        },
+        "val": {
+          "rows": 1402,
+          "saved_prediction_sha256": "1288da9f2d99c31bce84f2ad75a61cd04ce064d493fc5dac0ca8cbac767a6ad2",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 0,
+          "spearman_vs_canonical": 1.0,
+          "canonical_unique_scores": 418,
+          "selected_unique_scores": 418,
+          "saved_directed_auc_percent": 75.75041445246853,
+          "canonical_directed_auc_percent": 75.75041445246853
+        }
+      }
+    },
+    {
+      "job": "next_evo_original_2107",
+      "selected_candidate": "744d5e48aae6eb6913c81fcc1653ff54b0eb2c13dcf38a702919fcb343d9ba93",
+      "selected_validation_auc_percent": 76.9672,
+      "baseline_validation_auc_percent": 75.7504,
+      "frozen_source_sha256": "39c2607087c09c58d6e49d5b700061d45bdb3218ced3139f98da2be7fde37d5b",
+      "splits": {
+        "train": {
+          "rows": 5605,
+          "saved_prediction_sha256": "b1f778b572b1cdd05076444dee0ddacb87b911acd81ea669f9f6d451444f67a9",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 5605,
+          "spearman_vs_canonical": 0.9854192887246056,
+          "canonical_unique_scores": 619,
+          "selected_unique_scores": 5391,
+          "saved_directed_auc_percent": 75.66231791117701,
+          "canonical_directed_auc_percent": 74.32858297398488,
+          "fixed512_probe": {
+            "saved_predictions_equal_lp_arithmetic": true,
+            "max_abs_saved_minus_formula": 0.0,
+            "spearman_vs_canonical": 0.9821160106686576
+          }
+        },
+        "val": {
+          "rows": 1402,
+          "saved_prediction_sha256": "aaad9ac880fe38445dc47ba6589e1e547e085313c522f6692af62dd61950cfdd",
+          "saved_predictions_equal_lp_arithmetic": true,
+          "max_abs_saved_minus_formula": 0.0,
+          "changed_scores_vs_canonical_nll": 1402,
+          "spearman_vs_canonical": 0.9856665741138129,
+          "canonical_unique_scores": 418,
+          "selected_unique_scores": 1389,
+          "saved_directed_auc_percent": 76.9672298678294,
+          "canonical_directed_auc_percent": 75.75041445246853
+        }
+      }
+    }
+  ],
+  "existing_variance_winner_comparison": {
+    "train": {
+      "predictions_bitwise_equal": false,
+      "max_abs_difference": 0.14715576171875,
+      "spearman": 0.9999840777228163,
+      "changed_prediction_count": 5605
+    },
+    "val": {
+      "predictions_bitwise_equal": false,
+      "max_abs_difference": 0.13226318359375,
+      "spearman": 0.9999817959137238,
+      "changed_prediction_count": 1402
+    }
+  },
+  "existing_report_utc": "2026-10-21T19:59:36.482684+00:00",
+  "existing_primary_ood_summary": [
+    {
+      "method": "new/next_evo_neutral_rank_uniform_2107__primary",
+      "paper_macro_auc_percent": 68.71167185132946,
+      "directed_macro_auc_percent": 65.6431497469665
+    },
+    {
+      "method": "new/next_evo_neutral_rank_uniform_4319__primary",
+      "paper_macro_auc_percent": 69.3423717333023,
+      "directed_macro_auc_percent": 66.30483673749029
+    },
+    {
+      "method": "new/next_evo_neutral_rank_uniform_8741__primary",
+      "paper_macro_auc_percent": 68.71117305407847,
+      "directed_macro_auc_percent": 65.64388231516448
+    },
+    {
+      "method": "new/next_evo_original_2107__primary",
+      "paper_macro_auc_percent": 69.34362990222286,
+      "directed_macro_auc_percent": 66.30800284628233
+    }
+  ],
+  "existing_rank_arm_three_seed_summary": {
+    "phase": "sampler_control",
+    "policy": "neutral",
+    "writer_model": "Qwen/Qwen3.5-9B",
+    "staged_seeds": [
+      2107,
+      4319,
+      8741
+    ],
+    "evaluated_seeds": [
+      2107,
+      4319,
+      8741
+    ],
+    "directed_macro": {
+      "n": 3,
+      "mean": 65.86395626654043,
+      "std": 0.38181386356806724,
+      "minimum": 65.6431497469665,
+      "maximum": 66.30483673749029
+    },
+    "paper_macro": {
+      "n": 3,
+      "mean": 68.92173887957007,
+      "std": 0.36427882237217774,
+      "minimum": 68.71117305407847,
+      "maximum": 69.3423717333023
+    },
+    "selected_validation": {
+      "n": 3,
+      "mean": 76.15993333333334,
+      "std": 0.6991383363350455,
+      "minimum": 75.7504,
+      "maximum": 76.9672
+    }
+  },
+  "rank2107_symbolic_proof": {
+    "statement": "For each finite row and K>=2, sort(axis=1) is ascending across columns; [::-1] reverses rows only, hence column0-column1<=0 and maximum(0,difference)==0. The final detector is float32 output of -sum(lp,dtype=float32).",
+    "synthetic_array_operator_checks": [
+      {
+        "dtype": "float16",
+        "token_rows": 1,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float16",
+        "token_rows": 4,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float16",
+        "token_rows": 17,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float32",
+        "token_rows": 1,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float32",
+        "token_rows": 4,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float32",
+        "token_rows": 17,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float64",
+        "token_rows": 1,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float64",
+        "token_rows": 4,
+        "width": 512,
+        "gap_identically_zero": true
+      },
+      {
+        "dtype": "float64",
+        "token_rows": 17,
+        "width": 512,
+        "gap_identically_zero": true
+      }
+    ],
+    "domain": "finite real top-k logits, at least two columns; NaNs or malformed arrays are outside this equivalence claim"
+  },
+  "original2107_source_domain_equivalence": {
+    "expression": "float32 sum(-float32(lp)) + 0.5*var(float32(lp))",
+    "condition": "max(lp)>=-1e-6 on every nonempty sequence",
+    "all_7007_source_rows_satisfy_condition": true,
+    "not_a_global_program_identity": true,
+    "OOD_equivalence_not_claimed": true
+  },
+  "rank4319_precision": "Input sums and np.var use float16; scalar arithmetic preserves float16 under the actual NumPy version; final array is float32.",
+  "existing_report_sha256": "803a23133c96c5b963735aba3d5d24c6e2661fe3d06db2cfd392df024ec09edd",
+  "baseline_feature_and_promotion_distinction": "All methods consume the same stored float16 observed-token logprobs; only accumulation/variance arithmetic differs. No new features were extracted.",
+  "interpretation": "Selected rank winners are canonical NLL, its float32-accumulation variant, and a simple NLL+variance detector. This is not evidence of new complex-feature diversity or of improved parent-sampling quality; full matched neutral-seed comparison remains required."
+}

@@ -1,0 +1,20 @@
+{
+  "completed_utc": "2026-10-21T23:09:33.661138+00:00",
+  "generation_complete": true,
+  "outcome": "completed",
+  "source_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c",
+  "sampler_manifest_sha256": "5dd44749b9df9be59d3efacbbb9f303ba22381bf565c8dc9de015c9d11182a3d",
+  "confirmation_execution_manifest": "/workspace/mod1/results/next_experiments/confirmation27b_seed2107_manifest.json",
+  "experiment_cutoff_utc": "2026-10-22T01:46:28+00:00",
+  "hard_deadline_utc": "2026-10-22T02:16:28+00:00",
+  "analysis_manifest": "results/overnight20261021/analysis_manifest.json",
+  "pod_stopped": false,
+  "reserved_gpu_feature_transfer_minutes": 45.0,
+  "confirmation_generation_cutoff_utc": "2026-10-22T01:01:28+00:00",
+  "planned_gpu_feature_window": {
+    "start_utc": "2026-10-22T01:01:28+00:00",
+    "end_utc": "2026-10-22T01:46:28+00:00",
+    "purpose": "Full nine-dataset feature transfer after writer generation"
+  },
+  "scope": "27B confirmation only; source 9B and sampler retain the global experiment cutoff"
+}

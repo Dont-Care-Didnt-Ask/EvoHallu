@@ -1,0 +1,35 @@
+{
+  "dataset": "AVeriTeC__dev_filtered_10shot",
+  "rows": 427,
+  "phase": "reference",
+  "status": "passed_reference",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "c44e37b47a29cf487d41a9152f28a424e8d01777d0ab778c485951d527738e7f",
+  "reference_npz_sha256": "41ed1bcb747d2c5eb88f19531985e5c333eca530639f87ac54a1231490773d85",
+  "labels_groups_masks_exact": true,
+  "original512_label_prevalence": {
+    "chunk_size": 512,
+    "chunks": 1,
+    "minimum": 0.7142857142857143,
+    "maximum": 0.7142857142857143,
+    "last_chunk_rows": 427,
+    "prevalence_by_chunk": [
+      0.7142857142857143
+    ],
+    "order": "original CSV/cache row order; no label-based ordering"
+  },
+  "conditions": [
+    {
+      "case": "original_512",
+      "chunk_size": 512,
+      "directed_auc_percent": 63.84305294275732,
+      "paper_auc_percent": 63.84305294275732,
+      "spearman_vs_original512": 1.0,
+      "exact_original512_scores": true,
+      "maximum_absolute_score_difference": 0.0,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 0.4009575940144714
+    }
+  ]
+}

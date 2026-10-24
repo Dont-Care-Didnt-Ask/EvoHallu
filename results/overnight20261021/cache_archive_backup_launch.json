@@ -1,0 +1,19 @@
+{
+  "status": "launched_detached_cpu_archiver",
+  "pid": 29133,
+  "log": "/workspace/mod1/results/overnight20261021/cache_archive_backup.remote.log",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "/workspace/mod1/scripts/overnight_archive_transfer.py",
+    "--execute",
+    "--workers",
+    "2",
+    "--deadline-utc",
+    "2026-10-22T02:06:00Z"
+  ],
+  "lock": "/workspace/mod1/results/overnight20261021/cache_backup.archive.lock",
+  "source_receipt_sha256": "7c0d8f1daeed7a2309eeb696d1098ccd83d824c80df49b3c09abe3f2823a588c",
+  "archive_script_sha256": "5d27d8bbeade713006e8efaffca48a6c07ee134c4091cbae6cddb8a06e4d8ee5",
+  "started_utc": "2026-10-22T00:21:31.064928+00:00",
+  "archive_cutoff_utc": "2026-10-22T02:06:00+00:00"
+}

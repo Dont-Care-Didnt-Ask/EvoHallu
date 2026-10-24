@@ -1,0 +1,11 @@
+--- out/logs/research20261021/uncertainty_quantification_next_prompt_compositional_2107/frozen_estimator.py
++++ results/overnight20261021/screen_component_ablations/frozen/screen_compositional__drop_tail_surprisal_mean/frozen_estimator.py
+@@ -81,7 +81,7 @@
+                 score_slope = 0.0
+             
+             # Aggregate
+-            final_score = (W_VAR * score_var) + (W_MEAN * score_mean) + (W_SLOPE * score_slope)
++            final_score = (W_VAR * score_var) + (0.0) + (W_SLOPE * score_slope)
+             scores[i] = final_score
+ 
+         return scores

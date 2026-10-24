@@ -1,0 +1,50 @@
+{
+  "files": [
+    {
+      "file": "/root/evohallu/mod1/data/feature_cache_archive/overnight20261021/geometry__counterfact_true_false.pt.xz",
+      "archive_sha256": "6bb56750763640bd696c3c04d564223a2312f0332b176e1f2a0bf01ef663de3f",
+      "archive_bytes": 442485400,
+      "raw_sha256": "3558db4e70ef43e811f7cdcd8c50e242de00a5f7932cd2b3ac91eb0397f9586e",
+      "raw_bytes": 4772684845,
+      "compressed_sha256_verified": true,
+      "remote_roundtrip_raw_sha256_verified": true
+    },
+    {
+      "file": "/root/evohallu/mod1/data/feature_cache_archive/overnight20261021/x-fact__test_filtered_10shot.pt.xz",
+      "archive_sha256": "1e2b9f0047df7e9865949d2bafe73b461dacf39370ee3b0a3b86766bf355200c",
+      "archive_bytes": 183969988,
+      "raw_sha256": "f4388e107680efe747335d28efc98e093e57fb895735b6fb4b4b8f45ef86cd9b",
+      "raw_bytes": 908810888,
+      "compressed_sha256_verified": true,
+      "remote_roundtrip_raw_sha256_verified": true
+    },
+    {
+      "file": "/root/evohallu/mod1/data/feature_cache_archive/overnight20261021/popqa__popqa_test_filtered_10shot.pt.xz",
+      "archive_sha256": "6ddceca321656b4b36c862ec2bf6c33d47c05e72b99e3c60db2c11f9cb2c97fa",
+      "archive_bytes": 135891168,
+      "raw_sha256": "237d8b9d67874d62e429a26ae16822540ddd40e3d3917023ae45515ada36ebba",
+      "raw_bytes": 1068702495,
+      "compressed_sha256_verified": true,
+      "remote_roundtrip_raw_sha256_verified": true
+    }
+  ],
+  "status": "complete_three_local_cache_archives",
+  "updated_utc": "2026-10-22T00:30:19.026393+00:00",
+  "hard_stop_utc": "2026-10-22T02:13:00+00:00",
+  "no_gpu_or_feature_extraction": true,
+  "no_pod_stop": true,
+  "source_completion_sha256": "7c0d8f1daeed7a2309eeb696d1098ccd83d824c80df49b3c09abe3f2823a588c",
+  "remote_launch": {
+    "status": "archive_lock_busy"
+  },
+  "remote_archive_receipt_sha256": "703f33c3c0e776592d0c8bf265426f96212d7bae819a84eb247a1d921440b6a9",
+  "remaining_archive_bytes": 762346556,
+  "available_bytes": 3952226304,
+  "protected_reserve_bytes": 419430400,
+  "required_free_bytes": 1181776956,
+  "space_admitted": true,
+  "already_verified": [],
+  "archive": "popqa__popqa_test_filtered_10shot.pt.xz",
+  "expected_bytes": 135891168,
+  "total_archive_bytes": 762346556
+}

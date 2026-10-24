@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1.  **Analysis of Shown Detectors**\n    -   **Detector 1 (Average NLL):** Uses the mean of the negative log-probabilities per token. This mitigates length bias but may be too smooth; it fails to distinguish between a single low-probability token (potential hallucination) and a sequence of slightly low-probability tokens (normal text).\n    -   **Detector 2 (Total NLL):** Uses the sum of negative log-probabilities. This suffers from strong sequence-length bias, as longer sequences accumulate more uncertainty regardless of content quality.\n\n2.  **Proposed Detector**\n    -   **Approach:** **Peak-to-Average Ratio (PAR) of NLL**.\n    -   **Signal:** The ratio of the maximum negative log-probability (peak uncertainty) to the average negative log-probability.\n    -   **Aggregation Principle:** Divide the maximum NLL per sequence by the mean NLL per sequence.\n    -   **Rationale:** This focuses on the most \"surprising\" token in the sequence. A hallucination often manifests as a specific token with extremely low probability (high NLL) amidst otherwise confident text. This detector captures this local anomaly without being biased by sequence length.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the Peak-to-Average Ratio of Negative Log-Probabilities.\n        \n        Aggregation Principle: For each sequence, compute max(sequence_logprobs) / mean(sequence_logprobs).\n        This isolates the most uncertain token relative to the overall confidence.\n        \n        Hypothesis for future: Hallucinations are characterized by a high variance in confidence,\n        specifically a single low-probability token (high peak) amidst generally confident text.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            length = len(seq_logprobs)\n            if length > 0:\n                max_nll = np.max(seq_logprobs)\n                mean_nll = np.mean(seq_logprobs)\n                # Avoid division by zero if all tokens have 0 logprob (unlikely)\n                if mean_nll == 0:\n                    par = 0.0\n                else:\n                    par = max_nll / mean_nll\n            else:\n                par = 0.0\n            scores.append(par)\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 565,
+      "prompt_tokens": 766,
+      "total_tokens": 1331,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 43.742840546008665
+  },
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\nThe two provided detectors rely exclusively on the `sequence_logprobs` (Negative Log-Likelihood) of the generated tokens.\n*   **Detector 1 (Average NLL):** Uses the mean of the negative log-probabilities. It attempts to normalize for sequence length to avoid penalizing long texts, but it assumes hallucinations are characterized by *low average confidence*.\n*   **Detector 2 (Total NLL):** Sums the negative log-probabilities. It assumes hallucinations are characterized by *high total uncertainty*.\n\nBoth approaches are **unidirectional**; they only look at the probability of the token *actually generated*. They ignore the quality of the alternatives available to the model.\n\n### 2. Proposed Detector\n\n**Signal:** **Confidence Gap (Top-k Margin)**\n**Aggregation Principle:** **Mean of the Gap**\n**Structural Difference:** Unlike the previous detectors which use the probability of the *generated* token, this detector measures the *distance* between the generated token and the next most likely token. This explores the \"sharpness\" of the model's decision boundary. If the model is hallucinating, it often predicts a token that is not the most likely one (e.g., due to bias or lack of knowledge), resulting in a large gap between the top token and the actual output.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average confidence gap between the generated token and the \n        top-k alternative.\n        \n        Signal: The difference between the log-probability of the generated token \n        and the log-probability of the most likely alternative (Top-1).\n        \n        Aggregation Principle: Average the gap across the sequence length.\n        \n        Hypothesis for future: Hallucinations often occur when the model selects \n        a token that is not the most probable one (e.g., due to training data \n        contamination or lack of grounding), resulting in a higher uncertainty \n        gap compared to fluent, factual continuations.\n        \"\"\"\n        scores = []\n        for seq_logprobs, top_k_logit, top_k_idx in zip(\n            stats[\"sequence_logprobs\"],\n            stats[\"top_k_logits\"],\n            stats[\"top_k_indices\"]\n        ):\n            length = len(seq_logprobs)\n            if length == 0:\n                scores.append(0.0)\n                continue\n            \n            # Get the log-probability of the generated token\n            gen_logprob = seq_logprobs\n            \n            # Get the log-probability of the top-1 alternative\n            # top_k_logits shape is (n_i, k), we take index 0\n            top1_logit = top_k_logit[:, 0]\n            \n            # Calculate the gap (margin)\n            # If the model chose the top token, gap is 0. If it chose a lower one, gap > 0.\n            gap = top1_logit - gen_logprob\n            \n            avg_gap = np.mean(gap)\n            scores.append(avg_gap)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 729,
+      "prompt_tokens": 786,
+      "total_tokens": 1515,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 56.27491649900912
+  }
+]

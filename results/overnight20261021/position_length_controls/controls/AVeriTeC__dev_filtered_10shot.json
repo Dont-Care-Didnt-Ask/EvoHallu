@@ -1,0 +1,23 @@
+{
+  "status": "complete_four_controls",
+  "dataset": "AVeriTeC__dev_filtered_10shot",
+  "rows": 427,
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "raw_sha256": "c44e37b47a29cf487d41a9152f28a424e8d01777d0ab778c485951d527738e7f",
+  "reference_npz_sha256": "eef92dcce24e14e618a6e7d2254d0e3b1aeb9783e6cf8780fa2d9a1f1cce2180",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "labels_groups_masks_exact": true,
+  "frozen_quadratic_sum_byte_exact": true,
+  "canonical_nll_byte_exact": true,
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum",
+    "lp_total_length",
+    "float32_nll_sum",
+    "float32_nll_mean",
+    "float32_quadratic_mean"
+  ],
+  "bootstrap_samples": 500,
+  "scores_sha256": "7275464f4362a2287d078ae9e5730c17f927f50b7ceaa9cf70d97e8f04aba489",
+  "bootstrap_sha256": "176a8a17f9e8acd5d82c297bf61654ce346cab626815dcbd5489f804e382221b"
+}

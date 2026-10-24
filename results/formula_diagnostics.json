@@ -1,0 +1,324 @@
+{
+  "data": "synthetic diagnostics only; no hallucination-quality conclusions",
+  "seed": 441,
+  "samples": 128,
+  "methods": [
+    {
+      "name": "EntropySlope",
+      "lines": 36,
+      "ast_nodes": 222,
+      "seconds_128_samples": 0.09974380023777485,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "ExpWeightedNegLogProb",
+      "lines": 63,
+      "ast_nodes": 304,
+      "seconds_128_samples": 0.04023563675582409,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "ExpWeightedNegLogProbWithTop1",
+      "lines": 88,
+      "ast_nodes": 465,
+      "seconds_128_samples": 0.045841481536626816,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "Gap",
+      "lines": 48,
+      "ast_nodes": 227,
+      "seconds_128_samples": 0.015158433467149734,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "LogProbSlope",
+      "lines": 68,
+      "ast_nodes": 186,
+      "seconds_128_samples": 0.04306465946137905,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "LogProbSlope_BottomMassAvg",
+      "lines": 85,
+      "ast_nodes": 449,
+      "seconds_128_samples": 0.3829857259988785,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "LogProbSlope_OutlierScore",
+      "lines": 69,
+      "ast_nodes": 300,
+      "seconds_128_samples": 0.03903250768780708,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "LogProbSlope_TopBottomRatio",
+      "lines": 89,
+      "ast_nodes": 501,
+      "seconds_128_samples": 0.37765938602387905,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "MeanStdTokenEntropy",
+      "lines": 12,
+      "ast_nodes": 107,
+      "seconds_128_samples": 0.022042110562324524,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "MeanTokenEntropy",
+      "lines": 11,
+      "ast_nodes": 96,
+      "seconds_128_samples": 0.014831339940428734,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "MinimalLogProb",
+      "lines": 10,
+      "ast_nodes": 98,
+      "seconds_128_samples": 0.01354067400097847,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "Perplexity",
+      "lines": 10,
+      "ast_nodes": 103,
+      "seconds_128_samples": 0.016635676845908165,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "PositionWeightedGap",
+      "lines": 53,
+      "ast_nodes": 273,
+      "seconds_128_samples": 0.01558290421962738,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "PositionWeightedGapNormalized",
+      "lines": 60,
+      "ast_nodes": 332,
+      "seconds_128_samples": 0.03358500264585018,
+      "finite": true,
+      "chunk_invariant": false,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "PositionWeightedGap_EntropySlope_TopKMassInv",
+      "lines": 191,
+      "ast_nodes": 912,
+      "seconds_128_samples": 0.052108295261859894,
+      "finite": true,
+      "chunk_invariant": false,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "QuartileEntropyDiff",
+      "lines": 33,
+      "ast_nodes": 197,
+      "seconds_128_samples": 0.017187848687171936,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "QuartileEntropyDiffNormalized",
+      "lines": 44,
+      "ast_nodes": 256,
+      "seconds_128_samples": 0.016859935596585274,
+      "finite": true,
+      "chunk_invariant": false,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "QuartileEntropyDiff_PositionWeightedGap",
+      "lines": 107,
+      "ast_nodes": 515,
+      "seconds_128_samples": 0.01692282035946846,
+      "finite": true,
+      "chunk_invariant": false,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay",
+      "lines": 145,
+      "ast_nodes": 763,
+      "seconds_128_samples": 0.03700471296906471,
+      "finite": true,
+      "chunk_invariant": false,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "SequenceLogProb",
+      "lines": 12,
+      "ast_nodes": 98,
+      "seconds_128_samples": 0.012466583400964737,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "SequenceLogProbBottom",
+      "lines": 16,
+      "ast_nodes": 145,
+      "seconds_128_samples": 0.01498076319694519,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "SequenceLogProb_BottomMassAvg",
+      "lines": 77,
+      "ast_nodes": 399,
+      "seconds_128_samples": 0.27857641503214836,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "SequenceLogProb_OutlierScore",
+      "lines": 62,
+      "ast_nodes": 250,
+      "seconds_128_samples": 0.015047969296574593,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "SequenceLogProb_TopBottomRatio",
+      "lines": 81,
+      "ast_nodes": 451,
+      "seconds_128_samples": 0.2860926892608404,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    },
+    {
+      "name": "StdTokenEntropy",
+      "lines": 12,
+      "ast_nodes": 98,
+      "seconds_128_samples": 0.017343061044812202,
+      "finite": true,
+      "chunk_invariant": true,
+      "logit_shift_invariant": true,
+      "logit_shift_rank_correlation": 1.0
+    }
+  ],
+  "nearly_identical_rankings": [
+    {
+      "first": "ExpWeightedNegLogProb",
+      "second": "ExpWeightedNegLogProbWithTop1",
+      "spearman": 0.9995193188060795
+    },
+    {
+      "first": "PositionWeightedGap",
+      "second": "PositionWeightedGapNormalized",
+      "spearman": 1.0
+    },
+    {
+      "first": "QuartileEntropyDiff",
+      "second": "QuartileEntropyDiffNormalized",
+      "spearman": 1.0
+    },
+    {
+      "first": "SequenceLogProb",
+      "second": "SequenceLogProbBottom",
+      "spearman": 0.9962174967954587
+    },
+    {
+      "first": "SequenceLogProb",
+      "second": "SequenceLogProb_BottomMassAvg",
+      "spearman": 1.0
+    },
+    {
+      "first": "SequenceLogProb",
+      "second": "SequenceLogProb_OutlierScore",
+      "spearman": 1.0
+    },
+    {
+      "first": "SequenceLogProb",
+      "second": "SequenceLogProb_TopBottomRatio",
+      "spearman": 0.9999942776048343
+    },
+    {
+      "first": "SequenceLogProbBottom",
+      "second": "SequenceLogProb_BottomMassAvg",
+      "spearman": 0.9962174967954587
+    },
+    {
+      "first": "SequenceLogProbBottom",
+      "second": "SequenceLogProb_OutlierScore",
+      "spearman": 0.9962174967954587
+    },
+    {
+      "first": "SequenceLogProbBottom",
+      "second": "SequenceLogProb_TopBottomRatio",
+      "spearman": 0.9962060520051272
+    },
+    {
+      "first": "SequenceLogProb_BottomMassAvg",
+      "second": "SequenceLogProb_OutlierScore",
+      "spearman": 1.0
+    },
+    {
+      "first": "SequenceLogProb_BottomMassAvg",
+      "second": "SequenceLogProb_TopBottomRatio",
+      "spearman": 0.9999942776048343
+    },
+    {
+      "first": "SequenceLogProb_OutlierScore",
+      "second": "SequenceLogProb_TopBottomRatio",
+      "spearman": 0.9999942776048343
+    }
+  ]
+}

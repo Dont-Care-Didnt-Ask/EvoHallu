@@ -1,0 +1,15 @@
+{"model": "mistralai/Devstral-Small-2-24B-Instruct-2512", "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128", "remaining_bytes": 25827009376}
+{"file": "chat_template.jinja", "bytes": 11362, "sha256": "a0c0ed8a45c2c75c85fd756316a10419b90eb4f3dbe64d00f5c0b8ad4de5209a"}
+{"file": "config.json", "bytes": 1822, "sha256": "8d570ae877badd9ff5442afdc726385aba07f5757ba875a7491bde9549457e72"}
+{"file": "VIBE_SYSTEM_PROMPT.txt", "bytes": 1809, "sha256": "c55c3592065d1786b75e82fc0fe05ac4c4940b473e77799c8abb75e439a15556"}
+{"file": "CHAT_SYSTEM_PROMPT.txt", "bytes": 2367, "sha256": "35e9942fc2a95dca58e4ce6484515f16a798f718aad0ce0b2e83ba0887f53b29"}
+{"file": "consolidated.safetensors.index.json", "bytes": 101411, "sha256": "ae098214199fb7fe4948768c0a640f0cea32d1effb827c09b0ae1314b02ef714"}
+{"file": "generation_config.json", "bytes": 175, "sha256": "c5ee59a086c5504838db2a66cafdf04d10aac11cb021dd4e92a15946645c2dda"}
+{"file": "processor_config.json", "bytes": 976, "sha256": "ece2373c2ae391bce18785a1810543bc6173a1f28b6767cffab2c35dbea5f002"}
+{"file": "params.json", "bytes": 1185, "sha256": "1618da0d6f897e074ff7ec4b1047b5d2e8a1a4aa1fab41e26fc88f3b5b94d2aa"}
+{"file": "tokenizer.json", "bytes": 17077420, "sha256": "99cf274236c60277fcfad861a5a1007518687ad06ba8938760f50b55ffa0b1ef"}
+{"file": "tokenizer_config.json", "bytes": 21177, "sha256": "4a05af595aa11c3436d3b68a616219ae99b303426f708a12b31bc9ce32530728"}
+{"file": "tekken.json", "bytes": 16753784, "sha256": "600bb27946565481ecf51ba8aee252e49b9a68507866080ac9c30185bb312843"}
+{"file": "consolidated-00002-of-00002.safetensors", "bytes": 5953165906, "sha256": "b783163b5ee6fb9595fde29d6072e81be8fcc24ea576d09ecc3dc7611ababb97"}
+{"file": "consolidated-00001-of-00002.safetensors", "bytes": 19839869982, "sha256": "dfa96c3ccb824ac308eeeaa86fd1ce01aca4e3311e1aaa27a498ec3b7302e165"}
+DOWNLOAD COMPLETE

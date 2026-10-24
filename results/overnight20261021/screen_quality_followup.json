@@ -1,0 +1,16 @@
+{
+  "declared_utc": "2026-10-21T18:47:38.872164+00:00",
+  "purpose": "Secondary nine-dataset quality of all four frozen-context screen winners",
+  "jobs": [
+    "next_prompt_original_2107",
+    "next_prompt_neutral_2107",
+    "next_prompt_diverse_2107",
+    "next_prompt_compositional_2107"
+  ],
+  "selection": "Within each 30-request screen, highest directed PopQA validation AUROC including NLL baseline",
+  "primary_evolution_comparison": false,
+  "equal_budget_to_60_request_adaptive_runs": false,
+  "historical_parent_contexts_shared_across_four_arms": true,
+  "test_results_used_for_writer_policy_selection": false,
+  "conditional_writer_policy_selection": "Mean validation across three complete adaptive evolution seeds, independently of these test scores"
+}

@@ -1,0 +1,10 @@
+{
+  "status": "finished",
+  "generator": "frozen_formula_ablation",
+  "requests": 0,
+  "valid_candidates": 0,
+  "total_tokens": 0,
+  "elapsed_seconds": 0.0,
+  "selected_validation_auc_percent": 79.61461597856201,
+  "held_out_test_evaluated": false
+}

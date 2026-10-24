@@ -1,0 +1,126 @@
+{
+  "created_utc": "2026-10-21T19:17:07.100868+00:00",
+  "design_status": "exploratory_training_failure_motivated_no_execution",
+  "source_audit_created_utc": "2026-10-21T19:05:13.260942+00:00",
+  "source_audit_sha256": "c4fe15988e9961d49f1d63c79797df8d1fe7ffe213de0f0a10092d369c0f56cd",
+  "frozen_source_audit": "results/overnight20261021/interface_contract/failure_audit_snapshot.json",
+  "source_test_data_or_predictions_read": false,
+  "ledger_rows": 126,
+  "pipeline_valid": 75,
+  "invalid_ledger_rows": 51,
+  "category_counts": {
+    "valid_nonconstant_scores": 71,
+    "ragged_shape_alignment_nonfinite": 36,
+    "evaluation_timeout": 1,
+    "imports_api": 6,
+    "valid_constant_scores": 4,
+    "wrong_estimator_constructor": 5,
+    "syntax_extraction": 1,
+    "other_failure": 2
+  },
+  "actual_error_frequencies": [
+    {
+      "error": "ValueError: Input contains NaN.",
+      "count": 21
+    },
+    {
+      "error": "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.",
+      "count": 3
+    },
+    {
+      "error": "TypeError: object.__init__() takes exactly one argument (the instance to initialize)",
+      "count": 3
+    },
+    {
+      "error": "ImportError: cannot import name 'entropy' from 'scipy.special' (/workspace/mod1/.venv/lib/python3.12/site-packages/scipy/special/__init__.py)",
+      "count": 2
+    },
+    {
+      "error": "ValueError: operands could not be broadcast together with shapes (28,) (27,) ",
+      "count": 2
+    },
+    {
+      "error": "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>",
+      "count": 2
+    },
+    {
+      "error": "ValueError: cannot select an axis to squeeze out which has size not equal to one",
+      "count": 1
+    },
+    {
+      "error": "evaluation timeout after 120.0s",
+      "count": 1
+    },
+    {
+      "error": "TypeError: only length-1 arrays can be converted to Python scalars",
+      "count": 1
+    },
+    {
+      "error": "ValueError: operands could not be broadcast together with shapes (28,512) (28,28) ",
+      "count": 1
+    },
+    {
+      "error": "AttributeError: 'dict' object has no attribute 'linregress'",
+      "count": 1
+    },
+    {
+      "error": "ValueError: operands could not be broadcast together with shapes (27,) (28,28) ",
+      "count": 1
+    },
+    {
+      "error": "TypeError: only integer scalar arrays can be converted to a scalar index",
+      "count": 1
+    },
+    {
+      "error": "AxisError: axis 1 is out of bounds for array of dimension 1",
+      "count": 1
+    },
+    {
+      "error": "IndexError: index 14924 is out of bounds for axis 0 with size 512",
+      "count": 1
+    },
+    {
+      "error": "NameError: name 't_idx_in_seq' is not defined",
+      "count": 1
+    },
+    {
+      "error": "AttributeError: 'list' object has no attribute 'size'",
+      "count": 1
+    },
+    {
+      "error": "SyntaxError: invalid syntax (<unknown>, line 46)",
+      "count": 1
+    },
+    {
+      "error": "AttributeError: 'list' object has no attribute 'shape'",
+      "count": 1
+    },
+    {
+      "error": "ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()",
+      "count": 1
+    },
+    {
+      "error": "IndexError: boolean index did not match indexed array along axis 0; size of axis is 27 but size of corresponding boolean axis is 6",
+      "count": 1
+    },
+    {
+      "error": "NameError: name 'k' is not defined",
+      "count": 1
+    },
+    {
+      "error": "ValueError: setting an array element with a sequence.",
+      "count": 1
+    },
+    {
+      "error": "TypeError: list indices must be integers or slices, not tuple",
+      "count": 1
+    }
+  ],
+  "motivation": "Observed training-pipeline constructor/API/ragged-shape/alignment/nonfinite failures; no validation or OOD result chooses contract content",
+  "truth_sources": [
+    "src/packing/evaluate/uncertainty_quantification/estimator_base.py",
+    "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py",
+    "src/packing/evaluate/uncertainty_quantification/precompute_raw_stats_separated.py",
+    "results/next_experiments/readiness.json"
+  ]
+}

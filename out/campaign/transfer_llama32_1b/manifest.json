@@ -1,0 +1,63 @@
+{
+  "frozen_estimators": {
+    "new/uncertainty_quantification_devstral_evo_1048": {
+      "file": "out/logs/mod1/uncertainty_quantification_devstral_evo_1048/frozen_estimator.py",
+      "sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d"
+    },
+    "new/uncertainty_quantification_laguna_evo_1048": {
+      "file": "out/logs/mod1/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+      "sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31"
+    },
+    "new/uncertainty_quantification_linear_evolution_1047": {
+      "file": "out/logs/mod1/uncertainty_quantification_linear_evolution_1047/frozen_estimator.py",
+      "sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a"
+    },
+    "new/uncertainty_quantification_qwen35_4b_evo_1048": {
+      "file": "out/logs/mod1/uncertainty_quantification_qwen35_4b_evo_1048/frozen_estimator.py",
+      "sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875"
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+      "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/frozen_estimator.py",
+      "sha256": "4b817650efff1f84685e993110aff97c658f0a1467d191529f9eec2c5f245502"
+    },
+    "new/uncertainty_quantification_qwen38_evo_1047": {
+      "file": "out/logs/mod1/uncertainty_quantification_qwen38_evo_1047/frozen_estimator.py",
+      "sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9"
+    },
+    "out/campaign/supervised/models.joblib": {
+      "file": "out/campaign/supervised/models.joblib",
+      "sha256": "cc48fa8fd6342a81d100ac673ba5ffd309344f1f1adb784f1c671ba5d0a71754"
+    },
+    "out/campaign/supervised_documented/models.joblib": {
+      "file": "out/campaign/supervised_documented/models.joblib",
+      "sha256": "cf266c2cef21979f7781586f3b46ba948a0d8c154793398162b64461dd52bb62"
+    },
+    "out/campaign/supervised_group/models.joblib": {
+      "file": "out/campaign/supervised_group/models.joblib",
+      "sha256": "19337f334bed675b86be5d63f851293eaf7d3b99004a03f209c781987410909e"
+    }
+  },
+  "feature_model": "/dev/shm/mod1-models/Llama3.2-1B",
+  "dtype": "float32",
+  "tokenizer": "/workspace/mod1-models/llama31",
+  "primary_only": true,
+  "trimmed_header_suffix_tokens": 0,
+  "scoring_chunk_timeout_seconds": 120,
+  "cpu_worker_address_space_GiB": null,
+  "scoring_chunk_size": 512,
+  "bootstrap_samples": 500,
+  "bootstrap_unit": "claim",
+  "original_bootstrap_policy": "shortlist",
+  "method_prefix": null,
+  "data": {
+    "AVeriTeC/dev_filtered_10shot.csv": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+    "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+    "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+    "geometry/cities.csv": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+    "geometry/common_claim_true_false.csv": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+    "geometry/companies_true_false.csv": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+    "geometry/counterfact_true_false.csv": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+    "popqa/popqa_test_filtered_10shot.csv": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+    "x-fact/test_filtered_10shot.csv": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13"
+  }
+}

@@ -1,0 +1,366 @@
+{
+  "created_utc": "2026-10-21T23:12:04.620106+00:00",
+  "status": "complete_two_full_budget_frozen_programs",
+  "writer_model": "Qwen/Qwen3.8-27B",
+  "writer_revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0",
+  "feature_model": "Llama3.1-8b-instruct",
+  "label_field": "is_hallu",
+  "source_manifest": "results/next_experiments/confirmation27b_seed2107_manifest.json",
+  "source_manifest_sha256": "913c91fe20781e3c98a0552334489e61d9b15ba4e7e08325c32b4742cf2d969f",
+  "rows": [
+    {
+      "job_id": "next27b_evo_original_2107",
+      "policy": "original",
+      "seed": 2107,
+      "requests": 60,
+      "valid_candidates": 52,
+      "validation_auc_percent": 79.5366,
+      "candidate": "5a782bb1ff22f8fd0e9be3d5ce8ebf862b4f764a25fb805c8d686f101727c48d",
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next27b_evo_original_2107/frozen_estimator.py",
+      "source_sha256": "f6977a70705aa15865a906e030ae09c9a2ea5b6ee1cdf2ebfd67b809811b1d89",
+      "staged_file": "results/overnight20261021/frozen/next27b_evo_original_2107__primary/frozen_estimator.py",
+      "staged_source_exactly_matches_runner": true,
+      "summary_sha256": "da54acb7e681764701a78dfb32d0bd46bc3c1535fbb2d87c93756224c243b83a",
+      "trial_config_sha256": "763c6059d824ea428fd4609857e75b8c3b6e5a3d56c69ae18b678384a4d8c69f",
+      "config_file": "configs/next_experiments/next27b_evo_original_2107.yaml",
+      "config_sha256": "c6f033af44142820de7c72019fcb73c41347dce59f5ee007be10741d908279e6",
+      "job_elapsed_seconds_including_cpu_scoring": 3510.558955068991,
+      "imports": [
+        "import numpy as np",
+        "from typing import Dict, Any",
+        "from scipy.stats import pearsonr"
+      ],
+      "stats_dependencies": [
+        "sequence_logprobs"
+      ],
+      "top_k_logits_numerically_used": false,
+      "token_ids_used": false,
+      "batch_normalization": false,
+      "batch_independent_from_static_source": true,
+      "alignment": "Only the n observed-logprob entries are consumed; no top-k arrays, extra row, row shift or ID-to-column mapping.",
+      "dead_code_audit": "No mathematically dead scoring term identified. Guards are input-dependent; no new empirical guard-coverage test was run. Future top-k discussion is non-executable docstring text.",
+      "semantics": {
+        "formula": "For n>=2: -r + 0.5/n * sum_j max(0, -(lp[j]-mean(lp[W_j]))/std(lp[W_j])); zero z_j when local std<1e-6; r=0 when global std<1e-6 or correlation NaN. For n<2: 0.",
+        "components": [
+          "negative Pearson correlation of token position with observed logprob",
+          "mean clipped negative local z-score in centered width-11 windows, weighted 0.5"
+        ],
+        "dtypes": {
+          "input_promotion": "float64",
+          "positions": "float64",
+          "local_scores": "float64",
+          "reductions": "float64",
+          "output": "float32"
+        },
+        "guards": [
+          "n<2 returns zero",
+          "global population std<1e-6 forces r=0",
+          "NaN Pearson r forces r=0",
+          "local population std<1e-6 forces z_j=0"
+        ],
+        "window": "W_j = [max(0,j-5):min(n,j+6)], includes the current token; np.std default ddof=0",
+        "interpretation": [
+          "Pearson correlation is not OLS slope",
+          "every negative local z-score contributes; no additional significance threshold",
+          "anomaly sum is divided by n",
+          "top-k entropy is only a future hypothesis in the docstring, not executable input"
+        ]
+      }
+    },
+    {
+      "job_id": "next27b_evo_diverse_2107",
+      "policy": "diverse",
+      "seed": 2107,
+      "requests": 60,
+      "valid_candidates": 56,
+      "validation_auc_percent": 80.1645,
+      "candidate": "4f1cce8a65a70070726f9d95e48f54c1fdd46fd99e83503570367d7a811dee97",
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next27b_evo_diverse_2107/frozen_estimator.py",
+      "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+      "staged_file": "results/overnight20261021/frozen/next27b_evo_diverse_2107__primary/frozen_estimator.py",
+      "staged_source_exactly_matches_runner": true,
+      "summary_sha256": "b20999f26d88eb641b56e06f64e1a7efdbb60e1712e94ae1c8f78300ce3141ba",
+      "trial_config_sha256": "9764ea57af0cb0f7fbea472739f9086cba8b53285795511ef1939ed2c0ae2ca2",
+      "config_file": "configs/next_experiments/next27b_evo_diverse_2107.yaml",
+      "config_sha256": "4c64bd1f453ef39e1f39049dedf4770dcc769761b7e2d2acf24dd1af8efe07ff",
+      "job_elapsed_seconds_including_cpu_scoring": 2399.9598472390207,
+      "imports": [
+        "import numpy as np",
+        "from typing import Dict, Any"
+      ],
+      "stats_dependencies": [
+        "sequence_logprobs"
+      ],
+      "top_k_logits_numerically_used": false,
+      "token_ids_used": false,
+      "batch_normalization": false,
+      "batch_independent_from_static_source": true,
+      "alignment": "Only the n observed-logprob entries are consumed; no top-k arrays, extra row, row shift or ID-to-column mapping.",
+      "dead_code_audit": "No mathematically dead scoring term identified. Guards are input-dependent; no new empirical guard-coverage test was run. Future top-k discussion is non-executable docstring text.",
+      "semantics": {
+        "formula": "For n>1: sum_t (-float32(lp[t])) * (float32(t)/(n-1))**2. n=1: -float32(lp[0]); n=0: 0.",
+        "components": [
+          "quadratic later-position-weighted observed-token NLL sum"
+        ],
+        "dtypes": {
+          "input_promotion": "float32",
+          "positions": "float32",
+          "weights": "float32",
+          "reductions": "float32",
+          "intermediate_python_cast": "float after reduction",
+          "output": "float32"
+        },
+        "guards": [
+          "n=0 returns zero",
+          "n=1 uses one weight equal to 1"
+        ],
+        "interpretation": [
+          "for n>1 first weight=0 and last weight=1",
+          "weight mass is n*(2*n-1)/(6*(n-1)); approximately n/3, so this is not a length-normalized mean",
+          "top-k-gap variance is only a future hypothesis in the docstring, not an executed component"
+        ]
+      }
+    }
+  ],
+  "core_and_support_pins": [
+    {
+      "file": "src/experiments/extension_trial.py",
+      "sha256": "5d9e7e93febe82f01cb6988ba7c8d139e1931fef72ce259469b6b4168c031f36",
+      "current_bytes_match": true
+    },
+    {
+      "file": "src/experiments/prompt_policies.py",
+      "sha256": "bb8d3092c22b0e1255c440a626c086cb692762669d60517e1563b921584d1daa",
+      "current_bytes_match": true
+    },
+    {
+      "file": "src/packing/funsearch/programs_database.py",
+      "sha256": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+      "current_bytes_match": true
+    },
+    {
+      "file": "src/packing/model/prompt.py",
+      "sha256": "1c60df86c1ae48c11815751299459d7679e995cae7892ff93288c5d87424b625",
+      "current_bytes_match": true
+    },
+    {
+      "file": "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py",
+      "sha256": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+      "current_bytes_match": true
+    },
+    {
+      "file": "src/packing/evaluate/uncertainty_quantification/features.py",
+      "sha256": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+      "current_bytes_match": true
+    },
+    {
+      "file": "configs/config_uq_trial.yaml",
+      "sha256": "a8e5fb034dbcdfbff9de5eb7c75848ecfb81a1256d51f74e933fd727482db199",
+      "current_bytes_match": true
+    },
+    {
+      "file": "configs/config_uq.yaml",
+      "sha256": "b54cb74fc7886336c0aa7047ae78b63d9e870755be69975500153d1c63509949",
+      "current_bytes_match": true
+    },
+    {
+      "file": "configs/model/qwen35_9b.yaml",
+      "sha256": "16e49c2c7d01cf2097a9ae9c3e03c280f5a8d31d026c73be8993f42e52cfee47",
+      "current_bytes_match": true
+    },
+    {
+      "file": "configs/task/uncertainty_quantification.yaml",
+      "sha256": "40e1da09c9dc3c34af2315c194cdf75d7edd936c7f1ca88e596fd6fbd3bc55c7",
+      "current_bytes_match": true
+    },
+    {
+      "file": "configs/model/qwen38_27b.yaml",
+      "sha256": "74c1c90648cfd63d67d514f5dca060af71d3747c44f61b944789758f70165a74",
+      "current_bytes_match": true
+    },
+    {
+      "file": "scripts/overnight_prepare_confirmation.py",
+      "sha256": "fc8f37e3d5a8f3aafddd473d0b1515fa7556a45fe6d59b7fb662257043267395",
+      "current_bytes_match": true
+    }
+  ],
+  "selection_provenance": {
+    "source_manifest": "results/next_experiments/run_manifest.json",
+    "source_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c",
+    "ready": true,
+    "missing": [],
+    "observations": [
+      {
+        "job": "next_evo_original_2107",
+        "policy": "original",
+        "seed": 2107,
+        "selected_validation_auc_percent": 76.9672,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_original_2107/summary.json",
+        "summary_sha256": "68bba9a7a57066591044524a1ffa18e960d04e2fc97857483e76b3f4040edb5d",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_original_2107/candidates.jsonl",
+        "ledger_sha256": "617dafe0e53f6468ca0b842970908008f6a0974ed806312fd703c6763df5b5b3",
+        "config": "next_experiments/next_evo_original_2107",
+        "config_sha256": "df81e7035981a59cf3dd836cfdde7db927cfd937b6c8293e61444f87b2b9a02d"
+      },
+      {
+        "job": "next_evo_neutral_2107",
+        "policy": "neutral",
+        "seed": 2107,
+        "selected_validation_auc_percent": 75.7504,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_2107/summary.json",
+        "summary_sha256": "d4b99224d412ab93c5b29e61ae69cdc28ec88d1f1d5b725cbc2ad076c162f4ac",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_2107/candidates.jsonl",
+        "ledger_sha256": "74f3d0090a12aef5f2197604a36af1061f82be272143f8c34a851fe89a359dbc",
+        "config": "next_experiments/next_evo_neutral_2107",
+        "config_sha256": "5f1169a43bf7daaa2aa3d312f615a7529da9fd61a246faad9d17ccbee98f33e8"
+      },
+      {
+        "job": "next_evo_diverse_2107",
+        "policy": "diverse",
+        "seed": 2107,
+        "selected_validation_auc_percent": 76.8771,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_2107/summary.json",
+        "summary_sha256": "08c23108c682e763b722d6b644a81d221627815288a04c793c96ceaab3d19b65",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_2107/candidates.jsonl",
+        "ledger_sha256": "8f8cecf905b0676aae87f20c819f0e9f8cd9cda4c8a50b328b5782157a22f9d5",
+        "config": "next_experiments/next_evo_diverse_2107",
+        "config_sha256": "df1090b54f6eeb3c1efabb649d9dd9523a1a2961732f0dd0250789682627ba0c"
+      },
+      {
+        "job": "next_evo_compositional_2107",
+        "policy": "compositional",
+        "seed": 2107,
+        "selected_validation_auc_percent": 76.8237,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_2107/summary.json",
+        "summary_sha256": "57b395c80248bc6b9188b5fac159a4c83815d5ec25f23f44c0141b75d0a12845",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_2107/candidates.jsonl",
+        "ledger_sha256": "ff122f44c19365902ba6b9644b6712b5f45a2aeb5732afac85ab24b91128a9a0",
+        "config": "next_experiments/next_evo_compositional_2107",
+        "config_sha256": "5b8ff8aedfdbf6062aec5462594a608a7e0203edfa8443865d382b46496f6ad5"
+      },
+      {
+        "job": "next_evo_original_4319",
+        "policy": "original",
+        "seed": 4319,
+        "selected_validation_auc_percent": 79.2061,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_original_4319/summary.json",
+        "summary_sha256": "35ce7119ab6d8b919336c9955c4c10ccc3993fd085cfe02a350f4b920db38a0e",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_original_4319/candidates.jsonl",
+        "ledger_sha256": "be3eaa9037725478ddb2c0ca09e3dadc685fe3913a8ace3d58ac6a257fcccfed",
+        "config": "next_experiments/next_evo_original_4319",
+        "config_sha256": "4c2bb10bd47595763ba14937fa2ed7fda1784488ecfeb51065ff7a0211a7d0b9"
+      },
+      {
+        "job": "next_evo_neutral_4319",
+        "policy": "neutral",
+        "seed": 4319,
+        "selected_validation_auc_percent": 75.7504,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319/summary.json",
+        "summary_sha256": "c7866bff26df06f058578f95eb47d30415cbd7e54161b8a5da6da59019b0665e",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319/candidates.jsonl",
+        "ledger_sha256": "12d27e9526f58a264af7b67df6a1555f118e3eb385ff17b4d6358c654beae889",
+        "config": "next_experiments/next_evo_neutral_4319",
+        "config_sha256": "1aeffd78b3c3bb1b938438ed1b4c78badb6582c3db53a5766280063a9e347091"
+      },
+      {
+        "job": "next_evo_diverse_4319",
+        "policy": "diverse",
+        "seed": 4319,
+        "selected_validation_auc_percent": 79.5207,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_4319/summary.json",
+        "summary_sha256": "437f534643c17b918f03267795760ba4124a88b37faebaba05fcc95ced6b2fbc",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_4319/candidates.jsonl",
+        "ledger_sha256": "18034ed169006f02666515a2f7cdc7d23b4204fda9275436c7a5252c8c79b751",
+        "config": "next_experiments/next_evo_diverse_4319",
+        "config_sha256": "7146a60c0b36183465bb33b8e6b6f92bd6b63d32e2811e193ed5cdf5af68f698"
+      },
+      {
+        "job": "next_evo_compositional_4319",
+        "policy": "compositional",
+        "seed": 4319,
+        "selected_validation_auc_percent": 76.6394,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319/summary.json",
+        "summary_sha256": "1bfae937c628d2aba377d75cb3107c008121186a8658b47b985eb2fffe6cfe7f",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319/candidates.jsonl",
+        "ledger_sha256": "4f21723531f3d2bd50932c481712e48158233e5cd987d540d6a5745dd470bfcf",
+        "config": "next_experiments/next_evo_compositional_4319",
+        "config_sha256": "5dcb325993eaa9431c6663cbadc9a8f838fa76aeea4938a727c3bedf28ef6947"
+      },
+      {
+        "job": "next_evo_original_8741",
+        "policy": "original",
+        "seed": 8741,
+        "selected_validation_auc_percent": 78.454,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_original_8741/summary.json",
+        "summary_sha256": "bc3d1468c907dc410a00ae5a721ed9fed422d51975004bd8ecfb31aff7fbc3fa",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_original_8741/candidates.jsonl",
+        "ledger_sha256": "e934eef011a584c96b299f58339a05b18140e884a8e5ac3e7b07474f72b8f06f",
+        "config": "next_experiments/next_evo_original_8741",
+        "config_sha256": "dd2bd50166445cd8630868e5377a97ae74a2d92febe0db24de8d4df575c76a7a"
+      },
+      {
+        "job": "next_evo_neutral_8741",
+        "policy": "neutral",
+        "seed": 8741,
+        "selected_validation_auc_percent": 75.7504,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_8741/summary.json",
+        "summary_sha256": "08c87c4153f5ba62225fa77083e6b53cb90bce3a663ce7c99d1616aa3beb30c0",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_8741/candidates.jsonl",
+        "ledger_sha256": "ed298655a7c525dc05fc5fc0989a9c9821fa129ec86f7ce0fbbe95ee9f7a84f2",
+        "config": "next_experiments/next_evo_neutral_8741",
+        "config_sha256": "f4eb436ecf45074524970687505bb418023bab1693a111fdca45eba7a263f5ea"
+      },
+      {
+        "job": "next_evo_diverse_8741",
+        "policy": "diverse",
+        "seed": 8741,
+        "selected_validation_auc_percent": 75.7622,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_8741/summary.json",
+        "summary_sha256": "cf313127cb59cfeb5c3bf52ecce6148112c4084ec989332c3f50ac54aac05a48",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_8741/candidates.jsonl",
+        "ledger_sha256": "308e36c628654f390d09f80b817283e97a8469470577769963235b2df53998b4",
+        "config": "next_experiments/next_evo_diverse_8741",
+        "config_sha256": "ddcae2768ee9cb32ac67bbadf1ee70680953b03e16b7fd9268fffda5dc576583"
+      },
+      {
+        "job": "next_evo_compositional_8741",
+        "policy": "compositional",
+        "seed": 8741,
+        "selected_validation_auc_percent": 78.2742,
+        "summary_path": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_8741/summary.json",
+        "summary_sha256": "e979e46fb5def226dcc5299c30ba05a0f257bb8ad74a65c93fe206079ab63ce4",
+        "ledger_path": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_8741/candidates.jsonl",
+        "ledger_sha256": "5c53078218307bc51af0483be09909cbe68000bddfc76df0bfe39c934f1fe6ba",
+        "config": "next_experiments/next_evo_compositional_8741",
+        "config_sha256": "a7c96f63a74d754f4e7160b21d92e2827fb21f19e052cb488776e839b8bae623"
+      }
+    ],
+    "mean_selected_validation_auc_percent": {
+      "original": 78.2091,
+      "neutral": 75.7504,
+      "diverse": 77.38666666666667,
+      "compositional": 77.24576666666667
+    },
+    "selected_policy": "diverse",
+    "selection_rule": "Among neutral, diverse, and compositional, select the largest arithmetic mean selected_validation_auc_percent over all three full-budget 9B evolution seeds 2107, 4319, 8741. Exact ties use neutral, then diverse, then compositional. Original is the comparison arm, never a candidate for the selected arm.",
+    "held_out_test_scores_read": false
+  },
+  "selection": "Directed PopQA validation winner within each sixty-request run including canonical baseline; no test-best candidate or seed selection",
+  "scope": "One generation seed 2107, original versus all-three-source-validation-selected diverse; exploratory writer contrast, no multi-seed writer conclusion",
+  "audit_actions": {
+    "source_ast_parsed": true,
+    "source_executed": false,
+    "new_scoring": false,
+    "new_model_calls": false,
+    "new_fitting": false,
+    "test_predictions_or_test_labels_read": false,
+    "raw_caches_read": false,
+    "primary_registry_modified": false
+  },
+  "limitations": [
+    "Code comments are not executed features",
+    "Observed logprobs include the cached template sequence",
+    "Guard inactivity on actual data was not inferred without evidence",
+    "No claim about OOD superiority is made by this source inspection"
+  ]
+}

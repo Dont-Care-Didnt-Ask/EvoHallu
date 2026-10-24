@@ -1,0 +1,22 @@
+{
+  "status": "passed_original_proxy_reference",
+  "dataset": "geometry__common_claim_true_false",
+  "rows": 4450,
+  "phase": "reference",
+  "parent_source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "7c090c050b81ec242b81bebae9164b3da320e87a65b35fc3e25b1b3a550685f7",
+  "reference_npz_sha256": "f04da3e9624604615ad40d4f1d4b07d806554338290d525d02cd24e37b9c347f",
+  "labels_groups_masks_exact": true,
+  "conditions": [
+    {
+      "case": "original_512",
+      "directed_auc_percent": 51.88981189243782,
+      "paper_auc_percent": 51.88981189243782,
+      "canonical_nll_byte_exact": true,
+      "original512_byte_exact": true,
+      "frozen_case_invariance_exact": false,
+      "spearman_vs_original512": 1.0,
+      "elapsed_seconds": 3.4117877789831255
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "created_utc": "2026-10-22T11:15:25.754746+00:00",
+  "weights": {
+    "original": "08343c06889f2c6030ec785febd838969401d185cf31920279168d189665c72e",
+    "neutral": "d870bb7aa476b5099d43ae9e10b9b8fedb61ed393365d20ca1e1f88f2b092006",
+    "diverse": "e25949a5debfd3fcafde8b9037636e44fd3129e3052a91e0d35339a879d1ae4d",
+    "compositional": "8a3bfc02d861c4fef38911c078ba9fc202c206bac5e43cdd061623d4c7e002ae"
+  },
+  "test_scoring_started": false
+}

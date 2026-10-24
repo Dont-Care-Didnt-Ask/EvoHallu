@@ -1,0 +1,57 @@
+{
+  "checked_utc": "2026-10-19T09:51:57.518722+00:00",
+  "display_name": "Llama3.1-8b-instruct",
+  "role": "Fixed feature model, inherited from the supplied EvoHallu repository",
+  "used_checkpoint": {
+    "id": "VityaVitalich/Llama3.1-8b-instruct",
+    "revision": "247cb7c3baebabc46cff1fb97a3a5913e4c4511d",
+    "metadata_url": "https://huggingface.co/api/models/VityaVitalich/Llama3.1-8b-instruct/revision/247cb7c3baebabc46cff1fb97a3a5913e4c4511d?blobs=true"
+  },
+  "official_reference": {
+    "id": "meta-llama/Llama-3.1-8B-Instruct",
+    "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+    "metadata_url": "https://huggingface.co/api/models/meta-llama/Llama-3.1-8B-Instruct/revision/0e9e39f249a16976918f6564b8830bc894c89659?blobs=true"
+  },
+  "weight_files": [
+    {
+      "file": "model-00001-of-00004.safetensors",
+      "used_checkpoint_sha256": "2b1879f356aed350030bb40eb45ad362c89d9891096f79a3ab323d3ba5607668",
+      "official_reference_sha256": "2b1879f356aed350030bb40eb45ad362c89d9891096f79a3ab323d3ba5607668",
+      "identical": true
+    },
+    {
+      "file": "model-00002-of-00004.safetensors",
+      "used_checkpoint_sha256": "09d433f650646834a83c580877bd60c6d1f88f7755305c12576b5c7058f9af15",
+      "official_reference_sha256": "09d433f650646834a83c580877bd60c6d1f88f7755305c12576b5c7058f9af15",
+      "identical": true
+    },
+    {
+      "file": "model-00003-of-00004.safetensors",
+      "used_checkpoint_sha256": "fc1cdddd6bfa91128d6e94ee73d0ce62bfcdb7af29e978ddcab30c66ae9ea7fa",
+      "official_reference_sha256": "fc1cdddd6bfa91128d6e94ee73d0ce62bfcdb7af29e978ddcab30c66ae9ea7fa",
+      "identical": true
+    },
+    {
+      "file": "model-00004-of-00004.safetensors",
+      "used_checkpoint_sha256": "92ecfe1a2414458b4821ac8c13cf8cb70aed66b5eea8dc5ad9eeb4ff309d6d7b",
+      "official_reference_sha256": "92ecfe1a2414458b4821ac8c13cf8cb70aed66b5eea8dc5ad9eeb4ff309d6d7b",
+      "identical": true
+    }
+  ],
+  "all_four_safetensors_published_sha256_identical": true,
+  "shared_metadata_files_identical_by_git_blob_id": {
+    "config.json": false,
+    "tokenizer.json": true,
+    "tokenizer_config.json": false,
+    "special_tokens_map.json": true,
+    "generation_config.json": false
+  },
+  "original_repository_evidence": {
+    "archive": "EvoHallu-hallu3.zip",
+    "import_commit": "49504d5c89b64288db0b6ef2fe6db7ce8b5d527d",
+    "file": "src/packing/evaluate/uncertainty_quantification/precompute_raw_stats_separated.py",
+    "default_model_id": "VityaVitalich/Llama3.1-8b-instruct"
+  },
+  "scope": "Comparison of public Hugging Face LFS SHA-256 metadata and git blob identifiers. No model weights were downloaded, no inference was rerun, and no fresh hashes of the historical local weight files were computed.",
+  "interpretation": "Published Safetensors weight files match the official reference exactly by SHA-256. Some configuration files differ; equivalence of the full checkpoint package is not claimed."
+}

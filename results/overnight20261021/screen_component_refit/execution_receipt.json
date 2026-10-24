@@ -1,0 +1,21 @@
+{
+  "fit": {
+    "exit_code": 0,
+    "timed_out": false,
+    "skipped": false,
+    "elapsed_seconds": 122.72569451099844
+  },
+  "source_nine": {
+    "exit_code": 0,
+    "timed_out": false,
+    "skipped": false,
+    "elapsed_seconds": 862.5542359670217
+  },
+  "target_six": {
+    "exit_code": 0,
+    "timed_out": false,
+    "skipped": false,
+    "elapsed_seconds": 945.8453702200204
+  },
+  "completed_utc": "2026-10-21T19:56:22.403918+00:00"
+}

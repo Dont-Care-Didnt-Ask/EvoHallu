@@ -1,0 +1,59 @@
+{
+  "created_utc": "2026-10-21T18:26:23.363520+00:00",
+  "source_feature_model": "Llama3.1-8b-instruct",
+  "target_feature_model": "Llama3.2-1B-Instruct",
+  "tokenizer": "Original shared Llama3.1 tokenizer retained by preexisting transfer extraction",
+  "labels": "is_hallu",
+  "target_labels_used_for_selection": false,
+  "fitting_on_target": false,
+  "selection": "Same immutable source-validation primary winners and same source-fitted documented14 heads",
+  "reporting": "Per-dataset max(AUC,100-AUC), followed by equal-weight average over the prespecified six datasets only",
+  "prespecified_transfer_subset": [
+    "AVeriTeC__dev_filtered_10shot",
+    "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+    "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+    "geometry__cities",
+    "geometry__common_claim_true_false",
+    "geometry__companies_true_false"
+  ],
+  "subset_size": 6,
+  "nine_dataset_benchmark_size": 9,
+  "full_nine_dataset_macro_available": false,
+  "source_prediction_sha256": {},
+  "target_prediction_sha256": {},
+  "failures": [],
+  "methods": [
+    {
+      "method": "original/SequenceLogProb",
+      "identity": null,
+      "expected_subset_datasets": 6,
+      "target_datasets_scored": 0,
+      "matched_source_target_datasets": 0,
+      "full_nine_dataset_macro": false,
+      "per_dataset": [],
+      "status": "pending_or_failed"
+    },
+    {
+      "method": "supervised/logistic_documented_claim_group",
+      "identity": null,
+      "expected_subset_datasets": 6,
+      "target_datasets_scored": 0,
+      "matched_source_target_datasets": 0,
+      "full_nine_dataset_macro": false,
+      "per_dataset": [],
+      "status": "pending_or_failed"
+    },
+    {
+      "method": "supervised/qda_documented_claim_group",
+      "identity": null,
+      "expected_subset_datasets": 6,
+      "target_datasets_scored": 0,
+      "matched_source_target_datasets": 0,
+      "full_nine_dataset_macro": false,
+      "per_dataset": [],
+      "status": "pending_or_failed"
+    }
+  ],
+  "all_seed_primary_groups": [],
+  "uncertainty": "Paired claim-bootstrap differences reuse matching deterministic resamples after verifying source/target row identity; intervals condition on frozen programs"
+}

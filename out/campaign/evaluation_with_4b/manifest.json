@@ -1,0 +1,217 @@
+{
+  "reused_frozen_predictions_from": "out/campaign/evaluation",
+  "new_methods_from": "out/campaign/evaluation_4b_delta",
+  "recomputed_reference_scores_and_bootstrap_identical": true,
+  "protocol_manifests": {
+    "original": {
+      "reused_frozen_predictions_from": "out/campaign/evaluation_before_9b",
+      "new_methods_from": "out/campaign/evaluation_delta",
+      "recomputed_reference_scores_and_bootstrap_identical": true,
+      "protocol_manifests": {
+        "original": {
+          "frozen_estimators": {
+            "new/ablation_laguna_slope_only": {
+              "file": "out/campaign/reference_frozen/ablation_laguna_slope_only/frozen_estimator.py",
+              "sha256": "c1c053b0d530931542ae88dd6bbeef58b9eaa2307c21f0eff5e7488fca038ebe"
+            },
+            "new/ablation_laguna_slope_range": {
+              "file": "out/campaign/reference_frozen/ablation_laguna_slope_range/frozen_estimator.py",
+              "sha256": "4569f2423553d8eb56d26e408fc7e72239dc85baa26ac62046ee9259a5d6aa39"
+            },
+            "new/ablation_laguna_slope_variance": {
+              "file": "out/campaign/reference_frozen/ablation_laguna_slope_variance/frozen_estimator.py",
+              "sha256": "d7e644ac201b3d29831956667f13351e75d48da1be0f56d573d6c2c866df7269"
+            },
+            "new/ablation_qwen_linear_position_nll": {
+              "file": "out/campaign/reference_frozen/ablation_qwen_linear_position_nll/frozen_estimator.py",
+              "sha256": "68b25e25db2a5ac75f8febce1eb891cac41d0b92b5738a48d6fa28d52e5d2e63"
+            },
+            "new/uncertainty_quantification_laguna_evo_1047": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_evo_1047/frozen_estimator.py",
+              "sha256": "eb952792127e317dacb31e89e1c91bc6d03dbe558c5aa55dac9e4afaede0ee8b"
+            },
+            "new/uncertainty_quantification_laguna_evo_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_evo_1048/frozen_estimator.py",
+              "sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31"
+            },
+            "new/uncertainty_quantification_laguna_independent_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_independent_1048/frozen_estimator.py",
+              "sha256": "3b550475be86082880b3ac5711eb9dc4898d15d382fef2b9395b985649c68a22"
+            },
+            "new/uncertainty_quantification_laguna_seeded_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_laguna_seeded_1048/frozen_estimator.py",
+              "sha256": "3985d4798f93ba223d8782abf791f420adfa36f46b72a927c6338970b7eb7932"
+            },
+            "new/uncertainty_quantification_linear_evolution_1047": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_evolution_1047/frozen_estimator.py",
+              "sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a"
+            },
+            "new/uncertainty_quantification_linear_evolution_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_evolution_1048/frozen_estimator.py",
+              "sha256": "35c0906c0c4e02e99550b72f858b4bd33cf02aa8acf65245d04ca547d9be17db"
+            },
+            "new/uncertainty_quantification_linear_independent_1047": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_independent_1047/frozen_estimator.py",
+              "sha256": "1ac8242ebfc3e7b1b5d8a32bcf732055aa1ce2ba01f6d0c828f857ab4771552a"
+            },
+            "new/uncertainty_quantification_linear_independent_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_linear_independent_1048/frozen_estimator.py",
+              "sha256": "e8a1829bc98816e4c88e295a19278cba10c9f78b86da91fb09270407bc2c578c"
+            },
+            "new/uncertainty_quantification_qwen38_evo_1047": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_evo_1047/frozen_estimator.py",
+              "sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9"
+            },
+            "new/uncertainty_quantification_qwen38_evo_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_evo_1048/frozen_estimator.py",
+              "sha256": "fe26a84cde139742031491e52094fd68fba71389e7f771b712a2ce0b0ab6d6b7"
+            },
+            "new/uncertainty_quantification_qwen38_independent_contract_1048": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_independent_contract_1048/frozen_estimator.py",
+              "sha256": "bda784c76efd69f5c4a161d5e4fccc936cf2725a40d779a77cd692787e6ce04a"
+            },
+            "new/uncertainty_quantification_qwen38_pilot_1046": {
+              "file": "out/campaign/reference_frozen/uncertainty_quantification_qwen38_pilot_1046/frozen_estimator.py",
+              "sha256": "38257225408e5630f146b3adf4cd1568df1141c993889f2dae2d9ff0bbcedb03"
+            },
+            "out/campaign/supervised/models.joblib": {
+              "file": "out/campaign/supervised/models.joblib",
+              "sha256": "cc48fa8fd6342a81d100ac673ba5ffd309344f1f1adb784f1c671ba5d0a71754"
+            },
+            "out/campaign/supervised_documented/models.joblib": {
+              "file": "out/campaign/supervised_documented/models.joblib",
+              "sha256": "cf266c2cef21979f7781586f3b46ba948a0d8c154793398162b64461dd52bb62"
+            },
+            "out/campaign/supervised_group/models.joblib": {
+              "file": "out/campaign/supervised_group/models.joblib",
+              "sha256": "19337f334bed675b86be5d63f851293eaf7d3b99004a03f209c781987410909e"
+            }
+          },
+          "feature_model": "/workspace/mod1-models/llama31",
+          "dtype": "float32",
+          "tokenizer": "/workspace/mod1-models/llama31",
+          "primary_only": false,
+          "trimmed_header_suffix_tokens": 0,
+          "scoring_chunk_timeout_seconds": 120,
+          "cpu_worker_address_space_GiB": 32,
+          "scoring_chunk_size": 512,
+          "bootstrap_samples": 500,
+          "bootstrap_unit": "claim",
+          "original_bootstrap_policy": "shortlist",
+          "method_prefix": null,
+          "data": {
+            "AVeriTeC/dev_filtered_10shot.csv": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+            "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+            "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+            "geometry/cities.csv": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+            "geometry/common_claim_true_false.csv": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+            "geometry/companies_true_false.csv": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+            "geometry/counterfact_true_false.csv": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+            "popqa/popqa_test_filtered_10shot.csv": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+            "x-fact/test_filtered_10shot.csv": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13"
+          }
+        },
+        "additional": {
+          "frozen_estimators": {
+            "new/uncertainty_quantification_qwen35_9b_evo_1047": {
+              "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1047/frozen_estimator.py",
+              "sha256": "aa7614dbccd5bd56c2a3da2885300e3600b5e2ba7dfba5f570f37de92a9d9d22"
+            },
+            "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+              "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_evo_1048/frozen_estimator.py",
+              "sha256": "4b817650efff1f84685e993110aff97c658f0a1467d191529f9eec2c5f245502"
+            },
+            "new/uncertainty_quantification_qwen35_9b_independent_1048": {
+              "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_independent_1048/frozen_estimator.py",
+              "sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d"
+            },
+            "new/uncertainty_quantification_qwen35_9b_seeded_1048": {
+              "file": "out/logs/mod1/uncertainty_quantification_qwen35_9b_seeded_1048/frozen_estimator.py",
+              "sha256": "6d8fb3da2b29a19dd9aa3ab95028057afa70f995c9fe0f3c70ec4062497715c9"
+            },
+            "out/campaign/supervised/models.joblib": {
+              "file": "out/campaign/supervised/models.joblib",
+              "sha256": "cc48fa8fd6342a81d100ac673ba5ffd309344f1f1adb784f1c671ba5d0a71754"
+            },
+            "out/campaign/supervised_documented/models.joblib": {
+              "file": "out/campaign/supervised_documented/models.joblib",
+              "sha256": "cf266c2cef21979f7781586f3b46ba948a0d8c154793398162b64461dd52bb62"
+            },
+            "out/campaign/supervised_group/models.joblib": {
+              "file": "out/campaign/supervised_group/models.joblib",
+              "sha256": "19337f334bed675b86be5d63f851293eaf7d3b99004a03f209c781987410909e"
+            }
+          },
+          "feature_model": "/workspace/mod1-models/llama31",
+          "dtype": "float32",
+          "tokenizer": "/workspace/mod1-models/llama31",
+          "primary_only": false,
+          "trimmed_header_suffix_tokens": 0,
+          "scoring_chunk_timeout_seconds": 120,
+          "cpu_worker_address_space_GiB": 32,
+          "scoring_chunk_size": 512,
+          "bootstrap_samples": 500,
+          "bootstrap_unit": "claim",
+          "original_bootstrap_policy": "shortlist",
+          "method_prefix": "new/uncertainty_quantification_qwen35_9b_",
+          "data": {
+            "AVeriTeC/dev_filtered_10shot.csv": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+            "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+            "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+            "geometry/cities.csv": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+            "geometry/common_claim_true_false.csv": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+            "geometry/companies_true_false.csv": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+            "geometry/counterfact_true_false.csv": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+            "popqa/popqa_test_filtered_10shot.csv": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+            "x-fact/test_filtered_10shot.csv": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13"
+          }
+        }
+      },
+      "datasets": 9
+    },
+    "additional": {
+      "frozen_estimators": {
+        "new/uncertainty_quantification_qwen35_4b_evo_1048": {
+          "file": "out/logs/mod1/uncertainty_quantification_qwen35_4b_evo_1048/frozen_estimator.py",
+          "sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875"
+        },
+        "out/campaign/supervised/models.joblib": {
+          "file": "out/campaign/supervised/models.joblib",
+          "sha256": "cc48fa8fd6342a81d100ac673ba5ffd309344f1f1adb784f1c671ba5d0a71754"
+        },
+        "out/campaign/supervised_documented/models.joblib": {
+          "file": "out/campaign/supervised_documented/models.joblib",
+          "sha256": "cf266c2cef21979f7781586f3b46ba948a0d8c154793398162b64461dd52bb62"
+        },
+        "out/campaign/supervised_group/models.joblib": {
+          "file": "out/campaign/supervised_group/models.joblib",
+          "sha256": "19337f334bed675b86be5d63f851293eaf7d3b99004a03f209c781987410909e"
+        }
+      },
+      "feature_model": "/workspace/mod1-models/llama31",
+      "dtype": "float32",
+      "tokenizer": "/workspace/mod1-models/llama31",
+      "primary_only": false,
+      "trimmed_header_suffix_tokens": 0,
+      "scoring_chunk_timeout_seconds": 120,
+      "cpu_worker_address_space_GiB": 32,
+      "scoring_chunk_size": 512,
+      "bootstrap_samples": 500,
+      "bootstrap_unit": "claim",
+      "original_bootstrap_policy": "shortlist",
+      "method_prefix": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "data": {
+        "AVeriTeC/dev_filtered_10shot.csv": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+        "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+        "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv": "0d23bfdbcfce8c7b10736cacf66f6aca008f55aca889f307717a1f688bf54032",
+        "geometry/cities.csv": "fe3c22fd3d0c7d86392240aa15c3d5458bd7344d32455ee6ec3632b945414ecf",
+        "geometry/common_claim_true_false.csv": "da876657f49db27397cf7e672c071d1ae1c385e580a153d0d726bdec8532c6a6",
+        "geometry/companies_true_false.csv": "b843ce105d38992d8d4ae6dc48d810d50e3cf977f1180e9ef4c8d41b0b0da4b2",
+        "geometry/counterfact_true_false.csv": "8093c05958e5090490c56dec96a63f802803c1bf26bae75470d06800fd0417a6",
+        "popqa/popqa_test_filtered_10shot.csv": "3c9fe6dbdcfd031b88f1da98777c6dab02391b8da1be98baef84cb05e433ea8f",
+        "x-fact/test_filtered_10shot.csv": "b72ea8f4bef345d276fdbbbe095f558b8157cab98cd45d15ae717d8bd2bb5e13"
+      }
+    }
+  },
+  "datasets": 9
+}

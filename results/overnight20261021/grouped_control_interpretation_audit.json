@@ -1,0 +1,140 @@
+{
+  "outer_fit_rows": 5606,
+  "outer_validation_rows": 1401,
+  "outer_shared_normalized_claims": 0,
+  "inner_folds": [
+    {
+      "fit_rows": 3736,
+      "fold_validation_rows": 1870,
+      "shared_normalized_claims": 0
+    },
+    {
+      "fit_rows": 3738,
+      "fold_validation_rows": 1868,
+      "shared_normalized_claims": 0
+    },
+    {
+      "fit_rows": 3738,
+      "fold_validation_rows": 1868,
+      "shared_normalized_claims": 0
+    }
+  ],
+  "datasets": [
+    {
+      "dataset": "AVeriTeC/dev_filtered_10shot.csv",
+      "rows": 427,
+      "unique_normalized_claims": 419,
+      "fit_overlapping_unique_claims": 0,
+      "fit_overlapping_rows": 0,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 0,
+      "all_train_csv_overlapping_rows": 0
+    },
+    {
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv",
+      "rows": 2057,
+      "unique_normalized_claims": 2051,
+      "fit_overlapping_unique_claims": 0,
+      "fit_overlapping_rows": 0,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 0,
+      "all_train_csv_overlapping_rows": 0
+    },
+    {
+      "dataset": "WildHallucinations/pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.csv",
+      "rows": 46605,
+      "unique_normalized_claims": 46283,
+      "fit_overlapping_unique_claims": 5,
+      "fit_overlapping_rows": 5,
+      "outer_validation_overlapping_unique_claims": 1,
+      "outer_validation_overlapping_rows": 1,
+      "all_train_csv_overlapping_unique_claims": 6,
+      "all_train_csv_overlapping_rows": 6
+    },
+    {
+      "dataset": "geometry/cities.csv",
+      "rows": 1496,
+      "unique_normalized_claims": 1496,
+      "fit_overlapping_unique_claims": 1,
+      "fit_overlapping_rows": 1,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 1,
+      "all_train_csv_overlapping_rows": 1
+    },
+    {
+      "dataset": "geometry/common_claim_true_false.csv",
+      "rows": 4450,
+      "unique_normalized_claims": 4447,
+      "fit_overlapping_unique_claims": 0,
+      "fit_overlapping_rows": 0,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 0,
+      "all_train_csv_overlapping_rows": 0
+    },
+    {
+      "dataset": "geometry/companies_true_false.csv",
+      "rows": 1200,
+      "unique_normalized_claims": 1186,
+      "fit_overlapping_unique_claims": 0,
+      "fit_overlapping_rows": 0,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 0,
+      "all_train_csv_overlapping_rows": 0
+    },
+    {
+      "dataset": "geometry/counterfact_true_false.csv",
+      "rows": 31964,
+      "unique_normalized_claims": 31938,
+      "fit_overlapping_unique_claims": 0,
+      "fit_overlapping_rows": 0,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 0,
+      "all_train_csv_overlapping_rows": 0
+    },
+    {
+      "dataset": "popqa/popqa_test_filtered_10shot.csv",
+      "rows": 6974,
+      "unique_normalized_claims": 6686,
+      "fit_overlapping_unique_claims": 323,
+      "fit_overlapping_rows": 393,
+      "outer_validation_overlapping_unique_claims": 89,
+      "outer_validation_overlapping_rows": 127,
+      "all_train_csv_overlapping_unique_claims": 412,
+      "all_train_csv_overlapping_rows": 520
+    },
+    {
+      "dataset": "x-fact/test_filtered_10shot.csv",
+      "rows": 2315,
+      "unique_normalized_claims": 2315,
+      "fit_overlapping_unique_claims": 0,
+      "fit_overlapping_rows": 0,
+      "outer_validation_overlapping_unique_claims": 0,
+      "outer_validation_overlapping_rows": 0,
+      "all_train_csv_overlapping_unique_claims": 0,
+      "all_train_csv_overlapping_rows": 0
+    }
+  ],
+  "model_artifact_sha256": "b2f27a12db5177f004fa81f5df521f59436e4df2fcdc7f632e0eba847ecd4bce",
+  "models": {
+    "logistic_documented_claim_group": {
+      "model_type": "LogisticRegression",
+      "scaler_fit_rows": 5606,
+      "features": 14,
+      "feature_set": "documented",
+      "header_suffix_trim": 0
+    },
+    "qda_documented_claim_group": {
+      "model_type": "QuadraticDiscriminantAnalysis",
+      "scaler_fit_rows": 5606,
+      "features": 14,
+      "feature_set": "documented",
+      "header_suffix_trim": 0
+    }
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe two provided detectors rely solely on `sequence_logprobs` (surprisal):\n1.  **Squared Sum Detector**: Aggregates the sum of squared negative log-probabilities. Hypothesis: Hallucinations contain tokens with extreme outliers in surprisal, which are amplified by squaring.\n2.  **Linear Sum Detector**: Aggregates the sum of negative log-probabilities (total surprisal). Score: 74.33.\n\n**Observation**: The linear sum approach performs slightly better (74.33) than the squared sum (74.31). This suggests that while extreme outliers might exist, the *cumulative* effect of many moderately low-probability tokens (common in coherent but hallucinated narratives) is a stronger signal than just amplifying the worst single token. The squared approach may be too sensitive to noise or specific token distributions that don't correlate with hallucination in this specific dataset.\n\n### Proposed Improvement\n**Signal Family**: Surprisal Accumulation.\n**Aggregation Principle**: Weighted Cumulative Surprisal with Length Normalization.\n\n**Specific Change**:\nInstead of a raw sum, I will implement a **weighted sum of negative log-probabilities** where the weight for each token is its position in the sequence (normalized by sequence length).\n*   **Hypothesis**: Hallucinations often manifest as a drift in coherence towards the end of a generated sequence (the \"drift hypothesis\"). Early tokens are often grounded in the prompt/context, while later tokens accumulate errors. A simple sum treats early and late errors equally. By weighting later tokens more heavily (linearly increasing weight), the detector should better capture the progressive degradation of probability mass characteristic of hallucinated tails.\n\n### Python Code\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by calculating a position-weighted sum of negative log-probabilities.\n        \n        Hypothesis: Hallucinated claims exhibit a progressive degradation of token probability \n        towards the end of the sequence (coherence drift). Weighting later tokens higher \n        amplifies this tail-end instability compared to a uniform sum.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # seq_logprobs shape: (n_i - 1,)\n            # Weights: linear increase from 1 to n, normalized by n\n            n_tokens = len(seq_logprobs)\n            if n_tokens == 0:\n                scores.append(0.0)\n                continue\n            \n            # Create weights: [1, 2, ..., n] / n\n            weights = np.arange(1, n_tokens + 1, dtype=np.float32) / n_tokens\n            \n            # Calculate weighted sum of negative log-probs\n            # Note: input is logprobs (usually negative), so -logprobs is surprisal (positive)\n            weighted_surprisal = np.sum(-seq_logprobs * weights)\n            scores.append(weighted_surprisal)\n        \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 753,
+      "prompt_tokens": 830,
+      "total_tokens": 1583,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.921721416991204
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided candidates rely exclusively on **aggregate surprisal** (sum or sum-of-squares of negative log-probabilities).\n- **Candidate 1 (Sum of Squared):** Focuses on the *magnitude* of uncertainty, assuming hallucinations introduce tokens with extremely low probabilities (outliers).\n- **Candidate 2 (Sum):** Focuses on the *total* uncertainty of the sequence.\n\nBoth approaches treat the sequence as a \"bag of tokens\" regarding uncertainty, ignoring the **temporal dynamics** of how confidence evolves. They do not account for whether the model suddenly loses confidence mid-sentence or maintains low confidence throughout.\n\n### Proposed Detector\n**Signal:** **Confidence Trajectory Variance**.\nInstead of just the total uncertainty, this detector measures the variance of the negative log-probabilities across the sequence.\n\n**Aggregation Principle:** Calculate the variance of the negative log-probabilities for each sequence.\n- **Hypothesis:** Hallucinated claims often involve a narrative drift where the model starts with high confidence (contextually grounded) but then generates increasingly improbable tokens to fabricate details, leading to a sequence with high variance in surprisal (a mix of high-confidence and very low-confidence tokens). Grounded, factual sequences tend to have more consistent (lower variance) surprisal profiles.\n\n### Code Implementation\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by calculating the variance of negative log-probabilities.\n        \n        Hypothesis: Hallucinated claims often exhibit a narrative drift where the model \n        transitions from high-confidence context to low-confidence fabrication, resulting \n        in higher variance of surprisal compared to consistent factual sequences.\n        \"\"\"\n        # sequence_logprobs: List[np.ndarray], shape (n_i-1,)\n        # Calculate variance of negative log-probabilities for each sequence\n        # Using ddof=0 for population variance to be deterministic and scale-consistent\n        variance_scores = np.array([\n            np.var(-seq_logprobs, ddof=0) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        return variance_scores\n```",
+    "usage": {
+      "completion_tokens": 554,
+      "prompt_tokens": 849,
+      "total_tokens": 1403,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.625536898005521
+  }
+]

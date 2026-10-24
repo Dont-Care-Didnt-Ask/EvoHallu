@@ -1,0 +1,46 @@
+{
+  "created_utc": "2026-10-19T09:38:45.804454+00:00",
+  "repository": "/root/evohallu/mod1",
+  "archive": "/root/.codex/attachments/b16f3a13-a12c-4f3b-a90b-d96e6110d0b2/EvoHallu-hallu3.zip",
+  "archive_sha256": "9aabac68d75e7d0a93c9b13b6f76247b066ca98d9ac9c31cb043b0c6136b11c2",
+  "archive_files": 269,
+  "import_commit": "49504d5c89b64288db0b6ef2fe6db7ce8b5d527d",
+  "snapshot_head": "45dff51361a6f252a17ff71f479bbfb9ea4c5431",
+  "import_already_modified_vs_zip": [
+    ".gitignore"
+  ],
+  "original_ignored_files_absent_from_import_commit": [
+    "configs/sweep/example_eval_sweep_config.csv",
+    "configs/sweep/example_train_sweep_config.csv"
+  ],
+  "original_ignored_files_preserved_in_archive_comparison": [
+    "configs/sweep/example_eval_sweep_config.csv",
+    "configs/sweep/example_train_sweep_config.csv"
+  ],
+  "original_and_import_source_code_identical": true,
+  "current_tracked_files": 372,
+  "changed_files_vs_archive": 112,
+  "code_patch_files": 57,
+  "code_patch_stat": "57 files changed, 5660 insertions(+), 50 deletions(-)",
+  "scope": "All current tracked repository files versus supplied ZIP, including existing uncommitted document edits; ignored datasets/caches/weights/env/credentials/logs excluded. Frozen generated estimators are separate bundle files.",
+  "working_tree_status_at_snapshot": [
+    " M EXPERIMENT_RESULTS_RU.md",
+    " M REPORT_RU.md"
+  ],
+  "roundtrip_validation": {
+    "full_repository.patch": {
+      "applies_to_original_zip": true,
+      "byte_identical_files": 112,
+      "sha256": "732fdacc273d94a5144c36ade39a4c04b42e36a64bf1792e20dcd51e2e660db3",
+      "bytes": 2283516
+    },
+    "full_code.patch": {
+      "applies_to_original_zip": true,
+      "byte_identical_files": 57,
+      "sha256": "a01cb7315437b000a0c9467f3eaa8b2672c407fcca70888e9fa10d07f31813bb",
+      "bytes": 306717
+    }
+  },
+  "frozen_estimators_exported": 23,
+  "source_working_tree_unchanged": true
+}

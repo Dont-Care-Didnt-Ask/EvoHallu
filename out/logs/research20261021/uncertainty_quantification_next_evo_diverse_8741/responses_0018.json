@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detectors both rely on the **cumulative surprisal** (sum of negative log-probabilities) as their primary signal.\n- **Approach**: They aggregate the `sequence_logprobs` by summing the negative values across the entire generated sequence.\n- **Logic**: The hypothesis is that hallucinated content is often generated with lower confidence (lower log-probabilities), leading to a higher total negative log-probability sum compared to factual content.\n- **Observation**: Both implementations yield nearly identical scores (~74.3), suggesting that the raw sum is a strong baseline but may lack sensitivity to the *distribution* of probabilities within the sequence. It treats a sequence of ten tokens with log-prob -0.1 (high confidence) the same as a sequence with one token at -0.1 and nine at 0.0 (mixed confidence), even though the latter might be more indicative of localized hallucination or uncertainty.\n\n### Proposed Detector\n**Signal**: **Maximum Negative Log-Probability (Peak Surprisal)**.\n**Aggregation Principle**: Instead of summing the entire sequence (which dilutes local anomalies with high-probability tokens), this detector identifies the single most unlikely token in the sequence. Hallucinations often manifest as specific, highly improbable assertions or entities inserted into an otherwise plausible context. By taking the maximum negative log-probability, we isolate these \"spikes\" of uncertainty.\n\n**Specific Change**: Replace the `sum` aggregation with a `max` aggregation on the negative log-probabilities.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the maximum negative log-probability (peak surprisal) within each sequence.\n        Hypothesis: Hallucinated segments often contain specific, highly improbable tokens that create local spikes in surprisal, \n        which are better captured by the maximum value than by the cumulative sum that averages out these spikes.\n        \"\"\"\n        log_probs_list = stats[\"sequence_logprobs\"]\n        # Calculate the maximum negative log-prob (peak surprisal) per sequence\n        scores = np.array([-np.max(lp, dtype=np.float32) for lp in log_probs_list], dtype=np.float32)\n        return scores\n```",
+    "usage": {
+      "completion_tokens": 560,
+      "prompt_tokens": 784,
+      "total_tokens": 1344,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.6822330499999225
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided candidates both rely on **global aggregation** of the sequence log-probabilities (specifically, the sum or mean of negative log-probabilities).\n- **Signal**: Cumulative surprisal (how unlikely the entire sequence is).\n- **Aggregation**: Summation (or mean) across the whole sequence.\n- **Limitation**: These approaches treat a hallucination as a global property. A short, highly improbable hallucination buried in a very long, probable sequence might be diluted by the high-probability tokens, while a long, slightly improbable sequence might trigger a false positive. They lack sensitivity to *where* in the sequence the uncertainty spikes.\n\n### Proposed Detector\nTo explore a different principle, I will shift from global aggregation to **local extremum detection** combined with **positional variance**.\n- **Signal**: The maximum negative log-probability (peak surprisal) within a sequence and its distance from the sequence's mean surprisal.\n- **Aggregation**: A composite score representing the \"sharpest\" deviation from the expected confidence profile. Hallucinations often manifest as sharp, localized drops in probability (spikes in negative log-prob) rather than a uniform shift.\n- **Structural Difference**: Instead of collapsing the sequence into a single scalar (sum/mean), this detector identifies the most anomalous *local* token and penalizes sequences where the distribution of confidence is highly skewed (high variance), which is characteristic of generated hallucinations vs. grounded text.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the peak local surprisal and the variance of surprisal across the sequence.\n        Hypothesis: Hallucinated segments often introduce sharp, localized spikes in negative log-probability that deviate \n        significantly from the sequence's average confidence, creating a high-variance distribution unlike the smoother \n        confidence profiles of grounded text.\n        \"\"\"\n        log_probs_list = stats[\"sequence_logprobs\"]\n        scores = []\n        \n        for lp in log_probs_list:\n            if len(lp) == 0:\n                scores.append(0.0)\n                continue\n            \n            # Calculate peak surprisal (max negative log-prob)\n            peak_surprisal = -np.max(lp)\n            \n            # Calculate mean and standard deviation of surprisal\n            mean_surprisal = -np.mean(lp)\n            std_surprisal = np.std(lp)\n            \n            # Composite score: Peak surprisal amplified by the relative variance\n            # High peak + High variance suggests a sharp anomaly (hallucination)\n            # Normalizing by mean prevents bias from sequence length\n            variance_ratio = std_surprisal / (mean_surprisal + 1e-8)\n            \n            score = peak_surprisal * (1.0 + variance_ratio)\n            scores.append(score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 707,
+      "prompt_tokens": 803,
+      "total_tokens": 1510,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.368150175025221
+  }
+]

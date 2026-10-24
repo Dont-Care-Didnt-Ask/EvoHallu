@@ -1,0 +1,258 @@
+{
+  "status": "complete_final_full_budget_GLM_seed2107_selected_source_inspection",
+  "created_utc": "2026-10-22T00:06:48.054359+00:00",
+  "remote_final_registry_snapshot_utc": "2026-10-22T00:05:50.957903+00:00",
+  "manifest_file": "results/next_experiments/glm47_seed2107_manifest.json",
+  "manifest_sha256": "e28f72a01f11b16bf2176b958b678f720353295e44f637d2903014b96f05c902",
+  "primary_registry_file": "results/overnight20261021/frozen_manifest.json",
+  "primary_registry_sha256_at_read": "85f86b2f527873cb49de3875c22d156766e48dbb1be0326d37583152622bcd89",
+  "writer": "zai-org/GLM-4.7-Flash",
+  "writer_revision": "7dd20894a642a0aa287e9827cb1a1f7f91386b67",
+  "feature_model": "Llama3.1-8b-instruct",
+  "labels": "is_hallu",
+  "seed": 2107,
+  "requests": 120,
+  "valid_candidates": 64,
+  "total_tokens": 208611,
+  "all_two_jobs_final_and_full_budget": true,
+  "selection": "Directed PopQA validation maximum including canonical NLL fallback, within each run; all candidate training fitness uses directed PopQA training AUROC.",
+  "policy_selection": "Diverse chosen prospectively among neutral/diverse/compositional by mean source PopQA validation over all three9B discovery seeds; original held as reference, no benchmark/target score used.",
+  "source_pin_checks": {
+    "src/experiments/extension_trial.py": {
+      "expected_sha256": "5d9e7e93febe82f01cb6988ba7c8d139e1931fef72ce259469b6b4168c031f36",
+      "actual_sha256": "5d9e7e93febe82f01cb6988ba7c8d139e1931fef72ce259469b6b4168c031f36",
+      "match": true
+    },
+    "src/experiments/prompt_policies.py": {
+      "expected_sha256": "bb8d3092c22b0e1255c440a626c086cb692762669d60517e1563b921584d1daa",
+      "actual_sha256": "bb8d3092c22b0e1255c440a626c086cb692762669d60517e1563b921584d1daa",
+      "match": true
+    },
+    "src/packing/funsearch/programs_database.py": {
+      "expected_sha256": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+      "actual_sha256": "fa0037e027081b8463a26e9f5cf8c192ecd4b59adbed410aad81172640fcb065",
+      "match": true
+    },
+    "src/packing/model/prompt.py": {
+      "expected_sha256": "1c60df86c1ae48c11815751299459d7679e995cae7892ff93288c5d87424b625",
+      "actual_sha256": "1c60df86c1ae48c11815751299459d7679e995cae7892ff93288c5d87424b625",
+      "match": true
+    },
+    "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py": {
+      "expected_sha256": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+      "actual_sha256": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+      "match": true
+    },
+    "src/packing/evaluate/uncertainty_quantification/features.py": {
+      "expected_sha256": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+      "actual_sha256": "fa24814b0c439b21fcf9bf5deaa25ef842b822f1a9c06e77cd9f0e5207631de2",
+      "match": true
+    },
+    "configs/config_uq_trial.yaml": {
+      "expected_sha256": "a8e5fb034dbcdfbff9de5eb7c75848ecfb81a1256d51f74e933fd727482db199",
+      "actual_sha256": "a8e5fb034dbcdfbff9de5eb7c75848ecfb81a1256d51f74e933fd727482db199",
+      "match": true
+    },
+    "configs/config_uq.yaml": {
+      "expected_sha256": "b54cb74fc7886336c0aa7047ae78b63d9e870755be69975500153d1c63509949",
+      "actual_sha256": "b54cb74fc7886336c0aa7047ae78b63d9e870755be69975500153d1c63509949",
+      "match": true
+    },
+    "configs/model/qwen35_9b.yaml": {
+      "expected_sha256": "16e49c2c7d01cf2097a9ae9c3e03c280f5a8d31d026c73be8993f42e52cfee47",
+      "actual_sha256": "16e49c2c7d01cf2097a9ae9c3e03c280f5a8d31d026c73be8993f42e52cfee47",
+      "match": true
+    },
+    "configs/task/uncertainty_quantification.yaml": {
+      "expected_sha256": "40e1da09c9dc3c34af2315c194cdf75d7edd936c7f1ca88e596fd6fbd3bc55c7",
+      "actual_sha256": "40e1da09c9dc3c34af2315c194cdf75d7edd936c7f1ca88e596fd6fbd3bc55c7",
+      "match": true
+    },
+    "configs/model/glm47_flash.yaml": {
+      "expected_sha256": "f26903672c7bdde6ae3ca5cbba79012b3a1446df99d5ad262f1e1893cc6b8a98",
+      "actual_sha256": "f26903672c7bdde6ae3ca5cbba79012b3a1446df99d5ad262f1e1893cc6b8a98",
+      "match": true
+    },
+    "scripts/overnight_prepare_glm.py": {
+      "expected_sha256": "547f6eb0437b6bf0c33b669507dec2bcddb5803a4c27c3dd0415a9cce471ec9a",
+      "actual_sha256": "547f6eb0437b6bf0c33b669507dec2bcddb5803a4c27c3dd0415a9cce471ec9a",
+      "match": true
+    },
+    "scripts/overnight_prepare_confirmation.py": {
+      "expected_sha256": "fc8f37e3d5a8f3aafddd473d0b1515fa7556a45fe6d59b7fb662257043267395",
+      "actual_sha256": "fc8f37e3d5a8f3aafddd473d0b1515fa7556a45fe6d59b7fb662257043267395",
+      "match": true
+    },
+    "scripts/overnight_start_glm.py": {
+      "expected_sha256": "d01fb330b5f27f23176ed3a5966e74e0ff753602921ca95fe68e3e5f13c1f277",
+      "actual_sha256": "d01fb330b5f27f23176ed3a5966e74e0ff753602921ca95fe68e3e5f13c1f277",
+      "match": true
+    }
+  },
+  "all14_manifest_source_pins_match": true,
+  "all_run_staged_primary_hashes_match": true,
+  "found_formulas_source_file": "src/packing/evaluate/uncertainty_quantification/found_formulas.py",
+  "found_formulas_source_sha256": "ac1ed0b7fa2884c9f326a861f68777db75fba7b18bcd8ef565b78fa225dabebc",
+  "inherited_LogProbSlope_class_line": 649,
+  "programs": [
+    {
+      "identity": {
+        "method": "new/nextglm_evo_original_2107__primary",
+        "job_id": "nextglm_evo_original_2107",
+        "phase": "writer_generalization",
+        "policy": "original",
+        "seed": 2107,
+        "writer_model": "zai-org/GLM-4.7-Flash",
+        "role": "primary",
+        "validation_rank": 1,
+        "candidate": "4d80eca6979e1ee825a90664aea77f07de394ffbf9628587fafd994f98f8dedf",
+        "validation_auc_percent": 78.7667,
+        "requests": 60,
+        "planned_requests": 60,
+        "full_budget": true,
+        "source_file": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_original_2107/frozen_estimator.py",
+        "source_sha256": "869e426b9002b5c7d3ae1d4ad4bee2131a09f86e8bb0d6f0e8b9e103aaec4c75",
+        "staged_file": "results/overnight20261021/frozen/nextglm_evo_original_2107__primary/frozen_estimator.py",
+        "selection": "directed PopQA validation AUROC within this run",
+        "held_out_labels_used_for_selection": false
+      },
+      "run": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_original_2107",
+      "summary_sha256": "b620558c14e15d4dc69aaadf69d1b04cf4427c4c6ee705d4b6934e860f8513d7",
+      "ledger_sha256": "f762011d7f959a5500510302b270023972de12caddf39e0308c17d0fa2462e1b",
+      "ledger_records": 60,
+      "trial_config_sha256": "d928e144c825ecbbd04ea86d4db195d6f7c2f06257ec2b6112adb3667c1cdaa1",
+      "config_file": "configs/next_experiments/nextglm_evo_original_2107.yaml",
+      "config_sha256": "d8cc10f67cf1ab9bbcee938627242e7cc1d75a31203f49cff7105e0a512e5a4b",
+      "run_and_staged_source_byte_exact": true,
+      "source_bytes": 1702,
+      "ast_nodes": 155,
+      "run_status": "finished",
+      "stop_reason": "round_budget",
+      "requests": 60,
+      "valid_candidates": 28,
+      "total_tokens": 114107,
+      "elapsed_seconds_including_cpu_and_shared_serving": 3182.667130187998,
+      "selected_candidate": "4d80eca6979e1ee825a90664aea77f07de394ffbf9628587fafd994f98f8dedf",
+      "validation_auc_percent": 78.7667,
+      "baseline_validation_auc_percent": 75.7504,
+      "writer_config": {
+        "model_name": "glm47_flash",
+        "hf_model_id": "zai-org/GLM-4.7-Flash",
+        "revision": "7dd20894a642a0aa287e9827cb1a1f7f91386b67",
+        "temperature": 0.7,
+        "topk": 20,
+        "topp": 0.8,
+        "max_tokens": 4096,
+        "repetition_penalty": 1.0,
+        "supports_chat_template_kwargs": true
+      },
+      "effective_formula": "float32(-PearsonCorr(arange(n), asarray(lp,float32)))",
+      "actual_code": "np.corrcoef(np.arange(len(log_probs)), np.array(log_probs,dtype=np.float32))[0,1], negate, then float32 output",
+      "active_signals": [
+        "One per-claim Pearson correlation between token position and observed-token logprob"
+      ],
+      "declared_and_effective_dependencies": [
+        "sequence_logprobs"
+      ],
+      "topk_used": false,
+      "batch_dependent": false,
+      "coefficient_fitting": false,
+      "dead_signal_branches": [],
+      "unused_variables": [
+        "enumerated sample index i"
+      ],
+      "precision": "Stored float16 LPs promote exactly to float32; np.corrcoef defaults to float64 covariance/correlation; final output float32",
+      "novelty": "Rediscovers inherited original/LogProbSlope mathematical score; not OLS regression and not a new NLL precision variant",
+      "baseline_equivalence_scope": "For finite nonempty recorded float16 vectors where inherited LogProbSlope empty/allclose guards do not trigger, both feed the same float64 positions/LP matrix into np.corrcoef and cast its negative correlation to float32. This is a static conditional identity, not a globally established executable alias or new saved-prediction parity test.",
+      "guard_caveats": [
+        "No guard for zero/one token, constant or near-constant logprob sequences; np.corrcoef may return NaN.",
+        "Inherited LogProbSlope explicitly returns0 for empty or np.allclose-constant vectors; GLM code omits those guards.",
+        "Nonfinite/short-sequence behavior was not repaired or newly tested here."
+      ],
+      "selected_training_auc_percent": 79.8256,
+      "selected_round_index_as_logged": 24
+    },
+    {
+      "identity": {
+        "method": "new/nextglm_evo_diverse_2107__primary",
+        "job_id": "nextglm_evo_diverse_2107",
+        "phase": "writer_generalization",
+        "policy": "diverse",
+        "seed": 2107,
+        "writer_model": "zai-org/GLM-4.7-Flash",
+        "role": "primary",
+        "validation_rank": 1,
+        "candidate": "baseline",
+        "validation_auc_percent": 75.7504,
+        "requests": 60,
+        "planned_requests": 60,
+        "full_budget": true,
+        "source_file": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_diverse_2107/frozen_estimator.py",
+        "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+        "staged_file": "results/overnight20261021/frozen/nextglm_evo_diverse_2107__primary/frozen_estimator.py",
+        "selection": "directed PopQA validation AUROC within this run",
+        "held_out_labels_used_for_selection": false
+      },
+      "run": "out/logs/research20261021/uncertainty_quantification_nextglm_evo_diverse_2107",
+      "summary_sha256": "fadbb55452bea5d11a2971caf6f97ea26e1046b238763da551575635b1311f05",
+      "ledger_sha256": "9c7fabaa2c058dd724d5a5a8055468a52f24ab71fc967ef19b51e9cd0069b7f9",
+      "ledger_records": 60,
+      "trial_config_sha256": "59bc4dfab8b4eae5b8fdc0448d134ca2299186d99b15907e637bcfdff0d57041",
+      "config_file": "configs/next_experiments/nextglm_evo_diverse_2107.yaml",
+      "config_sha256": "4a2f676e55f039e34e9699008188646ce9abf4db7dd7b84d2e5cb9c2bc25c2f4",
+      "run_and_staged_source_byte_exact": true,
+      "source_bytes": 666,
+      "ast_nodes": 88,
+      "run_status": "finished",
+      "stop_reason": "round_budget",
+      "requests": 60,
+      "valid_candidates": 36,
+      "total_tokens": 94504,
+      "elapsed_seconds_including_cpu_and_shared_serving": 2934.2295058630116,
+      "selected_candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "baseline_validation_auc_percent": 75.7504,
+      "writer_config": {
+        "model_name": "glm47_flash",
+        "hf_model_id": "zai-org/GLM-4.7-Flash",
+        "revision": "7dd20894a642a0aa287e9827cb1a1f7f91386b67",
+        "temperature": 0.7,
+        "topk": 20,
+        "topp": 0.8,
+        "max_tokens": 4096,
+        "repetition_penalty": 1.0,
+        "supports_chat_template_kwargs": true
+      },
+      "effective_formula": "float32(-sum(lp)) with native stored-array accumulation",
+      "active_signals": [
+        "Canonical full cached-sequence observed-token NLL"
+      ],
+      "declared_and_effective_dependencies": [
+        "sequence_logprobs"
+      ],
+      "topk_used": false,
+      "batch_dependent": false,
+      "coefficient_fitting": false,
+      "dead_signal_branches": [],
+      "unused_variables": [],
+      "precision": "Native float16 cached-array sum, then float32 output; identical frozen canonical NLL source",
+      "novelty": "Baseline fallback selected; not a generated new feature or float32-sum NLL variant",
+      "guard_caveats": [
+        "Native array accumulation can have finite-precision ties; unchanged canonical baseline behavior."
+      ],
+      "selected_training_auc_percent": 74.3286
+    }
+  ],
+  "no_candidate_execution_or_rescoring": true,
+  "no_gpu_or_model_calls": true,
+  "no_benchmark_predictions_or_labels_used_in_this_inspection": true,
+  "no_repairs_or_source_edits": true,
+  "no_primary_registry_or_execution_manifest_changes": true,
+  "limitations": [
+    "One actual matched seed; cannot establish a robust writer-family or prompt-policy effect.",
+    "Descriptions concern the final two selected programs, not every generated GLM candidate.",
+    "Cached positional arrays include chat/template tokens; Pearson correlation is not proof of a causal hallucination snowball effect.",
+    "Pipeline validity is finite/correctly-shaped scoring, not novel feature discovery.",
+    "Only seed2107 is inspected; prepared additional seeds and separate scheduler skip/terminal receipts are not assumed completed here."
+  ]
+}

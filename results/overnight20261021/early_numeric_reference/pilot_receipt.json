@@ -1,0 +1,456 @@
+{
+  "status": "passed",
+  "started_utc": "2026-10-21T21:48:11.456291+00:00",
+  "scope": "427 historical AVeriTeC rows only; no missing-three extraction or main-receipt writes",
+  "gpu_index": 0,
+  "parent_max_seconds": 210,
+  "child_max_seconds": 180,
+  "state_before": {
+    "running": [
+      {
+        "job": "next_evo_compositional_8741",
+        "port": 18001,
+        "pid": 17391,
+        "started_utc": "2026-10-21T21:40:20.987414+00:00"
+      }
+    ],
+    "issued_requests": 14,
+    "source_finished": 15,
+    "sampler_terminal": true,
+    "interface_terminal": true,
+    "feedback_terminal": true
+  },
+  "server_mapping": [
+    {
+      "gpu": 0,
+      "port": 18000,
+      "pid": 2986
+    },
+    {
+      "gpu": 1,
+      "port": 18001,
+      "pid": 2987
+    }
+  ],
+  "filtered_inference_processes_before": [
+    {
+      "pid": 2986,
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "/workspace/mod1/.venv/bin/vllm",
+        "serve",
+        "/workspace/models/Qwen3.5-9B",
+        "--served-model-name",
+        "Qwen/Qwen3.5-9B",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18000",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.7",
+        "--language-model-only",
+        "--reasoning-parser",
+        "qwen3"
+      ]
+    },
+    {
+      "pid": 2987,
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "/workspace/mod1/.venv/bin/vllm",
+        "serve",
+        "/workspace/models/Qwen3.5-9B",
+        "--served-model-name",
+        "Qwen/Qwen3.5-9B",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "18001",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.7",
+        "--language-model-only",
+        "--reasoning-parser",
+        "qwen3"
+      ]
+    },
+    {
+      "pid": 17391,
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next_evo_compositional_8741",
+        "cluster.api_base_url=http://127.0.0.1:18001/v1",
+        "trial.max_seconds=5400"
+      ]
+    }
+  ],
+  "asset_checks": {
+    "target": {
+      "model": "unsloth/Llama-3.2-1B-Instruct",
+      "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+      "all_file_hashes_verified": true,
+      "manifest_sha256": "37b14df3cafdea8e0fe7be75f8430ad478d1e1a2d2f56e5803b856d04434369f"
+    },
+    "tokenizer": {
+      "model": "VityaVitalich/Llama3.1-8b-instruct",
+      "revision": "247cb7c3baebabc46cff1fb97a3a5913e4c4511d",
+      "all_file_hashes_verified": true,
+      "manifest_sha256": "23e8ddcc2b3916e64c0386733b7e5fe46d2fb706d8d1796a0a9a68f7f3cfba7c"
+    }
+  },
+  "tokenizer_parity": {
+    "historical_sample": "AVeriTeC sample 0",
+    "exact_chat_input_ids_match": true,
+    "exact_raw_claim_input_ids_match": true,
+    "historical_template": "generate_true_statement",
+    "add_generation_prompt": false,
+    "template_render_then_default_tokenization": true,
+    "preserves_historical_double_bos": true,
+    "reference_metadata_sha256": "7d7206e5ec3fb1767013b4c28a673f53c10f11eae68988604b85fe11fa5d9112"
+  },
+  "historical_caches": [
+    {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt",
+      "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+      "raw_bytes": 91371710
+    },
+    {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt",
+      "raw_sha256": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+      "raw_bytes": 330370352
+    },
+    {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt",
+      "raw_sha256": "9aa596bb80778b1c4c5979a8cddc6c90d95e4108defb7a9f4d63b4428d0df3d3",
+      "raw_bytes": 7507614021
+    },
+    {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__cities.pt",
+      "raw_sha256": "aa15cb4b5b5d6937ef51f240b31fff4eae0f44e12adadfd720d8f7ccf3975ed2",
+      "raw_bytes": 226514189
+    },
+    {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__common_claim_true_false.pt",
+      "raw_sha256": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+      "raw_bytes": 744503079
+    },
+    {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/geometry__companies_true_false.pt",
+      "raw_sha256": "5655c3628d232149a22df2ca1f09e44ef728f740a87bb012db5f6ad6d04dbc96",
+      "raw_bytes": 201844417
+    }
+  ],
+  "maximum_reference_input_tokens": 85,
+  "conservative_reference_gpu_bytes": 16803840000,
+  "gpu_samples_before": [
+    [
+      {
+        "index": 0,
+        "uuid": "GPU-4b6106ae-e0ac-0d63-9b37-4cb477bb6ae5",
+        "free_mib": 23720,
+        "used_mib": 57433,
+        "util_percent": 0
+      },
+      {
+        "index": 1,
+        "uuid": "GPU-7f44e2b4-4e34-7c0e-49b9-421f0e6d11b2",
+        "free_mib": 23494,
+        "used_mib": 57659,
+        "util_percent": 0
+      }
+    ],
+    [
+      {
+        "index": 0,
+        "uuid": "GPU-4b6106ae-e0ac-0d63-9b37-4cb477bb6ae5",
+        "free_mib": 23720,
+        "used_mib": 57433,
+        "util_percent": 0
+      },
+      {
+        "index": 1,
+        "uuid": "GPU-7f44e2b4-4e34-7c0e-49b9-421f0e6d11b2",
+        "free_mib": 23494,
+        "used_mib": 57659,
+        "util_percent": 0
+      }
+    ]
+  ],
+  "gpu_compute_processes_before": [
+    "GPU-4b6106ae-e0ac-0d63-9b37-4cb477bb6ae5, 3529831, 57424",
+    "GPU-7f44e2b4-4e34-7c0e-49b9-421f0e6d11b2, 3529902, 57650"
+  ],
+  "state_at_launch": {
+    "running": [
+      {
+        "job": "next_evo_compositional_8741",
+        "port": 18001,
+        "pid": 17391,
+        "started_utc": "2026-10-21T21:40:20.987414+00:00"
+      }
+    ],
+    "issued_requests": 14,
+    "source_finished": 15,
+    "sampler_terminal": true,
+    "interface_terminal": true,
+    "feedback_terminal": true
+  },
+  "code_sha256": {
+    "scripts/prepare_remaining_transfer.py": "bd35863bd7fbc95fdedeb6d31baa4e2332d3860a2a62a43f75bf44078c49fe8e",
+    "scripts/evaluate_cached_claims.py": "8d742f36bb111686b031f10f5c5f33c559e75f71c6c4963917e2e5aa1ef70221",
+    "src/packing/evaluate/uncertainty_quantification/precompute_raw_stats_separated.py": "b2dadaee51c1052aa04381a1b03e2c05d8c38cc2f57b1f00cdbfad42e31ef834"
+  },
+  "launched_utc": "2026-10-21T21:48:31.398393+00:00",
+  "numerical_reference": {
+    "status": "passed",
+    "started_utc": "2026-10-21T21:48:31.399490+00:00",
+    "cutoff_utc": "2026-10-21T21:51:31.399490+00:00",
+    "dataset": "AVeriTeC",
+    "rows": 427,
+    "gpu_index": 0,
+    "predeclared_guard": {
+      "observed_logprob_max_abs_difference_at_most": 0.1,
+      "canonical_nll_spearman_at_least": 0.999,
+      "require_exact_identity_shapes_dtypes": true,
+      "require_all_numeric_values_finite": true
+    },
+    "maximum_reference_gpu_seconds": 180,
+    "shared_missing_cache_cutoff_utc": "2026-10-21T21:51:51.398393+00:00",
+    "original_cache": {
+      "path": "/workspace/mod1/data/restored/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt",
+      "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+      "raw_bytes": 91371710
+    },
+    "scratch_cache": "/workspace/mod1/results/overnight20261021/early_numeric_reference/scratch_anchor/mod1-transfer-numerical-reference/20261021T214831399490Z_17858/AVeriTeC__dev_filtered_10shot.pt",
+    "command": [
+      "/workspace/mod1/.venv/bin/python",
+      "scripts/evaluate_cached_claims.py",
+      "--mode",
+      "cache",
+      "--data-root",
+      "/workspace/mod1/data/claims",
+      "--cache-dir",
+      "/workspace/mod1/results/overnight20261021/early_numeric_reference/scratch_anchor/mod1-transfer-numerical-reference/20261021T214831399490Z_17858",
+      "--output",
+      "/workspace/mod1/results/overnight20261021/early_numeric_reference/numerical_reference/20261021T214831399490Z_17858/cache_metadata/dataset_0",
+      "--model-id",
+      "/workspace/mod1-models/Llama3.2-1B",
+      "--tokenizer-id",
+      "/workspace/mod1-models/llama31-tokenizer",
+      "--dataset-index",
+      "0",
+      "--dtype",
+      "float32",
+      "--batch-size",
+      "16",
+      "--max-batch-tokens",
+      "16384",
+      "--cpu-threads",
+      "12",
+      "--gc-interval",
+      "32",
+      "--cuda-cache-interval",
+      "32",
+      "--frozen-glob",
+      "out/overnight_no_selected_programs/*/frozen_estimator.py"
+    ],
+    "current_package_versions": {
+      "torch": "2.13.0",
+      "transformers": "5.17.0",
+      "numpy": "2.1.2",
+      "scipy": "1.18.1"
+    },
+    "quality_labels_used_for_numerical_guard": false,
+    "quality_auc_computed": false,
+    "rationale": "Gross-drift check, not bitwise certification: float16 feature quantization and backend/kernel variance permit small differences; require LP max abs <=0.1 and canonical NLL rank rho >=0.999 over all 427 rows. No test-quality AUC or label-based quality chooses these thresholds.",
+    "scratch_cache_inspection": {
+      "path": "/workspace/mod1/results/overnight20261021/early_numeric_reference/scratch_anchor/mod1-transfer-numerical-reference/20261021T214831399490Z_17858/AVeriTeC__dev_filtered_10shot.pt",
+      "raw_sha256": "5c15deb768c77323faa4f3ea4cc30636a5474ff405bc586743801addbe854127",
+      "raw_bytes": 91371710,
+      "sample_count": 427,
+      "dataset_csv": "/workspace/mod1/data/claims/AVeriTeC/dev_filtered_10shot.csv",
+      "dataset_csv_sha256": "b66f00d944a0238562f2f1b946f577944b91145c3676a88895d74863d74c1aa2",
+      "meta": {
+        "model_id": "/workspace/mod1-models/Llama3.2-1B",
+        "hidden_size": 2048,
+        "num_layers": 16,
+        "num_attention_heads": 32,
+        "vocab_size": 128256,
+        "modalities": "logits",
+        "model_dtype": "torch.float32",
+        "requested_forward_batch_size": 16,
+        "max_padded_forward_tokens": 16384,
+        "cpu_feature_threads": 12,
+        "cpu_gc_interval_batches": 32,
+        "cuda_cache_cleanup_interval_batches": 32
+      },
+      "claims_labels_match_csv_in_order": true,
+      "all_topk_widths_512": true,
+      "all_topk_logprob_length_offset_1": true,
+      "stored_sequence_logprobs_dtype": "float16",
+      "stored_topk_logits_dtype": "torch.float16"
+    },
+    "execution": {
+      "dataset_index": 0,
+      "elapsed_seconds": 31.664735645987093,
+      "command": [
+        "/workspace/mod1/.venv/bin/python",
+        "scripts/evaluate_cached_claims.py",
+        "--mode",
+        "cache",
+        "--data-root",
+        "/workspace/mod1/data/claims",
+        "--cache-dir",
+        "/workspace/mod1/results/overnight20261021/early_numeric_reference/scratch_anchor/mod1-transfer-numerical-reference/20261021T214831399490Z_17858",
+        "--output",
+        "/workspace/mod1/results/overnight20261021/early_numeric_reference/numerical_reference/20261021T214831399490Z_17858/cache_metadata/dataset_0",
+        "--model-id",
+        "/workspace/mod1-models/Llama3.2-1B",
+        "--tokenizer-id",
+        "/workspace/mod1-models/llama31-tokenizer",
+        "--dataset-index",
+        "0",
+        "--dtype",
+        "float32",
+        "--batch-size",
+        "16",
+        "--max-batch-tokens",
+        "16384",
+        "--cpu-threads",
+        "12",
+        "--gc-interval",
+        "32",
+        "--cuda-cache-interval",
+        "32",
+        "--frozen-glob",
+        "out/overnight_no_selected_programs/*/frozen_estimator.py"
+      ],
+      "gpu_index": 0,
+      "exit_code": 0
+    },
+    "comparison": {
+      "status": "passed",
+      "all_rows_compared": 427,
+      "all_claims_labels_ids_input_ids_attention_masks_shapes_dtypes_exact": true,
+      "all_compared_numeric_values_finite": true,
+      "predeclared_guard": {
+        "observed_logprob_max_abs_difference_at_most": 0.1,
+        "canonical_nll_spearman_at_least": 0.999,
+        "require_exact_identity_shapes_dtypes": true,
+        "require_all_numeric_values_finite": true
+      },
+      "guard_checks": {
+        "observed_logprob_gross_drift": true,
+        "canonical_nll_rank_preservation": true
+      },
+      "absolute_difference_summaries": {
+        "sequence_logprobs": {
+          "elements": 17215,
+          "max_abs_difference": 0.00390625,
+          "mean_abs_difference": 7.046941335624365e-06,
+          "p99_abs_difference": 0.0,
+          "p999_abs_difference": 0.001953125,
+          "exact_value_fraction": 0.994191112401975
+        },
+        "greedy_logprobs": {
+          "elements": 17642,
+          "max_abs_difference": 0.001953125,
+          "mean_abs_difference": 7.471439857599673e-06,
+          "p99_abs_difference": 0.0,
+          "p999_abs_difference": 0.0009765625,
+          "exact_value_fraction": 0.991214148055776
+        },
+        "token_entropies": {
+          "elements": 17642,
+          "max_abs_difference": 0.00390625,
+          "mean_abs_difference": 6.451751082787613e-05,
+          "p99_abs_difference": 0.001953125,
+          "p999_abs_difference": 0.00390625,
+          "exact_value_fraction": 0.9462079129350414
+        },
+        "top_k_logits": {
+          "elements": 9032704,
+          "max_abs_difference": 0.0,
+          "mean_abs_difference": 0.0,
+          "p99_abs_difference": 0.0,
+          "p999_abs_difference": 0.0,
+          "exact_value_fraction": 1.0
+        },
+        "top512_conditional_top1_mass": {
+          "elements": 17642,
+          "max_abs_difference": 0.0,
+          "mean_abs_difference": 0.0,
+          "p99_abs_difference": 0.0,
+          "p999_abs_difference": 0.0,
+          "exact_value_fraction": 1.0
+        },
+        "top512_conditional_top10_mass": {
+          "elements": 17642,
+          "max_abs_difference": 0.0,
+          "mean_abs_difference": 0.0,
+          "p99_abs_difference": 0.0,
+          "p999_abs_difference": 0.0,
+          "exact_value_fraction": 1.0
+        },
+        "top512_conditional_entropy": {
+          "elements": 17642,
+          "max_abs_difference": 0.0,
+          "mean_abs_difference": 0.0,
+          "p99_abs_difference": 0.0,
+          "p999_abs_difference": 0.0,
+          "exact_value_fraction": 1.0
+        }
+      },
+      "canonical_nll": {
+        "spearman_rho": 0.9999998843978325,
+        "max_abs_difference": 0.125,
+        "mean_abs_difference": 0.0005854800692759454,
+        "historical_float16_sum_then_float32_output": true
+      },
+      "topk_ids_descriptive": {
+        "rank_slot_match_fraction": 1.0,
+        "top1_id_match_fraction": 1.0,
+        "exact_512_rank_id_row_fraction": 1.0,
+        "logit_comparison": "rank-aligned sorted values; token IDs may differ around ties; not an equality requirement"
+      },
+      "quality_auc_computed": false,
+      "labels_used_for_guard": false,
+      "bitwise_parity_claimed": false
+    },
+    "historical_cache_unchanged": true,
+    "finished_utc": "2026-10-21T21:49:04.633083+00:00",
+    "receipt_file": "/workspace/mod1/results/overnight20261021/early_numeric_reference/remaining_transfer_numerical_reference.json",
+    "receipt_sha256": "85599a35819351faf620f11b648cbac8200c85abf9afa9af6d562369b4a77105"
+  },
+  "all_six_historical_caches_unchanged": true,
+  "finished_utc": "2026-10-21T21:49:11.365419+00:00",
+  "gpu_after": [
+    {
+      "index": 0,
+      "uuid": "GPU-4b6106ae-e0ac-0d63-9b37-4cb477bb6ae5",
+      "free_mib": 23720,
+      "used_mib": 57433,
+      "util_percent": 0
+    },
+    {
+      "index": 1,
+      "uuid": "GPU-7f44e2b4-4e34-7c0e-49b9-421f0e6d11b2",
+      "free_mib": 23494,
+      "used_mib": 57659,
+      "util_percent": 0
+    }
+  ]
+}

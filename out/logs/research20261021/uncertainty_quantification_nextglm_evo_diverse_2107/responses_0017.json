@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Variance Detector (Score ~69.56):** Uses a sliding window (size=5) to calculate local variance of log-probabilities, then takes the maximum of the averaged window variances. It attempts to find high volatility in confidence.\n   - **Average NLL Detector (Score ~71.99):** Calculates the average negative log-probability per token. It attempts to capture general uncertainty but is susceptible to sequence length bias and ignores local structure.\n\n2. **Proposed Detector**\n   - **Signal:** **Top-k Margin** (Difference between top-1 and top-k logits).\n   - **Aggregation Principle:** Calculate the **mean** of the top-k margins per sequence.\n   - **Rationale:** A high top-k margin indicates the model is confident in a specific token (the generated one) despite having other high-probability tokens available. A low margin (close to zero) implies the model is \"stuck\" or uncertain, often associated with hallucinations or low-quality generation. This focuses on the *sharpness* of the distribution rather than the raw probability value or variance.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average top-k margin (Top-1 - Top-k) per sequence.\n        \n        Aggregation Principle:\n        1. For each token position, compute the margin as the difference between the \n           log-probability of the generated token (Top-1) and the lowest log-probability \n           among the top-k candidates.\n        2. Average these margins across the sequence length.\n        \n        Hypothesis for future: This detector assumes that hallucinations are \n        characterized by low sharpness in the model's confidence distribution \n        (low top-k margin), indicating the model is uncertain or stuck between \n        similar high-probability tokens.\n        \"\"\"\n        scores = []\n        for logits, indices in zip(stats[\"top_k_logits\"], stats[\"top_k_indices\"]):\n            n_tokens = len(logits)\n            if n_tokens == 0:\n                scores.append(0.0)\n                continue\n            \n            # Extract Top-1 (index 0) and Top-k (index -1) log-probs\n            top1_logprobs = logits[:, 0]\n            topk_logprobs = logits[:, -1]\n            \n            # Calculate margin for each token\n            margins = top1_logprobs - topk_logprobs\n            \n            # Average margin across the sequence\n            avg_margin = np.mean(margins)\n            scores.append(avg_margin)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 618,
+      "prompt_tokens": 1000,
+      "total_tokens": 1618,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 48.46231731100124
+  },
+  {
+    "content": "### Analysis of Shown Detectors\n\nThe provided examples explore two distinct families of signals based on `sequence_logprobs`:\n\n1.  **Volatility/Local Variance:** The first detector uses a sliding window to calculate the maximum average local variance of log-probabilities. It hypothesizes that hallucinations are characterized by high volatility (instability) in confidence at specific local segments rather than a global average.\n2.  **Global Average Uncertainty:** The second detector uses the average negative log-probability (NLL) per token. It hypothesizes that hallucinations are characterized by low average confidence (high NLL) across the sequence, mitigating length bias.\n\n### Proposed Detector\n\n**Signal:** **Top-k Entropy / Log-Sum-Exp (LSE) Ratio**\n**Aggregation Principle:** **Per-token Average**\n**Structural Difference:** Unlike the previous methods which rely solely on the actual generated tokens (`sequence_logprobs`), this detector utilizes the `top_k_logits` and `top_k_indices`. It measures the concentration of probability mass within the top-512 tokens. This approach captures the model's \"sharpness\" or \"spread\" of the distribution at each generation step. The aggregation is the mean of these sharpness scores across the sequence, contrasting with the \"max\" aggregation of the volatility detector and the \"average NLL\" of the global uncertainty detector.\n\n### Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average top-k entropy per token.\n        \n        Aggregation Principle:\n        1. For each token position, calculate the entropy of the top-k probability distribution.\n           Entropy is defined as the negative sum of p * log(p), where p is the normalized probability.\n        2. Average the entropy values across the sequence length.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by a lack of focus in the model's top-k distribution\n        (high entropy/sharpness), rather than the absolute confidence of the\n        selected token or local fluctuations in that confidence.\n        \"\"\"\n        scores = []\n        for top_k_logits in stats[\"top_k_logits\"]:\n            # Convert logits to probabilities\n            exp_logits = np.exp(top_k_logits - np.max(top_k_logits, axis=1, keepdims=True))\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # Calculate entropy: -sum(p * log(p))\n            # Add a small epsilon to avoid log(0)\n            entropy = -np.sum(probs * np.log(probs + 1e-12), axis=1)\n            \n            scores.append(np.mean(entropy))\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 639,
+      "prompt_tokens": 1020,
+      "total_tokens": 1659,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 50.15155499399407
+  }
+]

@@ -1,0 +1,90 @@
+{
+  "completed_at_utc": "2026-10-21T23:07:55.601597+00:00",
+  "status": "static_feasibility_only",
+  "model_id": "openai/gpt-oss-120b",
+  "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+  "weights_downloaded": false,
+  "gpu_model_load_or_inference": false,
+  "packages_installed": false,
+  "running_servers_changed": false,
+  "capability_conclusion": "Installed vLLM 0.31 exposes supported SM80 GPT-OSS MXFP4 Marlin route; bounded TP1 and TP2 engineering pilots remain unexecuted.",
+  "required_root_weight_files": 15,
+  "required_root_weight_file_bytes": 65248893184,
+  "all_metadata_files": [
+    {
+      "name": "LICENSE",
+      "bytes": 11357,
+      "sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+    },
+    {
+      "name": "checkpoint_README.md",
+      "bytes": 7111,
+      "sha256": "92b0408cf5dce04e4c5e4e5f2be0361da710d3650baefd7d7519badd1c687919"
+    },
+    {
+      "name": "checkpoint_api.json",
+      "bytes": 29051,
+      "sha256": "1e89a597b58ef1bf39fceb23cf098a33bcd5fc4d4bd63bcc00edf34a6892a2a6"
+    },
+    {
+      "name": "checkpoint_chat_template.jinja",
+      "bytes": 16738,
+      "sha256": "a4c9919cbbd4acdd51ccffe22da049264b1b73e59055fa58811a99efbd7c8146"
+    },
+    {
+      "name": "checkpoint_original_config.json",
+      "bytes": 377,
+      "sha256": "063aaa98e012cac330d58d18471700f0b0eb90bb15c58fb227809d45090f3e65"
+    },
+    {
+      "name": "checkpoint_original_dtypes.json",
+      "bytes": 19658,
+      "sha256": "5726a2558b998f57ff570570c46fd2c94a431dc69ff1a55d57df6c4955aec7bf"
+    },
+    {
+      "name": "checkpoint_summary.json",
+      "bytes": 7486,
+      "sha256": "3e1f5188916fca7ac28a9eb4f01f9a330bf6a6bfeff85189fec1d379f06ed1a2"
+    },
+    {
+      "name": "config.json",
+      "bytes": 2089,
+      "sha256": "933aeb666a3fd851133ddd7686414f369bc564c4185fb5704416550879f10566"
+    },
+    {
+      "name": "generation_config.json",
+      "bytes": 177,
+      "sha256": "f9970ada892d2d1f72e3ed0a6535ccebadd11897318794ca671d8c7014c957da"
+    },
+    {
+      "name": "hardware_and_padding.json",
+      "bytes": 20212,
+      "sha256": "194505657f7d954842b466eee15c4af30e3377159df8cc8e9c67a909fc31b337"
+    },
+    {
+      "name": "installed_backend.json",
+      "bytes": 93218,
+      "sha256": "8f4d42d26324006c6794f76ef21e0c6b3aa08f81e4f8a725a8856ba480fdd51e"
+    },
+    {
+      "name": "memory_estimates.json",
+      "bytes": 1452,
+      "sha256": "729c6d1a6c063c7f42ff3592fb24191ed68f262b76908741dcfc46a3d1ef9093"
+    },
+    {
+      "name": "model.safetensors.index.json",
+      "bytes": 54511,
+      "sha256": "ede2655fdc05008561983b6e0829c600727c28d591e071077377059f03a6c00e"
+    },
+    {
+      "name": "retrieval.json",
+      "bytes": 268,
+      "sha256": "b9b9a17571536371567abe463ad370138cd1634a60a147b4d2cbc0ccd05b46a5"
+    },
+    {
+      "name": "tokenizer_config.json",
+      "bytes": 4200,
+      "sha256": "9279e942392b742d633c7adbb89ebe002c98399db8926a7af5125c726f404070"
+    }
+  ]
+}

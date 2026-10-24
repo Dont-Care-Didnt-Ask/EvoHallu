@@ -1,0 +1,398 @@
+{
+  "created_utc": "2026-10-21T22:14:25.954709+00:00",
+  "status": "complete_static_inspection_12_adaptive_winners",
+  "writer_model": "Qwen/Qwen3.5-9B",
+  "feature_model": "Llama3.1-8b-instruct",
+  "labels": "is_hallu",
+  "selection": "Existing directed PopQA validation primary within each60request run, including canonical NLL fallback; no benchmark-based promotion",
+  "validation_rows": 1402,
+  "training_rows": 5605,
+  "canonical_validation_auc_percent": 75.7504,
+  "report_snapshot_utc": "2026-10-21T22:08:59.219458+00:00",
+  "report_sha256": "09b157b0d76512fcc15f5a0db0adc19787820bc6498e7a3dadf9ac47156b933d",
+  "candidate_execution_calls": 0,
+  "model_calls": 0,
+  "code_repairs": 0,
+  "all12_source_and_staged_hashes_verified": true,
+  "all12_full60request_budgets_verified": true,
+  "source9_test_qualities_included": false,
+  "rows": [
+    {
+      "policy": "original",
+      "seed": 2107,
+      "method": "new/next_evo_original_2107__primary",
+      "candidate": "744d5e48aae6eb6913c81fcc1653ff54b0eb2c13dcf38a702919fcb343d9ba93",
+      "validation_auc_percent": 76.9672,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_original_2107/frozen_estimator.py",
+      "source_sha256": "39c2607087c09c58d6e49d5b700061d45bdb3218ced3139f98da2be7fde37d5b",
+      "staged_file": "results/overnight20261021/frozen/next_evo_original_2107__primary/frozen_estimator.py",
+      "valid_candidates": 30,
+      "declared_dependencies": [
+        "sequence_logprobs",
+        "top_k_logits",
+        "top_k_indices"
+      ],
+      "formula": "NLL32 + 0.5*Var32(-lp) + mean_top512_entropy/(-max(lp)) if max(lp)<-1e-6, else NLL32 + 0.5*Var32(-lp)",
+      "features": [
+        "float32 total NLL",
+        "float32 token surprisal variance",
+        "conditional top-512 entropy ratio"
+      ],
+      "caveats": [
+        "Prior saved-data audit verified max(lp)==0 for every one of 7007 source training rows, so the entropy-ratio contribution is zero there; not a universal or OOD identity.",
+        "Top-k indices are declared but not used numerically; entropy includes the extra final logits row."
+      ],
+      "evidence": "Static full expression; source-training branch inactivity independently verified in semantic_rank_winner_audit.json"
+    },
+    {
+      "policy": "original",
+      "seed": 4319,
+      "method": "new/next_evo_original_4319__primary",
+      "candidate": "01ab33c6722e45a84279ed1f753c0d7a1905b2659bc9dc1ebdbae31dbbf32405",
+      "validation_auc_percent": 79.2061,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_original_4319/frozen_estimator.py",
+      "source_sha256": "eabfdd5476779c29b48595b16544bb76a0bb471b61c8c6aef61bf526a837728f",
+      "staged_file": "results/overnight20261021/frozen/next_evo_original_4319__primary/frozen_estimator.py",
+      "valid_candidates": 36,
+      "declared_dependencies": [
+        "sequence_logprobs",
+        "top_k_logits",
+        "top_k_indices"
+      ],
+      "formula": "-PearsonCorr(position,lp) + EMA32(-lp, alpha=0.5)[last]/mean32(-lp), ratio=0 if mean<=1e-6",
+      "features": [
+        "global negative positional correlation",
+        "recent surprisal EMA relative to global mean"
+      ],
+      "caveats": [
+        "EMA starts at the first surprisal; this is the final EMA, not a weighted sum over the whole sequence.",
+        "Top-k arrays/indices are zipped but their numeric values do not enter the score.",
+        "Constant or one-token sequences can make Pearson undefined; no new failure test was run."
+      ],
+      "evidence": "Static exact nonempty-sequence expression"
+    },
+    {
+      "policy": "original",
+      "seed": 8741,
+      "method": "new/next_evo_original_8741__primary",
+      "candidate": "74adf6f7b19dedf77b0681fa0f201fb76106b2a617e9b0c80da3ab04ddd41af2",
+      "validation_auc_percent": 78.454,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_original_8741/frozen_estimator.py",
+      "source_sha256": "baf4ddab41363eb2beac71c0cf9e753e543f09d911b81240ebd1eeeaff64f4fc",
+      "staged_file": "results/overnight20261021/frozen/next_evo_original_8741__primary/frozen_estimator.py",
+      "valid_candidates": 35,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "-PearsonCorr(position,lp32) * (1 + std(lp32[W])/(std(lp32)+1e-8)); j=argmin(diff(lp32)); W=[max(0,j-2):min(n,j+3)]",
+      "features": [
+        "global negative positional correlation",
+        "local/global standard-deviation ratio around minimum adjacent difference"
+      ],
+      "caveats": [
+        "The variable named local_var is a standard deviation, not variance.",
+        "There is no division by sequence length; the normalization is by global standard deviation.",
+        "Minimum adjacent difference need not be negative for every possible input; constant sequences can give NaN correlation."
+      ],
+      "evidence": "Static exact expression for n>=2; n<2 returns0"
+    },
+    {
+      "policy": "neutral",
+      "seed": 2107,
+      "method": "new/next_evo_neutral_2107__primary",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_2107/frozen_estimator.py",
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/frozen/next_evo_neutral_2107__primary/frozen_estimator.py",
+      "valid_candidates": 29,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "-sum(lp) in native cached float16 precision, then float32 output",
+      "features": [
+        "canonical SequenceLogProb/NLL baseline"
+      ],
+      "caveats": [
+        "Baseline fallback won validation; no generated candidate exceeded its directed validation AUROC.",
+        "This is the canonical unchanged baseline, not evidence of a newly discovered formula."
+      ],
+      "evidence": "Baseline identity in frozen registry and static canonical sum"
+    },
+    {
+      "policy": "neutral",
+      "seed": 4319,
+      "method": "new/next_evo_neutral_4319__primary",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_4319/frozen_estimator.py",
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/frozen/next_evo_neutral_4319__primary/frozen_estimator.py",
+      "valid_candidates": 36,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "-sum(lp) in native cached float16 precision, then float32 output",
+      "features": [
+        "canonical SequenceLogProb/NLL baseline"
+      ],
+      "caveats": [
+        "Baseline fallback won validation; no generated candidate exceeded its directed validation AUROC.",
+        "This is the canonical unchanged baseline, not evidence of a newly discovered formula."
+      ],
+      "evidence": "Baseline identity in frozen registry and static canonical sum"
+    },
+    {
+      "policy": "neutral",
+      "seed": 8741,
+      "method": "new/next_evo_neutral_8741__primary",
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_neutral_8741/frozen_estimator.py",
+      "source_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "staged_file": "results/overnight20261021/frozen/next_evo_neutral_8741__primary/frozen_estimator.py",
+      "valid_candidates": 33,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "-sum(lp) in native cached float16 precision, then float32 output",
+      "features": [
+        "canonical SequenceLogProb/NLL baseline"
+      ],
+      "caveats": [
+        "Baseline fallback won validation; no generated candidate exceeded its directed validation AUROC.",
+        "This is the canonical unchanged baseline, not evidence of a newly discovered formula."
+      ],
+      "evidence": "Baseline identity in frozen registry and static canonical sum"
+    },
+    {
+      "policy": "diverse",
+      "seed": 2107,
+      "method": "new/next_evo_diverse_2107__primary",
+      "candidate": "231e2ec0f77946f643f2830d55c1f2e4e26ce04d1039347df8cfd5f36b3d5646",
+      "validation_auc_percent": 76.8771,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_2107/frozen_estimator.py",
+      "source_sha256": "8839fa3cd06414c27e4d42119fe72ef98134ea07377a56b1c3bc25572ad7be8f",
+      "staged_file": "results/overnight20261021/frozen/next_evo_diverse_2107__primary/frozen_estimator.py",
+      "valid_candidates": 41,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "-sum(lp[lp < -5.0]), with native cached-array accumulation then float32 output",
+      "features": [
+        "strict low-logprob thresholded partial NLL"
+      ],
+      "caveats": [
+        "Threshold is fixed by generated code, not fitted afterward.",
+        "This discards more confident tokens rather than adding a separate feature to NLL.",
+        "Thresholding and reduction depend on stored float16 precision."
+      ],
+      "evidence": "Static exact expression"
+    },
+    {
+      "policy": "diverse",
+      "seed": 4319,
+      "method": "new/next_evo_diverse_4319__primary",
+      "candidate": "4edc60e6fc8a6b4f83ba7c14cfc002c152eae013b4c9febcb3a40762df0427db",
+      "validation_auc_percent": 79.5207,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_4319/frozen_estimator.py",
+      "source_sha256": "403f7b69e0eaf01e68b12f57004088d758f6518914f9585517717f725d0763fc",
+      "staged_file": "results/overnight20261021/frozen/next_evo_diverse_4319__primary/frozen_estimator.py",
+      "valid_candidates": 25,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "sum_t((-lp[t]) * (t+1)/n), weights float32",
+      "features": [
+        "linearly later-weighted sequence surprisal"
+      ],
+      "caveats": [
+        "This is not a length-normalized mean; the weighting still sums over tokens.",
+        "No top-k dependency or additional fitted coefficient."
+      ],
+      "evidence": "Static exact expression"
+    },
+    {
+      "policy": "diverse",
+      "seed": 8741,
+      "method": "new/next_evo_diverse_8741__primary",
+      "candidate": "271d0a456048e7672fec6ea3b8ac5bd427fa1c9efead76d9cb51e51c3be0d71f",
+      "validation_auc_percent": 75.7622,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_diverse_8741/frozen_estimator.py",
+      "source_sha256": "66be09b1f829a618d937133de49375a6cbb598028ec21532133ac00e265317d7",
+      "staged_file": "results/overnight20261021/frozen/next_evo_diverse_8741__primary/frozen_estimator.py",
+      "valid_candidates": 37,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "-sum(lp,dtype=float32), output float32",
+      "features": [
+        "float32-accumulated total NLL"
+      ],
+      "caveats": [
+        "This is an NLL precision variant, not a new uncertainty feature.",
+        "Canonical baseline sums the cached float16 array before casting its output; the distinct summation can change ties.",
+        "Prior rank-winner audit established the same precision-only family; no new candidate execution here."
+      ],
+      "evidence": "Static exact float32 sum; canonical-precision distinction previously verified"
+    },
+    {
+      "policy": "compositional",
+      "seed": 2107,
+      "method": "new/next_evo_compositional_2107__primary",
+      "candidate": "697c9e4d98162be91a3f5af352b353aba17226e234d432d28f7a02ee90c53e70",
+      "validation_auc_percent": 76.8237,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_2107/frozen_estimator.py",
+      "source_sha256": "0be32c5d64072ed4a7cfebea20f705755ecbd63b92e3fa35db2e33916100758c",
+      "staged_file": "results/overnight20261021/frozen/next_evo_compositional_2107__primary/frozen_estimator.py",
+      "valid_candidates": 27,
+      "declared_dependencies": [
+        "sequence_logprobs",
+        "top_k_logits",
+        "top_k_indices"
+      ],
+      "formula": "max_{t>=floor(.7*n)} [0.4*(u_t-u_H)/u_H + 0.35*(F_H-F_t)/(F_H+1e-8) + 0.25*(H_t-H_H)/(H_H+1e-8)], with original denominator guards",
+      "features": [
+        "tail-vs-head relative surprisal",
+        "tail-vs-head raw-logit spread contrast",
+        "tail-vs-head conditional top-512 entropy contrast"
+      ],
+      "caveats": [
+        "u=-lp; H denotes the first floor(n/2) token positions; F_t=max(top512_logits[t])-mean(top512_logits[t]); H_t is conditional top-512 entropy.",
+        "Head-empty and denominator-near-zero branches remain exactly as generated.",
+        "Uses logits row t for observed-token logprob t and leaves final extra row unused.",
+        "q25=sorted_logits[25//512] selects index0 but is unused, as is chosen_logit; neither affects the score.",
+        "The score takes the maximum combined tail contrast, not an average of the tail."
+      ],
+      "evidence": "Static exact main formula, original guards preserved"
+    },
+    {
+      "policy": "compositional",
+      "seed": 4319,
+      "method": "new/next_evo_compositional_4319__primary",
+      "candidate": "4803d0d3622d864a5449a6f4233e43e57d3b65699dad5adee8630d905ca180b2",
+      "validation_auc_percent": 76.6394,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319/frozen_estimator.py",
+      "source_sha256": "71795a8c291b410a69ad1dc49e6af3ce1d6e0ae8ae7fbb819a83844f0d4aaf91",
+      "staged_file": "results/overnight20261021/frozen/next_evo_compositional_4319__primary/frozen_estimator.py",
+      "valid_candidates": 29,
+      "declared_dependencies": [
+        "sequence_logprobs",
+        "top_k_logits",
+        "top_k_indices"
+      ],
+      "formula": "0.25*(-mean(lp) + Var(lp[floor(.8*n):]) + 1-mean_rows(clip((top1-top2)/(abs(top1)+1e-9),0,1)) + mean(abs(diff(lp[floor(.7*n):]))))",
+      "features": [
+        "mean sequence surprisal",
+        "last20% logprob variance",
+        "normalized top1/top2 logit gap complement",
+        "last30% mean adjacent absolute change"
+      ],
+      "caveats": [
+        "Original empty/short-segment guards set corresponding terms to0.",
+        "Gap averages all n+1 logits rows; LP-based terms use n predicted-token logprobs. This extra-row weighting is real; do not silently trim it.",
+        "Dividing the gap by abs(raw top1 logit) breaks invariance to a constant logit shift and is fragile near zero; it is not a probability gap.",
+        "Top-k indices are declared but unused numerically."
+      ],
+      "evidence": "Static exact expression with original segment guards"
+    },
+    {
+      "policy": "compositional",
+      "seed": 8741,
+      "method": "new/next_evo_compositional_8741__primary",
+      "candidate": "eac31045503bb9c0506ddd333e56ffd578caa83456c74cc20081ddbe2e2a62d6",
+      "validation_auc_percent": 78.2742,
+      "requests": 60,
+      "planned_requests": 60,
+      "full_budget": true,
+      "source_file": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_8741/frozen_estimator.py",
+      "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+      "staged_file": "results/overnight20261021/frozen/next_evo_compositional_8741__primary/frozen_estimator.py",
+      "valid_candidates": 22,
+      "declared_dependencies": [
+        "sequence_logprobs"
+      ],
+      "formula": "0.4*R_B(f1) + 0.25*R_B(f2) + 0.2*R_B(f3) + 0.15*R_B(f4)",
+      "features": [
+        "canonical-accumulation total NLL",
+        "mean width5 stride2 local variance",
+        "mean largest/least-negative10% observed logprobs",
+        "maximum width5 stride2 local absolute deviation"
+      ],
+      "caveats": [
+        "R_B(f)=(f-median_B(f))/(1.4826*median_B(abs(f-median_B(f)))); if MAD<1e-8 the whole feature vector becomes0. B is the current sample batch in __call__.",
+        "This is a batch-dependent, unsupervised set statistic. Changing chunk composition changes relative feature scales and can change ranking; not an independent pointwise score.",
+        "f1=-sum(lp); f2=mean of width5 stride2 variances; f3=mean(sort(lp)[-floor(.1*n):]); f4=max over width5 stride2 windows of max(abs(window-mean(window))).",
+        "f3 selects the largest, most confident logprobs, not bottom10% severity. When n<10, -0 slicing selects the entire sequence. It may be constant in some batches, but this inspection does not establish that empirically.",
+        "For n<=5, f2 uses whole-sequence variance and f4 uses max(abs(lp)); empty sequences use0. For batch size1 every median absolute deviation is0, hence score0 analytically.",
+        "No labels enter the batch normalization, but target/test-batch marginal statistics do. Retain original512-row protocol and assess other chunks only as a separate diagnostic.",
+        "Verified original training, validation and benchmark evaluations all use512-row chunks; there is no train-full/test512 chunk-size mismatch."
+      ],
+      "evidence": "Static exact four-component expression; batch-size1 degeneracy follows algebraically, not from new execution"
+    }
+  ],
+  "limitations": [
+    "Static semantics are not proof of empirical term magnitude.",
+    "Verified original2107 training branch inactivity is inherited from the prior saved-data semantic audit.",
+    "Batch-dependent C8741 needs separate fixed-case chunk sensitivity; primary identity and512-row scores remain frozen."
+  ],
+  "verified_scoring_protocol": {
+    "train_chunk_size": 512,
+    "validation_chunk_size": 512,
+    "benchmark_chunk_size": 512,
+    "config": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_8741/trial_config.json",
+    "config_sha256": "2a4e6ea32072df152c055a683ef4e3f50ddb672593a72d314cb2a86849d16713",
+    "task_evaluator": "src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py",
+    "task_evaluator_sha256": "7890c9accf4d6a6970d6650fa3a5643f81f876343fc6684f1d521deff665e9b5",
+    "interpretation": "All primary splits use512-row chunks; sensitivity concerns batch membership/partition, not train-full versus test512 mismatch."
+  },
+  "separate_batch_diagnostic": {
+    "report": "batch_sensitivity/INTERPRETATION.md",
+    "status": "complete",
+    "original512_primary_exact_all9": true,
+    "primary_replaced": false
+  },
+  "later_training_branch_evidence": {
+    "source": "frozen_train_normalization/fit_features_and_split.npz",
+    "fit_rows": 5605,
+    "excluded_validation_rows": 1402,
+    "original512_training_chunks": 11,
+    "feature3_zero_mad_chunks": 11,
+    "feature4_zero_mad_chunks": 11,
+    "interpretation": "The original zero-MAD branches deactivate both contributions in all original training calls; not a claim of constant raw features or validation/OOD inactivity.",
+    "source_rewritten": false
+  }
+}

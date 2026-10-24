@@ -1,0 +1,8 @@
+{
+  "status": "complete_matched_screen",
+  "full_paired_comparisons_available": true,
+  "saved_requests": 120,
+  "valid_requests": 72,
+  "protocol_errors": 0,
+  "output": "/workspace/mod1/results/overnight20261021/prompt_screen_analysis"
+}

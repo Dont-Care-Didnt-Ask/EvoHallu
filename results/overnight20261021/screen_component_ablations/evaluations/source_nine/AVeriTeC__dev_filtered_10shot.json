@@ -1,0 +1,229 @@
+{
+  "rows": 427,
+  "duplicate_disjoint_rows": 427,
+  "failed": {},
+  "methods": {
+    "original/SequenceLogProb": {
+      "auc_percent": 63.76780435366837,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 63.76780435366837,
+      "auc_ci95_percent": [
+        57.23204458167941,
+        70.23949108842564
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/screen_compositional__drop_global_correlation": {
+      "auc_percent": 60.38699274388606,
+      "gain_pp": -3.380811609782308,
+      "duplicate_disjoint_auc_percent": 60.38699274388606,
+      "auc_ci95_percent": [
+        53.66548080671096,
+        66.01409733681302
+      ],
+      "paired_gain_ci95_pp": [
+        -8.219661789501272,
+        1.563348385995212
+      ]
+    },
+    "new/screen_compositional__drop_tail_surprisal_mean": {
+      "auc_percent": 62.94275732330018,
+      "gain_pp": -0.8250470303681867,
+      "duplicate_disjoint_auc_percent": 62.94275732330018,
+      "auc_ci95_percent": [
+        56.11935990867576,
+        69.08799973278256
+      ],
+      "paired_gain_ci95_pp": [
+        -5.113384104897786,
+        3.2193732648870905
+      ]
+    },
+    "new/screen_compositional__drop_tail_surprisal_variance": {
+      "auc_percent": 62.97231926901371,
+      "gain_pp": -0.7954850846546568,
+      "duplicate_disjoint_auc_percent": 62.97231926901371,
+      "auc_ci95_percent": [
+        55.397620473713935,
+        68.58051449887387
+      ],
+      "paired_gain_ci95_pp": [
+        -5.279873178317902,
+        3.291012564115196
+      ]
+    },
+    "new/screen_compositional__full": {
+      "auc_percent": 63.042192958882026,
+      "gain_pp": -0.7256113947863407,
+      "duplicate_disjoint_auc_percent": 63.042192958882026,
+      "auc_ci95_percent": [
+        55.63533248577556,
+        68.81894023916739
+      ],
+      "paired_gain_ci95_pp": [
+        -5.009947756139256,
+        3.2285942234508154
+      ]
+    },
+    "new/screen_diverse__drop_relative_gap_drift": {
+      "auc_percent": 63.89411448535339,
+      "gain_pp": 0.1263101316850257,
+      "duplicate_disjoint_auc_percent": 63.89411448535339,
+      "auc_ci95_percent": [
+        57.16609724851238,
+        70.44690763759642
+      ],
+      "paired_gain_ci95_pp": [
+        -1.5944441702140113,
+        1.8159281752674437
+      ]
+    },
+    "new/screen_diverse__drop_tail_gap_variance": {
+      "auc_percent": 63.76780435366837,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 63.76780435366837,
+      "auc_ci95_percent": [
+        57.245857081018414,
+        70.23602690012507
+      ],
+      "paired_gain_ci95_pp": [
+        -0.06291703467217191,
+        0.062480333261836205
+      ]
+    },
+    "new/screen_diverse__drop_total_nll": {
+      "auc_percent": 56.94974469228702,
+      "gain_pp": -6.818059661381348,
+      "duplicate_disjoint_auc_percent": 56.94974469228702,
+      "auc_ci95_percent": [
+        49.819073589544,
+        62.85782235874105
+      ],
+      "paired_gain_ci95_pp": [
+        -13.461973226126162,
+        -0.5072399215230272
+      ]
+    },
+    "new/screen_diverse__full": {
+      "auc_percent": 63.891427035743085,
+      "gain_pp": 0.12362268207471994,
+      "duplicate_disjoint_auc_percent": 63.891427035743085,
+      "auc_ci95_percent": [
+        57.145735337597856,
+        70.43693206756384
+      ],
+      "paired_gain_ci95_pp": [
+        -1.6126727183013376,
+        1.8094427893361993
+      ]
+    },
+    "new/screen_neutral__drop_tail_gap_variance": {
+      "auc_percent": 64.70841171728028,
+      "gain_pp": 0.9406073636119228,
+      "duplicate_disjoint_auc_percent": 64.70841171728028,
+      "auc_ci95_percent": [
+        57.666456838321814,
+        71.35108612867974
+      ],
+      "paired_gain_ci95_pp": [
+        -1.2373808733013125,
+        2.9383183723326356
+      ]
+    },
+    "new/screen_neutral__drop_total_nll": {
+      "auc_percent": 63.59849502821822,
+      "gain_pp": -0.16930932545015098,
+      "duplicate_disjoint_auc_percent": 63.59849502821822,
+      "auc_ci95_percent": [
+        56.81303299059164,
+        69.94229344693062
+      ],
+      "paired_gain_ci95_pp": [
+        -4.006690434361779,
+        3.4895654278969483
+      ]
+    },
+    "new/screen_neutral__drop_weighted_gap": {
+      "auc_percent": 63.297500671862394,
+      "gain_pp": -0.4703036818059725,
+      "duplicate_disjoint_auc_percent": 63.297500671862394,
+      "auc_ci95_percent": [
+        56.622780931719696,
+        69.65549917599098
+      ],
+      "paired_gain_ci95_pp": [
+        -2.0349642276068445,
+        1.0239769109608732
+      ]
+    },
+    "new/screen_neutral__full": {
+      "auc_percent": 64.21392098898147,
+      "gain_pp": 0.44611663531309853,
+      "duplicate_disjoint_auc_percent": 64.21392098898147,
+      "auc_ci95_percent": [
+        57.39033380090969,
+        70.84896399499944
+      ],
+      "paired_gain_ci95_pp": [
+        -1.9478397884667609,
+        2.6532247350782714
+      ]
+    },
+    "new/screen_original__drop_inverse_tail_range": {
+      "auc_percent": 62.270894920720245,
+      "gain_pp": -1.4969094329481236,
+      "duplicate_disjoint_auc_percent": 62.270894920720245,
+      "auc_ci95_percent": [
+        55.97847765391499,
+        67.7421618046618
+      ],
+      "paired_gain_ci95_pp": [
+        -9.147109354158394,
+        5.465932694882188
+      ]
+    },
+    "new/screen_original__drop_normalized_slope": {
+      "auc_percent": 39.53775866702499,
+      "gain_pp": -24.230045686643376,
+      "duplicate_disjoint_auc_percent": 39.53775866702499,
+      "auc_ci95_percent": [
+        33.537688945846476,
+        45.97991341387815
+      ],
+      "paired_gain_ci95_pp": [
+        -34.41557817030054,
+        -13.03772002014189
+      ]
+    },
+    "new/screen_original__full": {
+      "auc_percent": 57.15667831228165,
+      "gain_pp": -6.611126041386717,
+      "duplicate_disjoint_auc_percent": 57.15667831228165,
+      "auc_ci95_percent": [
+        51.08257583675577,
+        62.61471709437244
+      ],
+      "paired_gain_ci95_pp": [
+        -15.1162297633434,
+        1.4181084063261913
+      ]
+    }
+  },
+  "feature_model_metadata": {
+    "model_id": "/workspace/mod1-models/llama31",
+    "hidden_size": 4096,
+    "num_layers": 32,
+    "num_attention_heads": 32,
+    "vocab_size": 128256,
+    "modalities": "logits",
+    "model_dtype": "torch.float32",
+    "requested_forward_batch_size": 16,
+    "max_padded_forward_tokens": 16384,
+    "cpu_feature_threads": 12
+  },
+  "unique_normalized_claims": 419,
+  "bootstrap_unit": "claim"
+}

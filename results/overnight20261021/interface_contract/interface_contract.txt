@@ -1,0 +1,42 @@
+## Exact evaluator interface and metric contract
+The following specifies the actual evaluator API and array indexing. Formula
+structure, signal families, coefficients and the number of components remain open.
+
+- Provide class HallucinationDetector(Estimator). Estimator is supplied by the
+  evaluator; do not import or redefine it. Its constructor takes context and
+  keyword-only stats_dependencies and level. In __init__(self, context), call:
+  super().__init__(context, stats_dependencies=["sequence_logprobs", "top_k_logits", "top_k_indices"], level="sequence")
+  The dependency list may instead name the available inputs your formula uses.
+- Implement __call__(self, stats) directly: this is the method the evaluator
+  invokes. stats is a DICTIONARY for a batch, not a list of claim dictionaries
+  and not the scipy.stats module. N = len(stats["sequence_logprobs"]).
+- The documented token inputs are lists of N NumPy arrays. For sample i, let
+  L_i = len(stats["sequence_logprobs"][i]). That observed-token logprob array
+  has shape (L_i,). The corresponding top_k_logits[i] and top_k_indices[i]
+  arrays have shape (L_i + 1, 512). L_i varies across samples; the batch is
+  ragged, so handle each sample's own arrays or explicitly pad/group them.
+- Alignment is exact: observed logprob entry t was computed from logits row t
+  for the next observed token. To compare rowwise with all L_i observed
+  logprobs, use stats["top_k_logits"][i][:-1] (and the same slice of
+  stats["top_k_indices"][i] when needed). The
+  final top-k row has no corresponding observed-token logprob. There is no
+  additional one-position shift between those aligned arrays. These arrays
+  cover the cached token sequence, including its template tokens.
+- top_k_logits contains raw logits. A softmax over its 512 columns defines a
+  top-512-conditional distribution, not a full-vocabulary distribution. Its
+  logprobs and full-vocabulary observed-token logprobs have different
+  normalizers. top_k_indices contains vocabulary token IDs, not column
+  positions within the 512-wide array; map IDs to columns when that is needed.
+- Stored floating arrays can be float16. Promote arrays to float32 or float64
+  before arithmetic/reductions where needed for finite numerical results.
+  Handle short/constant arrays and zero denominators explicitly; correlations
+  of constant vectors and divisions by zero can yield NaN.
+- Import NumPy/SciPy APIs you use. entropy and linregress are in scipy.stats;
+  softmax and logsumexp are in scipy.special. The parameter stats remains the
+  input dictionary, so stats.linregress is not a SciPy function call.
+- Return one finite, one-dimensional NumPy array of shape (N,), with one
+  uncertainty score per sample. Higher score means greater hallucination
+  risk (is_hallu=1); the training/validation fitness uses directed ROC-AUC.
+  Labels and fitted model weights are not supplied to this unsupervised
+  detector. Any deterministic NumPy/SciPy scoring formula is allowed; there
+  is no added feature-count ceiling or required baseline-plus-extra structure.

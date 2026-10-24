@@ -1,0 +1,50 @@
+{
+  "status": "prepared_only_for_root_review",
+  "execute_invoked": false,
+  "real_feature_caches_scored": false,
+  "target_fit": false,
+  "gpu_calls": 0,
+  "tests": {
+    "command": "PYTHONPATH=src:. OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest -q tests/test_overnight_normalization_transfer.py",
+    "passed": 16,
+    "elapsed_seconds": 7.63,
+    "fixture_only": true
+  },
+  "protected_artifacts_verified": 62,
+  "six_dataset_names": [
+    "AVeriTeC__dev_filtered_10shot",
+    "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+    "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+    "geometry__cities",
+    "geometry__common_claim_true_false",
+    "geometry__companies_true_false"
+  ],
+  "new_nine_dataset_indices": [
+    6,
+    7,
+    8
+  ],
+  "deadline_utc": "2026-10-22T02:03:00+00:00",
+  "files": [
+    {
+      "path": "scripts/overnight_normalization_transfer.py",
+      "bytes": 39538,
+      "sha256": "9ac58405f403ecdaaa61bb2f87baf3602d103ce68108276a2a3d6b6e4c01ac02"
+    },
+    {
+      "path": "tests/test_overnight_normalization_transfer.py",
+      "bytes": 11272,
+      "sha256": "ef979e03de1f27f5ba7f2e93ada2cc5534f4f1a498daf7220ef2b85ffdc13929"
+    },
+    {
+      "path": "results/overnight20261021/normalization_transfer/PLAN.json",
+      "bytes": 18970,
+      "sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39"
+    },
+    {
+      "path": "results/overnight20261021/normalization_transfer/DESIGN.md",
+      "bytes": 5839,
+      "sha256": "81e3b91457e33a910998b0d602efc5390531bf42934bd884621b345c778551b2"
+    }
+  ]
+}

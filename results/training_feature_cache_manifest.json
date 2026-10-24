@@ -1,0 +1,9 @@
+{
+  "raw_file": "data/uncertainty_quantification/popqa_train_filtered_10shot_raw_stats_logits.pt",
+  "raw_bytes": 1074638092,
+  "raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "gzip_file": "data/feature_cache_archive/train/popqa_train_filtered_10shot_raw_stats_logits.pt.gz",
+  "gzip_bytes": 435979549,
+  "gzip_sha256": "fdf39f060a0d61dc940bfcfab5800717c6ce14b6db4771ad2c56e5a0d0fc1194",
+  "included_in_portable_source_zip": false
+}

@@ -1,0 +1,503 @@
+{
+  "hard_deadline_utc": "2026-10-15T10:45:00+00:00",
+  "actions": [
+    {
+      "id": "wait_laguna_checkpoint",
+      "kind": "wait_file",
+      "path": "/dev/shm/mod1-models/Laguna-XS-2.1/download_manifest.json",
+      "timeout": 1800,
+      "log": "/workspace/mod1-laguna-download.log",
+      "log_contains": "DOWNLOAD COMPLETE"
+    },
+    {
+      "id": "serve_laguna",
+      "kind": "serve",
+      "log": "out/campaign/laguna_server.log",
+      "timeout": 1200,
+      "command": [
+        "vllm",
+        "serve",
+        "/dev/shm/mod1-models/Laguna-XS-2.1",
+        "--served-model-name",
+        "poolside/Laguna-XS-2.1",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.92",
+        "--reasoning-parser",
+        "poolside_v1",
+        "--enforce-eager"
+      ]
+    },
+    {
+      "id": "laguna_evo_1048",
+      "kind": "command",
+      "log": "out/campaign/laguna_evo_1048.log",
+      "timeout": 3720,
+      "minimum_remaining_seconds": 18000,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=laguna_xs21",
+        "run_identifier_name=laguna_evo",
+        "search_mode=evolution",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=3600",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "laguna_independent_1048",
+      "kind": "command",
+      "log": "out/campaign/laguna_independent_1048.log",
+      "timeout": 3720,
+      "minimum_remaining_seconds": 18000,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=laguna_xs21",
+        "run_identifier_name=laguna_independent",
+        "search_mode=independent",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=3600",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "laguna_seeded_1048",
+      "kind": "command",
+      "log": "out/campaign/laguna_seeded_1048.log",
+      "timeout": 3720,
+      "minimum_remaining_seconds": 18000,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=laguna_xs21",
+        "run_identifier_name=laguna_seeded",
+        "search_mode=baseline_seeded",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=3600",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "laguna_evo_1047",
+      "kind": "command",
+      "log": "out/campaign/laguna_evo_1047.log",
+      "timeout": 3720,
+      "minimum_remaining_seconds": 18000,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=laguna_xs21",
+        "run_identifier_name=laguna_evo",
+        "search_mode=evolution",
+        "seed=1047",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=3600",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "laguna_structured_1048",
+      "kind": "command",
+      "log": "out/campaign/laguna_structured_1048.log",
+      "timeout": 3720,
+      "minimum_remaining_seconds": 21600,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=laguna_xs21",
+        "run_identifier_name=laguna_structured",
+        "search_mode=structured",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=3600",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "laguna_group_1048",
+      "kind": "command",
+      "log": "out/campaign/laguna_group_1048.log",
+      "timeout": 3720,
+      "minimum_remaining_seconds": 21600,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=laguna_xs21",
+        "run_identifier_name=laguna_group",
+        "search_mode=evolution",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=3600",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "task.split_strategy=claim_group"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "stop_laguna",
+      "kind": "stop_server"
+    },
+    {
+      "id": "rotate_laguna",
+      "kind": "command",
+      "log": "out/campaign/rotate_laguna.log",
+      "timeout": 120,
+      "minimum_remaining_seconds": 0,
+      "command": [
+        "python",
+        "scripts/rotate_checkpoint.py",
+        "/dev/shm/mod1-models/Laguna-XS-2.1"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "redownload_feature_model",
+      "kind": "command",
+      "log": "out/campaign/redownload_feature_model.log",
+      "timeout": 1800,
+      "minimum_remaining_seconds": 0,
+      "command": [
+        "python",
+        "scripts/download_checkpoint.py",
+        "VityaVitalich/Llama3.1-8b-instruct",
+        "/workspace/mod1-models/llama31",
+        "--revision",
+        "247cb7c3baebabc46cff1fb97a3a5913e4c4511d"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "cache_nine_datasets",
+      "kind": "command",
+      "log": "out/campaign/cache_nine_datasets.log",
+      "timeout": 10800,
+      "minimum_remaining_seconds": 0,
+      "command": [
+        "python",
+        "scripts/evaluate_cached_claims.py",
+        "--mode",
+        "cache",
+        "--batch-size",
+        "16",
+        "--cpu-threads",
+        "12"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "small_feature_timing_probe",
+      "kind": "command",
+      "log": "out/campaign/small_feature_probe.log",
+      "timeout": 180,
+      "minimum_remaining_seconds": 5400,
+      "continue_on_failure": true,
+      "command": [
+        "timeout",
+        "150",
+        "python",
+        "scripts/benchmark_small_features.py"
+      ]
+    },
+    {
+      "id": "download_qwen35_9b",
+      "kind": "command",
+      "log": "out/campaign/download_qwen35_9b.log",
+      "timeout": 1800,
+      "minimum_remaining_seconds": 5400,
+      "command": [
+        "python",
+        "scripts/download_checkpoint.py",
+        "Qwen/Qwen3.5-9B",
+        "/dev/shm/mod1-models/Qwen3.5-9B",
+        "--revision",
+        "c202236235762e1c871ad0ccb60c8ee5ba337b9a"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "serve_qwen35_9b",
+      "kind": "serve",
+      "log": "out/campaign/qwen35_9b_server.log",
+      "timeout": 600,
+      "command": [
+        "vllm",
+        "serve",
+        "/dev/shm/mod1-models/Qwen3.5-9B",
+        "--served-model-name",
+        "Qwen/Qwen3.5-9B",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.70",
+        "--language-model-only",
+        "--reasoning-parser",
+        "qwen3"
+      ],
+      "minimum_remaining_seconds": 5400
+    },
+    {
+      "id": "qwen35_9b_evo_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen35_9b_evo_1048.log",
+      "timeout": 1920,
+      "minimum_remaining_seconds": 3300,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=qwen35_9b",
+        "run_identifier_name=qwen35_9b_evo",
+        "search_mode=evolution",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=1800",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "trial.serving_profile=vllm_default"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "qwen35_9b_independent_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen35_9b_independent_1048.log",
+      "timeout": 1920,
+      "minimum_remaining_seconds": 3300,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=qwen35_9b",
+        "run_identifier_name=qwen35_9b_independent",
+        "search_mode=independent",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=1800",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "trial.serving_profile=vllm_default"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "qwen35_9b_evo_1047",
+      "kind": "command",
+      "log": "out/campaign/qwen35_9b_evo_1047.log",
+      "timeout": 1920,
+      "minimum_remaining_seconds": 3300,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=qwen35_9b",
+        "run_identifier_name=qwen35_9b_evo",
+        "search_mode=evolution",
+        "seed=1047",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=1800",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "trial.serving_profile=vllm_default"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "qwen35_9b_seeded_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen35_9b_seeded_1048.log",
+      "timeout": 1920,
+      "minimum_remaining_seconds": 8100,
+      "continue_on_failure": true,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=qwen35_9b",
+        "run_identifier_name=qwen35_9b_seeded",
+        "search_mode=baseline_seeded",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=1800",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "trial.serving_profile=vllm_default"
+      ]
+    },
+    {
+      "id": "stop_qwen35_9b",
+      "kind": "stop_server"
+    },
+    {
+      "id": "extended_small_feature_timing_probe",
+      "kind": "command",
+      "log": "out/campaign/small_feature_extended_probe.log",
+      "timeout": 180,
+      "minimum_remaining_seconds": 5400,
+      "continue_on_failure": true,
+      "command": [
+        "timeout",
+        "150",
+        "python",
+        "scripts/benchmark_small_features.py",
+        "--extended-cleanup",
+        "--output",
+        "out/campaign/small_feature_extended_probe.json"
+      ]
+    },
+    {
+      "id": "evaluate_frozen_nine_datasets",
+      "kind": "command",
+      "log": "out/campaign/evaluate_frozen_nine_datasets.log",
+      "timeout": 7200,
+      "minimum_remaining_seconds": 0,
+      "command": [
+        "python",
+        "scripts/evaluate_added_run.py",
+        "--run-prefix",
+        "uncertainty_quantification_qwen35_9b_",
+        "--reference",
+        "out/campaign/evaluation_before_9b",
+        "--output",
+        "out/campaign/evaluation"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "optional_small_writer",
+      "kind": "command",
+      "log": "out/campaign/phase3_small_driver.log",
+      "timeout": 3600,
+      "minimum_remaining_seconds": 3600,
+      "continue_on_failure": true,
+      "command": [
+        "python",
+        "scripts/campaign.py",
+        "--plan",
+        "configs/campaign/phase3_small.json",
+        "--state",
+        "out/campaign/state_phase3.json"
+      ]
+    },
+    {
+      "id": "optional_devstral_writer",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/campaign.py",
+        "--plan",
+        "configs/campaign/phase5_devstral.json",
+        "--state",
+        "out/campaign/state_phase5.json"
+      ],
+      "log": "out/campaign/phase5_devstral_driver.log",
+      "minimum_remaining_seconds": 3600,
+      "timeout": 3600,
+      "continue_on_failure": true
+    },
+    {
+      "id": "optional_feature_transfer",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/transfer_feature_model.py"
+      ],
+      "log": "out/campaign/feature_transfer.log",
+      "timeout": 3600,
+      "minimum_remaining_seconds": 3600,
+      "continue_on_failure": true
+    },
+    {
+      "id": "devstral_native_request_retry",
+      "kind": "command",
+      "log": "out/campaign/phase5_devstral_retry_driver.log",
+      "minimum_remaining_seconds": 3300,
+      "timeout": 3300,
+      "continue_on_failure": true,
+      "command": [
+        "python",
+        "scripts/campaign.py",
+        "--plan",
+        "configs/campaign/phase5_devstral_retry.json",
+        "--state",
+        "out/campaign/state_phase5_retry.json"
+      ]
+    },
+    {
+      "id": "optional_4b_structured",
+      "kind": "command",
+      "log": "out/campaign/phase4_structured_driver.log",
+      "timeout": 1800,
+      "minimum_remaining_seconds": 1800,
+      "continue_on_failure": true,
+      "command": [
+        "python",
+        "scripts/campaign.py",
+        "--plan",
+        "configs/campaign/phase4_structured.json",
+        "--state",
+        "out/campaign/state_phase4.json",
+        "--require-cohort-verified",
+        "out/campaign/evaluation_with_4b/cohort_verified.json"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,268 @@
+{
+  "utc": "2026-10-15T09:28:01.408058+00:00",
+  "estimators": [
+    {
+      "run": "ablation_laguna_slope_only",
+      "file_sha256": "c1c053b0d530931542ae88dd6bbeef58b9eaa2307c21f0eff5e7488fca038ebe",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "ablation_laguna_slope_range",
+      "file_sha256": "4569f2423553d8eb56d26e408fc7e72239dc85baa26ac62046ee9259a5d6aa39",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "ablation_laguna_slope_variance",
+      "file_sha256": "d7e644ac201b3d29831956667f13351e75d48da1be0f56d573d6c2c866df7269",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "ablation_qwen_linear_position_nll",
+      "file_sha256": "68b25e25db2a5ac75f8febce1eb891cac41d0b92b5738a48d6fa28d52e5d2e63",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [
+        "numpy"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_devstral_evo_1048",
+      "file_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "selected_candidate": "baseline",
+      "matches_selected_record": null,
+      "baseline_retained": true,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": true
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "file_sha256": "eb952792127e317dacb31e89e1c91bc6d03dbe558c5aa55dac9e4afaede0ee8b",
+      "selected_candidate": "a033e9afca603fcc7e24e7a0820d68465fc2dca6315270955748648d3247a27f",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "file_sha256": "6a19b39483c49dfe528fb7549728f1722e97ddb3dab1d32d77e121eb30587a31",
+      "selected_candidate": "f0d6566237d9d7f42ee6e6cd383d86f24c01838b2c3289a15ef1261dd9054d48",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_laguna_independent_1048",
+      "file_sha256": "3b550475be86082880b3ac5711eb9dc4898d15d382fef2b9395b985649c68a22",
+      "selected_candidate": "f2c3e705219d61996cb45b2bde9680ad74a72933b68fdeb525d0cd3eaf4761de",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_laguna_seeded_1048",
+      "file_sha256": "3985d4798f93ba223d8782abf791f420adfa36f46b72a927c6338970b7eb7932",
+      "selected_candidate": "c60ffa6638ba71c737befd34fd5a642a4d058b31c628949f95ee90203bfbedd0",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_linear_evolution_1047",
+      "file_sha256": "03163fa05b8c8714eb0d7342744a69a20eaa525763a345ce668eeda82330c59a",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [
+        "packing.evaluate.uncertainty_quantification.supervised_baselines"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_linear_evolution_1048",
+      "file_sha256": "35c0906c0c4e02e99550b72f858b4bd33cf02aa8acf65245d04ca547d9be17db",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [
+        "packing.evaluate.uncertainty_quantification.supervised_baselines"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_linear_independent_1047",
+      "file_sha256": "1ac8242ebfc3e7b1b5d8a32bcf732055aa1ce2ba01f6d0c828f857ab4771552a",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [
+        "packing.evaluate.uncertainty_quantification.supervised_baselines"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_linear_independent_1048",
+      "file_sha256": "e8a1829bc98816e4c88e295a19278cba10c9f78b86da91fb09270407bc2c578c",
+      "selected_candidate": null,
+      "matches_selected_record": null,
+      "baseline_retained": false,
+      "imports": [
+        "packing.evaluate.uncertainty_quantification.supervised_baselines"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "file_sha256": "d765dcb74dadd0a89578a6b7015f7ccb4f428a718380d5b4f25e7182c8356875",
+      "selected_candidate": "b45f63c83c4ccba6953cb5a88b0fa0788e8d930ce46b04805030f597e78caecd",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy",
+        "scipy.stats"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "file_sha256": "aa7614dbccd5bd56c2a3da2885300e3600b5e2ba7dfba5f570f37de92a9d9d22",
+      "selected_candidate": "83c36ab82dd92b5e1f6d12b45858a707900763c27de9aeb6d2119110c37c1e9c",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "file_sha256": "4b817650efff1f84685e993110aff97c658f0a1467d191529f9eec2c5f245502",
+      "selected_candidate": "109521072ee3a42a4fa18e7112ac761a2a8bf944bffa2266ed9a04be791e5a21",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_independent_1048",
+      "file_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "selected_candidate": "baseline",
+      "matches_selected_record": null,
+      "baseline_retained": true,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_seeded_1048",
+      "file_sha256": "6d8fb3da2b29a19dd9aa3ab95028057afa70f995c9fe0f3c70ec4062497715c9",
+      "selected_candidate": "b1952ddc48d1d087a27c5083ada306773769ac7802fbe63135c02cfe5cced8ff",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "file_sha256": "20431c1cd439a79480ead3e1e14d1a67d996c1948840a48bfc5bafabc5c2dcd9",
+      "selected_candidate": "39b967bbf368245a19bc78cfd899c5983ecdd8f69546a47416d04b4c9af19c23",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy",
+        "typing"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "file_sha256": "fe26a84cde139742031491e52094fd68fba71389e7f771b712a2ce0b0ab6d6b7",
+      "selected_candidate": "06c6dd8c553780efbba5d5fdf77c6015b51511a80afbe1328fbc5e6d7be4627b",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy",
+        "typing"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_1048",
+      "file_sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d",
+      "selected_candidate": "baseline",
+      "matches_selected_record": null,
+      "baseline_retained": true,
+      "imports": [],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": true
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_contract_1048",
+      "file_sha256": "bda784c76efd69f5c4a161d5e4fccc936cf2725a40d779a77cd692787e6ce04a",
+      "selected_candidate": "90b7bae563240e1de77d28ee9b99ba4b2514172fef878500b16af7fedf2e933c",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy",
+        "scipy"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_pilot_1046",
+      "file_sha256": "38257225408e5630f146b3adf4cd1568df1141c993889f2dae2d9ff0bbcedb03",
+      "selected_candidate": "d4d9306574c880403571ab4c92e4f16a94861f83264e087142e2864a16b4895c",
+      "matches_selected_record": true,
+      "baseline_retained": false,
+      "imports": [
+        "numpy",
+        "scipy.special",
+        "typing"
+      ],
+      "rng_or_external_io_calls_found": [],
+      "excluded_from_quality_evaluation": false
+    }
+  ],
+  "scope": "Static call/import inspection and exact equality to the recorded selected program; no program modifications"
+}

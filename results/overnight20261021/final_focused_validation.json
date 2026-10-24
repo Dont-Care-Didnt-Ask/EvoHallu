@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "utc": "2026-10-21T21:58:07.437301+00:00",
+  "tests": 183,
+  "elapsed_seconds": 237.54,
+  "exit_code": 0,
+  "scope": "21 focused protocol/controller/report/provenance/cache/transfer test modules; excludes model-downloading legacy tests",
+  "separate_shortlist_tests": 5,
+  "models_loaded": false
+}

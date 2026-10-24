@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "dataset": "popqa__popqa_test_filtered_10shot",
+  "phase": "source",
+  "rows": 6974,
+  "raw_sha256": "8f78c1e2111a48e7d58d5fd6213b408c1413746d34a39e1bec591edcbc14dad9",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "427195708a512c038e6afca0fbfcdf12351cf74a02a6b8c225036b1932d83610",
+  "bootstrap_sha256": "8863b0b14970f841131bf52c9b22d170fcbfef872e8545e0dfbb58c884fb724f",
+  "source_lp_only_saved_prediction_parity": true,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_512",
+      "score_sha256": "0b22f4695cd505397d41fea87e485c1cc1403912ef8fc3d3ee58c5caa90d02d4",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

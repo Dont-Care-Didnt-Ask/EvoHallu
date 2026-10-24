@@ -1,0 +1,112 @@
+{
+  "status": "independent_saved_predictions_and_statistics_passed",
+  "created_utc": "2026-10-21T23:48:02.113414+00:00",
+  "study_report_sha256": "73ed2b571552ab0fa136396017e51d0c0fce8c954677c9fe68d0cb61e49ad63f",
+  "six_seal_sha256": "34a341a4097cfff88a713ab506d5e08f99a5686d6b74adafc86e77b98ccaa0ed",
+  "inference_launched": false,
+  "sealed_six_files_exact": 21,
+  "independent_point_comparisons": 72,
+  "independent_expanded_bootstrap_AUC_checks": 360,
+  "macro_and_transfer_CIs_recomputed": 64,
+  "all500_draws_usable": true,
+  "replay_rule": "First5 deterministic claim draws expanded explicitly with numpy.repeat and sklearn.roc_auc_score; independent of weighted_auc_bootstrap implementation",
+  "remaining_limitation": "Target invariance is audited from execution case hashes matching saved scores; raw target inference was not repeated by this audit",
+  "per_dataset": [
+    {
+      "view": "source",
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "rows": 427,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "rows": 2057,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "rows": 46605,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__cities",
+      "rows": 1496,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__common_claim_true_false",
+      "rows": 4450,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": false
+    },
+    {
+      "view": "source",
+      "dataset": "geometry__companies_true_false",
+      "rows": 1200,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": false
+    },
+    {
+      "view": "target",
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "rows": 427,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "rows": 2057,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "rows": 46605,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__cities",
+      "rows": 1496,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__common_claim_true_false",
+      "rows": 4450,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": true
+    },
+    {
+      "view": "target",
+      "dataset": "geometry__companies_true_false",
+      "rows": 1200,
+      "point_AUROCs_recomputed": true,
+      "first5_expanded_claim_bootstraps_checked": true,
+      "recorded_invariance_hashes_match_saved_fixed_scores": true
+    }
+  ]
+}

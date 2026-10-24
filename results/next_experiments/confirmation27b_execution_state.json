@@ -1,0 +1,110 @@
+{
+  "events": [
+    {
+      "utc": "2026-10-21T22:10:49.232103+00:00",
+      "event": "controller_started",
+      "selected_jobs": 2,
+      "completed_skips": 0
+    },
+    {
+      "utc": "2026-10-21T22:10:49.273745+00:00",
+      "event": "batch_started",
+      "batch": "evolution_four_policies",
+      "pending": 2
+    },
+    {
+      "utc": "2026-10-21T22:10:49.276740+00:00",
+      "event": "job_started",
+      "job": "next27b_evo_original_2107",
+      "port": 18000,
+      "pid": 19803,
+      "max_seconds": 5400
+    },
+    {
+      "utc": "2026-10-21T22:10:49.279444+00:00",
+      "event": "job_started",
+      "job": "next27b_evo_diverse_2107",
+      "port": 18001,
+      "pid": 19804,
+      "max_seconds": 5400
+    },
+    {
+      "utc": "2026-10-21T22:51:01.495436+00:00",
+      "event": "job_finished",
+      "job": "next27b_evo_diverse_2107",
+      "port": 18001,
+      "status": "complete",
+      "exit_code": 0,
+      "elapsed_seconds": 2412.208396297996,
+      "error": null
+    },
+    {
+      "utc": "2026-10-21T23:09:31.587402+00:00",
+      "event": "job_finished",
+      "job": "next27b_evo_original_2107",
+      "port": 18000,
+      "status": "complete",
+      "exit_code": 0,
+      "elapsed_seconds": 3522.3046415940044,
+      "error": null
+    },
+    {
+      "utc": "2026-10-21T23:09:31.589306+00:00",
+      "event": "controller_stopped",
+      "failed_jobs": [],
+      "budget_stop": false,
+      "unfinished_jobs": []
+    }
+  ],
+  "jobs": {
+    "next27b_evo_original_2107": {
+      "status": "complete",
+      "port": 18000,
+      "pid": 19803,
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next27b_evo_original_2107",
+        "cluster.api_base_url=http://127.0.0.1:18000/v1",
+        "trial.max_seconds=5400"
+      ],
+      "log": "/workspace/mod1/results/next_experiments/execution_logs/next27b_evo_original_2107.parallel.log",
+      "max_seconds": 5400,
+      "exit_code": 0,
+      "elapsed_seconds": 3522.3046415940044,
+      "timed_out": false,
+      "error": null
+    },
+    "next27b_evo_diverse_2107": {
+      "status": "complete",
+      "port": 18001,
+      "pid": 19804,
+      "command": [
+        ".venv/bin/python",
+        "src/experiments/main.py",
+        "--config-name",
+        "next_experiments/next27b_evo_diverse_2107",
+        "cluster.api_base_url=http://127.0.0.1:18001/v1",
+        "trial.max_seconds=5400"
+      ],
+      "log": "/workspace/mod1/results/next_experiments/execution_logs/next27b_evo_diverse_2107.parallel.log",
+      "max_seconds": 5400,
+      "exit_code": 0,
+      "elapsed_seconds": 2412.208396297996,
+      "timed_out": false,
+      "error": null
+    }
+  },
+  "manifest_sha256": "913c91fe20781e3c98a0552334489e61d9b15ba4e7e08325c32b4742cf2d969f",
+  "deadline_utc": "2026-10-22T01:31:28+00:00",
+  "experiment_cutoff_utc": "2026-10-22T01:01:28+00:00",
+  "reserve_minutes": 30.0,
+  "controller_pid": 19802,
+  "ports": [
+    18000,
+    18001
+  ],
+  "running": [],
+  "updated_utc": "2026-10-21T23:09:31.589334+00:00"
+}

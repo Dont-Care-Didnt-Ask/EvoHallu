@@ -1,0 +1,5 @@
+<string>:59: RuntimeWarning: divide by zero encountered in log
+<string>:59: RuntimeWarning: invalid value encountered in multiply
+<string>:100: RuntimeWarning: divide by zero encountered in log
+<string>:100: RuntimeWarning: invalid value encountered in multiply
+{"dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot", "rows": 2057, "methods": 25, "failed": {}}

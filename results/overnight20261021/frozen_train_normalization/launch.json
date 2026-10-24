@@ -1,0 +1,14 @@
+{
+  "status": "started_cpu_control",
+  "pid": 20855,
+  "started_utc": "2026-10-21T22:26:59.687174+00:00",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "/workspace/mod1/scripts/overnight_frozen_normalization.py",
+    "--execute"
+  ],
+  "workers": 4,
+  "gpu_calls": 0,
+  "plan_sha256": "252334fbb472c819747888ae860d131b156e2e5c49790c210d1486d523f2b6f5",
+  "helper_sha256": "f2f92a85857801c301e1383fabde5b4903c68a401f46d7a6dbb1a968a7fdc89d"
+}

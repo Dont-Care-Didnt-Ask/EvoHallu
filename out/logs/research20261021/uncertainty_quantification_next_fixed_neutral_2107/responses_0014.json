@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as the signal. It aggregates the sum of log-probabilities across the entire sequence.\n- **Approach**: Global confidence scoring.\n- **Hypothesis**: Hallucinated sequences are generally less probable under the model's distribution than grounded ones, leading to higher total NLL.\n- **Limitation**: This is a very coarse-grained signal. It conflates sequence length, overall model uncertainty, and specific hallucination events. A long, slightly uncertain truthful sequence might score worse (higher NLL) than a short, highly confident hallucination, potentially diluting the discriminative power for short atomic claims.\n\n### Proposed Detector\n**Signal**: **Mean Per-Token Negative Log-Probability of the Top-1 Prediction**.\nInstead of summing probabilities over the whole sequence (which is biased by length), we calculate the average negative log-probability for each token position. This normalizes the score by sequence length, focusing purely on the model's confidence per token.\n\n**Aggregation Principle**:\nFor each sample, compute the mean of the negative log-probabilities of the actual generated tokens. The hypothesis is that hallucinated atomic claims will exhibit a statistically significant spike in *per-token* uncertainty compared to factual claims, even if the claim length varies. This approach is more robust to length variations than the total sum.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the average per-token uncertainty.\n        \n        Approach: Calculates the mean negative log-probability of the generated tokens.\n        Hypothesis: Hallucinated atomic claims exhibit higher average per-token perplexity \n        (negative log-prob) than grounded claims, as the model is less confident in \n        generating factually incorrect or non-existent entities.\n        \n        Returns: Array of shape [N] containing the mean negative log-prob for each sample.\n        \"\"\"\n        # Calculate mean negative log-prob for each sequence\n        # sequence_logprobs: List[np.ndarray], each inner array has length n_i - 1\n        mean_neg_logprobs = np.array([\n            -np.mean(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        return mean_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 592,
+      "prompt_tokens": 498,
+      "total_tokens": 1090,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.944979733001674
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses a simple **global negative log-likelihood (NLL)** aggregation. It sums the log-probabilities of all generated tokens (excluding the first) and negates the sum.\n- **Signal**: Total uncertainty of the entire sequence.\n- **Weakness**: This metric is highly sensitive to sequence length. Longer sequences naturally accumulate higher total NLL even if the model is confident per token. It also treats a sequence of many low-confidence tokens the same as a sequence of few high-confidence tokens if the sums match, failing to distinguish between \"long but plausible\" and \"short but hallucinated\" claims. It lacks granularity regarding local confidence drops which often characterize hallucinations.\n\n### Proposed Detector\n**Signal**: **Minimum Log-Probability (MinLogP)** within the sequence.\n**Aggregation Principle**: **Maximization** (since we want high scores for hallucinations, and low log-probs indicate high uncertainty).\n**Hypothesis**: Hallucinated atomic claims often contain specific tokens that the model assigns extremely low probability to (out-of-distribution concepts), creating a sharp local minimum in the log-probability distribution, whereas grounded claims maintain relatively stable, higher probabilities across all tokens. The global sum dilutes these sharp local anomalies with the average confidence of the rest of the sentence.\n\n```python\nimport numpy as np\nfrom sklearn.base import Estimator\n\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    Detects hallucinations by identifying sequences containing tokens with extremely low generation probability.\n    \n    Approach:\n    Calculates the minimum log-probability observed in the sequence (excluding the first token).\n    Hallucinations are hypothesized to contain specific out-of-distribution tokens that drive the min-log-prob \n    significantly lower than in grounded claims.\n    \n    Aggregation:\n    Returns the raw minimum value per sequence. Higher scores (less negative) indicate more plausible sequences,\n    but for anomaly detection, we invert the logic or rely on the fact that hallucinations push this metric \n    towards -infinity. \n    *Correction for ROC-AUC scoring convention*: We return the negative of the minimum log-prob (i.e., -min_log_p).\n    A hallucination has a very low log_p (e.g., -20), so -min_log_p becomes +20 (High Score = Hallucination).\n    A grounded claim has higher log_p (e.g., -1), so -min_log_p becomes +1 (Low Score = Grounded).\n    \n    Hypothesis: Future work should explore weighting this minimum by the length of the context preceding it \n    to account for long-range dependency failures.\n    \"\"\"\n    \n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Extract list of log-prob arrays\n        log_probs_list = stats[\"sequence_logprobs\"]\n        \n        # Compute min log-prob for each sequence\n        # sequence_logprobs[i] is shape (n_i - 1,)\n        min_log_probs = np.array([np.min(seq) for seq in log_probs_list], dtype=np.float32)\n        \n        # Convert to score: Hallucinations have very low log-probs (e.g., -30).\n        # We want Hallucinations to have HIGH scores for anomaly detection.\n        # Score = - (min_log_prob) -> Hallucination: 30, Grounded: 1.\n        scores = -min_log_probs\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 798,
+      "prompt_tokens": 498,
+      "total_tokens": 1296,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 9.310755976999644
+  }
+]

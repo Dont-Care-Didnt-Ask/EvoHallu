@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\nThe provided candidate detector implements a simple \"Total Negative Log-Likelihood\" approach. It aggregates the log-probabilities of every token in a sequence into a single scalar score (sum of negative log-probs). This acts as a measure of overall perplexity or confidence. The score achieved is 74.33, indicating that this raw metric has discriminative power but likely suffers from variance due to sequence length differences and the scale of the raw log-probabilities.\n\n2. **Proposed Detector**\nI propose a **\"Log-Likelihood Ratio\"** detector. Instead of using the raw sum, this method calculates the ratio of the sequence's total log-likelihood to the average log-likelihood of the top-k candidates at the final step. This normalizes the score by the model's \"best guess\" confidence, making it robust to sequence length and absolute probability scale.\n*   **Signal:** The ratio of actual log-probability to the maximum top-k log-probability at the last token position.\n*   **Aggregation Principle:** Deterministic ratio calculation for each sequence.\n\n3. **Code**\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Extract inputs\n        sequence_logprobs = stats[\"sequence_logprobs\"]  # List[np.ndarray]\n        top_k_logits = stats[\"top_k_logits\"]           # List[np.ndarray]\n        \n        scores = []\n        \n        for i, probs in enumerate(sequence_logprobs):\n            # 1. Calculate total negative log-likelihood (actual generation)\n            # Shape: (n_i - 1,)\n            actual_ll = -np.sum(probs)\n            \n            # 2. Calculate max log-likelihood from top-k logits at the final step\n            # top_k_logits shape is (n_i, k). We take the last row (n_i-1).\n            final_logits = top_k_logits[i][-1, :]\n            max_top_k_ll = -np.max(final_logits)\n            \n            # 3. Compute Log-Likelihood Ratio\n            # Avoid division by zero by adding a small epsilon if max_top_k_ll is 0\n            if max_top_k_ll > 0:\n                llr = actual_ll / max_top_k_ll\n            else:\n                llr = actual_ll  # Fallback if model is completely unconfident\n                \n            scores.append(llr)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 582,
+      "prompt_tokens": 489,
+      "total_tokens": 1071,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 60.32054474100005
+  },
+  {
+    "content": "1. **Analysis of shown detectors:** The provided sample demonstrates a detector based on the **total negative log-likelihood** of the generated sequence. This is a standard \"surprisal\" or \"confidence\" signal, which correlates with the likelihood of the text being a valid continuation of the context.\n\n2. **Proposed detector:**\n   - **Signal:** **Log-Probability Gap (Entropy Proxy)**. This measures the confidence gap between the *actual* generated token and the *next-best* alternative (top-2 token).\n   - **Aggregation Principle:** **Element-wise Maximum**. For each token position, we take the difference between the log-probability of the generated token and the highest log-probability among the alternatives. We then aggregate this per sequence by taking the maximum value across all positions.\n   - **Structural Difference:** Unlike the previous method which aggregates the *sum* of probabilities (total likelihood), this method aggregates the *max* of local confidence gaps. This makes the detector more sensitive to specific low-confidence moments (hallucinations) rather than just the overall length or complexity of the text.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Input: stats[\"sequence_logprobs\"] is a list of arrays, length N\n        # Each inner array has shape (n_i - 1,)\n        \n        sequence_scores = []\n        \n        for logprobs, logits, indices in zip(\n            stats[\"sequence_logprobs\"], \n            stats[\"top_k_logits\"], \n            stats[\"top_k_indices\"]\n        ):\n            # Ensure inputs are numpy arrays\n            logprobs = np.asarray(logprobs)\n            logits = np.asarray(logits)\n            indices = np.asarray(indices)\n            \n            # Calculate the gap between the actual token and the top alternative\n            # Gap = LogProb(Actual) - LogProb(Next_Best)\n            \n            # 1. Extract log-probabilities for the actual tokens (column 0)\n            actual_logprobs = logprobs\n            \n            # 2. Extract log-probabilities for the top-1 alternative (column 1)\n            # We use argmax to handle potential duplicate top-1 indices if k > 2\n            next_best_indices = np.argmax(indices[:, 1:], axis=1) + 1\n            next_best_logprobs = logits[np.arange(len(indices)), next_best_indices, 1]\n            \n            # 3. Compute the gap per token position\n            # A larger gap indicates the model was confident in the choice.\n            # A smaller (or negative) gap indicates the model was unsure or preferred an alternative.\n            gaps = actual_logprobs - next_best_logprobs\n            \n            # 4. Aggregate: Use the maximum gap as the sequence score.\n            # This captures the most \"confident\" moment in the sequence.\n            # If the sequence is a hallucination, the gaps will be small/negative.\n            max_gap = np.max(gaps)\n            sequence_scores.append(max_gap)\n            \n        return np.array(sequence_scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 712,
+      "prompt_tokens": 509,
+      "total_tokens": 1221,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 70.34596520202467
+  }
+]

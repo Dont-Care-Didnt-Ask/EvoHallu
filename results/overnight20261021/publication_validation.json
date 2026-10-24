@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-22T00:50:31.715310+00:00",
+  "tracked_files": 7328,
+  "text_files_scanned": 4660,
+  "limited_high_specificity_secret_findings": [],
+  "local_links_checked": 118,
+  "all_links_resolve": true,
+  "main_unchanged": true,
+  "raw_caches_and_model_shards_excluded": true,
+  "validation_scope": "Limited filename/content preflight plus recorded scientific tests/audits; no full legacy test suite or clean rebuild claim"
+}

@@ -1,0 +1,23 @@
+{
+  "status": "complete_four_controls",
+  "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+  "rows": 46605,
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "raw_sha256": "2c78d90193e9ceb56a69a988a5383f71336f7e2b2b72fdd6123416b15727ed2d",
+  "reference_npz_sha256": "f6f73744cf9022936baf41c4ab4400cbbf9ed41b86bf9bec3d3b063e64fbab55",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "labels_groups_masks_exact": true,
+  "frozen_quadratic_sum_byte_exact": true,
+  "canonical_nll_byte_exact": true,
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum",
+    "lp_total_length",
+    "float32_nll_sum",
+    "float32_nll_mean",
+    "float32_quadratic_mean"
+  ],
+  "bootstrap_samples": 500,
+  "scores_sha256": "d428160f5dd71570d0e38053ea3cba0409efbb526299755154d784b2703b2d2d",
+  "bootstrap_sha256": "1cda771d0590ec1d88e55c057f1dfe76a47d30ea212bd3d875beba9be3c17979"
+}

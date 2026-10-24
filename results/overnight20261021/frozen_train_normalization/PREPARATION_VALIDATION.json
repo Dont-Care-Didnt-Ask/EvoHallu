@@ -1,0 +1,21 @@
+{
+  "created_utc": "2026-10-21T22:26:48.506228+00:00",
+  "status": "predeclared_tested_no_actual_control_run_yet",
+  "tests_passed": 9,
+  "test_seconds": 7.46,
+  "plan_sha256": "252334fbb472c819747888ae860d131b156e2e5c49790c210d1486d523f2b6f5",
+  "helper_sha256": "f2f92a85857801c301e1383fabde5b4903c68a401f46d7a6dbb1a968a7fdc89d",
+  "parent_batch_helper_sha256": "9f554b2ed30a2aa80bec3e92f2dc9693fec1c19a78ee0c405b9a6e94863a5ba1",
+  "checks": [
+    "Original source AST/median contract",
+    "Transparent original-prediction parity",
+    "Captured features invariant to batch grouping",
+    "Nonconstant frozen scores exactly invariant across1/128/512/shuffle",
+    "JSON dtype/score roundtrip",
+    "Original degenerate-MAD behavior",
+    "Private namespace restored on exception",
+    "Extra median calls fail closed",
+    "All9 reference gate rejects stale cache"
+  ],
+  "gpu_calls": 0
+}

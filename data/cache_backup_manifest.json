@@ -1,0 +1,107 @@
+{
+  "data/feature_cache_archive/mod1-eval-cache/AVeriTeC__dev_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/AVeriTeC__dev_filtered_10shot.pt",
+    "raw_bytes": 91374334,
+    "gzip_bytes": 36372759,
+    "gzip_sha256": "2af8779cec20e01571b575bb9d2d01d654f72d79180559cb0ad3483e7bbf88d2",
+    "utc": "2026-10-15T05:40:47.128605+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt",
+    "raw_bytes": 330383664,
+    "gzip_bytes": 133371272,
+    "gzip_sha256": "171ec538d5347c654f86210a3687b956765a6dd8d807e7b9c5411edc60b23dfd",
+    "utc": "2026-10-15T05:42:54.837825+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt",
+    "raw_bytes": 7507921149,
+    "gzip_bytes": 3019449442,
+    "gzip_sha256": "e621088d8701b4938ea7ea3df52784554f7e1415959c5fd91893b3637a374782",
+    "utc": "2026-10-15T06:36:03.459839+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/geometry__cities.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/geometry__cities.pt",
+    "raw_bytes": 226519181,
+    "gzip_bytes": 92169983,
+    "gzip_sha256": "c0df0b20eff3eb53e3c4d2f06fd2141cb930d8cd431e821dfb651e7ba826d3bd",
+    "utc": "2026-10-15T06:38:09.676849+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/geometry__common_claim_true_false.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/geometry__common_claim_true_false.pt",
+    "raw_bytes": 744533735,
+    "gzip_bytes": 299732764,
+    "gzip_sha256": "983f0aabc1342f3b8964aa6b175145917278a7d040c50331f7f52569bdf7c632",
+    "utc": "2026-10-15T06:40:25.106486+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/geometry__companies_true_false.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/geometry__companies_true_false.pt",
+    "raw_bytes": 201853121,
+    "gzip_bytes": 80852430,
+    "gzip_sha256": "222b68bd90d8aec87ef3d066303ddf43ca291fab8f06b6d7cca3412862ad4b79",
+    "utc": "2026-10-15T06:42:30.720167+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/geometry__counterfact_true_false.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/geometry__counterfact_true_false.pt",
+    "raw_bytes": 4772906485,
+    "gzip_bytes": 1936944151,
+    "gzip_sha256": "89553e94d0064b47765d58365c9d338047b8fd80b93a4850276774e297b13d07",
+    "utc": "2026-10-15T07:14:20.592909+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/popqa__popqa_test_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/popqa__popqa_test_filtered_10shot.pt",
+    "raw_bytes": 1068750047,
+    "gzip_bytes": 433834578,
+    "gzip_sha256": "a4a1e3ed4af73a1807f2899dc79a4f4973eeac5fcc27fb59744e98f397f89e5f",
+    "utc": "2026-10-15T07:20:45.716608+00:00"
+  },
+  "data/feature_cache_archive/mod1-eval-cache/x-fact__test_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-eval-cache/x-fact__test_filtered_10shot.pt",
+    "raw_bytes": 908815112,
+    "gzip_bytes": 359281507,
+    "gzip_sha256": "0fb4f34347aab0e8ac20541cf701f4a85574dd74c35655f5a7d472a083492eea",
+    "utc": "2026-10-15T07:33:08.105927+00:00"
+  },
+  "data/feature_cache_archive/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt",
+    "raw_bytes": 91371710,
+    "gzip_bytes": 36228361,
+    "gzip_sha256": "3c7f4d5722f2abef158661f0a5932a4c4ae9a47638c41688693ef31aa2618917",
+    "utc": "2026-10-15T08:53:49.648579+00:00"
+  },
+  "data/feature_cache_archive/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt",
+    "raw_bytes": 330370352,
+    "gzip_bytes": 133065419,
+    "gzip_sha256": "63306ff418639280c1fa52ca484389b6d972d482d5f392ba9cbe242f08716332",
+    "utc": "2026-10-15T08:55:57.573963+00:00"
+  },
+  "data/feature_cache_archive/mod1-transfer-cache/geometry__cities.pt.gz": {
+    "source": "/dev/shm/mod1-transfer-cache/geometry__cities.pt",
+    "raw_bytes": 226514189,
+    "gzip_bytes": 91607199,
+    "gzip_sha256": "ef1e7e406da37bc8d259bc891c6473b83727448dd0b5925548bcc4a51404cc8a",
+    "utc": "2026-10-15T09:14:11.289382+00:00"
+  },
+  "data/feature_cache_archive/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt.gz": {
+    "source": "/dev/shm/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt",
+    "raw_bytes": 7507614021,
+    "gzip_bytes": 3019608066,
+    "gzip_sha256": "6caf54ce93e91607021aeff93c71ed7bdd0ab9fd1a2d9ce647d4ceb7d3707e52",
+    "utc": "2026-10-15T09:16:30.603908+00:00"
+  },
+  "data/feature_cache_archive/mod1-transfer-cache/geometry__companies_true_false.pt.gz": {
+    "source": "/dev/shm/mod1-transfer-cache/geometry__companies_true_false.pt",
+    "raw_bytes": 201844417,
+    "gzip_bytes": 80629712,
+    "gzip_sha256": "f6caa06e4d9a0472cec84b076baf8cb3904c991742271ae5e57a459213235591",
+    "utc": "2026-10-15T09:18:36.144329+00:00"
+  },
+  "data/feature_cache_archive/mod1-transfer-cache/geometry__common_claim_true_false.pt.gz": {
+    "source": "/dev/shm/mod1-transfer-cache/geometry__common_claim_true_false.pt",
+    "raw_bytes": 744503079,
+    "gzip_bytes": 298596499,
+    "gzip_sha256": "cd76233a5e1e31207b523247a58796ec84f3f1002ba60b32712d5e8478eb5df2",
+    "utc": "2026-10-15T09:18:50.317233+00:00"
+  }
+}

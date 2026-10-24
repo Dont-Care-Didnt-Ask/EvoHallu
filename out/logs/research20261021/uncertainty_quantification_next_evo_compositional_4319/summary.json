@@ -1,0 +1,58 @@
+{
+  "status": "finished",
+  "stop_reason": "round_budget",
+  "requests": 60,
+  "valid_candidates": 29,
+  "total_tokens": 182827,
+  "baseline_train": {
+    "score": 74.3286,
+    "metrics": {
+      "AUC": 74.33,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.75, 75.91)",
+      "Precision at median score threshold": 89.02,
+      "Recall at median score threshold": 58.19,
+      "Number of samples": 5605
+    },
+    "seconds": 2.0717400549910963
+  },
+  "baseline_val": {
+    "score": 75.7504,
+    "metrics": {
+      "AUC": 75.75,
+      "AUC 95% confidence interval (bootstrap)": "(nan, nan)",
+      "AUC 95% confidence interval (DeLong)": "(72.69, 78.81)",
+      "Precision at median score threshold": 90.73,
+      "Recall at median score threshold": 59.22,
+      "Number of samples": 1402
+    },
+    "seconds": 1.8687347309896722
+  },
+  "selected_candidate": "4803d0d3622d864a5449a6f4233e43e57d3b65699dad5adee8630d905ca180b2",
+  "selected_validation_auc_percent": 76.6394,
+  "held_out_test_evaluated": false,
+  "elapsed_seconds": 2312.990825264016,
+  "validation_shortlist": [
+    {
+      "rank": 1,
+      "candidate": "4803d0d3622d864a5449a6f4233e43e57d3b65699dad5adee8630d905ca180b2",
+      "validation_auc_percent": 76.6394,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319/validation_shortlist/rank_01_4803d0d3622d.py",
+      "sha256": "71795a8c291b410a69ad1dc49e6af3ce1d6e0ae8ae7fbb819a83844f0d4aaf91"
+    },
+    {
+      "rank": 2,
+      "candidate": "baseline",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319/validation_shortlist/rank_02_baseline.py",
+      "sha256": "2441fedd58e6043981283df3fc50a87c6e5a223090439c2b9996472eabf9af7d"
+    },
+    {
+      "rank": 3,
+      "candidate": "f262c47ef5e92c80a858d8b4aa8d49caf009454336a51ffa8d7b0caf6353e461",
+      "validation_auc_percent": 75.7504,
+      "file": "out/logs/research20261021/uncertainty_quantification_next_evo_compositional_4319/validation_shortlist/rank_03_f262c47ef5e9.py",
+      "sha256": "8739474b1854a0a78289961abc491661599e2274d2e6c45d593872ca314a9593"
+    }
+  ]
+}

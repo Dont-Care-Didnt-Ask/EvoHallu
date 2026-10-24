@@ -1,0 +1,151 @@
+{
+  "utc": "2026-10-15T09:28:01.152073+00:00",
+  "archives": {
+    "data/feature_cache_archive/mod1-eval-cache/AVeriTeC__dev_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 91374334,
+      "raw_sha256": "c44e37b47a29cf487d41a9152f28a424e8d01777d0ab778c485951d527738e7f",
+      "gzip_bytes": 36372759,
+      "gzip_sha256": "2af8779cec20e01571b575bb9d2d01d654f72d79180559cb0ad3483e7bbf88d2",
+      "mtime_ns": 1792042847004324754,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 330383664,
+      "raw_sha256": "9e20c2fef8c2b830a62dbcc9bc63fe0dd52e44a7d3eed26748e4cc1589e9bd75",
+      "gzip_bytes": 133371272,
+      "gzip_sha256": "171ec538d5347c654f86210a3687b956765a6dd8d807e7b9c5411edc60b23dfd",
+      "mtime_ns": 1792042974424557477,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 7507921149,
+      "raw_sha256": "2c78d90193e9ceb56a69a988a5383f71336f7e2b2b72fdd6123416b15727ed2d",
+      "gzip_bytes": 3019449442,
+      "gzip_sha256": "e621088d8701b4938ea7ea3df52784554f7e1415959c5fd91893b3637a374782",
+      "mtime_ns": 1792046148442501710,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/geometry__cities.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 226519181,
+      "raw_sha256": "ec33dd2d2d765fbc9f2beda4519c8903034322516774c4a796e7bb5bee5731e2",
+      "gzip_bytes": 92169983,
+      "gzip_sha256": "c0df0b20eff3eb53e3c4d2f06fd2141cb930d8cd431e821dfb651e7ba826d3bd",
+      "mtime_ns": 1792046289208172871,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/geometry__common_claim_true_false.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 744533735,
+      "raw_sha256": "7c090c050b81ec242b81bebae9164b3da320e87a65b35fc3e25b1b3a550685f7",
+      "gzip_bytes": 299732764,
+      "gzip_sha256": "983f0aabc1342f3b8964aa6b175145917278a7d040c50331f7f52569bdf7c632",
+      "mtime_ns": 1792046423899590154,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/geometry__companies_true_false.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 201853121,
+      "raw_sha256": "58058cb635b3bad846e59c520e4fa3f48462203d4445a8da14d5ac21b4cf2b24",
+      "gzip_bytes": 80852430,
+      "gzip_sha256": "222b68bd90d8aec87ef3d066303ddf43ca291fab8f06b6d7cca3412862ad4b79",
+      "mtime_ns": 1792046550396825640,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/geometry__counterfact_true_false.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 4772906485,
+      "raw_sha256": "a5ac1d32045e3bed4c5f6b65918f7ae22a1c010cfa3ac78708c0cdba1b900f14",
+      "gzip_bytes": 1936944151,
+      "gzip_sha256": "89553e94d0064b47765d58365c9d338047b8fd80b93a4850276774e297b13d07",
+      "mtime_ns": 1792048444512849333,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/popqa__popqa_test_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 1068750047,
+      "raw_sha256": "8f78c1e2111a48e7d58d5fd6213b408c1413746d34a39e1bec591edcbc14dad9",
+      "gzip_bytes": 433834578,
+      "gzip_sha256": "a4a1e3ed4af73a1807f2899dc79a4f4973eeac5fcc27fb59744e98f397f89e5f",
+      "mtime_ns": 1792048842126550390,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-eval-cache/x-fact__test_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 908815112,
+      "raw_sha256": "62c6fc50d8c8761df2c03945f6d3a856918409c59efc7533a697525bb985f240",
+      "gzip_bytes": 359281507,
+      "gzip_sha256": "0fb4f34347aab0e8ac20541cf701f4a85574dd74c35655f5a7d472a083492eea",
+      "mtime_ns": 1792049586840309401,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-transfer-cache/AVeriTeC__dev_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 91371710,
+      "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+      "gzip_bytes": 36228361,
+      "gzip_sha256": "3c7f4d5722f2abef158661f0a5932a4c4ae9a47638c41688693ef31aa2618917",
+      "mtime_ns": 1792054429486415671,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-transfer-cache/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 330370352,
+      "raw_sha256": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+      "gzip_bytes": 133065419,
+      "gzip_sha256": "63306ff418639280c1fa52ca484389b6d972d482d5f392ba9cbe242f08716332",
+      "mtime_ns": 1792054556962319369,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-transfer-cache/WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 7507614021,
+      "raw_sha256": "9aa596bb80778b1c4c5979a8cddc6c90d95e4108defb7a9f4d63b4428d0df3d3",
+      "gzip_bytes": 3019608066,
+      "gzip_sha256": "6caf54ce93e91607021aeff93c71ed7bdd0ab9fd1a2d9ce647d4ceb7d3707e52",
+      "mtime_ns": 1792055775587531393,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-transfer-cache/geometry__cities.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 226514189,
+      "raw_sha256": "aa15cb4b5b5d6937ef51f240b31fff4eae0f44e12adadfd720d8f7ccf3975ed2",
+      "gzip_bytes": 91607199,
+      "gzip_sha256": "ef1e7e406da37bc8d259bc891c6473b83727448dd0b5925548bcc4a51404cc8a",
+      "mtime_ns": 1792055650988857330,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-transfer-cache/geometry__common_claim_true_false.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 744503079,
+      "raw_sha256": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+      "gzip_bytes": 298596499,
+      "gzip_sha256": "cd76233a5e1e31207b523247a58796ec84f3f1002ba60b32712d5e8478eb5df2",
+      "mtime_ns": 1792055929233623791,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/mod1-transfer-cache/geometry__companies_true_false.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 201844417,
+      "raw_sha256": "5655c3628d232149a22df2ca1f09e44ef728f740a87bb012db5f6ad6d04dbc96",
+      "gzip_bytes": 80629712,
+      "gzip_sha256": "f6caa06e4d9a0472cec84b076baf8cb3904c991742271ae5e57a459213235591",
+      "mtime_ns": 1792055915798439796,
+      "backup_manifest_verified": true
+    },
+    "data/feature_cache_archive/train/popqa_train_filtered_10shot_raw_stats_logits.pt.gz": {
+      "gzip_crc_valid": true,
+      "raw_bytes": 1074638092,
+      "raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+      "gzip_bytes": 435979549,
+      "gzip_sha256": "fdf39f060a0d61dc940bfcfab5800717c6ce14b6db4771ad2c56e5a0d0fc1194",
+      "mtime_ns": 1792051472044864772,
+      "backup_manifest_verified": true
+    }
+  },
+  "count": 16,
+  "all_gzip_crc_valid": true
+}

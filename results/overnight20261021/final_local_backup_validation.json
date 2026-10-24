@@ -1,0 +1,14 @@
+{
+  "verified_utc": "2026-10-22T00:47:34.353130+00:00",
+  "manifest_sha256": "08a5b2f4951c8c0fc56a2428157ce39de985d0050ed0ff0951df83115751c247",
+  "files": 5889,
+  "bytes": 158999294,
+  "missing": [],
+  "different": [],
+  "all_exact": true,
+  "excluded_mutable_files": {
+    "results/overnight20261021/live_state.json": "Live monitoring state continues to change; no scientific arrays or selection records.",
+    "results/overnight20261021/figures/plot_manifest.json": "Presentation-only plotting receipt regenerated offline after shutdown to clarify model labels; scientific predictions and selection unchanged."
+  },
+  "prepublication_snapshot_files": 5890
+}

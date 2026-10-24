@@ -1,0 +1,32 @@
+{
+  "description": "Static illustrative tensor-allocation estimates, not measured memory or a capacity guarantee. Nonexpert bytes split evenly for TP2; replication, padding of biases, allocator, CUDA contexts, scratch, load temporaries and KV excluded. Marlin scales return to float8; BF16 conversion is transient.",
+  "expert_logical_weight_count": 114661785600,
+  "expert_native_weight_and_scale_bytes": 60914073600.0,
+  "other_checkpoint_payload_bytes": 4334742144.0,
+  "checkpoint_weight_GiB": 60.76776719093323,
+  "whole_repo_GiB": 182.31947031710297,
+  "all_BF16_logical_bytes": 233658313344,
+  "all_BF16_logical_GiB": 217.6112619638443,
+  "cases": [
+    {
+      "tp": 1,
+      "rank_hidden_padded": 3072,
+      "rank_intermediate_unpadded": 2880,
+      "rank_intermediate_padded": 2944,
+      "estimated_per_rank_weight_scale_bytes": 70753643136.0,
+      "estimated_per_rank_weight_scale_GiB": 65.8944650888443,
+      "gross_remainder_GiB_at_90pct_of_80GiB": 6.105534911155701
+    },
+    {
+      "tp": 2,
+      "rank_hidden_padded": 3072,
+      "rank_intermediate_unpadded": 1440,
+      "rank_intermediate_padded": 1536,
+      "estimated_per_rank_weight_scale_bytes": 36820710720.0,
+      "estimated_per_rank_weight_scale_GiB": 34.29195910692215,
+      "gross_remainder_GiB_at_90pct_of_80GiB": 37.70804089307785
+    }
+  ],
+  "bf16_full_attention_KV_bytes_per_token_all_36_layers": 73728,
+  "bf16_full_attention_KV_16k_one_sequence_GiB": 1.125
+}

@@ -1,5 +1,73 @@
 # EvoHallu
 
+## mod1 extension campaign
+
+**Completed 22 October 2026; pod stopped at 00:44:41 UTC:** all **27 writer jobs** completed their planned budgets, **1,500 requests / 841 valid candidates**: Qwen3.5-9B **1,260/669**, Qwen3.8-27B **120/108**, and GLM-4.7-Flash **120/64** requests/valid. The 27B original/diverse pair scores **71.155 / 72.306 folded source-nine AUROC**; GLM scores **70.671 / 68.711**, with diverse retaining canonical NLL. Both larger/different-family pairs use **one matched seed**. GLM original rediscovers inherited negative position/logprob correlation; neither pair establishes a stable writer ranking or matched paper-SOTA result. Writers propose code over unchanged Llama3.1-8b-instruct features. [Source results](results/overnight20261021/REPORT.md), [27B programs](results/overnight20261021/WRITER27B_CANDIDATE_INSPECTION.md), [GLM programs](results/overnight20261021/GLM_CANDIDATE_INSPECTION.md).
+
+**All nine target-feature caches are complete and backed up.** The three additions cover **41,253 rows**, preserve the six original caches and pass the formal 427-row numerical guard; their three XZ archives were verified locally, **762,346,556 bytes** total. Main target-nine evaluation tasks finished, with **29/30 methods complete on nine datasets** and one frozen compositional primary invalid on target UHEAD. Its eight available datasets remain partial; the compositional arm has no complete three-seed target-nine result. No repair or replacement was made. [Completion](results/overnight20261021/remaining_transfer_completion.json), [archive backup](results/overnight20261021/cache_backup_receipt.json).
+
+The frozen component head reaches **68.800 folded target-nine**, versus NLL **64.835**, gain **+3.965 pp [3.529,4.628]**. Conventional grouped logistic-14 reaches **68.939** and remains a strong target control; the head's folded difference versus it is unresolved. The head's source-to-target loss is **4.834 pp**, and its NLL-relative advantage shrinks **0.957 pp**. The separate source-fixed normalization control reaches **66.584**, gain **+1.750 [1.484,2.034]** over NLL; its relative transfer change remains unresolved. These exploratory frozen-state comparisons use no target fitting and retain the original six-dataset reports. [Head-nine report](results/overnight20261021/screen_component_refit/transfer_nine/TRANSFER9_REPORT.md), [normalization-nine interpretation](results/overnight20261021/normalization_transfer/NINE_INTERPRETATION.md).
+
+**Devstral was skipped without serving:** the fixed entry gate needed 75 minutes before 01:10 UTC but only 65.51 remained. GLM's second seed was also capacity-skipped. **RunPod confirmed `EXITED` with no GPU runtime at 22 October 00:44:41 UTC.** The run used **6 h 28 min**, estimated **$23.16 compute** at **$3.58/hour total**, excluding storage/network and pre-task waiting. [Stop receipt](results/overnight20261021/pod_stop_confirmation.json), [resource accounting](results/overnight20261021/resource_summary/RESOURCE_USAGE.md). The root English report below contains the completed new campaign; the [extension coverage](results/overnight20261021/extension_coverage_audit.md) maps it to the original questions. The [runtime audit](results/overnight20261021/ENVIRONMENT_REPRODUCTION.md) does not certify a second clean rebuild.
+
+[EvoHallu Preliminary Report](evohallu_preliminary_report.md): the English
+technical report, including models, selection rules, results, and limitations.
+[Read the rendered report](evohallu_preliminary_report.html).
+
+[Next experiments](NEXT_EXPERIMENTS.md): the dated preparation plan and latest
+execution notice, earlier issue checklist, reconciled paper reporting, a CPU control, and 19 originally prepared runs. The four prompt
+policies include open formula choice, distinct sibling roles, and multi-feature
+compositional detectors. Preparation/dry-run makes no model requests.
+
+[Исторический краткий отчёт на русском, 15 октября](EXPERIMENT_RESULTS_RU.md): протокол,
+основные результаты, контрольные эксперименты и изменения кода.
+
+[Исторический полный отчёт на русском, 15 октября](REPORT_RU.md): базовые модели, фактические бюджеты
+поиска, результаты по исходной `is_hallu`, сравнение со статьёй, изменения кода
+и ограничения 30-раундовых экспериментов.
+
+This checkout adds bounded local experiments through the original main entry
+point. The research assessment and data/protocol caveats are in
+[EXPERIMENT_EXTENSIONS.md](EXPERIMENT_EXTENSIONS.md).
+
+The earlier campaign evaluated 58 methods on 97,488 claims across nine
+datasets. Those historical artifacts are separate from the new three-writer
+campaign above; consult their reports for each writer/feature-model role. That earlier A100 pod was stopped after about 10.2 hours;
+this is not a shutdown receipt for the current overnight allocation.
+See [results/method_table.csv](results/method_table.csv),
+[results/experiment_figures.pdf](results/experiment_figures.pdf) and
+[results/campaign_closeout.json](results/campaign_closeout.json) for results
+and actual completion status. Optional cancelled work is listed explicitly.
+
+The extension document answers all seven proposed ideas and compares them
+with the paper's figures/tables. Primary results use the original `is_hallu`
+labels; the Sequence NLL baseline is **65.64 directed macro AUROC**. The author
+clarified per-dataset `max(AUC, 100-AUC)` reporting, which yields **68.71** and
+reproduces the paper's **68.7**. All three baseline bars match at published
+precision. The historical claim of a UHEAD label-conversion error is superseded;
+no target labels have been changed. Both reporting columns are preserved.
+
+```bash
+PYTHONPATH=src:. python src/experiments/main.py --config-name config_uq_trial \
+  model=qwen38_27b run_identifier_name=my_trial num_rounds=30 \
+  model.max_tokens=4096 trial.max_seconds=5400
+```
+
+Start the chosen local model server separately on `127.0.0.1:8000`; the trial
+client rejects external endpoints. Change `model` to `laguna_xs21`, `qwen35_9b`
+or `qwen35_4b` for the added configurations. Inputs use the original Llama feature
+checkpoint. Search uses training feedback, validation selection, per-candidate
+timeouts and memory limits, and saves every response plus a frozen winner.
+
+The pod-specific, resumable overnight plans are under `configs/campaign/`.
+`scripts/campaign_snapshot.py` reports progress; `scripts/evaluate_cached_claims.py`
+evaluates frozen methods on the nine held-out datasets with paired bootstrap
+intervals. Original data stays under ignored `data/claims/`; generated feature
+caches and full run logs are also ignored by Git. Share code and results without
+publishing those data files or any credentials.
+
+The original reproduction guide follows.
+
 AlphaEvolve-style evolution of **unsupervised uncertainty estimators** for hallucination detection. An LLM writes Python estimators, a labelled training set scores them, and a program database supplies successful examples for subsequent rounds. “Unsupervised” means labels are **not inputs to the estimator**; evolution still uses labels to select programs. No LLM finetuning is performed.
 
 This guide follows the **single-objective atomic-claim task**, with **GPT-OSS-120B writing estimator code** and **Llama-3.1-8B producing the uncertainty inputs**. These are different models: do not replace the preprocessing model with GPT-OSS unless you deliberately want a different experiment.
@@ -226,3 +294,7 @@ LM-Polygraph uses `prepare_polygraph_generations.py` → `compute_polygraph_metr
 Multi-dataset optimization lives in `task_uncertainty_quantification_multi.py` and `configs/config_uq_multi_train_mix_generations.yaml`; its current objective aggregates mean/minimum PRR. It is outside this reproduction guide. Before using it, read `configs/TRAIN_TEST_REMINDER.md`: its split semantics currently reuse the same underlying data and need repair for a proper train/validation/test experiment.
 
 These instructions are based on source inspection. A full GPU/vLLM reproduction has not been run in this checkout; exact historical tables additionally require the original datasets, candidate selection and compatible dependency/custom LM-Polygraph versions.
+
+## Research follow-ups
+
+The prioritized [research backlog](BACKLOG.md) covers GPT-OSS-120B/paper-scale replication, a competitive >100B open-weight writer, behavioural novelty and restart portfolios, and supervised evolved features. These are future studies, separate from the current campaign's recorded results.

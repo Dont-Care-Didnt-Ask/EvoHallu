@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-21T23:26:02.948096+00:00",
+  "status": "launched_separate_cpu_diagnostic",
+  "pid": 24709,
+  "helper_sha256": "de8dad4dc7548b4bc364a3bbcdca784d8418a2d4aee3729c87d12f4288d167fe",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "workers": 4,
+  "gpu_calls": 0,
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "scripts/overnight_position_length_controls.py",
+    "--execute"
+  ],
+  "cuda_visible_devices": "",
+  "primary_changes": false,
+  "tests": {
+    "passed": 7,
+    "seconds": 5.88
+  },
+  "root_review": "Reviewed formula arithmetic, original-source byte gate, all9 prerequisites, paired bootstrap/strict scopes, ownership/deadlines and output isolation before launch"
+}

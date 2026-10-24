@@ -1,0 +1,88 @@
+{
+  "rows": 427,
+  "duplicate_disjoint_rows": 427,
+  "failed": {},
+  "methods": {
+    "original/SequenceLogProb": {
+      "auc_percent": 61.627250739048634,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 61.627250739048634,
+      "auc_ci95_percent": [
+        55.15390064174465,
+        68.00322489358828
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/next_prompt_compositional_2107__primary": {
+      "auc_percent": 61.07497984412792,
+      "gain_pp": -0.5522708949207145,
+      "duplicate_disjoint_auc_percent": 61.07497984412792,
+      "auc_ci95_percent": [
+        54.04241970572365,
+        67.29250605809264
+      ],
+      "paired_gain_ci95_pp": [
+        -3.9239330966304693,
+        2.6923072696905748
+      ]
+    },
+    "new/next_prompt_diverse_2107__primary": {
+      "auc_percent": 62.35689330825047,
+      "gain_pp": 0.7296425692018382,
+      "duplicate_disjoint_auc_percent": 62.35689330825047,
+      "auc_ci95_percent": [
+        55.53543565738688,
+        68.9847163462368
+      ],
+      "paired_gain_ci95_pp": [
+        -0.8231172660656288,
+        2.3755057907302484
+      ]
+    },
+    "new/next_prompt_neutral_2107__primary": {
+      "auc_percent": 62.38108035474335,
+      "gain_pp": 0.7538296156947122,
+      "duplicate_disjoint_auc_percent": 62.38108035474335,
+      "auc_ci95_percent": [
+        55.464600755212814,
+        68.91056429661296
+      ],
+      "paired_gain_ci95_pp": [
+        -1.3220815798223202,
+        2.642296807014952
+      ]
+    },
+    "new/next_prompt_original_2107__primary": {
+      "auc_percent": 57.162053211502275,
+      "gain_pp": -4.46519752754636,
+      "duplicate_disjoint_auc_percent": 57.162053211502275,
+      "auc_ci95_percent": [
+        51.01741939920694,
+        62.83977946549955
+      ],
+      "paired_gain_ci95_pp": [
+        -13.191778474592889,
+        3.4021243045550533
+      ]
+    }
+  },
+  "feature_model_metadata": {
+    "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+    "hidden_size": 2048,
+    "num_layers": 16,
+    "num_attention_heads": 32,
+    "vocab_size": 128256,
+    "modalities": "logits",
+    "model_dtype": "torch.float32",
+    "requested_forward_batch_size": 16,
+    "max_padded_forward_tokens": 16384,
+    "cpu_feature_threads": 12,
+    "cpu_gc_interval_batches": 32,
+    "cuda_cache_cleanup_interval_batches": 32
+  },
+  "unique_normalized_claims": 419,
+  "bootstrap_unit": "claim"
+}

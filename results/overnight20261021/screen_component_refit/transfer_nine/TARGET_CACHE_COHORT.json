@@ -1,0 +1,14 @@
+{
+  "completion_receipt_sha256": "7c0d8f1daeed7a2309eeb696d1098ccd83d824c80df49b3c09abe3f2823a588c",
+  "target_raw_sha256": {
+    "AVeriTeC__dev_filtered_10shot": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+    "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+    "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": "9aa596bb80778b1c4c5979a8cddc6c90d95e4108defb7a9f4d63b4428d0df3d3",
+    "geometry__cities": "aa15cb4b5b5d6937ef51f240b31fff4eae0f44e12adadfd720d8f7ccf3975ed2",
+    "geometry__common_claim_true_false": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+    "geometry__companies_true_false": "5655c3628d232149a22df2ca1f09e44ef728f740a87bb012db5f6ad6d04dbc96",
+    "geometry__counterfact_true_false": "3558db4e70ef43e811f7cdcd8c50e242de00a5f7932cd2b3ac91eb0397f9586e",
+    "popqa__popqa_test_filtered_10shot": "237d8b9d67874d62e429a26ae16822540ddd40e3d3917023ae45515ada36ebba",
+    "x-fact__test_filtered_10shot": "f4388e107680efe747335d28efc98e093e57fb895735b6fb4b4b8f45ef86cd9b"
+  }
+}

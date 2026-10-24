@@ -1,0 +1,14 @@
+{
+  "status": "passed",
+  "verified_utc": "2026-10-22T11:17:40.717363+00:00",
+  "validation_script_sha256": "eacf0380b74b124bac9aa192cadd0922abafc1a194e7bf04d4306781f5cf9cea",
+  "result_sha256": "8a9881a41b99235b7307967557b6e1b01fbf085c1f1a3ff29c91d32425f68ad0",
+  "independent_rank_auc_metric_cells": 528,
+  "independently_reproduced_cv_fits": 60,
+  "independently_reproduced_final_fits": 4,
+  "frozen_evo_vectors_exact": 36,
+  "source_dataset_rows": 97488,
+  "coefficient_unit_conversion_verified": true,
+  "original_input_hashes_unchanged": true,
+  "all_checks_passed": true
+}

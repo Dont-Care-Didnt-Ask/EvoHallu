@@ -1,0 +1,19 @@
+# Install GPU torch and vLLM together in the serving environment.
+hydra-core
+numpy
+scipy
+scikit-learn
+pandas
+torch
+transformers
+peft
+accelerate
+datasets
+wandb
+huggingface-hub
+openai
+psutil
+absl-py
+tqdm
+requests
+matplotlib

@@ -1,0 +1,15 @@
+{"model": "Qwen/Qwen3.8-27B", "revision": "1d4bf0f2ff6012fd82039f2fa52739d0dd7c60c0", "remaining_bytes": 55586036737}
+{"file": "chat_template.jinja", "bytes": 8952, "sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041"}
+{"file": "generation_config.json", "bytes": 202, "sha256": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e"}
+{"file": "config.json", "bytes": 4312, "sha256": "191e0af232104ed8b65258cf3fb2b842e288008baca7633c11b82a1ac7203aab"}
+{"file": "crc32.txt", "bytes": 238, "sha256": "b42dd291f5f98b05807e458f5b47849969a9b3326acbf0c97d28b05826740b83"}
+{"file": "merges.txt", "bytes": 3353259, "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d"}
+{"file": "model-00003-of-00018.safetensors", "bytes": 2542796952, "sha256": "2e1bf62cbcd406eaa64b60d10353e1f0ef4039d0976e56f05cabe953454f9968"}
+{"file": "model-00002-of-00018.safetensors", "bytes": 3043080328, "sha256": "06a148c01bfbe3faa14a5f184a7ff29a706f7ae1c8b2705d2058e26d17a001fb"}
+{"file": "model-00005-of-00018.safetensors", "bytes": 2099339864, "sha256": "635cb53446dc74f219740fc59e18b774f877b803b9722e289ca62575a6efa701"}
+{"file": "model-00001-of-00018.safetensors", "bytes": 3966730552, "sha256": "ba0ce20aae489ad196733da5064bcdf159a1fe84f53336648196e1ebb7751b1c"}
+{"file": "model-00004-of-00018.safetensors", "bytes": 3988973152, "sha256": "511e34063187882659753c4d93f3859f93c019fd438d8813071921c81d9a3f1a"}
+{"file": "model-00007-of-00018.safetensors", "bytes": 2108759344, "sha256": "80b0c49033e9a0d5762562aa12f4acdb7f54da586f3d0110f28c48d91cf07892"}
+{"file": "model-00009-of-00018.safetensors", "bytes": 2108759344, "sha256": "af3c48cc37af44f3db6ae0579baf019180d48d9c527caa0a1f03ff85813a56d8"}
+{"file": "model-00006-of-00018.safetensors", "bytes": 3979553696, "sha256": "0bc5214fac607f0e6cc92eec3789d4b8559410ef9fce66621ba8158e8410dae0"}
+{"file": "model-00008-of-00018.safetensors", "bytes": 3979553696, "sha256": "7192c5b66185d3592927daabee1cc19e6f6e0ce75988ee20e824b624765fda79"}

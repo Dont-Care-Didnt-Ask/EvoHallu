@@ -1,0 +1,23 @@
+{
+  "status": "complete_four_controls",
+  "dataset": "popqa__popqa_test_filtered_10shot",
+  "rows": 6974,
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "raw_sha256": "8f78c1e2111a48e7d58d5fd6213b408c1413746d34a39e1bec591edcbc14dad9",
+  "reference_npz_sha256": "4d74a0fa971ac7facbd8d9787de35507271eeca944aaa9e6543f041afe1ebe09",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "labels_groups_masks_exact": true,
+  "frozen_quadratic_sum_byte_exact": true,
+  "canonical_nll_byte_exact": true,
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum",
+    "lp_total_length",
+    "float32_nll_sum",
+    "float32_nll_mean",
+    "float32_quadratic_mean"
+  ],
+  "bootstrap_samples": 500,
+  "scores_sha256": "3784f3abb1224dd2cb98a712bf636ddbed822656cad5692d0afebf26bacb09ed",
+  "bootstrap_sha256": "f944603dbb5e7eefa3c01285062d82eb61a14a7970c3cc25b7cc70fd078d2d07"
+}

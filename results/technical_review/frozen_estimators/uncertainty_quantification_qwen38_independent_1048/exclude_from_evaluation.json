@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-15T02:27:41.536257+00:00",
+  "reason": "Original from-scratch prompt omitted the required __call__ method contract. The first four programs could not instantiate; three implemented other method names and one imported Estimator from sklearn.",
+  "superseded_by": "uncertainty_quantification_qwen38_independent_contract_1048",
+  "test_data_consulted": false
+}

@@ -1,0 +1,18 @@
+{
+  "status": "passed_reference",
+  "dataset": "x-fact__test_filtered_10shot",
+  "rows": 2315,
+  "source_sha256": "6a399c68edd3d47e2ad09a611d44204f378514103329a4205422f08a6cb336a3",
+  "raw_sha256": "62c6fc50d8c8761df2c03945f6d3a856918409c59efc7533a697525bb985f240",
+  "reference_npz_sha256": "daef23e2a1253f2f184d9e628b8631b1cf70d32444cd714948947972b5985abd",
+  "plan_sha256": "cbd1b16e07398ba8175b54a7b8f598a3c0d4ca8a6ef97d4f995dcae34ab9088c",
+  "labels_groups_masks_exact": true,
+  "frozen_quadratic_sum_byte_exact": true,
+  "canonical_nll_byte_exact": true,
+  "methods": [
+    "canonical_nll",
+    "frozen_quadratic_sum"
+  ],
+  "bootstrap_samples": 0,
+  "scores_sha256": "57ba4400c4cb1d07c69dd4bb8a247c4bf49e526deec0af4c19253d37dbce9960"
+}

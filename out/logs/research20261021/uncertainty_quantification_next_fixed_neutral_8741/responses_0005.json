@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Likelihood (NLL)** as the signal. It aggregates log-probabilities across the entire sequence into a single scalar per sample.\n- **Approach**: Global likelihood scoring.\n- **Limitation**: This metric is highly sensitive to sequence length. Longer sequences naturally accumulate higher total NLL even if the model is confident per token. Without normalization by length, it conflates \"long hallucinated sequence\" with \"short confident sequence,\" likely degrading ROC-AUC performance on variable-length data.\n\n### Proposed Detector\n**Signal**: **Average Negative Log-Likelihood per Token** (normalized perplexity proxy).\n**Aggregation Principle**: Compute the mean of the negative log-probabilities for each sequence. This normalizes the penalty for sequence length, allowing the detector to focus purely on the *confidence density* of the generation. Hallucinations often manifest as regions of low probability density; averaging preserves this local signal while removing the length bias inherent in the total sum.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by penalizing sequences with low average token probability density.\n        \n        Approach: Calculates the mean negative log-probability (avg-NLL) across all generated tokens \n        in each sequence. This normalizes the score by sequence length, isolating the model's \n        confidence per token rather than the total cumulative penalty.\n        \n        Hypothesis: Hallucinated claims often correspond to tokens generated with significantly lower \n        probability mass than factual claims, even within short sequences; length normalization \n        prevents long sequences from being penalized solely due to length.\n        \"\"\"\n        # Calculate sum of negative logprobs for each sequence\n        neg_log_sums = np.array([-np.sum(seq) for seq in stats[\"sequence_logprobs\"]], dtype=np.float32)\n        \n        # Calculate sequence lengths (original length = sum_len + 1 because first token excluded)\n        lengths = np.array([len(seq) + 1 for seq in stats[\"sequence_logprobs\"]], dtype=np.float32)\n        \n        # Avoid division by zero if a sequence is empty (though unlikely given input shape constraints)\n        # If length is 1, avg_nll equals the single token's neg_logprob\n        with np.errstate(divide='ignore', invalid='ignore'):\n            avg_neg_logprobs = np.divide(neg_log_sums, lengths, out=np.zeros_like(neg_log_sums), where=lengths!=0)\n        \n        return avg_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 635,
+      "prompt_tokens": 498,
+      "total_tokens": 1133,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 12.861929582024459
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses a simple **Total Negative Log-Likelihood (NLL)** aggregation. It sums the log-probabilities across the entire sequence to get a single scalar per sample.\n- **Signal**: Cumulative probability mass of the generated sequence.\n- **Aggregation**: Summation over all tokens.\n- **Limitation**: This approach is sensitive to sequence length. Longer sequences naturally accumulate higher negative log-probability even if the model is confident at every step. It conflates \"longness\" with \"hallucination.\" Without normalization by length or variance, it struggles to distinguish between a long, coherent hallucination and a short, confident one, or a long, confident sequence vs. a short, hallucinated one.\n\n### Proposed Detector\nTo address the length bias and capture local confidence drops (which are often signatures of hallucination where the model guesses incorrectly), I propose a **Normalized Average Negative Log-Likelihood with Variance Penalty**.\n\n- **Signal Family**: Local confidence stability. Hallucinated tokens often appear as clusters of low probability or high variance in the top-k distribution, whereas coherent text maintains steady confidence.\n- **Aggregation Principle**: \n  1. Calculate the mean negative log-probability per sequence (normalizing for length).\n  2. Add a penalty term based on the variance of the log-probabilities. High variance suggests the model was unsure or guessing wildly at certain points, a strong indicator of hallucination.\n  3. Formula: $Score = \\frac{1}{n-1} \\sum (-\\log p_t) + \\lambda \\cdot \\text{Var}(-\\log p_t)$.\n  4. *Hypothesis*: Hallucinated sequences exhibit higher local uncertainty (variance) compared to ground-truth sequences of similar length, even if their average likelihood is comparable.\n\n```python\nimport numpy as np\nfrom sklearn.base import BaseEstimator, RegressorMixin\n\nclass HallucinationDetector(BaseEstimator, RegressorMixin):\n    \"\"\"\n    Detects hallucinations using normalized average negative log-likelihood plus a variance penalty.\n    Hypothesis: Hallucinated sequences exhibit higher local uncertainty (variance in log-probs) \n    compared to ground-truth sequences of similar length, even if average likelihood is comparable.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # sequence_logprobs: List[np.ndarray] of length N, inner 1d array has length n_i - 1.\n        log_probs = stats[\"sequence_logprobs\"]\n        scores = np.zeros(len(log_probs), dtype=np.float32)\n        \n        for i, seq in enumerate(log_probs):\n            if len(seq) == 0:\n                scores[i] = 0.0\n                continue\n            \n            neg_log_probs = -seq\n            mean_nll = np.mean(neg_log_probs)\n            var_nll = np.var(neg_log_probs, ddof=0)\n            \n            # Weighted sum: Mean NLL + Variance Penalty\n            # Variance penalty helps catch sequences with sharp confidence drops (hallucinations)\n            scores[i] = mean_nll + 0.5 * var_nll\n            \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 758,
+      "prompt_tokens": 498,
+      "total_tokens": 1256,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 14.963039208989358
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as its signal.\n- **Approach**: It aggregates the log-probabilities of all generated tokens (excluding the first) into a single scalar per sequence.\n- **Hypothesis**: It assumes that hallucinated sequences are generally less probable under the model's distribution than truthful ones, leading to higher cumulative negative log-probability.\n- **Limitation**: This approach is sensitive to sequence length. Longer sequences naturally accumulate higher NLL even if the per-token likelihood is high. It also fails to distinguish between a sequence of many highly probable tokens and a few very improbable tokens if the total sum is similar. The score of 74.3 suggests this baseline captures some signal but leaves significant room for improvement by accounting for sequence length normalization or local probability anomalies.\n\n### Proposed Detector\n**Signal**: **Average Negative Log-Probability (ANLP) with Length Penalty Adjustment**.\n**Aggregation Principle**: Instead of summing log-probabilities, we calculate the mean negative log-probability per token. This normalizes for sequence length. Furthermore, we apply a penalty term proportional to the variance of the log-probabilities within the sequence. Hallucinations often involve a mix of confident (high prob) and completely made-up (very low prob) tokens, creating high variance, whereas truthful sequences tend to have more consistent probability distributions.\n\n**Formula**:\n$$ \\text{Score}_i = \\frac{1}{L_i} \\sum_{t=1}^{L_i} (-\\log p_t) + \\lambda \\cdot \\text{Var}(-\\log p_t) $$\nWhere $L_i$ is the number of tokens, $p_t$ is the probability of token $t$, and $\\lambda$ is a small constant (e.g., 0.1) to weigh the variance.\n\n```python\nimport numpy as np\nfrom sklearn.base import BaseEstimator, RegressorMixin\n\nclass HallucinationDetector(BaseEstimator, RegressorMixin):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by combining average negative log-probability \n        with the variance of log-probabilities.\n        \n        Hypothesis: Hallucinated sequences exhibit higher variance in token likelihoods \n        compared to truthful sequences, which tend to have more consistent probability \n        distributions across the generation.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            if len(seq_logprobs) == 0:\n                scores.append(0.0)\n                continue\n            \n            neg_logprobs = -np.array(seq_logprobs, dtype=np.float32)\n            avg_nll = np.mean(neg_logprobs)\n            var_nll = np.var(neg_logprobs)\n            \n            # Weighted combination: Base likelihood + Variance penalty\n            # Using 0.5 as a heuristic weight for variance\n            score = avg_nll + 0.5 * var_nll\n            scores.append(score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 737,
+      "prompt_tokens": 498,
+      "total_tokens": 1235,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 19.88134869397618
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector (`HallucinationDetector`) relies solely on the **total negative log-probability** (sum of negative log-likelihoods) of the generated sequence.\n- **Approach**: It assumes that hallucinated content is semantically incoherent or factually incorrect in a way that causes the language model to assign lower probabilities to the tokens compared to coherent, grounded text.\n- **Limitation**: This approach is coarse-grained. It aggregates the entire sequence into a single scalar. A model might confidently hallucinate a specific detail (high probability) while being slightly less confident about surrounding filler text, resulting in a similar total score to a fully coherent sequence. It ignores the *distribution* of confidence and the *locality* of uncertainty.\n\n### Proposed Detector\n**Signal**: **Local Log-Probability Variance (Volatility)**.\nInstead of just the sum, we measure the variance of the log-probabilities across the sequence. Hallucinations often manifest as sudden drops in probability or inconsistent confidence patterns compared to the smooth, high-confidence flow of grounded facts. We hypothesize that hallucinated segments introduce higher local volatility in the model's confidence distribution compared to coherent ground truth.\n\n**Aggregation Principle**: Compute the variance of log-probabilities for each sequence and return this scalar as the score. Higher variance indicates a higher likelihood of hallucination.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations based on the variance of token-level log-probabilities.\n        Hypothesis: Hallucinated sequences exhibit higher local volatility (variance) in \n        model confidence compared to coherent, grounded sequences which tend to have \n        smoother probability distributions.\n        \"\"\"\n        variances = np.array([\n            np.var(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        return variances\n```",
+    "usage": {
+      "completion_tokens": 489,
+      "prompt_tokens": 498,
+      "total_tokens": 987,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 17.00546663699788
+  }
+]

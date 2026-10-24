@@ -1,0 +1,32 @@
+{
+  "checked_utc": "2026-10-15T09:53:39.632383+00:00",
+  "uhead_label_complement_checked_on_all_58_frozen_score_vectors": true,
+  "direct_auc_cross_check_all_nine_datasets": {
+    "original/SequenceLogProb": {
+      "directly_recomputed_macro_auc_percent": 68.71117305407847,
+      "matches_transformed_aggregate": true
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+      "directly_recomputed_macro_auc_percent": 72.45291355391643,
+      "matches_transformed_aggregate": true
+    },
+    "new/uncertainty_quantification_qwen38_evo_1047": {
+      "directly_recomputed_macro_auc_percent": 72.00196563063089,
+      "matches_transformed_aggregate": true
+    },
+    "supervised/logistic_documented_stratified": {
+      "directly_recomputed_macro_auc_percent": 72.60658383999018,
+      "matches_transformed_aggregate": true
+    }
+  },
+  "comparison_csv_row_counts": {
+    "paper_figure2_comparison.csv": 18,
+    "paper_table3_context.csv": 9,
+    "uhead_label_convention_methods.csv": 58
+  },
+  "original_csv_hash_matches_campaign_audit": true,
+  "primary_prediction_and_report_hashes_unchanged": true,
+  "new_gpu_hours": 0,
+  "new_model_generations": 0,
+  "scope": "Source-supported secondary label-convention analysis; historical CSV conversion provenance remains unverified."
+}

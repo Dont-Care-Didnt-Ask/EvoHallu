@@ -1,0 +1,55 @@
+{
+  "datasets": {
+    "AVeriTeC__dev_filtered_10shot.pt": {
+      "rows": 427,
+      "padded_tokens": 25622,
+      "batches": 27
+    },
+    "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot.pt": {
+      "rows": 2057,
+      "padded_tokens": 79958,
+      "batches": 129
+    },
+    "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot.pt": {
+      "rows": 46605,
+      "padded_tokens": 1778093,
+      "batches": 2921
+    },
+    "geometry__cities.pt": {
+      "rows": 1496,
+      "padded_tokens": 47872,
+      "batches": 94
+    },
+    "geometry__common_claim_true_false.pt": {
+      "rows": 4450,
+      "padded_tokens": 171112,
+      "batches": 279
+    },
+    "geometry__companies_true_false.pt": {
+      "rows": 1200,
+      "padded_tokens": 58144,
+      "batches": 75
+    },
+    "geometry__counterfact_true_false.pt": {
+      "rows": 31964,
+      "padded_tokens": 1024372,
+      "batches": 1998
+    },
+    "popqa__popqa_test_filtered_10shot.pt": {
+      "rows": 6974,
+      "padded_tokens": 268160,
+      "batches": 436
+    },
+    "x-fact__test_filtered_10shot.pt": {
+      "rows": 2315,
+      "padded_tokens": 584383,
+      "batches": 145
+    }
+  },
+  "total_padded_tokens": 4037716,
+  "projection_feature_seconds": 2484.276447157692,
+  "suggested_total_budget_seconds": 3600,
+  "method": "Scale timing by exact shared-tokenizer padded token work, add10percent and10minutes scoring/setup; round up5minutes",
+  "quality_metrics_used": false,
+  "inspection_seconds": 17.527702543884516
+}

@@ -1,0 +1,73 @@
+{
+  "dataset": "geometry__cities",
+  "rows": 1496,
+  "phase": "variants",
+  "status": "complete_conditions",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "raw_sha256": "ec33dd2d2d765fbc9f2beda4519c8903034322516774c4a796e7bb5bee5731e2",
+  "reference_npz_sha256": "ef5557ee06566f5603e3c9cd6e17c1205ddb59e72e5f7a83c51fd29e306de1e1",
+  "labels_groups_masks_exact": true,
+  "original512_label_prevalence": {
+    "chunk_size": 512,
+    "chunks": 3,
+    "minimum": 0.5,
+    "maximum": 0.5,
+    "last_chunk_rows": 472,
+    "prevalence_by_chunk": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "order": "original CSV/cache row order; no label-based ordering"
+  },
+  "conditions": [
+    {
+      "case": "original_128",
+      "chunk_size": 128,
+      "directed_auc_percent": 91.18451342617747,
+      "paper_auc_percent": 91.18451342617747,
+      "spearman_vs_original512": 0.9957470724350129,
+      "exact_original512_scores": false,
+      "maximum_absolute_score_difference": 0.22229242324829102,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 0.7297432399936952
+    },
+    {
+      "case": "original_2048",
+      "chunk_size": 2048,
+      "directed_auc_percent": 91.06404958677686,
+      "paper_auc_percent": 91.06404958677686,
+      "spearman_vs_original512": 0.9987802057570891,
+      "exact_original512_scores": false,
+      "maximum_absolute_score_difference": 0.07395756244659424,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 0.7000706559920218
+    },
+    {
+      "case": "original_full",
+      "chunk_size": 1496,
+      "directed_auc_percent": 91.06404958677686,
+      "paper_auc_percent": 91.06404958677686,
+      "spearman_vs_original512": 0.9987802057570891,
+      "exact_original512_scores": false,
+      "maximum_absolute_score_difference": 0.07395756244659424,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 0.6967612029984593
+    },
+    {
+      "case": "shuffle451_512",
+      "chunk_size": 512,
+      "directed_auc_percent": 90.99836641024906,
+      "paper_auc_percent": 90.99836641024906,
+      "spearman_vs_original512": 0.9975174894821139,
+      "exact_original512_scores": false,
+      "maximum_absolute_score_difference": 0.12723290920257568,
+      "nonconstant": true,
+      "canonical_nll_byte_exact": true,
+      "elapsed_seconds": 0.7067843080149032
+    }
+  ]
+}

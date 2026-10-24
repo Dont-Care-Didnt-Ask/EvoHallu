@@ -1,0 +1,11 @@
+--- out/logs/research20261021/uncertainty_quantification_next_prompt_original_2107/frozen_estimator.py
++++ results/overnight20261021/screen_component_ablations/frozen/screen_original__drop_normalized_slope/frozen_estimator.py
+@@ -80,7 +80,7 @@
+             # Combine: Weight slope (0.7) and tail collapse (0.3)
+             # Note: Tail collapse is counter-intuitive in isolation (we want high score for low range),
+             # but the normalization handles the scale.
+-            final_score = 0.7 * slope_score_norm + 0.3 * tail_collapse_norm
++            final_score = 0.0 + 0.3 * tail_collapse_norm
+             
+             scores[i] = final_score
+ 

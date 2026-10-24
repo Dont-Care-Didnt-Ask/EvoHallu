@@ -1,0 +1,8 @@
+Absolute deadline: 2026-10-22T02:16:28+00:00; generation cutoff: 2026-10-22T01:46:28+00:00
+Batch evolution_four_policies: 1 jobs, 60 requests
+next_evo_neutral_interface_2107 .venv/bin/python scripts/overnight_interface_trial.py --config-name next_experiments/next_evo_neutral_interface_2107 cluster.api_base_url=http://127.0.0.1:18000/v1 trial.max_seconds=5400
+{"utc": "2026-10-21T19:31:42.120127+00:00", "event": "controller_started", "selected_jobs": 1, "completed_skips": 0}
+{"utc": "2026-10-21T19:31:42.166474+00:00", "event": "batch_started", "batch": "evolution_four_policies", "pending": 1}
+{"utc": "2026-10-21T19:31:42.168754+00:00", "event": "job_started", "job": "next_evo_neutral_interface_2107", "port": 18000, "pid": 8677, "max_seconds": 5400}
+{"utc": "2026-10-21T19:58:38.309852+00:00", "event": "job_finished", "job": "next_evo_neutral_interface_2107", "port": 18000, "status": "complete", "exit_code": 0, "elapsed_seconds": 1616.1354554319987, "error": null}
+{"utc": "2026-10-21T19:58:38.311794+00:00", "event": "controller_stopped", "failed_jobs": [], "budget_stop": false, "unfinished_jobs": []}

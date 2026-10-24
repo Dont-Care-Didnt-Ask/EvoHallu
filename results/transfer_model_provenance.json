@@ -1,0 +1,8 @@
+{
+  "id": "unsloth/Llama-3.2-1B-Instruct",
+  "revision": "5a8abab4a5d6f164389b1079fb721cfab8d7126c",
+  "license": "llama3.2",
+  "gated": false,
+  "weight_bytes": 2471645608,
+  "base_model": "meta-llama/Llama-3.2-1B-Instruct"
+}

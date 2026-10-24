@@ -1,0 +1,6 @@
+{"dataset": "AVeriTeC__dev_filtered_10shot", "rows": 427, "methods": 16, "failed": {}}
+{"dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot", "rows": 2057, "methods": 16, "failed": {}}
+{"dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot", "rows": 46605, "methods": 16, "failed": {}}
+{"dataset": "geometry__cities", "rows": 1496, "methods": 16, "failed": {}}
+{"dataset": "geometry__common_claim_true_false", "rows": 4450, "methods": 16, "failed": {}}
+{"dataset": "geometry__companies_true_false", "rows": 1200, "methods": 16, "failed": {}}

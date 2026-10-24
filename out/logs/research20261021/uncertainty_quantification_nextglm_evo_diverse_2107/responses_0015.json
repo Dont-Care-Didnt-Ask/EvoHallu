@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### 1. Analysis of Shown Detectors\n\nThe provided candidates represent two distinct signal families:\n1.  **Global/Global-Last Signal (Score 50.0):** Uses the negative log-probability of the final token. This is a simple \"confidence\" signal. The low score indicates that hallucinations are not consistently \"more confident\" than facts in this specific context, or that confidence is not a sufficient discriminator.\n2.  **Local Volatility Signal (Score 58.0598):** Uses the variance of log-probabilities across the sequence. This measures \"confidence instability.\" The improvement over the baseline suggests that hallucinations are often generated with fluctuating confidence levels, whereas facts are generated with smoother probability trajectories.\n\n### 2. Proposed Detector\n\n**Signal:** **Top-K Probability Gap (Entropy Reduction).**\n**Aggregation Principle:** **Sequence Aggregation (Mean).**\n\n**Rationale:**\nThe variance detector (Score ~58) captures *instability*, but it treats all fluctuations equally. A hallucination often involves the model struggling to find the correct token among many candidates (high entropy) and finally settling on a \"safe\" but incorrect one.\nBy calculating the average gap between the top-1 probability and the top-512 probability (or the sum of the top-k probabilities), we can measure the \"sharpness\" of the model's decision.\n- **Ground Truth:** The model usually has a very high top-1 probability (sharp decision).\n- **Hallucination:** The model often has a low top-1 probability but a high sum of top-k probabilities (shallow decision, high entropy).\n\n**Specific Change:** We will switch from analyzing the *log-probability values* (which are already derived from top-1) to analyzing the *raw logits* or *probabilities* from `top_k_logits` to capture the \"crowdedness\" of the top-512 distribution.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average 'sharpness' of the model's predictions.\n        \n        Hypothesis for future: Hallucinations are generated when the model \n        cannot distinguish a correct token from a set of incorrect tokens, \n        resulting in a higher sum of top-k probabilities (lower confidence gap) \n        compared to factual generation.\n        \"\"\"\n        scores = []\n        for logits in stats[\"top_k_logits\"]:\n            # logits shape: (n_i, k)\n            # Convert logits to probabilities (softmax along the k dimension)\n            # We use a stable epsilon to avoid log(0)\n            exp_logits = np.exp(logits - np.max(logits, axis=1, keepdims=True))\n            probs = exp_logits / np.sum(exp_logits, axis=1, keepdims=True)\n            \n            # Calculate the sum of top-k probabilities\n            # This acts as a proxy for the \"uncertainty mass\" the model assigned \n            # to the top 512 candidates.\n            sum_top_k = np.sum(probs, axis=1)\n            \n            # We take the mean sharpness across the sequence\n            # Ground truth: low sum (high confidence)\n            # Hallucination: high sum (low confidence)\n            seq_score = np.mean(sum_top_k)\n            \n            scores.append(seq_score)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 756,
+      "prompt_tokens": 834,
+      "total_tokens": 1590,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 58.71113973099273
+  },
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **Detector 1 (Final Token LogProb):** Uses the absolute confidence (negative log-probability) of the final token. It assumes hallucinations are finalized with higher confidence.\n   - **Detector 2 (Sequence Variance):** Uses the variance of log-probabilities across the sequence. It assumes hallucinations exhibit higher local volatility/confidence instability.\n\n2. **Proposed Detector**\n   - **Signal:** The normalized entropy of the top-k token distribution (or confidence gap) for the *first* token of the atomic claim.\n   - **Aggregation Principle:** Sequence-level aggregation (mean).\n   - **Rationale:** The exploration role focuses on the confidence gap between the observed token and alternatives. By examining the first token (which is the start of the atomic claim), we detect if the model is \"forced\" to pick a token it isn't confident about, rather than just the final confidence. Normalizing by the top-1 log-prob ensures the score is bounded and comparable across sequences of different lengths.\n\n3. **Code Block**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the normalized entropy (or confidence gap) of the first token's \n        top-k distribution.\n        \n        Hypothesis for future: This detector assumes that hallucinations often \n        involve the model starting a claim with a token that has a high probability \n        of being incorrect relative to its alternatives, resulting in a lower \n        normalized confidence score compared to factual starts.\n        \"\"\"\n        scores = []\n        for seq_logprobs, top_k_logits, top_k_indices in zip(\n            stats[\"sequence_logprobs\"],\n            stats[\"top_k_logits\"],\n            stats[\"top_k_indices\"]\n        ):\n            # We analyze the first generated token (index 0)\n            if len(seq_logprobs) == 0 or len(top_k_logits) == 0:\n                scores.append(0.0)\n                continue\n            \n            # Extract top-k logits for the first token\n            first_logits = top_k_logits[0]  # Shape (k,)\n            \n            # Compute Softmax probabilities\n            exp_logits = np.exp(first_logits - np.max(first_logits))  # Numerical stability\n            probs = exp_logits / np.sum(exp_logits)\n            \n            # Calculate Entropy: H = -sum(p * log(p))\n            # Normalize by log(k) to get a value between 0 and 1\n            entropy = -np.sum(probs * np.log(probs + 1e-12))\n            normalized_entropy = entropy / np.log(probs.shape[0])\n            \n            scores.append(normalized_entropy)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 640,
+      "prompt_tokens": 854,
+      "total_tokens": 1494,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 49.93661910499213
+  }
+]

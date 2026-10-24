@@ -1,0 +1,68 @@
+{
+  "status": "frozen_train_only_statistics",
+  "source_contract": {
+    "original_source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+    "nested_normalizer_count": 1,
+    "median_calls_in_normalizer": 2,
+    "normalizer_calls": 4,
+    "other_median_calls": 0,
+    "source_edited": false,
+    "ast_rewritten": false,
+    "proxy_scope": "Private candidate class global np only, restored after each call"
+  },
+  "statistics": [
+    {
+      "feature": 1,
+      "dtype": "<f4",
+      "median": 141.0,
+      "mad": 6.875,
+      "degenerate": false,
+      "minimum": 105.8125,
+      "maximum": 359.25,
+      "rows": 5605
+    },
+    {
+      "feature": 2,
+      "dtype": "<f4",
+      "median": 21.5625,
+      "mad": 2.734375,
+      "degenerate": false,
+      "minimum": 6.18359375,
+      "maximum": 44.25,
+      "rows": 5605
+    },
+    {
+      "feature": 3,
+      "dtype": "<f4",
+      "median": 0.0,
+      "mad": 0.0,
+      "degenerate": true,
+      "minimum": -0.00048732757568359375,
+      "maximum": 0.0,
+      "rows": 5605
+    },
+    {
+      "feature": 4,
+      "dtype": "<f4",
+      "median": 13.359375,
+      "mad": 0.0,
+      "degenerate": true,
+      "minimum": 13.359375,
+      "maximum": 22.25,
+      "rows": 5605
+    }
+  ],
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "feature_and_split_sha256": "28db2d6a67c3e6b9a5fbc4332eeb023f23fa7bceff3cecb86e6af7aa64ef5dcc",
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "training_rows": 5605,
+  "validation_rows_excluded": 1402,
+  "training_indices_sha256": "aec1861b8ee67c8302f960e358c9eeff7996bb13d66ec7b62061e92d0c31bae2",
+  "excluded_validation_indices_sha256": "1ed3824e3580607d4ff8e7630cfdd450448e1d250b8d4c39bf4202d00a84cd1d",
+  "fitting_labels_used": false,
+  "labels_used_only_to_reproduce_original_split": true,
+  "test_target_data_read_during_fit": false,
+  "source_program_rewritten": false,
+  "coefficient_or_threshold_selection": false,
+  "exploratory_after_test_view": true
+}

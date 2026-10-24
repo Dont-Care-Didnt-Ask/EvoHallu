@@ -1,0 +1,62 @@
+{
+  "rows": 1496,
+  "duplicate_disjoint_rows": 1495,
+  "failed": {},
+  "methods": {
+    "original/SequenceLogProb": {
+      "auc_percent": 87.87649418055993,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_auc_percent": 87.86026458776281,
+      "auc_ci95_percent": [
+        86.16913804023524,
+        89.63633518979532
+      ],
+      "paired_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "supervised/logistic_documented_claim_group": {
+      "auc_percent": 96.74962109296807,
+      "gain_pp": 8.873126912408136,
+      "duplicate_disjoint_auc_percent": 96.74526984945129,
+      "auc_ci95_percent": [
+        95.80820636004891,
+        97.65546189533697
+      ],
+      "paired_gain_ci95_pp": [
+        7.405220995967936,
+        10.308695955049934
+      ]
+    },
+    "supervised/qda_documented_claim_group": {
+      "auc_percent": 88.17684949526723,
+      "gain_pp": 0.30035531470731236,
+      "duplicate_disjoint_auc_percent": 88.16227476751928,
+      "auc_ci95_percent": [
+        86.61869587329552,
+        89.6685807881193
+      ],
+      "paired_gain_ci95_pp": [
+        -1.0959958616942447,
+        1.7929476838655103
+      ]
+    }
+  },
+  "feature_model_metadata": {
+    "model_id": "/dev/shm/mod1-models/Llama3.2-1B",
+    "hidden_size": 2048,
+    "num_layers": 16,
+    "num_attention_heads": 32,
+    "vocab_size": 128256,
+    "modalities": "logits",
+    "model_dtype": "torch.float32",
+    "requested_forward_batch_size": 16,
+    "max_padded_forward_tokens": 16384,
+    "cpu_feature_threads": 12,
+    "cpu_gc_interval_batches": 32,
+    "cuda_cache_cleanup_interval_batches": 32
+  },
+  "unique_normalized_claims": 1496,
+  "bootstrap_unit": "claim"
+}

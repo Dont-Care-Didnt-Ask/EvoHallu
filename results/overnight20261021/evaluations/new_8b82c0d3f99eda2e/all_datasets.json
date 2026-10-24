@@ -1,0 +1,542 @@
+{
+  "AVeriTeC__dev_filtered_10shot": {
+    "rows": 427,
+    "duplicate_disjoint_rows": 427,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.76780435366837,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.76780435366837,
+        "auc_ci95_percent": [
+          57.23204458167941,
+          70.23949108842564
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 63.84305294275732,
+        "gain_pp": 0.07524858908894982,
+        "duplicate_disjoint_auc_percent": 63.84305294275732,
+        "auc_ci95_percent": [
+          56.9688258829749,
+          70.02798228316773
+        ],
+        "paired_gain_ci95_pp": [
+          -4.290706515665843,
+          4.0550940703652865
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 63.84305294275732,
+        "gain_pp": 0.07524858908894982,
+        "duplicate_disjoint_auc_percent": 63.84305294275732,
+        "auc_ci95_percent": [
+          56.9688258829749,
+          70.02798228316773
+        ],
+        "paired_gain_ci95_pp": [
+          -4.290706515665843,
+          4.0550940703652865
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 419,
+    "bootstrap_unit": "claim"
+  },
+  "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {
+    "rows": 2057,
+    "duplicate_disjoint_rows": 2057,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 36.19719167488705,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 36.19719167488705,
+        "auc_ci95_percent": [
+          33.727009008119055,
+          38.4683483385775
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 38.96009158111383,
+        "gain_pp": 2.762899906226779,
+        "duplicate_disjoint_auc_percent": 38.96009158111383,
+        "auc_ci95_percent": [
+          36.21648414121046,
+          41.6735359623736
+        ],
+        "paired_gain_ci95_pp": [
+          0.9835944095697735,
+          4.521373535069896
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 38.96009158111383,
+        "gain_pp": 2.762899906226779,
+        "duplicate_disjoint_auc_percent": 38.96009158111383,
+        "auc_ci95_percent": [
+          36.21648414121046,
+          41.6735359623736
+        ],
+        "paired_gain_ci95_pp": [
+          0.9835944095697735,
+          4.521373535069896
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2051,
+    "bootstrap_unit": "claim"
+  },
+  "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {
+    "rows": 46605,
+    "duplicate_disjoint_rows": 46599,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 70.68591510605297,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 70.6814726670195,
+        "auc_ci95_percent": [
+          70.04724940140954,
+          71.3095596991671
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 65.68062288910512,
+        "gain_pp": -5.005292216947854,
+        "duplicate_disjoint_auc_percent": 65.67554669242588,
+        "auc_ci95_percent": [
+          65.01685586339919,
+          66.36134028954889
+        ],
+        "paired_gain_ci95_pp": [
+          -5.3470528137091025,
+          -4.6523125983241815
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 65.68062288910512,
+        "gain_pp": -5.005292216947854,
+        "duplicate_disjoint_auc_percent": 65.67554669242588,
+        "auc_ci95_percent": [
+          65.01685586339919,
+          66.36134028954889
+        ],
+        "paired_gain_ci95_pp": [
+          -5.3470528137091025,
+          -4.6523125983241815
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 46283,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__cities": {
+    "rows": 1496,
+    "duplicate_disjoint_rows": 1495,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 91.93696559810117,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 91.92635067900837,
+        "auc_ci95_percent": [
+          90.53825859295301,
+          93.26341852742824
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 91.12231547942463,
+        "gain_pp": -0.8146501186765409,
+        "duplicate_disjoint_auc_percent": 91.11060999792396,
+        "auc_ci95_percent": [
+          89.73488778172154,
+          92.52893279260556
+        ],
+        "paired_gain_ci95_pp": [
+          -1.8439547959321883,
+          0.150193712528557
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 91.12231547942463,
+        "gain_pp": -0.8146501186765409,
+        "duplicate_disjoint_auc_percent": 91.11060999792396,
+        "auc_ci95_percent": [
+          89.73488778172154,
+          92.52893279260556
+        ],
+        "paired_gain_ci95_pp": [
+          -1.8439547959321883,
+          0.150193712528557
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1496,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__common_claim_true_false": {
+    "rows": 4450,
+    "duplicate_disjoint_rows": 4450,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.26080040398939,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.26080040398939,
+        "auc_ci95_percent": [
+          61.68247129343744,
+          64.88894884275209
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 51.88981189243782,
+        "gain_pp": -11.370988511551571,
+        "duplicate_disjoint_auc_percent": 51.88981189243782,
+        "auc_ci95_percent": [
+          50.193818700506135,
+          53.608251492543815
+        ],
+        "paired_gain_ci95_pp": [
+          -12.277341256048297,
+          -10.354013750376016
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 51.88981189243782,
+        "gain_pp": -11.370988511551571,
+        "duplicate_disjoint_auc_percent": 51.88981189243782,
+        "auc_ci95_percent": [
+          50.193818700506135,
+          53.608251492543815
+        ],
+        "paired_gain_ci95_pp": [
+          -12.277341256048297,
+          -10.354013750376016
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 4447,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__companies_true_false": {
+    "rows": 1200,
+    "duplicate_disjoint_rows": 1200,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 72.58069444444443,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 72.58069444444443,
+        "auc_ci95_percent": [
+          69.65842172941194,
+          75.38574147158444
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 84.3801388888889,
+        "gain_pp": 11.79944444444445,
+        "duplicate_disjoint_auc_percent": 84.3801388888889,
+        "auc_ci95_percent": [
+          81.83084160155101,
+          86.52771641026989
+        ],
+        "paired_gain_ci95_pp": [
+          10.021002616411698,
+          13.550580278097865
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 84.3801388888889,
+        "gain_pp": 11.79944444444445,
+        "duplicate_disjoint_auc_percent": 84.3801388888889,
+        "auc_ci95_percent": [
+          81.83084160155101,
+          86.52771641026989
+        ],
+        "paired_gain_ci95_pp": [
+          10.021002616411698,
+          13.550580278097865
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1186,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__counterfact_true_false": {
+    "rows": 31964,
+    "duplicate_disjoint_rows": 31964,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 68.08486277916116,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 68.08486277916116,
+        "auc_ci95_percent": [
+          67.48551431303397,
+          68.65757659018908
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 71.04836166660462,
+        "gain_pp": 2.963498887443461,
+        "duplicate_disjoint_auc_percent": 71.04836166660462,
+        "auc_ci95_percent": [
+          70.4578286939902,
+          71.56184691882942
+        ],
+        "paired_gain_ci95_pp": [
+          2.672006320534326,
+          3.272398286960289
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 71.04836166660462,
+        "gain_pp": 2.963498887443461,
+        "duplicate_disjoint_auc_percent": 71.04836166660462,
+        "auc_ci95_percent": [
+          70.4578286939902,
+          71.56184691882942
+        ],
+        "paired_gain_ci95_pp": [
+          2.672006320534326,
+          3.272398286960289
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 31938,
+    "bootstrap_unit": "claim"
+  },
+  "popqa__popqa_test_filtered_10shot": {
+    "rows": 6974,
+    "duplicate_disjoint_rows": 6454,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 74.05170876856083,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 73.83072001100092,
+        "auc_ci95_percent": [
+          72.4306032260263,
+          75.34065956942705
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 76.76257295045306,
+        "gain_pp": 2.710864181892225,
+        "duplicate_disjoint_auc_percent": 76.42063995597489,
+        "auc_ci95_percent": [
+          75.18643746145882,
+          78.04643756681448
+        ],
+        "paired_gain_ci95_pp": [
+          1.9470245562099446,
+          3.5905084299372865
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 76.76257295045306,
+        "gain_pp": 2.710864181892225,
+        "duplicate_disjoint_auc_percent": 76.42063995597489,
+        "auc_ci95_percent": [
+          75.18643746145882,
+          78.04643756681448
+        ],
+        "paired_gain_ci95_pp": [
+          1.9470245562099446,
+          3.5905084299372865
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 6686,
+    "bootstrap_unit": "claim"
+  },
+  "x-fact__test_filtered_10shot": {
+    "rows": 2315,
+    "duplicate_disjoint_rows": 2315,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 50.22899770761495,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 50.22899770761495,
+        "auc_ci95_percent": [
+          47.85887972459884,
+          52.86128885641865
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_compositional_8741__primary": {
+        "auc_percent": 54.92268819068534,
+        "gain_pp": 4.693690483070389,
+        "duplicate_disjoint_auc_percent": 54.92268819068534,
+        "auc_ci95_percent": [
+          52.35674332200328,
+          57.3272057721279
+        ],
+        "paired_gain_ci95_pp": [
+          3.049665853948678,
+          6.497475485468454
+        ]
+      },
+      "new/next_evo_compositional_8741__trainbest": {
+        "auc_percent": 54.92268819068534,
+        "gain_pp": 4.693690483070389,
+        "duplicate_disjoint_auc_percent": 54.92268819068534,
+        "auc_ci95_percent": [
+          52.35674332200328,
+          57.3272057721279
+        ],
+        "paired_gain_ci95_pp": [
+          3.049665853948678,
+          6.497475485468454
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2315,
+    "bootstrap_unit": "claim"
+  }
+}

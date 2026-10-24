@@ -1,0 +1,47 @@
+{
+  "status": "independent_six_raw_sha_and_62_protected_files_passed",
+  "created_utc": "2026-10-21T23:45:10.942758+00:00",
+  "elapsed_seconds": 7.162026849982794,
+  "protected_files": 62,
+  "cache_audit_sha256": "d4465fe8991e69be83386b58ce6478de96bcc187fe7c887a7bbd2dd6d6889ad1",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "model_inference": false,
+  "per_dataset": [
+    {
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "raw_bytes": 91371710,
+      "raw_sha256": "6a71faa1fc7a140e9cc1bb21fd7afb51361fe202fed252db1b7e5d150de29a6f",
+      "independent_full_file_rehash_exact": true
+    },
+    {
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "raw_bytes": 330370352,
+      "raw_sha256": "cd77dba8440394def4aeaefb6f20815c1ea6e65d3bb6408e5f5c55bd4125de15",
+      "independent_full_file_rehash_exact": true
+    },
+    {
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "raw_bytes": 7507614021,
+      "raw_sha256": "9aa596bb80778b1c4c5979a8cddc6c90d95e4108defb7a9f4d63b4428d0df3d3",
+      "independent_full_file_rehash_exact": true
+    },
+    {
+      "dataset": "geometry__cities",
+      "raw_bytes": 226514189,
+      "raw_sha256": "aa15cb4b5b5d6937ef51f240b31fff4eae0f44e12adadfd720d8f7ccf3975ed2",
+      "independent_full_file_rehash_exact": true
+    },
+    {
+      "dataset": "geometry__common_claim_true_false",
+      "raw_bytes": 744503079,
+      "raw_sha256": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+      "independent_full_file_rehash_exact": true
+    },
+    {
+      "dataset": "geometry__companies_true_false",
+      "raw_bytes": 201844417,
+      "raw_sha256": "5655c3628d232149a22df2ca1f09e44ef728f740a87bb012db5f6ad6d04dbc96",
+      "independent_full_file_rehash_exact": true
+    }
+  ]
+}

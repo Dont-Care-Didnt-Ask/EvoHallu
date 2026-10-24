@@ -1,0 +1,15 @@
+{
+  "created_utc": "2026-10-21T18:56:41.061472+00:00",
+  "status": "prepared_no_real_feature_archives_created",
+  "script": "scripts/overnight_archive_transfer.py",
+  "script_sha256": "5d27d8bbeade713006e8efaffca48a6c07ee134c4091cbae6cddb8a06e4d8ee5",
+  "tests_passed": 1,
+  "test_elapsed_seconds": 0.3,
+  "test": "Synthetic three-file parallel compression, raw preservation, decompression hash equality and idempotent archive reuse",
+  "global_cutoff_utc": "2026-10-22T02:06:00Z",
+  "default_workers": 2,
+  "xz_threads_per_file": 4,
+  "compression_level": 6,
+  "real_cache_files_archived": 0,
+  "automatic_pipeline_stage_added": false
+}

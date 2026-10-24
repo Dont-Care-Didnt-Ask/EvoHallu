@@ -1,0 +1,3508 @@
+{
+  "created_utc": "2026-10-21T15:02:59.050970+00:00",
+  "no_gpu_or_model_calls": true,
+  "generated_candidate_code_executed": false,
+  "source": "Saved candidate ledgers, source-validation prediction arrays, and deterministic parent-sampling replay",
+  "novelty_scope": "Posthoc saved-validation-rank diagnostics only. Search-time novelty must instead use training/probe predictions. Float32 saved ranks do not prove functional equivalence.",
+  "primary_evolution_runs": 7,
+  "primary_requests": 402,
+  "primary_valid_candidates": 283,
+  "by_writer": {
+    "Qwen/Qwen3.5-4B": {
+      "requests": 42,
+      "valid": 16,
+      "valid_fraction": 0.38095238095238093,
+      "rank_near_repeat_fraction": 0.0,
+      "invalid_error_families": {
+        "shape_or_index": 10,
+        "class_interface": 9,
+        "numerical_or_dtype": 5,
+        "other": 2
+      }
+    },
+    "Qwen/Qwen3.5-9B": {
+      "requests": 120,
+      "valid": 68,
+      "valid_fraction": 0.5666666666666667,
+      "rank_near_repeat_fraction": 0.25,
+      "invalid_error_families": {
+        "shape_or_index": 39,
+        "numerical_or_dtype": 9,
+        "class_interface": 2,
+        "parse_or_syntax": 1,
+        "import_or_name": 1
+      }
+    },
+    "Qwen/Qwen3.8-27B": {
+      "requests": 120,
+      "valid": 110,
+      "valid_fraction": 0.9166666666666666,
+      "rank_near_repeat_fraction": 0.2909090909090909,
+      "invalid_error_families": {
+        "shape_or_index": 1,
+        "numerical_or_dtype": 5,
+        "class_interface": 2,
+        "import_or_name": 2
+      }
+    },
+    "poolside/Laguna-XS-2.1": {
+      "requests": 120,
+      "valid": 89,
+      "valid_fraction": 0.7416666666666667,
+      "rank_near_repeat_fraction": 0.4943820224719101,
+      "invalid_error_families": {
+        "numerical_or_dtype": 22,
+        "import_or_name": 2,
+        "other": 1,
+        "shape_or_index": 6
+      }
+    }
+  },
+  "sampler": {
+    "rounds_replayed": 201,
+    "prompt_mismatches": 0,
+    "rounds_quantile_filter_applied": 129,
+    "rounds_with_multiple_eligible_groups": 180,
+    "median_relative_effective_sample_size": 0.9984182712787575,
+    "minimum_relative_effective_sample_size": 0.8154353688528984,
+    "median_largest_to_smallest_probability": 1.1048394165279434,
+    "median_best_group_probability": 0.26024860896913454,
+    "p90_largest_to_smallest_probability": 2.53838359872245,
+    "rounds_with_at_least_five_groups_but_no_quantile_filter": 18
+  },
+  "rank_sampler_sensitivity": {
+    "0.5": {
+      "uniform_mixture_fraction": 0.2,
+      "median_relative_effective_sample_size": 0.9543005348987332,
+      "median_best_group_probability": 0.33730915418211316,
+      "scope": "Counterfactual probability distributions on recorded eligible-group counts only; no counterfactual offspring or quality measured"
+    },
+    "1.0": {
+      "uniform_mixture_fraction": 0.2,
+      "median_relative_effective_sample_size": 0.8335556148306212,
+      "median_best_group_probability": 0.43400000000000005,
+      "scope": "Counterfactual probability distributions on recorded eligible-group counts only; no counterfactual offspring or quality measured"
+    },
+    "2.0": {
+      "uniform_mixture_fraction": 0.2,
+      "median_relative_effective_sample_size": 0.5805067959008552,
+      "median_best_group_probability": 0.6119512195121952,
+      "scope": "Counterfactual probability distributions on recorded eligible-group counts only; no counterfactual offspring or quality measured"
+    }
+  },
+  "runs": [
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "writer": "poolside/Laguna-XS-2.1",
+      "mode": "evolution",
+      "seed": 1047,
+      "requests": 60,
+      "valid": 46,
+      "valid_fraction": 0.7666666666666667,
+      "invalid_error_families": {
+        "numerical_or_dtype": 12,
+        "import_or_name": 1,
+        "other": 1
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 45,
+      "exact_rank_repeats": 2,
+      "near_rank_repeats_0995": 21,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 3,
+      "selected_round_1based": 28,
+      "selected_validation_auc": 79.2575,
+      "best_validation_by_request_budget": {
+        "10": 76.3542,
+        "20": 76.3542,
+        "40": 78.7735,
+        "60": 79.2575
+      },
+      "train_validation_candidate_auc_spearman": 0.996298811345944,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope_BottomMassAvg",
+      "selected_nearest_supplied_formula_spearman": 0.9843660065805727,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 2126.1730163656175,
+      "valid_offspring_above_best_parent_train": 14,
+      "valid_offspring_compared_to_parents": 46
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "writer": "poolside/Laguna-XS-2.1",
+      "mode": "evolution",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 43,
+      "valid_fraction": 0.7166666666666667,
+      "invalid_error_families": {
+        "shape_or_index": 6,
+        "numerical_or_dtype": 10,
+        "import_or_name": 1
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 40,
+      "exact_rank_repeats": 4,
+      "near_rank_repeats_0995": 23,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 4,
+      "selected_round_1based": 28,
+      "selected_validation_auc": 79.5008,
+      "best_validation_by_request_budget": {
+        "10": 75.8347,
+        "20": 76.0611,
+        "40": 78.7667,
+        "60": 79.5008
+      },
+      "train_validation_candidate_auc_spearman": 0.9758289901049926,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope_BottomMassAvg",
+      "selected_nearest_supplied_formula_spearman": 0.9790401227201924,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 2008.6850759219378,
+      "valid_offspring_above_best_parent_train": 11,
+      "valid_offspring_compared_to_parents": 43
+    },
+    {
+      "run": "uncertainty_quantification_laguna_independent_1048",
+      "writer": "poolside/Laguna-XS-2.1",
+      "mode": "independent",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 35,
+      "valid_fraction": 0.5833333333333334,
+      "invalid_error_families": {
+        "numerical_or_dtype": 18,
+        "import_or_name": 5,
+        "shape_or_index": 2
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 29,
+      "exact_rank_repeats": 7,
+      "near_rank_repeats_0995": 13,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 8,
+      "selected_round_1based": 6,
+      "selected_validation_auc": 79.0003,
+      "best_validation_by_request_budget": {
+        "10": 75.796,
+        "20": 79.0003,
+        "40": 79.0003,
+        "60": 79.0003
+      },
+      "train_validation_candidate_auc_spearman": 0.9695087521174478,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope_BottomMassAvg",
+      "selected_nearest_supplied_formula_spearman": 0.9853869245538133,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 2327.3694228772074
+    },
+    {
+      "run": "uncertainty_quantification_laguna_seeded_1048",
+      "writer": "poolside/Laguna-XS-2.1",
+      "mode": "baseline_seeded",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 43,
+      "valid_fraction": 0.7166666666666667,
+      "invalid_error_families": {
+        "numerical_or_dtype": 10,
+        "shape_or_index": 5,
+        "other": 2
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 39,
+      "exact_rank_repeats": 5,
+      "near_rank_repeats_0995": 14,
+      "constant_predictions": 1,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 6,
+      "selected_round_1based": 21,
+      "selected_validation_auc": 78.7735,
+      "best_validation_by_request_budget": {
+        "10": 75.7504,
+        "20": 76.361,
+        "40": 77.4586,
+        "60": 78.7735
+      },
+      "train_validation_candidate_auc_spearman": 0.9703569267997579,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope",
+      "selected_nearest_supplied_formula_spearman": 0.9999977650572753,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 1995.2719495054334
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "writer": "Qwen/Qwen3.5-4B",
+      "mode": "evolution",
+      "seed": 1048,
+      "requests": 42,
+      "valid": 16,
+      "valid_fraction": 0.38095238095238093,
+      "invalid_error_families": {
+        "shape_or_index": 10,
+        "class_interface": 9,
+        "numerical_or_dtype": 5,
+        "other": 2
+      },
+      "truncated_responses": 1,
+      "baseline_included_unique_rank_patterns": 16,
+      "exact_rank_repeats": 1,
+      "near_rank_repeats_0995": 0,
+      "constant_predictions": 2,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": 10,
+      "selected_validation_auc": 78.0317,
+      "best_validation_by_request_budget": {
+        "10": 75.7504,
+        "20": 78.0317,
+        "40": 78.0317
+      },
+      "train_validation_candidate_auc_spearman": 0.9911634756995582,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope_TopBottomRatio",
+      "selected_nearest_supplied_formula_spearman": 0.990923640699918,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 705.6375347152352,
+      "valid_offspring_above_best_parent_train": 1,
+      "valid_offspring_compared_to_parents": 16
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "writer": "Qwen/Qwen3.5-9B",
+      "mode": "evolution",
+      "seed": 1047,
+      "requests": 60,
+      "valid": 32,
+      "valid_fraction": 0.5333333333333333,
+      "invalid_error_families": {
+        "shape_or_index": 23,
+        "numerical_or_dtype": 2,
+        "class_interface": 2,
+        "parse_or_syntax": 1
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 32,
+      "exact_rank_repeats": 1,
+      "near_rank_repeats_0995": 8,
+      "constant_predictions": 1,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": 12,
+      "selected_validation_auc": 77.8208,
+      "best_validation_by_request_budget": {
+        "10": 76.4304,
+        "20": 76.4304,
+        "40": 77.8208,
+        "60": 77.8208
+      },
+      "train_validation_candidate_auc_spearman": 0.9222731439046746,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope_BottomMassAvg",
+      "selected_nearest_supplied_formula_spearman": 0.8648884765059747,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 1266.4133275095373,
+      "valid_offspring_above_best_parent_train": 5,
+      "valid_offspring_compared_to_parents": 32
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "writer": "Qwen/Qwen3.5-9B",
+      "mode": "evolution",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 36,
+      "valid_fraction": 0.6,
+      "invalid_error_families": {
+        "shape_or_index": 16,
+        "import_or_name": 1,
+        "numerical_or_dtype": 7
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 37,
+      "exact_rank_repeats": 0,
+      "near_rank_repeats_0995": 9,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": 16,
+      "selected_validation_auc": 79.5752,
+      "best_validation_by_request_budget": {
+        "10": 76.8433,
+        "20": 76.8433,
+        "40": 79.5752,
+        "60": 79.5752
+      },
+      "train_validation_candidate_auc_spearman": 0.9732303732303732,
+      "selected_train_auc_below_best_train": true,
+      "selected_nearest_supplied_formula": "LogProbSlope",
+      "selected_nearest_supplied_formula_spearman": 0.7614401506293482,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 1128.5983065348119,
+      "valid_offspring_above_best_parent_train": 11,
+      "valid_offspring_compared_to_parents": 36
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_independent_1048",
+      "writer": "Qwen/Qwen3.5-9B",
+      "mode": "independent",
+      "seed": 1048,
+      "requests": 12,
+      "valid": 1,
+      "valid_fraction": 0.08333333333333333,
+      "invalid_error_families": {
+        "class_interface": 8,
+        "import_or_name": 3
+      },
+      "truncated_responses": 1,
+      "baseline_included_unique_rank_patterns": 2,
+      "exact_rank_repeats": 0,
+      "near_rank_repeats_0995": 1,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": null,
+      "selected_validation_auc": 75.7504,
+      "best_validation_by_request_budget": {
+        "10": 75.7504
+      },
+      "train_validation_candidate_auc_spearman": null,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "SequenceLogProb",
+      "selected_nearest_supplied_formula_spearman": 0.9999999999999998,
+      "selected_exact_saved_rank_match_to_supplied": true,
+      "recorded_elapsed_seconds": 265.94331633485854
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_seeded_1048",
+      "writer": "Qwen/Qwen3.5-9B",
+      "mode": "baseline_seeded",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 34,
+      "valid_fraction": 0.5666666666666667,
+      "invalid_error_families": {
+        "import_or_name": 3,
+        "class_interface": 11,
+        "shape_or_index": 8,
+        "other": 4
+      },
+      "truncated_responses": 3,
+      "baseline_included_unique_rank_patterns": 33,
+      "exact_rank_repeats": 2,
+      "near_rank_repeats_0995": 7,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": 4,
+      "selected_validation_auc": 79.71,
+      "best_validation_by_request_budget": {
+        "10": 79.71,
+        "20": 79.71,
+        "40": 79.71,
+        "60": 79.71
+      },
+      "train_validation_candidate_auc_spearman": 0.9840275152924232,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "ExpWeightedNegLogProbWithTop1",
+      "selected_nearest_supplied_formula_spearman": 0.8700366032997335,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 889.3338226508349
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "writer": "Qwen/Qwen3.8-27B",
+      "mode": "evolution",
+      "seed": 1047,
+      "requests": 60,
+      "valid": 57,
+      "valid_fraction": 0.95,
+      "invalid_error_families": {
+        "shape_or_index": 1,
+        "numerical_or_dtype": 2
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 56,
+      "exact_rank_repeats": 2,
+      "near_rank_repeats_0995": 17,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": 5,
+      "selected_validation_auc": 79.6135,
+      "best_validation_by_request_budget": {
+        "10": 79.6135,
+        "20": 79.6135,
+        "40": 79.6135,
+        "60": 79.6135
+      },
+      "train_validation_candidate_auc_spearman": 0.9108028392700871,
+      "selected_train_auc_below_best_train": true,
+      "selected_nearest_supplied_formula": "ExpWeightedNegLogProbWithTop1",
+      "selected_nearest_supplied_formula_spearman": 0.8709576762124996,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 4456.509634871036,
+      "valid_offspring_above_best_parent_train": 10,
+      "valid_offspring_compared_to_parents": 57
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "writer": "Qwen/Qwen3.8-27B",
+      "mode": "evolution",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 53,
+      "valid_fraction": 0.8833333333333333,
+      "invalid_error_families": {
+        "class_interface": 2,
+        "numerical_or_dtype": 3,
+        "import_or_name": 2
+      },
+      "truncated_responses": 1,
+      "baseline_included_unique_rank_patterns": 48,
+      "exact_rank_repeats": 6,
+      "near_rank_repeats_0995": 15,
+      "constant_predictions": 0,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 5,
+      "selected_round_1based": 14,
+      "selected_validation_auc": 78.7667,
+      "best_validation_by_request_budget": {
+        "10": 78.4723,
+        "20": 78.4723,
+        "40": 78.7667,
+        "60": 78.7667
+      },
+      "train_validation_candidate_auc_spearman": 0.9499939508811548,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope",
+      "selected_nearest_supplied_formula_spearman": 1.0,
+      "selected_exact_saved_rank_match_to_supplied": true,
+      "recorded_elapsed_seconds": 4874.888502115384,
+      "valid_offspring_above_best_parent_train": 11,
+      "valid_offspring_compared_to_parents": 53
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_contract_1048",
+      "writer": "Qwen/Qwen3.8-27B",
+      "mode": "independent",
+      "seed": 1048,
+      "requests": 60,
+      "valid": 58,
+      "valid_fraction": 0.9666666666666667,
+      "invalid_error_families": {
+        "import_or_name": 2
+      },
+      "truncated_responses": 0,
+      "baseline_included_unique_rank_patterns": 52,
+      "exact_rank_repeats": 7,
+      "near_rank_repeats_0995": 17,
+      "constant_predictions": 8,
+      "candidates_with_ranks_equal_to_a_supplied_formula": 0,
+      "selected_round_1based": 27,
+      "selected_validation_auc": 79.7812,
+      "best_validation_by_request_budget": {
+        "10": 79.0619,
+        "20": 79.0619,
+        "40": 79.0619,
+        "60": 79.7812
+      },
+      "train_validation_candidate_auc_spearman": 0.9618652563249424,
+      "selected_train_auc_below_best_train": false,
+      "selected_nearest_supplied_formula": "LogProbSlope_BottomMassAvg",
+      "selected_nearest_supplied_formula_spearman": 0.9661998110525237,
+      "selected_exact_saved_rank_match_to_supplied": false,
+      "recorded_elapsed_seconds": 2867.458130983636
+    }
+  ],
+  "sampler_rounds": [
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 1,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 2,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9920849476050178,
+      "best_group_probability": 0.3544842644949663,
+      "largest_to_smallest_sampling_probability": 1.2172083511883345,
+      "parent_train_scores": [
+        66.4883,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 4,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9313624588099823,
+      "best_group_probability": 0.3052398250155259,
+      "largest_to_smallest_sampling_probability": 2.1972575179858755,
+      "parent_train_scores": [
+        42.8623,
+        66.4883
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.999959558901711,
+      "best_group_probability": 0.3362610579882383,
+      "largest_to_smallest_sampling_probability": 1.0149405100622872,
+      "parent_train_scores": [
+        74.3286,
+        74.9218
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9960981531880925,
+      "best_group_probability": 0.26127084408858936,
+      "largest_to_smallest_sampling_probability": 1.1715556722144571,
+      "parent_train_scores": [
+        68.5885,
+        74.9218
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 7,
+      "island": 1,
+      "score_groups": 6,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999959558901711,
+      "best_group_probability": 0.3362610579882383,
+      "largest_to_smallest_sampling_probability": 1.0149405100622872,
+      "parent_train_scores": [
+        74.3286,
+        74.4632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 6,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999996176176903,
+      "best_group_probability": 0.3336047689558808,
+      "largest_to_smallest_sampling_probability": 1.0014986218130266,
+      "parent_train_scores": [
+        74.3507,
+        74.3885
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 9,
+      "island": 0,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999996176176903,
+      "best_group_probability": 0.3336047689558808,
+      "largest_to_smallest_sampling_probability": 1.0014986218130266,
+      "parent_train_scores": [
+        74.3507,
+        74.3885
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 10,
+      "island": 1,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999959558901711,
+      "best_group_probability": 0.3362610579882383,
+      "largest_to_smallest_sampling_probability": 1.0149405100622872,
+      "parent_train_scores": [
+        74.3286,
+        74.4632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 11,
+      "island": 0,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999996176176903,
+      "best_group_probability": 0.3336047689558808,
+      "largest_to_smallest_sampling_probability": 1.0014986218130266,
+      "parent_train_scores": [
+        74.3507,
+        74.3885
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 12,
+      "island": 1,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999959558901711,
+      "best_group_probability": 0.3362610579882383,
+      "largest_to_smallest_sampling_probability": 1.0149405100622872,
+      "parent_train_scores": [
+        74.3286,
+        74.4632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 9,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999996242578049,
+      "best_group_probability": 0.2502466371263319,
+      "largest_to_smallest_sampling_probability": 1.0015036293186543,
+      "parent_train_scores": [
+        74.3284,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 14,
+      "island": 0,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999999704252986,
+      "best_group_probability": 0.25018987885378274,
+      "largest_to_smallest_sampling_probability": 1.0014986218130268,
+      "parent_train_scores": [
+        74.3507,
+        74.3885
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 9,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999959558901711,
+      "best_group_probability": 0.3362610579882383,
+      "largest_to_smallest_sampling_probability": 1.0149405100622872,
+      "parent_train_scores": [
+        74.3286,
+        74.9218
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9960981531880925,
+      "best_group_probability": 0.26127084408858936,
+      "largest_to_smallest_sampling_probability": 1.1715556722144571,
+      "parent_train_scores": [
+        74.3286,
+        74.4632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 17,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999679525209467,
+      "best_group_probability": 0.25238402244614194,
+      "largest_to_smallest_sampling_probability": 1.0149405100622872,
+      "parent_train_scores": [
+        74.4525,
+        74.4632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 11,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999802479628334,
+      "best_group_probability": 0.25191892879896094,
+      "largest_to_smallest_sampling_probability": 1.0106968060935129,
+      "parent_train_scores": [
+        74.3885,
+        74.7763
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 19,
+      "island": 0,
+      "score_groups": 11,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999802479628334,
+      "best_group_probability": 0.25191892879896094,
+      "largest_to_smallest_sampling_probability": 1.0106968060935129,
+      "parent_train_scores": [
+        74.3647,
+        74.7763
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999742507101359,
+      "best_group_probability": 0.20187224224661182,
+      "largest_to_smallest_sampling_probability": 1.014940510062287,
+      "parent_train_scores": [
+        74.3286,
+        74.5768
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 21,
+      "island": 1,
+      "score_groups": 16,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9982692926097906,
+      "best_group_probability": 0.2165713320964027,
+      "largest_to_smallest_sampling_probability": 1.1099583587711876,
+      "parent_train_scores": [
+        74.4525,
+        74.9218
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 22,
+      "island": 0,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9964629294156662,
+      "best_group_probability": 0.27574155633383424,
+      "largest_to_smallest_sampling_probability": 1.1463322525913877,
+      "parent_train_scores": [
+        74.3647,
+        74.3885
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 23,
+      "island": 0,
+      "score_groups": 14,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9957981229799385,
+      "best_group_probability": 0.26653377826765057,
+      "largest_to_smallest_sampling_probability": 1.145650387775995,
+      "parent_train_scores": [
+        79.7326,
+        79.8274
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 24,
+      "island": 1,
+      "score_groups": 18,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9982692926097906,
+      "best_group_probability": 0.2165713320964027,
+      "largest_to_smallest_sampling_probability": 1.1099583587711876,
+      "parent_train_scores": [
+        74.4632,
+        78.6254
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 25,
+      "island": 1,
+      "score_groups": 20,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9982692926097906,
+      "best_group_probability": 0.2165713320964027,
+      "largest_to_smallest_sampling_probability": 1.1099583587711876,
+      "parent_train_scores": [
+        74.4525,
+        74.4632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 26,
+      "island": 0,
+      "score_groups": 16,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9996921718707042,
+      "best_group_probability": 0.25424169692635645,
+      "largest_to_smallest_sampling_probability": 1.0447577078325667,
+      "parent_train_scores": [
+        79.7326,
+        79.8274
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 27,
+      "island": 0,
+      "score_groups": 18,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999175834744382,
+      "best_group_probability": 0.2515052335500564,
+      "largest_to_smallest_sampling_probability": 1.0220010303998135,
+      "parent_train_scores": [
+        78.9569,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 28,
+      "island": 1,
+      "score_groups": 22,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9982692926097906,
+      "best_group_probability": 0.2165713320964027,
+      "largest_to_smallest_sampling_probability": 1.1099583587711876,
+      "parent_train_scores": [
+        74.4525,
+        74.5768
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 29,
+      "island": 0,
+      "score_groups": 18,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999175834744382,
+      "best_group_probability": 0.2515052335500564,
+      "largest_to_smallest_sampling_probability": 1.0220010303998135,
+      "parent_train_scores": [
+        79.7326,
+        79.8274
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "round_1based": 30,
+      "island": 0,
+      "score_groups": 20,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999997299802903,
+      "best_group_probability": 0.25057829904632795,
+      "largest_to_smallest_sampling_probability": 1.0046583163780052,
+      "parent_train_scores": [
+        79.7326,
+        79.8274
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 1,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 2,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8154353688528984,
+      "best_group_probability": 0.5434796038804652,
+      "largest_to_smallest_sampling_probability": 3.387814421318879,
+      "parent_train_scores": [
+        25.5212,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 4,
+      "island": 1,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8469602210633632,
+      "best_group_probability": 0.45280783136097796,
+      "largest_to_smallest_sampling_probability": 3.3721988185103364,
+      "parent_train_scores": [
+        25.706,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.884127833083261,
+      "best_group_probability": 0.31776285238743807,
+      "largest_to_smallest_sampling_probability": 3.3721988185103364,
+      "parent_train_scores": [
+        70.6396,
+        71.7922
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8839218297054724,
+      "best_group_probability": 0.26914059160523385,
+      "largest_to_smallest_sampling_probability": 3.372198818510336,
+      "parent_train_scores": [
+        71.7922,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 7,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8455976743209818,
+      "best_group_probability": 0.3525525140125666,
+      "largest_to_smallest_sampling_probability": 3.394342245094498,
+      "parent_train_scores": [
+        50.0366,
+        74.4056
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8708898120371132,
+      "best_group_probability": 0.26180304294394846,
+      "largest_to_smallest_sampling_probability": 3.4145561026797,
+      "parent_train_scores": [
+        25.5212,
+        74.6431
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 9,
+      "island": 1,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8843248631788122,
+      "best_group_probability": 0.2347601464193706,
+      "largest_to_smallest_sampling_probability": 3.372198818510337,
+      "parent_train_scores": [
+        71.7922,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 10,
+      "island": 0,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8903851544988705,
+      "best_group_probability": 0.20804517907712003,
+      "largest_to_smallest_sampling_probability": 3.4145561026797,
+      "parent_train_scores": [
+        74.119,
+        74.4056
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 11,
+      "island": 1,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9984949237256449,
+      "best_group_probability": 0.35082074964811294,
+      "largest_to_smallest_sampling_probability": 1.096611531919601,
+      "parent_train_scores": [
+        71.7922,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 12,
+      "island": 0,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999887824963525,
+      "best_group_probability": 0.3348683227627485,
+      "largest_to_smallest_sampling_probability": 1.0078934906211332,
+      "parent_train_scores": [
+        74.3286,
+        74.6431
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999889053339012,
+      "best_group_probability": 0.2509130887477852,
+      "largest_to_smallest_sampling_probability": 1.0078934906211334,
+      "parent_train_scores": [
+        74.4056,
+        74.6431
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 14,
+      "island": 1,
+      "score_groups": 9,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9990758225868328,
+      "best_group_probability": 0.3410913221113979,
+      "largest_to_smallest_sampling_probability": 1.0692099379580007,
+      "parent_train_scores": [
+        71.7922,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9944124305007015,
+      "best_group_probability": 0.2805590906843152,
+      "largest_to_smallest_sampling_probability": 1.2224230553780406,
+      "parent_train_scores": [
+        74.3286,
+        74.469
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9947356898972584,
+      "best_group_probability": 0.2800166518298753,
+      "largest_to_smallest_sampling_probability": 1.2121916473221923,
+      "parent_train_scores": [
+        72.1284,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 17,
+      "island": 0,
+      "score_groups": 11,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999893281399435,
+      "best_group_probability": 0.2509002829038643,
+      "largest_to_smallest_sampling_probability": 1.0076868936324708,
+      "parent_train_scores": [
+        74.3368,
+        74.6431
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999989333199653,
+      "best_group_probability": 0.2509001267269013,
+      "largest_to_smallest_sampling_probability": 1.0076843744183857,
+      "parent_train_scores": [
+        74.3369,
+        74.6109
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 19,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9969273379865821,
+      "best_group_probability": 0.22218343506313398,
+      "largest_to_smallest_sampling_probability": 1.1473156540711107,
+      "parent_train_scores": [
+        74.3286,
+        74.5191
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 16,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9969273379865821,
+      "best_group_probability": 0.22218343506313398,
+      "largest_to_smallest_sampling_probability": 1.1473156540711107,
+      "parent_train_scores": [
+        74.3286,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 21,
+      "island": 0,
+      "score_groups": 14,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9994505459260914,
+      "best_group_probability": 0.26014998290142777,
+      "largest_to_smallest_sampling_probability": 1.055706277196597,
+      "parent_train_scores": [
+        74.6109,
+        74.6431
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 22,
+      "island": 0,
+      "score_groups": 16,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9957915040253171,
+      "best_group_probability": 0.2158431245875476,
+      "largest_to_smallest_sampling_probability": 1.1581454780807183,
+      "parent_train_scores": [
+        80.2655,
+        80.4837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 23,
+      "island": 1,
+      "score_groups": 17,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9969273379865821,
+      "best_group_probability": 0.22218343506313398,
+      "largest_to_smallest_sampling_probability": 1.1473156540711107,
+      "parent_train_scores": [
+        74.469,
+        74.5191
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 24,
+      "island": 1,
+      "score_groups": 17,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9969273379865821,
+      "best_group_probability": 0.22218343506313398,
+      "largest_to_smallest_sampling_probability": 1.1473156540711107,
+      "parent_train_scores": [
+        74.469,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 25,
+      "island": 0,
+      "score_groups": 16,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.996309577088636,
+      "best_group_probability": 0.2652840012435489,
+      "largest_to_smallest_sampling_probability": 1.1572135461238022,
+      "parent_train_scores": [
+        76.7482,
+        80.4837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 26,
+      "island": 0,
+      "score_groups": 18,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9989332142705503,
+      "best_group_probability": 0.2066005422997485,
+      "largest_to_smallest_sampling_probability": 1.0978870840965116,
+      "parent_train_scores": [
+        79.2343,
+        80.4837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 27,
+      "island": 1,
+      "score_groups": 18,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9965294061726874,
+      "best_group_probability": 0.2755438929546435,
+      "largest_to_smallest_sampling_probability": 1.1432956353853667,
+      "parent_train_scores": [
+        74.5191,
+        74.6559
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 28,
+      "island": 0,
+      "score_groups": 18,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9997636642950803,
+      "best_group_probability": 0.25449062262397626,
+      "largest_to_smallest_sampling_probability": 1.0356145307140248,
+      "parent_train_scores": [
+        80.2655,
+        80.4837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 29,
+      "island": 0,
+      "score_groups": 20,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998231872545321,
+      "best_group_probability": 0.2527342566982964,
+      "largest_to_smallest_sampling_probability": 1.0341992957307402,
+      "parent_train_scores": [
+        80.2655,
+        80.4837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "round_1based": 30,
+      "island": 0,
+      "score_groups": 20,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998231872545321,
+      "best_group_probability": 0.2527342566982964,
+      "largest_to_smallest_sampling_probability": 1.0341992957307402,
+      "parent_train_scores": [
+        80.2655,
+        80.4837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 1,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 2,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 4,
+      "island": 1,
+      "score_groups": 2,
+      "eligible_groups": 2,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9613141095917228,
+      "best_group_probability": 0.6003029357714437,
+      "largest_to_smallest_sampling_probability": 1.501894783565826,
+      "parent_train_scores": [
+        58.0595,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.88612062395953,
+      "best_group_probability": 0.33511675177040723,
+      "largest_to_smallest_sampling_probability": 2.9167865099996066,
+      "parent_train_scores": [
+        31.5093,
+        58.0595
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 6,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9710335505778099,
+      "best_group_probability": 0.37861698527594245,
+      "largest_to_smallest_sampling_probability": 1.5018947835658258,
+      "parent_train_scores": [
+        73.3309,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 7,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 9,
+      "island": 1,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9710335505778099,
+      "best_group_probability": 0.37861698527594245,
+      "largest_to_smallest_sampling_probability": 1.5018947835658258,
+      "parent_train_scores": [
+        73.3309,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 10,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 11,
+      "island": 1,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9710335505778099,
+      "best_group_probability": 0.37861698527594245,
+      "largest_to_smallest_sampling_probability": 1.5018947835658258,
+      "parent_train_scores": [
+        73.3309,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 12,
+      "island": 0,
+      "score_groups": 2,
+      "eligible_groups": 2,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9958885756758153,
+      "best_group_probability": 0.5321263051089448,
+      "largest_to_smallest_sampling_probability": 1.1373289648883782,
+      "parent_train_scores": [
+        74.3286,
+        79.4759
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8983854491681551,
+      "best_group_probability": 0.4375383645145542,
+      "largest_to_smallest_sampling_probability": 2.461473120034793,
+      "parent_train_scores": [
+        74.3286,
+        79.4759
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 14,
+      "island": 1,
+      "score_groups": 9,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9710335505778099,
+      "best_group_probability": 0.37861698527594245,
+      "largest_to_smallest_sampling_probability": 1.5018947835658258,
+      "parent_train_scores": [
+        58.0595,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9581109464707459,
+      "best_group_probability": 0.3058181199935685,
+      "largest_to_smallest_sampling_probability": 1.5905183986810838,
+      "parent_train_scores": [
+        73.3309,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9581109464707459,
+      "best_group_probability": 0.3058181199935685,
+      "largest_to_smallest_sampling_probability": 1.5905183986810838,
+      "parent_train_scores": [
+        55.7662,
+        73.3309
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 17,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8813615338937915,
+      "best_group_probability": 0.3617800598450008,
+      "largest_to_smallest_sampling_probability": 2.461473120034793,
+      "parent_train_scores": [
+        43.4455,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8813615338937915,
+      "best_group_probability": 0.3617800598450008,
+      "largest_to_smallest_sampling_probability": 2.461473120034793,
+      "parent_train_scores": [
+        43.4455,
+        79.4759
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 19,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.976736568871658,
+      "best_group_probability": 0.288415082400745,
+      "largest_to_smallest_sampling_probability": 1.5018947835658258,
+      "parent_train_scores": [
+        66.6838,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.976736568871658,
+      "best_group_probability": 0.288415082400745,
+      "largest_to_smallest_sampling_probability": 1.5018947835658258,
+      "parent_train_scores": [
+        58.0595,
+        73.3309
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "round_1based": 21,
+      "island": 0,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8465901462744534,
+      "best_group_probability": 0.254646385031973,
+      "largest_to_smallest_sampling_probability": 3.68860190971203,
+      "parent_train_scores": [
+        74.3286,
+        79.4759
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 1,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 2,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 4,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9988171646084097,
+      "best_group_probability": 0.3425617189248814,
+      "largest_to_smallest_sampling_probability": 1.0800744781409157,
+      "parent_train_scores": [
+        71.5155,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9983283205449841,
+      "best_group_probability": 0.21016321823740902,
+      "largest_to_smallest_sampling_probability": 1.1325112362959944,
+      "parent_train_scores": [
+        74.5967,
+        75.4469
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 7,
+      "island": 1,
+      "score_groups": 6,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9996233679916223,
+      "best_group_probability": 0.34154344564204553,
+      "largest_to_smallest_sampling_probability": 1.0485492058337824,
+      "parent_train_scores": [
+        74.5967,
+        75.4469
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 2,
+      "eligible_groups": 2,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9990869340510555,
+      "best_group_probability": 0.5151153928189174,
+      "largest_to_smallest_sampling_probability": 1.0623463504308457,
+      "parent_train_scores": [
+        74.3286,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 9,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9993911392719933,
+      "best_group_probability": 0.3432115598390818,
+      "largest_to_smallest_sampling_probability": 1.062346350430846,
+      "parent_train_scores": [
+        75.6259,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 10,
+      "island": 1,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.958484803986273,
+      "best_group_probability": 0.19112078547368155,
+      "largest_to_smallest_sampling_probability": 2.109318690819838,
+      "parent_train_scores": [
+        74.3286,
+        76.493
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 11,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9991684621526298,
+      "best_group_probability": 0.26024860896913454,
+      "largest_to_smallest_sampling_probability": 1.0766291470305398,
+      "parent_train_scores": [
+        73.7944,
+        75.6259
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 12,
+      "island": 1,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9996233679916223,
+      "best_group_probability": 0.34154344564204553,
+      "largest_to_smallest_sampling_probability": 1.0485492058337824,
+      "parent_train_scores": [
+        74.5967,
+        75.4469
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9991684621526298,
+      "best_group_probability": 0.26024860896913454,
+      "largest_to_smallest_sampling_probability": 1.0766291470305398,
+      "parent_train_scores": [
+        73.7944,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 14,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9991684621526298,
+      "best_group_probability": 0.26024860896913454,
+      "largest_to_smallest_sampling_probability": 1.0766291470305398,
+      "parent_train_scores": [
+        75.6259,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 9,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9995192596930017,
+      "best_group_probability": 0.3424018637139084,
+      "largest_to_smallest_sampling_probability": 1.0551680042664913,
+      "parent_train_scores": [
+        75.4469,
+        76.493
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9992076584224878,
+      "best_group_probability": 0.2598529693390452,
+      "largest_to_smallest_sampling_probability": 1.0778356471891832,
+      "parent_train_scores": [
+        74.5967,
+        75.4469
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 17,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9995192596930017,
+      "best_group_probability": 0.3424018637139084,
+      "largest_to_smallest_sampling_probability": 1.0551680042664913,
+      "parent_train_scores": [
+        75.4469,
+        77.5949
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9435483484494227,
+      "best_group_probability": 0.1931365091725206,
+      "largest_to_smallest_sampling_probability": 2.53838359872245,
+      "parent_train_scores": [
+        74.3261,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 19,
+      "island": 0,
+      "score_groups": 7,
+      "eligible_groups": 7,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9515093598521234,
+      "best_group_probability": 0.16486217959349894,
+      "largest_to_smallest_sampling_probability": 2.53838359872245,
+      "parent_train_scores": [
+        39.4867,
+        73.7944
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9992076584224878,
+      "best_group_probability": 0.2598529693390452,
+      "largest_to_smallest_sampling_probability": 1.0778356471891832,
+      "parent_train_scores": [
+        74.5967,
+        77.5949
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 21,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9992076584224878,
+      "best_group_probability": 0.2598529693390452,
+      "largest_to_smallest_sampling_probability": 1.0778356471891832,
+      "parent_train_scores": [
+        75.4469,
+        76.493
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 22,
+      "island": 0,
+      "score_groups": 7,
+      "eligible_groups": 7,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9515093598521234,
+      "best_group_probability": 0.16486217959349894,
+      "largest_to_smallest_sampling_probability": 2.53838359872245,
+      "parent_train_scores": [
+        74.3286,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 23,
+      "island": 0,
+      "score_groups": 9,
+      "eligible_groups": 9,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9595453630188074,
+      "best_group_probability": 0.12740322567233314,
+      "largest_to_smallest_sampling_probability": 2.53838359872245,
+      "parent_train_scores": [
+        71.9959,
+        76.3903
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 24,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9992076584224878,
+      "best_group_probability": 0.2598529693390452,
+      "largest_to_smallest_sampling_probability": 1.0778356471891832,
+      "parent_train_scores": [
+        74.5967,
+        77.5949
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 25,
+      "island": 1,
+      "score_groups": 15,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9993160919106513,
+      "best_group_probability": 0.2594378475371331,
+      "largest_to_smallest_sampling_probability": 1.070729294557784,
+      "parent_train_scores": [
+        75.4469,
+        76.493
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 26,
+      "island": 0,
+      "score_groups": 10,
+      "eligible_groups": 10,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9452339719371653,
+      "best_group_probability": 0.11959617218038204,
+      "largest_to_smallest_sampling_probability": 2.53838359872245,
+      "parent_train_scores": [
+        75.6259,
+        76.3903
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 27,
+      "island": 0,
+      "score_groups": 12,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998638233536453,
+      "best_group_probability": 0.337445158813754,
+      "largest_to_smallest_sampling_probability": 1.0284445343766122,
+      "parent_train_scores": [
+        75.6259,
+        76.3903
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 28,
+      "island": 1,
+      "score_groups": 17,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9993160919106513,
+      "best_group_probability": 0.2594378475371331,
+      "largest_to_smallest_sampling_probability": 1.070729294557784,
+      "parent_train_scores": [
+        74.8613,
+        77.5949
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 29,
+      "island": 0,
+      "score_groups": 13,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998638233536453,
+      "best_group_probability": 0.337445158813754,
+      "largest_to_smallest_sampling_probability": 1.0284445343766122,
+      "parent_train_scores": [
+        75.6259,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "round_1based": 30,
+      "island": 0,
+      "score_groups": 14,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998638233536453,
+      "best_group_probability": 0.337445158813754,
+      "largest_to_smallest_sampling_probability": 1.0284445343766122,
+      "parent_train_scores": [
+        76.3903,
+        76.7478
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 1,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 2,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 4,
+      "island": 1,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.968601816538351,
+      "best_group_probability": 0.3782563196449892,
+      "largest_to_smallest_sampling_probability": 1.5221023435738714,
+      "parent_train_scores": [
+        74.3286,
+        74.8632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9740429098795366,
+      "best_group_probability": 0.2777312823348249,
+      "largest_to_smallest_sampling_probability": 1.5473325299826224,
+      "parent_train_scores": [
+        74.8632,
+        75.5208
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9740429098795366,
+      "best_group_probability": 0.2777312823348249,
+      "largest_to_smallest_sampling_probability": 1.5473325299826224,
+      "parent_train_scores": [
+        58.0595,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 7,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8641089981598885,
+      "best_group_probability": 0.4342690233010216,
+      "largest_to_smallest_sampling_probability": 2.962341491349204,
+      "parent_train_scores": [
+        74.3286,
+        75.7475
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8641089981598885,
+      "best_group_probability": 0.4342690233010216,
+      "largest_to_smallest_sampling_probability": 2.962341491349204,
+      "parent_train_scores": [
+        74.3286,
+        75.7475
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 9,
+      "island": 1,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9505200370787172,
+      "best_group_probability": 0.24046768292849097,
+      "largest_to_smallest_sampling_probability": 1.7922422686967237,
+      "parent_train_scores": [
+        74.3286,
+        75.5208
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 10,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8621687382060794,
+      "best_group_probability": 0.353105507538815,
+      "largest_to_smallest_sampling_probability": 2.9623414913492043,
+      "parent_train_scores": [
+        50.2991,
+        75.7475
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 11,
+      "island": 1,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998971825351611,
+      "best_group_probability": 0.3378721424479581,
+      "largest_to_smallest_sampling_probability": 1.0245848436930702,
+      "parent_train_scores": [
+        74.5493,
+        74.8632
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 12,
+      "island": 0,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.8934704537828687,
+      "best_group_probability": 0.22813465722601356,
+      "largest_to_smallest_sampling_probability": 2.9623414913492043,
+      "parent_train_scores": [
+        73.3475,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999390584806408,
+      "best_group_probability": 0.3440074476529801,
+      "largest_to_smallest_sampling_probability": 1.0618365465453596,
+      "parent_train_scores": [
+        73.3475,
+        75.7475
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 14,
+      "island": 1,
+      "score_groups": 9,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999313048115817,
+      "best_group_probability": 0.33682449054526903,
+      "largest_to_smallest_sampling_probability": 1.0204691780307131,
+      "parent_train_scores": [
+        75.5208,
+        76.3313
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 11,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998200036912711,
+      "best_group_probability": 0.2542673610687184,
+      "largest_to_smallest_sampling_probability": 1.0373843530810627,
+      "parent_train_scores": [
+        74.8632,
+        76.3313
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9999389591136315,
+      "best_group_probability": 0.2521640091109178,
+      "largest_to_smallest_sampling_probability": 1.020469178030713,
+      "parent_train_scores": [
+        75.8874,
+        76.2018
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 17,
+      "island": 0,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999390584806408,
+      "best_group_probability": 0.3440074476529801,
+      "largest_to_smallest_sampling_probability": 1.0618365465453596,
+      "parent_train_scores": [
+        73.3475,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 9,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999390584806408,
+      "best_group_probability": 0.3440074476529801,
+      "largest_to_smallest_sampling_probability": 1.0618365465453596,
+      "parent_train_scores": [
+        73.3475,
+        75.7475
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 19,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9987361344410949,
+      "best_group_probability": 0.21396177039635994,
+      "largest_to_smallest_sampling_probability": 1.1015629114793295,
+      "parent_train_scores": [
+        75.5208,
+        79.39
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9987361344410949,
+      "best_group_probability": 0.21396177039635994,
+      "largest_to_smallest_sampling_probability": 1.1015629114793295,
+      "parent_train_scores": [
+        75.5208,
+        75.8874
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 21,
+      "island": 0,
+      "score_groups": 10,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9997773707560637,
+      "best_group_probability": 0.34007504200013317,
+      "largest_to_smallest_sampling_probability": 1.0361091547345271,
+      "parent_train_scores": [
+        74.3286,
+        75.7475
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 22,
+      "island": 0,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9971075712797142,
+      "best_group_probability": 0.26479321214362284,
+      "largest_to_smallest_sampling_probability": 1.1326046723271723,
+      "parent_train_scores": [
+        79.2645,
+        79.7311
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 23,
+      "island": 1,
+      "score_groups": 15,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9986983925337996,
+      "best_group_probability": 0.26553858465697316,
+      "largest_to_smallest_sampling_probability": 1.0915132104958625,
+      "parent_train_scores": [
+        76.3313,
+        79.39
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 24,
+      "island": 1,
+      "score_groups": 16,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9986983925337996,
+      "best_group_probability": 0.26553858465697316,
+      "largest_to_smallest_sampling_probability": 1.0915132104958625,
+      "parent_train_scores": [
+        75.8874,
+        76.3313
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 25,
+      "island": 0,
+      "score_groups": 12,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980878332375018,
+      "best_group_probability": 0.34558892459308466,
+      "largest_to_smallest_sampling_probability": 1.1047178908761588,
+      "parent_train_scores": [
+        75.7475,
+        79.2645
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 26,
+      "island": 0,
+      "score_groups": 14,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980878332375018,
+      "best_group_probability": 0.34558892459308466,
+      "largest_to_smallest_sampling_probability": 1.1047178908761588,
+      "parent_train_scores": [
+        79.2645,
+        79.7311
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 27,
+      "island": 1,
+      "score_groups": 17,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9988880839896612,
+      "best_group_probability": 0.26436000322682224,
+      "largest_to_smallest_sampling_probability": 1.082967545121888,
+      "parent_train_scores": [
+        76.6138,
+        79.39
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 28,
+      "island": 0,
+      "score_groups": 15,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980878332375018,
+      "best_group_probability": 0.34558892459308466,
+      "largest_to_smallest_sampling_probability": 1.1047178908761588,
+      "parent_train_scores": [
+        75.7475,
+        79.7311
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 29,
+      "island": 0,
+      "score_groups": 17,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9983416188318702,
+      "best_group_probability": 0.25685197792578146,
+      "largest_to_smallest_sampling_probability": 1.1048394165279434,
+      "parent_train_scores": [
+        75.7475,
+        79.7311
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "round_1based": 30,
+      "island": 0,
+      "score_groups": 18,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9983416188318702,
+      "best_group_probability": 0.25685197792578146,
+      "largest_to_smallest_sampling_probability": 1.1048394165279434,
+      "parent_train_scores": [
+        75.7475,
+        79.7311
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 1,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 2,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9982065647977992,
+      "best_group_probability": 0.34971978125921716,
+      "largest_to_smallest_sampling_probability": 1.1093841039217813,
+      "parent_train_scores": [
+        71.8914,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 4,
+      "island": 0,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9326236032606104,
+      "best_group_probability": 0.25027257075646525,
+      "largest_to_smallest_sampling_probability": 2.5945225208100737,
+      "parent_train_scores": [
+        71.8914,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 2,
+      "eligible_groups": 2,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9999884826820231,
+      "best_group_probability": 0.5016968684854219,
+      "largest_to_smallest_sampling_probability": 1.006810587283545,
+      "parent_train_scores": [
+        74.3286,
+        74.6001
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.995802858228707,
+      "best_group_probability": 0.2778350286048614,
+      "largest_to_smallest_sampling_probability": 1.1716347548913417,
+      "parent_train_scores": [
+        73.5671,
+        74.6001
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 7,
+      "island": 1,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9352829057368223,
+      "best_group_probability": 0.2505820296886159,
+      "largest_to_smallest_sampling_probability": 2.5545983251369906,
+      "parent_train_scores": [
+        74.3286,
+        79.9031
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.998617794802217,
+      "best_group_probability": 0.3485335264338716,
+      "largest_to_smallest_sampling_probability": 1.095477126140322,
+      "parent_train_scores": [
+        77.9047,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 9,
+      "island": 0,
+      "score_groups": 9,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9983318468108384,
+      "best_group_probability": 0.26510675599267414,
+      "largest_to_smallest_sampling_probability": 1.1075412851165911,
+      "parent_train_scores": [
+        75.6055,
+        77.9047
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 10,
+      "island": 1,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9957242099209681,
+      "best_group_probability": 0.3641992339739762,
+      "largest_to_smallest_sampling_probability": 1.1495407330000245,
+      "parent_train_scores": [
+        74.3286,
+        79.9031
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 11,
+      "island": 0,
+      "score_groups": 11,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980988798318835,
+      "best_group_probability": 0.21454238750016694,
+      "largest_to_smallest_sampling_probability": 1.1248362843000936,
+      "parent_train_scores": [
+        74.9857,
+        75.6055
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 12,
+      "island": 1,
+      "score_groups": 9,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.995802858228707,
+      "best_group_probability": 0.2778350286048614,
+      "largest_to_smallest_sampling_probability": 1.1716347548913417,
+      "parent_train_scores": [
+        73.5671,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 13,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980988798318835,
+      "best_group_probability": 0.21454238750016694,
+      "largest_to_smallest_sampling_probability": 1.1248362843000936,
+      "parent_train_scores": [
+        74.9857,
+        76.0436
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 14,
+      "island": 0,
+      "score_groups": 15,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.998182120186487,
+      "best_group_probability": 0.17995254040941036,
+      "largest_to_smallest_sampling_probability": 1.1248362843000936,
+      "parent_train_scores": [
+        75.6055,
+        77.9047
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 11,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9968232583251054,
+      "best_group_probability": 0.2741178174443064,
+      "largest_to_smallest_sampling_probability": 1.1417646452264436,
+      "parent_train_scores": [
+        74.6001,
+        75.5279
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9968232583251054,
+      "best_group_probability": 0.2741178174443064,
+      "largest_to_smallest_sampling_probability": 1.1417646452264436,
+      "parent_train_scores": [
+        74.6001,
+        75.5279
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 17,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9974569914291723,
+      "best_group_probability": 0.21901490762704218,
+      "largest_to_smallest_sampling_probability": 1.1417646452264436,
+      "parent_train_scores": [
+        74.6002,
+        75.5279
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 17,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.998182120186487,
+      "best_group_probability": 0.17995254040941036,
+      "largest_to_smallest_sampling_probability": 1.1248362843000936,
+      "parent_train_scores": [
+        74.9857,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 19,
+      "island": 0,
+      "score_groups": 18,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.998182120186487,
+      "best_group_probability": 0.17995254040941036,
+      "largest_to_smallest_sampling_probability": 1.1248362843000936,
+      "parent_train_scores": [
+        74.9857,
+        77.9047
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 16,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9974569914291723,
+      "best_group_probability": 0.21901490762704218,
+      "largest_to_smallest_sampling_probability": 1.1417646452264436,
+      "parent_train_scores": [
+        74.6001,
+        76.4735
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 21,
+      "island": 1,
+      "score_groups": 18,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9975567716863438,
+      "best_group_probability": 0.18390727058829673,
+      "largest_to_smallest_sampling_probability": 1.1472841033244483,
+      "parent_train_scores": [
+        74.6002,
+        75.5279
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 22,
+      "island": 0,
+      "score_groups": 20,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9985092240484835,
+      "best_group_probability": 0.1788047761072557,
+      "largest_to_smallest_sampling_probability": 1.1161497058618741,
+      "parent_train_scores": [
+        76.0436,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 23,
+      "island": 0,
+      "score_groups": 22,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9985092240484835,
+      "best_group_probability": 0.1788047761072557,
+      "largest_to_smallest_sampling_probability": 1.1161497058618741,
+      "parent_train_scores": [
+        75.2958,
+        76.5593
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 24,
+      "island": 1,
+      "score_groups": 19,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9974569914291723,
+      "best_group_probability": 0.21901490762704218,
+      "largest_to_smallest_sampling_probability": 1.1417646452264436,
+      "parent_train_scores": [
+        76.4735,
+        79.9031
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 25,
+      "island": 1,
+      "score_groups": 21,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9979910334257129,
+      "best_group_probability": 0.1826186994963448,
+      "largest_to_smallest_sampling_probability": 1.1417617908183983,
+      "parent_train_scores": [
+        74.6002,
+        75.5279
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 26,
+      "island": 0,
+      "score_groups": 24,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9989034682311427,
+      "best_group_probability": 0.17596614723203682,
+      "largest_to_smallest_sampling_probability": 1.095477126140322,
+      "parent_train_scores": [
+        78.4884,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 27,
+      "island": 0,
+      "score_groups": 25,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9989034682311427,
+      "best_group_probability": 0.17596614723203682,
+      "largest_to_smallest_sampling_probability": 1.095477126140322,
+      "parent_train_scores": [
+        76.5593,
+        78.4884
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 28,
+      "island": 1,
+      "score_groups": 23,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980110341699622,
+      "best_group_probability": 0.21738889145984863,
+      "largest_to_smallest_sampling_probability": 1.1218846563624076,
+      "parent_train_scores": [
+        75.3027,
+        76.4735
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 29,
+      "island": 0,
+      "score_groups": 27,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9989034682311427,
+      "best_group_probability": 0.17596614723203682,
+      "largest_to_smallest_sampling_probability": 1.095477126140322,
+      "parent_train_scores": [
+        77.9047,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "round_1based": 30,
+      "island": 0,
+      "score_groups": 29,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9989244747255721,
+      "best_group_probability": 0.17342804882354004,
+      "largest_to_smallest_sampling_probability": 1.0885183939631646,
+      "parent_train_scores": [
+        77.9047,
+        79.6912
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 1,
+      "island": 1,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 2,
+      "island": 0,
+      "score_groups": 1,
+      "eligible_groups": 1,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 1.0,
+      "best_group_probability": 1.0,
+      "largest_to_smallest_sampling_probability": 1.0,
+      "parent_train_scores": [
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 3,
+      "island": 0,
+      "score_groups": 2,
+      "eligible_groups": 2,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9999865680757014,
+      "best_group_probability": 0.5018324917951932,
+      "largest_to_smallest_sampling_probability": 1.0073569302092655,
+      "parent_train_scores": [
+        74.3286,
+        74.6218
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 4,
+      "island": 1,
+      "score_groups": 2,
+      "eligible_groups": 2,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9999884741964116,
+      "best_group_probability": 0.5016974934782209,
+      "largest_to_smallest_sampling_probability": 1.0068131043131598,
+      "parent_train_scores": [
+        74.3286,
+        74.6002
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 5,
+      "island": 1,
+      "score_groups": 3,
+      "eligible_groups": 3,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9986516728900401,
+      "best_group_probability": 0.35060795599240985,
+      "largest_to_smallest_sampling_probability": 1.0834820768974434,
+      "parent_train_scores": [
+        74.6002,
+        77.5358
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 6,
+      "island": 1,
+      "score_groups": 5,
+      "eligible_groups": 5,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9370660061716105,
+      "best_group_probability": 0.239786150863057,
+      "largest_to_smallest_sampling_probability": 2.461713125364066,
+      "parent_train_scores": [
+        74.3286,
+        77.5358
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 7,
+      "island": 0,
+      "score_groups": 4,
+      "eligible_groups": 4,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9989029612177107,
+      "best_group_probability": 0.2585813820332147,
+      "largest_to_smallest_sampling_probability": 1.0868406486342173,
+      "parent_train_scores": [
+        71.2908,
+        72.7574
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 8,
+      "island": 0,
+      "score_groups": 6,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998657953880483,
+      "best_group_probability": 0.33861241460041847,
+      "largest_to_smallest_sampling_probability": 1.027712028632029,
+      "parent_train_scores": [
+        74.6218,
+        75.422
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 9,
+      "island": 1,
+      "score_groups": 6,
+      "eligible_groups": 6,
+      "quantile_filter_applied": false,
+      "relative_effective_sample_size": 0.9401788458115314,
+      "best_group_probability": 0.20569613018700245,
+      "largest_to_smallest_sampling_probability": 2.4617131253640654,
+      "parent_train_scores": [
+        73.85,
+        74.3286
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 10,
+      "island": 0,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998660646358194,
+      "best_group_probability": 0.33860850974507517,
+      "largest_to_smallest_sampling_probability": 1.027676059340493,
+      "parent_train_scores": [
+        74.33,
+        75.422
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 11,
+      "island": 1,
+      "score_groups": 7,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9986516728900401,
+      "best_group_probability": 0.35060795599240985,
+      "largest_to_smallest_sampling_probability": 1.0834820768974434,
+      "parent_train_scores": [
+        74.3286,
+        77.5358
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 12,
+      "island": 0,
+      "score_groups": 9,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9998737395240079,
+      "best_group_probability": 0.25469282550309846,
+      "largest_to_smallest_sampling_probability": 1.0277120286320287,
+      "parent_train_scores": [
+        74.3286,
+        74.33
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 13,
+      "island": 0,
+      "score_groups": 11,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999885773788012,
+      "best_group_probability": 0.25449210334849715,
+      "largest_to_smallest_sampling_probability": 1.0276760593404928,
+      "parent_train_scores": [
+        74.33,
+        75.422
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 14,
+      "island": 1,
+      "score_groups": 8,
+      "eligible_groups": 3,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.99871832125325,
+      "best_group_probability": 0.35020948430866555,
+      "largest_to_smallest_sampling_probability": 1.0796857213092135,
+      "parent_train_scores": [
+        74.6002,
+        77.5358
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 15,
+      "island": 1,
+      "score_groups": 10,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9973584132182906,
+      "best_group_probability": 0.2691065063465407,
+      "largest_to_smallest_sampling_probability": 1.139551768998677,
+      "parent_train_scores": [
+        74.6002,
+        75.3481
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 16,
+      "island": 1,
+      "score_groups": 12,
+      "eligible_groups": 4,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9976534066216323,
+      "best_group_probability": 0.26836435614890636,
+      "largest_to_smallest_sampling_probability": 1.1263614705456446,
+      "parent_train_scores": [
+        75.0659,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 17,
+      "island": 0,
+      "score_groups": 13,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9997883173116339,
+      "best_group_probability": 0.20465576040499253,
+      "largest_to_smallest_sampling_probability": 1.0412375941019099,
+      "parent_train_scores": [
+        75.422,
+        76.0721
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 18,
+      "island": 0,
+      "score_groups": 15,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9997883173116339,
+      "best_group_probability": 0.20465576040499253,
+      "largest_to_smallest_sampling_probability": 1.0412375941019099,
+      "parent_train_scores": [
+        74.4557,
+        75.1654
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 19,
+      "island": 1,
+      "score_groups": 14,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980709914320586,
+      "best_group_probability": 0.2138171486110581,
+      "largest_to_smallest_sampling_probability": 1.1263614705456448,
+      "parent_train_scores": [
+        77.5358,
+        77.7998
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 20,
+      "island": 1,
+      "score_groups": 16,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980709914320586,
+      "best_group_probability": 0.2138171486110581,
+      "largest_to_smallest_sampling_probability": 1.1263614705456448,
+      "parent_train_scores": [
+        77.5358,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 21,
+      "island": 0,
+      "score_groups": 17,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.999137199093724,
+      "best_group_probability": 0.2108149669842086,
+      "largest_to_smallest_sampling_probability": 1.0874358568127154,
+      "parent_train_scores": [
+        74.6218,
+        75.422
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 22,
+      "island": 0,
+      "score_groups": 19,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9991143787510268,
+      "best_group_probability": 0.17666874305016284,
+      "largest_to_smallest_sampling_probability": 1.090733057488294,
+      "parent_train_scores": [
+        74.5007,
+        77.9747
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 23,
+      "island": 1,
+      "score_groups": 16,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9980709914320586,
+      "best_group_probability": 0.2138171486110581,
+      "largest_to_smallest_sampling_probability": 1.1263614705456448,
+      "parent_train_scores": [
+        75.3481,
+        77.7998
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 24,
+      "island": 1,
+      "score_groups": 18,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9986101730159941,
+      "best_group_probability": 0.21230661113500274,
+      "largest_to_smallest_sampling_probability": 1.1184429557758047,
+      "parent_train_scores": [
+        75.3481,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 25,
+      "island": 0,
+      "score_groups": 21,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.998710133819604,
+      "best_group_probability": 0.17569921533893426,
+      "largest_to_smallest_sampling_probability": 1.0994774263832903,
+      "parent_train_scores": [
+        75.422,
+        77.9747
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 26,
+      "island": 0,
+      "score_groups": 23,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9987894512194627,
+      "best_group_probability": 0.17552434656230567,
+      "largest_to_smallest_sampling_probability": 1.0926653645873539,
+      "parent_train_scores": [
+        77.9747,
+        78.4152
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 27,
+      "island": 1,
+      "score_groups": 19,
+      "eligible_groups": 5,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9986101730159941,
+      "best_group_probability": 0.21230661113500274,
+      "largest_to_smallest_sampling_probability": 1.1184429557758047,
+      "parent_train_scores": [
+        77.7998,
+        79.8256
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 28,
+      "island": 0,
+      "score_groups": 24,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9990560384790981,
+      "best_group_probability": 0.17445479546692738,
+      "largest_to_smallest_sampling_probability": 1.0846365999837586,
+      "parent_train_scores": [
+        75.1654,
+        76.0721
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 29,
+      "island": 0,
+      "score_groups": 26,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9990560384790981,
+      "best_group_probability": 0.17445479546692738,
+      "largest_to_smallest_sampling_probability": 1.0846365999837586,
+      "parent_train_scores": [
+        75.422,
+        76.0721
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "round_1based": 30,
+      "island": 0,
+      "score_groups": 28,
+      "eligible_groups": 6,
+      "quantile_filter_applied": true,
+      "relative_effective_sample_size": 0.9990560384790981,
+      "best_group_probability": 0.17445479546692738,
+      "largest_to_smallest_sampling_probability": 1.0846365999837586,
+      "parent_train_scores": [
+        75.422,
+        76.0721
+      ]
+    }
+  ]
+}

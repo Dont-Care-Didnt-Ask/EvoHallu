@@ -1,0 +1,135 @@
+{
+  "hard_deadline_utc": "2026-10-15T10:45:00+00:00",
+  "actions": [
+    {
+      "id": "rotate_qwen35_9b",
+      "kind": "command",
+      "log": "out/campaign/rotate_qwen35_9b.log",
+      "timeout": 60,
+      "command": [
+        "python",
+        "scripts/rotate_checkpoint.py",
+        "/dev/shm/mod1-models/Qwen3.5-9B"
+      ]
+    },
+    {
+      "id": "download_qwen35_4b",
+      "kind": "command",
+      "log": "out/campaign/download_qwen35_4b.log",
+      "timeout": 1800,
+      "command": [
+        "python",
+        "scripts/download_checkpoint.py",
+        "Qwen/Qwen3.5-4B",
+        "/dev/shm/mod1-models/Qwen3.5-4B",
+        "--revision",
+        "851bf6e806efd8d0a36b00ddf55e13ccb7b8cd0a"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "serve_qwen35_4b",
+      "kind": "serve",
+      "log": "out/campaign/qwen35_4b_server.log",
+      "timeout": 600,
+      "command": [
+        "vllm",
+        "serve",
+        "/dev/shm/mod1-models/Qwen3.5-4B",
+        "--served-model-name",
+        "Qwen/Qwen3.5-4B",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "8000",
+        "--dtype",
+        "bfloat16",
+        "--max-model-len",
+        "16384",
+        "--max-num-seqs",
+        "2",
+        "--gpu-memory-utilization",
+        "0.55",
+        "--language-model-only",
+        "--reasoning-parser",
+        "qwen3"
+      ]
+    },
+    {
+      "id": "qwen35_4b_evo_1048",
+      "kind": "command",
+      "log": "out/campaign/qwen35_4b_evo_1048.log",
+      "timeout": 1920,
+      "command": [
+        "python",
+        "src/experiments/main.py",
+        "--config-name",
+        "config_uq_trial",
+        "model=qwen35_4b",
+        "run_identifier_name=qwen35_4b_evo",
+        "search_mode=evolution",
+        "seed=1048",
+        "num_rounds=30",
+        "model.max_tokens=4096",
+        "trial.max_seconds=1800",
+        "trial.request_timeout_seconds=300",
+        "trial.max_total_tokens=3000000",
+        "trial.serving_profile=vllm_default"
+      ],
+      "continue_on_failure": true
+    },
+    {
+      "id": "stop_qwen35_4b",
+      "kind": "stop_server"
+    },
+    {
+      "id": "evaluate_augmented_four_writers",
+      "kind": "command",
+      "log": "out/campaign/evaluate_augmented_four_writers.log",
+      "timeout": 7200,
+      "minimum_remaining_seconds": 0,
+      "command": [
+        "python",
+        "scripts/evaluate_parallel.py",
+        "--workers",
+        "3",
+        "--bootstrap",
+        "500",
+        "--output",
+        "out/campaign/evaluation_4b_delta",
+        "--frozen-glob",
+        "out/logs/mod1/uncertainty_quantification_qwen35_4b_evo_1048/frozen_estimator.py",
+        "--method-prefix",
+        "new/uncertainty_quantification_qwen35_4b_evo_1048"
+      ],
+      "continue_on_failure": false
+    },
+    {
+      "id": "merge_phase3_small_cohort",
+      "kind": "command",
+      "command": [
+        "python",
+        "scripts/merge_evaluation_cohorts.py",
+        "--original",
+        "out/campaign/evaluation",
+        "--additional",
+        "out/campaign/evaluation_4b_delta",
+        "--output",
+        "out/campaign/evaluation_with_4b"
+      ],
+      "log": "out/campaign/merge_phase3_small.log",
+      "timeout": 180,
+      "continue_on_failure": false
+    },
+    {
+      "id": "verify_augmented_cohort",
+      "kind": "command",
+      "log": "out/campaign/verify_augmented_cohort.log",
+      "timeout": 300,
+      "command": [
+        "python",
+        "scripts/verify_augmented_evaluation.py"
+      ]
+    }
+  ]
+}

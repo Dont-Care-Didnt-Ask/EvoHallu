@@ -1,0 +1,8 @@
+{
+  "rows": 512,
+  "models": 6,
+  "ordinary_seconds": 1.2697642054408789,
+  "shared_features_seconds": 0.1903419867157936,
+  "predictions_bit_identical": true,
+  "held_out_data_read": false
+}

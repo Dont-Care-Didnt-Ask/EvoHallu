@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1. **Analysis of Shown Detectors**\n   - **LogProb (Baseline):** The simplest approach, using the sum of negative log-probabilities of the generated tokens. This captures the model's confidence in its own output but is heavily influenced by the length of the sequence (log-probabilities are additive).\n   - **Top-K Contrast (53.25):** Attempts to measure distribution concentration by comparing the sum of top-k probabilities against a conservative estimate of the tail mass. It fails to account for the fact that the \"tail\" of the vocabulary is often not uniform; simply taking the minimum logit underestimates the probability mass of the actual tail tokens. It also sums these ratios across the sequence, which may not be linearly correlated with hallucination likelihood.\n\n2. **Ideation of Novel Detector**\n   - **Approach:** **Top-Tail Entropy (Top-20% vs Bottom-20%)**\n   - **Rationale:** Instead of looking at the absolute sum of probabilities (LogProb) or a global contrast (Top-K), this detector focuses on the *spread* of the probability mass.\n   - **Mechanism:** We calculate the entropy of the top 20% of the vocabulary and the entropy of the bottom 20% of the vocabulary (excluding the top 20%). Hallucinations often occur when the model has high confidence in a low-probability token (high entropy in the tail) or when the model is \"overconfident\" in a generic token (low entropy in the top).\n   - **Metric:** The ratio of Tail Entropy to Top Entropy. A high ratio suggests the model is distributing probability mass across many low-confidence tokens (hallucination signal), while a low ratio suggests a \"tight\" distribution (ground truth signal).\n\n3. **Code**\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\nfrom scipy.special import softmax\nfrom scipy.stats import entropy\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"top_k_logits\",\n                \"top_k_indices\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by comparing the entropy of the top 20% \n        of the probability distribution against the entropy of the bottom 20%.\n\n        The detector calculates the entropy of the top 20% tokens and the \n        entropy of the bottom 20% tokens (excluding the top 20%). \n        It returns the ratio of Tail Entropy to Top Entropy. \n        High ratios indicate the model is spreading probability mass \n        across many low-confidence tokens (hallucination signal).\n\n        Hypothesis: \n        Future work should investigate whether the absolute magnitude of \n        the tail entropy (rather than the ratio) correlates better with \n        specific semantic categories of hallucinations (e.g., entity vs. relation).\n        \"\"\"\n        top_k_logits = stats[\"top_k_logits\"]\n        scores = []\n\n        for logits in top_k_logits:\n            # 1. Softmax to get probabilities for the top-k tokens\n            probs = softmax(logits, axis=-1)  # Shape (n_tokens, k)\n\n            # 2. Sort probabilities to identify Top and Bottom 20%\n            # We sort the probabilities in descending order\n            sorted_probs = np.sort(probs, axis=-1)[:, ::-1]  # (n_tokens, k)\n            \n            # Calculate split index for 20%\n            k = logits.shape[-1]\n            split_idx = int(k * 0.2)\n\n            # 3. Extract Top and Bottom 20% probability vectors\n            # Top 20% includes the split index\n            top_probs = sorted_probs[:, :split_idx+1]\n            # Bottom 20% excludes the top split_idx\n            bottom_probs = sorted_probs[:, split_idx+1:]\n\n            # 4. Calculate Entropy\n            # We calculate entropy using natural log (base e) as per scipy default\n            top_entropy = entropy(top_probs, axis=-1)\n            bottom_entropy = entropy(bottom_probs, axis=-1)\n\n            # 5. Calculate Ratio (Tail Entropy / Top Entropy)\n            # Add epsilon to avoid division by zero if Top Entropy is 0\n            ratio = bottom_entropy / (top_entropy + 1e-12)\n\n            # 6. Aggregate\n            # We sum the ratios across the sequence. \n            # A higher sum implies more \"spread\" in the tail relative to the top.\n            seq_score = np.sum(ratio)\n\n            scores.append(seq_score)\n\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 993,
+      "prompt_tokens": 1110,
+      "total_tokens": 2103,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 76.22154794898233
+  },
+  {
+    "content": "1.  **Analysis of Shown Detectors**\n    *   **LogProb Baseline:** This is the standard approach, summing negative log-probabilities. It is effective because hallucinations typically occur in regions where the model is less confident (higher log-probability loss), though it suffers from variance across different tokens (e.g., \"the\" vs. \"theoretical\").\n    *   **Tail Mass Contrast:** This detector attempts to measure concentration by comparing the sum of the top-512 probabilities against an estimate of the remaining vocabulary mass. The hypothesis relies on the idea that a \"tight\" distribution (high top-k mass, low tail mass) correlates with factual accuracy. However, the approximation of the tail mass using the minimum logit is crude; a model might have a very low minimum logit but still place significant mass on tokens outside the top-512 (the \"long tail\"), leading to false negatives. Additionally, the aggregation method (summing ratios) can be sensitive to the magnitude of the top-k mass itself.\n\n2.  **Ideation of Novel Detector**\n    *   **Hypothesis:** The \"concentration\" of the probability mass within the top-512 is more important than the absolute magnitude of the tail. If the model is hallucinating, it often spreads probability mass across many low-confidence tokens rather than concentrating it in the top-512.\n    *   **Approach:** We will calculate the **Kullback-Leibler (KL) Divergence** between the top-512 distribution and a uniform distribution over the top-512.\n    *   **Why:** A uniform distribution represents maximum entropy/concentration (no specific token is preferred). If the model is hallucinating, it might be \"guessing\" among many tokens, leading to a flatter distribution (closer to uniform) compared to a factual token, which is usually concentrated in the top-1 or top-2.\n    *   **Refinement:** To reduce variance, we will aggregate the top-20% of the top-512 logits (the \"head\" of the distribution) rather than using all 512, focusing on the most confident tokens.\n\n3.  **Code Block**",
+    "usage": {
+      "completion_tokens": 449,
+      "prompt_tokens": 1110,
+      "total_tokens": 1559,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 35.04411528099445
+  }
+]

@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Likelihood (NLL)** as the signal. It aggregates the log-probabilities of all generated tokens (excluding the first) by summing them and negating.\n- **Approach**: Global perplexity proxy.\n- **Weakness**: This metric is highly sensitive to sequence length. Longer sequences naturally accumulate higher total NLL even if the model is confident, while short hallucinations might be masked by the brevity of the text. It lacks token-level granularity to distinguish between a \"confidently wrong\" token and a \"plausible but wrong\" one in a long context.\n\n### Proposed Detector\n**Signal**: **Mean Top-1 Log-Probability of Hallucinated Tokens**.\n**Aggregation Principle**: **Sequence-level Average**.\n\n**Hypothesis**: Hallucinated tokens often appear as \"unlikely\" events within the model's own probability distribution (low log-prob), whereas factual tokens, even if rare in general corpora, are typically assigned higher relative probabilities by the model given the specific context. By focusing on the *mean* log-prob of the generated sequence, we normalize for sequence length and directly measure the model's confidence in its own output. Low confidence (high negative log-prob) correlates strongly with hallucination.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the average confidence of the model \n        in its generated tokens. Lower confidence (more negative log-prob) \n        indicates higher likelihood of hallucination.\n        \n        Hypothesis: Hallucinated tokens are assigned significantly lower \n        log-probabilities by the model compared to factual tokens within \n        the same context window.\n        \"\"\"\n        # Calculate mean log-prob per sequence\n        # sequence_logprobs: List[np.ndarray] where inner array has length n_i - 1\n        mean_log_probs = np.array([\n            np.mean(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        # Convert to negative log-prob (higher score = more likely hallucination)\n        # If mean_log_prob is very negative, -mean_log_prob is large positive\n        scores = -mean_log_probs\n        return scores\n```",
+    "usage": {
+      "completion_tokens": 571,
+      "prompt_tokens": 498,
+      "total_tokens": 1069,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.717667839024216
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Likelihood (NLL)** as the sole signal.\n- **Approach**: It sums the negative log-probabilities of all generated tokens (excluding the first) for each sequence.\n- **Logic**: Assumes that hallucinated content (facts not in the training distribution or context) will have lower probability under the model, thus increasing the NLL.\n- **Limitation**: This is a global sequence-level metric. It conflates the model's confidence in the *entire* generation with the specific atomic claim. A long sequence with mostly correct context but one hallucinated fact might still have a low total NLL (high likelihood) simply because the correct context dominates the sum. Conversely, a short, highly confident hallucination might not spike the total NLL enough to distinguish it from a confident correct answer.\n\n### Proposed Detector\n**Signal**: **Mean Per-Token Negative Log-Likelihood (Mean NLL)** of the generated sequence.\n**Aggregation Principle**: Instead of summing probabilities across the whole sequence, we calculate the average log-probability per token. This normalizes the score by sequence length, making the detector sensitive to the *density* of low-probability tokens rather than the total count. Hallucinations often manifest as a cluster of low-probability tokens; averaging prevents long, correct sequences from masking these local anomalies, while short hallucinations become more prominent relative to the sequence length.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by computing the mean negative log-probability per token.\n        Hypothesis: Hallucinated atomic claims introduce localized regions of low probability; \n        averaging normalizes for sequence length, making these local drops more discriminative \n        than total sum metrics which are dominated by long correct contexts.\n        \"\"\"\n        # Calculate mean negative log-prob for each sequence\n        # sequence_logprobs is List[np.ndarray], each inner array is length n_i - 1\n        mean_neg_logprobs = np.array([\n            -np.mean(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        return mean_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 561,
+      "prompt_tokens": 498,
+      "total_tokens": 1059,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.590300962008769
+  }
+]

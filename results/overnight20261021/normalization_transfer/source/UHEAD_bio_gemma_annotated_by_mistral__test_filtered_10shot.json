@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+  "phase": "source",
+  "rows": 2057,
+  "raw_sha256": "9e20c2fef8c2b830a62dbcc9bc63fe0dd52e44a7d3eed26748e4cc1589e9bd75",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "d3d22fc687967bedf07bcaa7585f65a62d0835621a02b7345eb7c5b5f49b2d40",
+  "bootstrap_sha256": "7c32f16ad87417938adc6c03c0b529156e4f05cf80fff3cbb7973c2ad0ab1954",
+  "source_lp_only_saved_prediction_parity": true,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_512",
+      "score_sha256": "9506ffc1739a9c20da227b2084351aed74ee4911f5c9cad02aa2b77feb29084a",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

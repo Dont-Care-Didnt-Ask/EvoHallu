@@ -1,0 +1,15 @@
+{
+  "status": "started_cpu_diagnostic",
+  "pid": 20245,
+  "started_utc": "2026-10-21T22:18:02.787790+00:00",
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "/workspace/mod1/scripts/overnight_batch_sensitivity.py",
+    "--execute"
+  ],
+  "workers": 4,
+  "cuda_visible_devices": "",
+  "plan_sha256": "9be91ae1c55eeea698ce75db689e16feb2bdccbcd458ba8bbd3e45e72bc2f4c9",
+  "script_sha256": "9f554b2ed30a2aa80bec3e92f2dc9693fec1c19a78ee0c405b9a6e94863a5ba1",
+  "log": "/workspace/mod1/results/overnight20261021/batch_sensitivity/run.log"
+}

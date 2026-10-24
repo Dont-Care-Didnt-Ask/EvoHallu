@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### 1. Analysis of Shown Detectors\nThe provided implementation uses a **Simple Aggregation** approach. It takes the sum of the negative log-probabilities (total negative log-likelihood) for the entire generated sequence. The hypothesis is that hallucinations are associated with higher likelihoods (or lower negative log-probabilities) because the model is \"confident\" in its false information.\n\n### 2. Proposed Detector\n**Signal:** **Local-Refinement Confidence**.\n**Aggregation Principle:** **Weighted Sum of Local Refinement**.\n**Change:** Instead of summing the log-probabilities of the *entire* sequence, this detector sums the log-probabilities of the *final token* (the one that closes the atomic claim). It assumes that a hallucination is more likely to be \"finalized\" with high confidence (low negative log-probability) than a non-hallucination, and that the beginning of the sequence is often noisy or irrelevant.\n\n### 3. Code\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the negative log-probability of the final token in each sequence.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        more likely to be finalized with higher confidence (lower negative log-prob)\n        than ground-truth facts, as the model may overfit to the false pattern.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # seq_logprobs length is n_i - 1. The last element corresponds to the \n            # probability of the final token (index n_i - 2 in the sequence).\n            if len(seq_logprobs) > 0:\n                final_neg_logprob = -seq_logprobs[-1]\n            else:\n                final_neg_logprob = 0.0\n            scores.append(final_neg_logprob)\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 474,
+      "prompt_tokens": 489,
+      "total_tokens": 963,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 36.65034940800979
+  },
+  {
+    "content": "1. **Analysis of Shown Detectors**\nThe provided code implements a simple **global surprisal detector**. It calculates the total negative log-probability (sum of log-likelihoods) for the entire generated sequence. The signal is the aggregate confidence of the model over the entire atomic claim. The aggregation principle is summation across the full sequence length.\n\n2. **Proposed Detector**\n**Signal:** **Local Surprisal Volatility**.\n**Aggregation Principle:** **Mean of local variance**.\n**Structural Difference:** Unlike the global sum, this detector looks at **local windows** (contiguous runs) of tokens. It computes the variance of log-probabilities within these windows. Hallucinations often exhibit unstable confidence (high variance) within specific segments, even if the overall sum is high, whereas coherent text typically has smoother confidence profiles. This explores the local statistical properties rather than the global aggregate.\n\n3. **Code**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Input: List[np.ndarray] of shape (n_i - 1,)\n        # Output: np.ndarray of shape [N]\n        \n        # Hypothesis: Hallucinations exhibit higher local variance in log-probability \n        # (confidence instability) compared to coherent text.\n        \n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            n = len(seq_logprobs)\n            if n < 2:\n                scores.append(0.0)\n                continue\n            \n            # Compute variance of the sequence log-probabilities\n            # This measures local volatility of the model's confidence\n            seq_variance = np.var(seq_logprobs)\n            scores.append(seq_variance)\n            \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 429,
+      "prompt_tokens": 511,
+      "total_tokens": 940,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 33.32968549602083
+  }
+]

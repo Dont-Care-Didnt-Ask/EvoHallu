@@ -1,0 +1,923 @@
+{
+  "generated_utc": "2026-10-15T10:34:25.424492+00:00",
+  "metric_label_column": "is_hallu, as supplied",
+  "paper_typical_rounds_per_run": 500,
+  "paper_candidates_per_round": 2,
+  "primary_requested_rounds_per_run": 30,
+  "fraction_of_paper_round_budget": 0.06,
+  "llm_run_categories": {
+    "protocol_failure": {
+      "runs": 2,
+      "requests": 12,
+      "valid_candidates": 0,
+      "elapsed_seconds": 355.22821983881295,
+      "reported_tokens": 10222
+    },
+    "primary_evolution": {
+      "runs": 7,
+      "requests": 402,
+      "valid_candidates": 283,
+      "elapsed_seconds": 16566.90539803356,
+      "reported_tokens": 1335172
+    },
+    "generation_control": {
+      "runs": 5,
+      "requests": 252,
+      "valid_candidates": 171,
+      "elapsed_seconds": 8345.37664235197,
+      "reported_tokens": 413506
+    },
+    "pilot": {
+      "runs": 1,
+      "requests": 10,
+      "valid_candidates": 9,
+      "elapsed_seconds": 841.2694434057921,
+      "reported_tokens": 26075
+    }
+  },
+  "llm_run_details": [
+    {
+      "run": "uncertainty_quantification_devstral_evo_1048",
+      "status": "finished",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "fp8_marlin_eager",
+      "writer_weight_precision": "published_fp8",
+      "requested_rounds": 30,
+      "requests": 6,
+      "valid_candidates": 0,
+      "validation_auc_percent": 75.7504,
+      "elapsed_seconds": 10.908337144181132,
+      "reported_tokens": 0,
+      "protocol_excluded": true,
+      "protocol_exclusion": {
+        "utc": "2026-10-15T08:57:30.513176+00:00",
+        "reason": "All six requests rejected with HTTP400 before token generation: native Mistral tokenizer forbids chat_template_kwargs. This is a request protocol failure, not a writer capability result.",
+        "replacement_run": "uncertainty_quantification_devstral_evo_native_1048",
+        "target_quality_evaluated_at_exclusion": false
+      },
+      "requests_without_usage": 6,
+      "invalid_candidate_errors": {
+        "BadRequestError: Error code: 400 - {'error': {'message': 'chat_template is not supported for Mistral tokenizers. (parameter=chat_template)', 'type': 'BadRequestError', 'param': 'chat_template', 'code': 400}}": 6
+      },
+      "valid_request_fraction": 0.0,
+      "generation_seconds_including_failed_requests": 0.04149284400045872,
+      "category": "protocol_failure",
+      "actual_rounds": 3,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": null,
+      "stop_reason": "consecutive_failed_rounds",
+      "validation_curve": {}
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 46,
+      "validation_auc_percent": 79.2575,
+      "elapsed_seconds": 2126.1730163656175,
+      "reported_tokens": 141183,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "NameError: name 'k' is not defined": 1,
+        "ValueError: Input contains NaN.": 8,
+        "TypeError: array type float16 is unsupported in linalg": 2,
+        "ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()": 1
+      },
+      "valid_request_fraction": 0.7666666666666667,
+      "complexity_validation_spearman": 0.25717105717919886,
+      "mean_train_validation_gap_pp": -0.06818695652174,
+      "mean_prediction_spearman": 0.37430575679956424,
+      "prediction_pairs_above_0995_fraction": 0.1072463768115942,
+      "diversity_candidates_with_saved_predictions": 46,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9843660065805728,
+        "identical_ranks": false,
+        "candidate_hash": "a033e9afca603fcc7e24e7a0820d68465fc2dca6315270955748648d3247a27f"
+      },
+      "generation_seconds_including_failed_requests": 1635.040545862168,
+      "macro_auc_percent": 69.42873391244323,
+      "gain_pp": 3.7848515972787595,
+      "duplicate_disjoint_macro_auc_percent": 69.36033626109014,
+      "macro_auc_ci95_percent": [
+        68.43480458936808,
+        70.30431994874816
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.1246537451081293,
+        4.532584242881424
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 28,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 76.3542,
+        "10": 76.3542,
+        "20": 78.7735,
+        "30": 79.2575
+      }
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 43,
+      "validation_auc_percent": 79.5008,
+      "elapsed_seconds": 2008.6850759219378,
+      "reported_tokens": 138096,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "IndexError: index 14924 is out of bounds for axis 1 with size 512": 1,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1,
+        "AxisError: axis 1 is out of bounds for array of dimension 1": 1,
+        "ValueError: Input contains NaN.": 7,
+        "NameError: name 'stats' is not defined": 1,
+        "IndexError: index 0 is out of bounds for axis 0 with size 0": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,512) (27,) ": 1,
+        "TypeError: array type float16 is unsupported in linalg": 1
+      },
+      "valid_request_fraction": 0.7166666666666667,
+      "complexity_validation_spearman": 0.417478661530327,
+      "mean_train_validation_gap_pp": 0.01562558139534985,
+      "mean_prediction_spearman": 0.34334087589940554,
+      "prediction_pairs_above_0995_fraction": 0.11406423034330011,
+      "diversity_candidates_with_saved_predictions": 43,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9790401227201923,
+        "identical_ranks": false,
+        "candidate_hash": "f0d6566237d9d7f42ee6e6cd383d86f24c01838b2c3289a15ef1261dd9054d48"
+      },
+      "generation_seconds_including_failed_requests": 1574.78080095537,
+      "macro_auc_percent": 69.2343481691619,
+      "gain_pp": 3.5904658539974292,
+      "duplicate_disjoint_macro_auc_percent": 69.16826619385816,
+      "macro_auc_ci95_percent": [
+        68.22766941224846,
+        70.10852606216548
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.0007114160564585,
+        4.203339890413913
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 28,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 75.8347,
+        "10": 76.0611,
+        "20": 78.7667,
+        "30": 79.5008
+      }
+    },
+    {
+      "run": "uncertainty_quantification_laguna_independent_1048",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 35,
+      "validation_auc_percent": 79.0003,
+      "elapsed_seconds": 2327.3694228772074,
+      "reported_tokens": 85793,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: Input contains NaN.": 18,
+        "AttributeError: module 'numpy' has no attribute 'logsumexp'": 1,
+        "NameError: name 'pearsonr' is not defined": 1,
+        "NameError: name 'k' is not defined": 2,
+        "NameError: name 'softmax' is not defined": 1,
+        "IndexError: index 27 is out of bounds for axis 0 with size 27": 2
+      },
+      "valid_request_fraction": 0.5833333333333334,
+      "complexity_validation_spearman": 0.12867481306655484,
+      "mean_train_validation_gap_pp": 0.04967999999999872,
+      "mean_prediction_spearman": 0.2638756320505668,
+      "prediction_pairs_above_0995_fraction": 0.08235294117647059,
+      "diversity_candidates_with_saved_predictions": 35,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9853869245538133,
+        "identical_ranks": false,
+        "candidate_hash": "f2c3e705219d61996cb45b2bde9680ad74a72933b68fdeb525d0cd3eaf4761de"
+      },
+      "generation_seconds_including_failed_requests": 1749.191167615354,
+      "macro_auc_percent": 68.30606336316065,
+      "gain_pp": 2.662181047996171,
+      "duplicate_disjoint_macro_auc_percent": 68.23088588577357,
+      "macro_auc_ci95_percent": [
+        67.2860551552135,
+        69.15058388151309
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.0258157798981937,
+        3.3062571080298073
+      ],
+      "category": "generation_control",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 6,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 75.796,
+        "10": 79.0003,
+        "20": 79.0003,
+        "30": 79.0003
+      }
+    },
+    {
+      "run": "uncertainty_quantification_laguna_seeded_1048",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "baseline_seeded",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 43,
+      "validation_auc_percent": 78.7735,
+      "elapsed_seconds": 1995.2719495054334,
+      "reported_tokens": 78062,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: Input contains NaN.": 7,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 2,
+        "evaluation timeout after 120.0s": 1,
+        "IndexError: invalid index to scalar variable.": 1,
+        "TypeError: array type float16 is unsupported in linalg": 2,
+        "AxisError: axis 1 is out of bounds for array of dimension 1": 1,
+        "TypeError: cannot unpack non-iterable numpy.float64 object": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 1
+      },
+      "valid_request_fraction": 0.7166666666666667,
+      "complexity_validation_spearman": -0.021008090704746435,
+      "mean_train_validation_gap_pp": 0.1677883720930226,
+      "mean_prediction_spearman": 0.1420967026395826,
+      "prediction_pairs_above_0995_fraction": 0.04413472706155633,
+      "diversity_candidates_with_saved_predictions": 42,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope",
+        "prediction_spearman": 0.9999977650572753,
+        "identical_ranks": false,
+        "candidate_hash": "c60ffa6638ba71c737befd34fd5a642a4d058b31c628949f95ee90203bfbedd0"
+      },
+      "generation_seconds_including_failed_requests": 1440.8621873427182,
+      "macro_auc_percent": 68.5347209309762,
+      "gain_pp": 2.890838615811731,
+      "duplicate_disjoint_macro_auc_percent": 68.45684832934342,
+      "macro_auc_ci95_percent": [
+        67.54847223281976,
+        69.37273829139961
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2185096967812616,
+        3.550334082594443
+      ],
+      "category": "generation_control",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 21,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 75.7504,
+        "10": 76.361,
+        "20": 77.4586,
+        "30": 78.7735
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-4B",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 42,
+      "valid_candidates": 16,
+      "validation_auc_percent": 78.0317,
+      "elapsed_seconds": 705.6375347152352,
+      "reported_tokens": 147190,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.": 4,
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 9,
+        "AttributeError: 'list' object has no attribute 'shape'": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 28": 2,
+        "ValueError: Shape mismatch: got (), expected (512,)": 1,
+        "ValueError: Input contains NaN.": 3,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 27": 1,
+        "IndexError: index 5120 is out of bounds for axis 0 with size 28": 1,
+        "ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()": 1,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1
+      },
+      "valid_request_fraction": 0.38095238095238093,
+      "complexity_validation_spearman": 0.11331864730826258,
+      "mean_train_validation_gap_pp": 0.05789375000000052,
+      "mean_prediction_spearman": -0.028492109044912315,
+      "prediction_pairs_above_0995_fraction": 0.0,
+      "diversity_candidates_with_saved_predictions": 14,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_TopBottomRatio",
+        "prediction_spearman": 0.9909236406999182,
+        "identical_ranks": false,
+        "candidate_hash": "b45f63c83c4ccba6953cb5a88b0fa0788e8d930ce46b04805030f597e78caecd"
+      },
+      "generation_seconds_including_failed_requests": 386.681858336553,
+      "macro_auc_percent": 68.36932125185352,
+      "gain_pp": 2.725438936689045,
+      "duplicate_disjoint_macro_auc_percent": 68.28462753341414,
+      "macro_auc_ci95_percent": [
+        67.39153217278438,
+        69.19374813183103
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.964823532088282,
+        3.464467764436969
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 21,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 10,
+      "stop_reason": "consecutive_failed_rounds",
+      "validation_curve": {
+        "5": 75.7504,
+        "10": 78.0317,
+        "20": 78.0317
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 32,
+      "validation_auc_percent": 77.8208,
+      "elapsed_seconds": 1266.4133275095373,
+      "reported_tokens": 214266,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: operands could not be broadcast together with shapes (28,) (6,) ": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "TypeError: list indices must be integers or slices, not tuple": 2,
+        "ValueError: setting an array element with a sequence.": 2,
+        "IndexError: index 26 is out of bounds for axis 0 with size 26": 1,
+        "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>": 1,
+        "AttributeError: 'list' object has no attribute 'shape'": 4,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 512": 2,
+        "IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices": 1,
+        "ValueError: operands could not be broadcast together with shapes (15,) (14,) ": 1,
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 1,
+        "IndexError: index 11 is out of bounds for axis 0 with size 11": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 2,
+        "IndexError: shape mismatch: indexing arrays could not be broadcast together with shapes (27,) (28,) ": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,) (26,) ": 1,
+        "IndexError: invalid index to scalar variable.": 1,
+        "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.": 1,
+        "IndexError: boolean index did not match indexed array along axis 0; size of axis is 27 but size of corresponding boolean axis is 28": 1,
+        "SyntaxError: invalid syntax (<unknown>, line 187)": 1
+      },
+      "valid_request_fraction": 0.5333333333333333,
+      "complexity_validation_spearman": -0.37616865261228233,
+      "mean_train_validation_gap_pp": 0.13758124999999932,
+      "mean_prediction_spearman": 0.2915995669703785,
+      "prediction_pairs_above_0995_fraction": 0.047311827956989246,
+      "diversity_candidates_with_saved_predictions": 31,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.8648884765059747,
+        "identical_ranks": false,
+        "candidate_hash": "83c36ab82dd92b5e1f6d12b45858a707900763c27de9aeb6d2119110c37c1e9c"
+      },
+      "generation_seconds_including_failed_requests": 852.1369413752109,
+      "macro_auc_percent": 68.01845167936695,
+      "gain_pp": 2.374569364202472,
+      "duplicate_disjoint_macro_auc_percent": 67.97178305826702,
+      "macro_auc_ci95_percent": [
+        66.9963926569551,
+        68.9284551586938
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.988705174843352,
+        2.7707381239489837
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 12,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 76.4304,
+        "10": 76.4304,
+        "20": 77.8208,
+        "30": 77.8208
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 36,
+      "validation_auc_percent": 79.5752,
+      "elapsed_seconds": 1128.5983065348119,
+      "reported_tokens": 221536,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 5,
+        "ImportError: cannot import name 'convolve1d' from 'scipy.signal' (/usr/local/lib/python3.12/dist-packages/scipy/signal/__init__.py)": 1,
+        "ValueError: Input contains NaN.": 6,
+        "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.": 4,
+        "TypeError: list indices must be integers or slices, not tuple": 3,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 512": 1,
+        "IndexError: index 14924 is out of bounds for axis 1 with size 512": 2,
+        "ValueError: operands could not be broadcast together with shapes (28,512) (28,) ": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 1
+      },
+      "valid_request_fraction": 0.6,
+      "complexity_validation_spearman": 0.15934101326514785,
+      "mean_train_validation_gap_pp": -0.5944972222222222,
+      "mean_prediction_spearman": 0.256748264787611,
+      "prediction_pairs_above_0995_fraction": 0.020634920634920634,
+      "diversity_candidates_with_saved_predictions": 36,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope",
+        "prediction_spearman": 0.7614401506293481,
+        "identical_ranks": false,
+        "candidate_hash": "109521072ee3a42a4fa18e7112ac761a2a8bf944bffa2266ed9a04be791e5a21"
+      },
+      "generation_seconds_including_failed_requests": 727.8415014483035,
+      "macro_auc_percent": 69.54116727473746,
+      "gain_pp": 3.8972849595729855,
+      "duplicate_disjoint_macro_auc_percent": 69.4883053848028,
+      "macro_auc_ci95_percent": [
+        68.60788766953256,
+        70.456784772449
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.6013087101239822,
+        4.240313795873778
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 16,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 76.8433,
+        "10": 76.8433,
+        "20": 79.5752,
+        "30": 79.5752
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_independent_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 12,
+      "valid_candidates": 1,
+      "validation_auc_percent": 75.7504,
+      "elapsed_seconds": 265.94331633485854,
+      "reported_tokens": 35213,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 8,
+        "ImportError: cannot import name 'entropy' from 'scipy.special' (/usr/local/lib/python3.12/dist-packages/scipy/special/__init__.py)": 3
+      },
+      "valid_request_fraction": 0.08333333333333333,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "SequenceLogProb_OutlierScore",
+        "prediction_spearman": 0.9992127342507969,
+        "identical_ranks": false,
+        "candidate_hash": "7f86386bd904aa4004ee5ff6b981651e3d52f4210502aa07a5ed690d46e5b08a"
+      },
+      "generation_seconds_including_failed_requests": 200.4573174789548,
+      "macro_auc_percent": 65.64388231516448,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_macro_auc_percent": 65.61765496897712,
+      "macro_auc_ci95_percent": [
+        64.70175354444672,
+        66.54085353608747
+      ],
+      "paired_macro_gain_ci95_pp": [
+        0.0,
+        0.0
+      ],
+      "category": "generation_control",
+      "actual_rounds": 6,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": null,
+      "stop_reason": "consecutive_failed_rounds",
+      "validation_curve": {
+        "5": 75.7504
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_seeded_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "baseline_seeded",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 34,
+      "validation_auc_percent": 79.71,
+      "elapsed_seconds": 889.3338226508349,
+      "reported_tokens": 112438,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ImportError: cannot import name 'convolve1d' from 'scipy.signal' (/usr/local/lib/python3.12/dist-packages/scipy/signal/__init__.py)": 1,
+        "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>": 3,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 1,
+        "NameError: name 'BaseEstimator' is not defined": 1,
+        "TypeError: list indices must be integers or slices, not tuple": 3,
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 7,
+        "AttributeError: 'list' object has no attribute 'shape'": 2,
+        "ValueError: Shape mismatch: got (1,), expected (512,)": 1,
+        "ImportError: cannot import name 'Estimator' from 'sklearn.base' (/usr/local/lib/python3.12/dist-packages/sklearn/base.py)": 2,
+        "ValueError: zero-dimensional arrays cannot be concatenated": 1,
+        "ValueError: setting an array element with a sequence.": 1,
+        "ValueError: Shape mismatch: got (), expected (512,)": 1,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1,
+        "ValueError: cannot select an axis to squeeze out which has size not equal to one": 1
+      },
+      "valid_request_fraction": 0.5666666666666667,
+      "complexity_validation_spearman": -0.23346840632205365,
+      "mean_train_validation_gap_pp": 0.18475588235294088,
+      "mean_prediction_spearman": 0.12598907123134262,
+      "prediction_pairs_above_0995_fraction": 0.012477718360071301,
+      "diversity_candidates_with_saved_predictions": 34,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "ExpWeightedNegLogProbWithTop1",
+        "prediction_spearman": 0.8700366032997338,
+        "identical_ranks": false,
+        "candidate_hash": "b1952ddc48d1d087a27c5083ada306773769ac7802fbe63135c02cfe5cced8ff"
+      },
+      "generation_seconds_including_failed_requests": 546.9787961076945,
+      "macro_auc_percent": 69.80096082462103,
+      "gain_pp": 4.157078509456554,
+      "duplicate_disjoint_macro_auc_percent": 69.73390540368717,
+      "macro_auc_ci95_percent": [
+        68.80003297420876,
+        70.68908787224039
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.7308027719782837,
+        4.574525803297222
+      ],
+      "category": "generation_control",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 4,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 79.71,
+        "10": 79.71,
+        "20": 79.71,
+        "30": 79.71
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 57,
+      "validation_auc_percent": 79.6135,
+      "elapsed_seconds": 4456.509634871036,
+      "reported_tokens": 242076,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: operands could not be broadcast together with shapes (27,27) (26,) ": 1,
+        "ValueError: Input contains NaN.": 2
+      },
+      "valid_request_fraction": 0.95,
+      "complexity_validation_spearman": -0.16573744000569335,
+      "mean_train_validation_gap_pp": -0.17251228070175434,
+      "mean_prediction_spearman": 0.49377996871557134,
+      "prediction_pairs_above_0995_fraction": 0.03132832080200501,
+      "diversity_candidates_with_saved_predictions": 57,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "ExpWeightedNegLogProbWithTop1",
+        "prediction_spearman": 0.8709576762124998,
+        "identical_ranks": false,
+        "candidate_hash": "39b967bbf368245a19bc78cfd899c5983ecdd8f69546a47416d04b4c9af19c23"
+      },
+      "generation_seconds_including_failed_requests": 3880.3123308923095,
+      "macro_auc_percent": 69.79694193022887,
+      "gain_pp": 4.153059615064393,
+      "duplicate_disjoint_macro_auc_percent": 69.72960583186092,
+      "macro_auc_ci95_percent": [
+        68.79897081425791,
+        70.68268245771469
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.730223018634196,
+        4.5807779344083706
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 5,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 79.6135,
+        "10": 79.6135,
+        "20": 79.6135,
+        "30": 79.6135
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 53,
+      "validation_auc_percent": 78.7667,
+      "elapsed_seconds": 4874.888502115384,
+      "reported_tokens": 230825,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>": 1,
+        "ValueError: Input contains NaN.": 3,
+        "AttributeError: 'dict' object has no attribute 'pearsonr'": 1,
+        "TypeError: Can't instantiate abstract class HallucinationDetector without an implementation for abstract method '__call__'": 1,
+        "UnboundLocalError: cannot access local variable 'gaps' where it is not associated with a value": 1
+      },
+      "valid_request_fraction": 0.8833333333333333,
+      "complexity_validation_spearman": 0.015686116426672864,
+      "mean_train_validation_gap_pp": 0.4245830188679223,
+      "mean_prediction_spearman": 0.4220489612169358,
+      "prediction_pairs_above_0995_fraction": 0.036284470246734396,
+      "diversity_candidates_with_saved_predictions": 53,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope",
+        "prediction_spearman": 1.0,
+        "identical_ranks": true,
+        "candidate_hash": "06c6dd8c553780efbba5d5fdf77c6015b51511a80afbe1328fbc5e6d7be4627b"
+      },
+      "generation_seconds_including_failed_requests": 3692.17041169852,
+      "macro_auc_percent": 68.53308417221132,
+      "gain_pp": 2.8892018570468423,
+      "duplicate_disjoint_macro_auc_percent": 68.45525628596222,
+      "macro_auc_ci95_percent": [
+        67.54574399923558,
+        69.37271494169951
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.21582571129568,
+        3.549518576617184
+      ],
+      "category": "primary_evolution",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 14,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 78.4723,
+        "10": 78.4723,
+        "20": 78.7667,
+        "30": 78.7667
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 6,
+      "valid_candidates": 0,
+      "validation_auc_percent": 75.7504,
+      "elapsed_seconds": 344.3198826946318,
+      "reported_tokens": 10222,
+      "protocol_excluded": true,
+      "protocol_exclusion": {
+        "utc": "2026-10-15T02:27:41.536257+00:00",
+        "reason": "Original from-scratch prompt omitted the required __call__ method contract. The first four programs could not instantiate; three implemented other method names and one imported Estimator from sklearn.",
+        "superseded_by": "uncertainty_quantification_qwen38_independent_contract_1048",
+        "test_data_consulted": false
+      },
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "TypeError: Can't instantiate abstract class HallucinationDetector without an implementation for abstract method '__call__'": 5,
+        "ImportError: cannot import name 'Estimator' from 'sklearn.base' (/usr/local/lib/python3.12/dist-packages/sklearn/base.py)": 1
+      },
+      "valid_request_fraction": 0.0,
+      "generation_seconds_including_failed_requests": 307.8408788703382,
+      "category": "protocol_failure",
+      "actual_rounds": 3,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": null,
+      "stop_reason": "consecutive_failed_rounds",
+      "validation_curve": {}
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_contract_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 58,
+      "validation_auc_percent": 79.7812,
+      "elapsed_seconds": 2867.458130983636,
+      "reported_tokens": 102000,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "AttributeError: 'dict' object has no attribute 'pearsonr'": 2
+      },
+      "valid_request_fraction": 0.9666666666666667,
+      "complexity_validation_spearman": -0.14716312304384216,
+      "mean_train_validation_gap_pp": 0.2464499999999999,
+      "mean_prediction_spearman": 0.5430637862926964,
+      "prediction_pairs_above_0995_fraction": 0.053877551020408164,
+      "diversity_candidates_with_saved_predictions": 50,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9661998110525238,
+        "identical_ranks": false,
+        "candidate_hash": "90b7bae563240e1de77d28ee9b99ba4b2514172fef878500b16af7fedf2e933c"
+      },
+      "generation_seconds_including_failed_requests": 2419.7150781825185,
+      "macro_auc_percent": 69.47011600353005,
+      "gain_pp": 3.8262336883655763,
+      "duplicate_disjoint_macro_auc_percent": 69.40800687086153,
+      "macro_auc_ci95_percent": [
+        68.46817405487955,
+        70.32070050067307
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.203843877882178,
+        4.4795600633481305
+      ],
+      "category": "generation_control",
+      "actual_rounds": 30,
+      "requested_rounds_actual_config": 30,
+      "selected_candidate_round": 27,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 79.0619,
+        "10": 79.0619,
+        "20": 79.0619,
+        "30": 79.7812
+      }
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_pilot_1046",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "evolution",
+      "seed": 1046,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 5,
+      "requests": 10,
+      "valid_candidates": 9,
+      "validation_auc_percent": 78.4814,
+      "elapsed_seconds": 841.2694434057921,
+      "reported_tokens": 26075,
+      "protocol_excluded": false,
+      "requests_without_usage": 1,
+      "invalid_candidate_errors": {
+        "APITimeoutError: Request timed out.": 1
+      },
+      "valid_request_fraction": 0.9,
+      "complexity_validation_spearman": -0.41666666666666663,
+      "mean_train_validation_gap_pp": 2.380433333333335,
+      "mean_prediction_spearman": 0.584628560913507,
+      "prediction_pairs_above_0995_fraction": 0.0,
+      "diversity_candidates_with_saved_predictions": 9,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "ExpWeightedNegLogProb",
+        "prediction_spearman": 0.909532927180847,
+        "identical_ranks": false,
+        "candidate_hash": "d4d9306574c880403571ab4c92e4f16a94861f83264e087142e2864a16b4895c"
+      },
+      "generation_seconds_including_failed_requests": 641.613746797666,
+      "macro_auc_percent": 70.11829199274169,
+      "gain_pp": 4.4744096775772135,
+      "duplicate_disjoint_macro_auc_percent": 70.03580133270526,
+      "macro_auc_ci95_percent": [
+        69.14845263364758,
+        71.00219318510781
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.8917648464306067,
+        5.064030375336418
+      ],
+      "category": "pilot",
+      "actual_rounds": 5,
+      "requested_rounds_actual_config": 5,
+      "selected_candidate_round": 4,
+      "stop_reason": "round_budget",
+      "validation_curve": {
+        "5": 78.4814
+      }
+    }
+  ],
+  "source_test_feature_extraction": {
+    "start_utc": "2026-10-15T05:39:13.856839+00:00",
+    "end_utc": "2026-10-15T07:31:12.855239+00:00",
+    "elapsed_seconds": 6718.9984
+  },
+  "partial_target_feature_pass": {
+    "start_utc": "2026-10-15T08:52:40.600725+00:00",
+    "end_utc": "2026-10-15T09:25:33.213946+00:00",
+    "elapsed_seconds": 1972.613221
+  },
+  "provider_uptime_seconds_before_stop": 36654,
+  "other_wall_seconds_not_covered_by_these_buckets": 1853.6086753698655,
+  "interpretation": "Recorded wall times, not GPU-kernel utilization or per-method billed cost. CPU evaluation of candidates is included in run times. Supplementary CPU jobs overlap these stages.",
+  "source_code_commit_before_report": "377eaea9d8aa73eb0f903d5dd7b00a9381099b0c"
+}

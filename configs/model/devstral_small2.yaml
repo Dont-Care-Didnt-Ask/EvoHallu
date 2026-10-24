@@ -1,0 +1,10 @@
+model_name: devstral_small2
+hf_model_id: mistralai/Devstral-Small-2-24B-Instruct-2512
+revision: 55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128
+weight_precision: published_fp8
+supports_chat_template_kwargs: false
+temperature: 0.7
+topk: 20
+topp: 0.8
+max_tokens: 4096
+repetition_penalty: 1.0

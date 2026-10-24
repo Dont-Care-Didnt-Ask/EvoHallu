@@ -1,0 +1,144 @@
+{
+  "status": "passed",
+  "gpu_or_model_calls": false,
+  "held_out_predictions_read": false,
+  "checks": [
+    {
+      "policy": "original",
+      "stored_feature_dtype": "float32",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "original",
+      "stored_feature_dtype": "float16",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "neutral",
+      "stored_feature_dtype": "float32",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "neutral",
+      "stored_feature_dtype": "float16",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "diverse",
+      "stored_feature_dtype": "float32",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "diverse",
+      "stored_feature_dtype": "float16",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "compositional",
+      "stored_feature_dtype": "float32",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    },
+    {
+      "policy": "compositional",
+      "stored_feature_dtype": "float16",
+      "lengths": [
+        8,
+        13,
+        31,
+        48,
+        67
+      ],
+      "full_control_byte_parity": true,
+      "exact_full_prediction_parity": true,
+      "actual_traced_component_identity": true,
+      "all_drop_identities": true,
+      "additive_reconstruction_identity": true,
+      "prediction_independent_of_chunk_neighbors": true
+    }
+  ],
+  "diverse_short_nll_fallback_preserved": true
+}

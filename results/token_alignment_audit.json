@@ -1,0 +1,65 @@
+{
+  "total": 7007,
+  "start_counts": {
+    "14": 7007
+  },
+  "suffix_token_counts": {
+    "5": 7007
+  },
+  "non_unique_or_unmatched": [],
+  "test_data_used": false,
+  "protocols": {
+    "stratified": {
+      "template_included_nll": {
+        "train_auc_percent": 74.32607960775624,
+        "validation_auc_percent": 75.76219512195121
+      },
+      "exact_claim_nll": {
+        "train_auc_percent": 74.30741976444922,
+        "validation_auc_percent": 75.74558863605397
+      },
+      "legacy_tail_crop_nll": {
+        "train_auc_percent": 72.58809541056627,
+        "validation_auc_percent": 72.84938910841622
+      },
+      "last_input_token_surprisal": {
+        "train_auc_percent": 50.0,
+        "validation_auc_percent": 50.0
+      },
+      "post_claim_surprisal": {
+        "train_auc_percent": 71.91950132944727,
+        "validation_auc_percent": 69.70196325566607
+      },
+      "claim_length": {
+        "train_auc_percent": 44.233806593831126,
+        "validation_auc_percent": 47.31088477085888
+      }
+    },
+    "claim_group": {
+      "template_included_nll": {
+        "train_auc_percent": 74.84434818294386,
+        "validation_auc_percent": 73.69368422248994
+      },
+      "exact_claim_nll": {
+        "train_auc_percent": 74.81243325911367,
+        "validation_auc_percent": 73.72351851430909
+      },
+      "legacy_tail_crop_nll": {
+        "train_auc_percent": 72.57003710509275,
+        "validation_auc_percent": 72.90691132680197
+      },
+      "last_input_token_surprisal": {
+        "train_auc_percent": 50.0,
+        "validation_auc_percent": 50.0
+      },
+      "post_claim_surprisal": {
+        "train_auc_percent": 71.47528244175082,
+        "validation_auc_percent": 71.55811720046371
+      },
+      "claim_length": {
+        "train_auc_percent": 44.84321926795187,
+        "validation_auc_percent": 44.9148159934535
+      }
+    }
+  }
+}

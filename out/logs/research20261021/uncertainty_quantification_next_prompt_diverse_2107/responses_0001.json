@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector (`HallucinationDetector`) uses a **global sum of negative log-probabilities (NLL)** as its scoring signal.\n- **Signal**: $S_i = -\\sum_{t=2}^{n_i} \\log P(x_t | x_{<t})$.\n- **Aggregation**: Simple summation across the entire sequence.\n- **Limitation**: This approach is heavily biased by sequence length ($n_i$). Longer sequences naturally accumulate higher NLL scores regardless of hallucination content, while short hallucinated sequences might be penalized less than long truthful ones. This confounds the length variable with the hallucination signal, likely capping the ROC-AUC.\n\n### Proposed Improvement\nTo improve the detector, we must decouple the hallucination signal from sequence length. The hypothesis is that hallucinations manifest as **local drops in confidence** (high NLL) relative to the sequence's baseline perplexity, rather than just a high absolute sum.\n\n**New Approach**:\n1.  **Signal**: Compute the **per-token negative log-probability** for each generated token.\n2.  **Aggregation**: Calculate the **mean negative log-probability** (average perplexity) for each sequence.\n3.  **Refinement**: Apply a **length-normalized z-score** within the training set distribution to standardize scores across different sequence lengths. This highlights sequences where the average confidence is significantly worse than expected for their length.\n\n**Specific Change**: Replace `sum` with `mean` and add a length-based normalization step to remove the length bias inherent in the sum-of-NLL approach.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        # Extract logprobs: List of arrays, each length n_i - 1\n        logprobs_list = stats[\"sequence_logprobs\"]\n        \n        # Calculate mean negative log-probability for each sequence\n        # This normalizes for sequence length, focusing on average confidence per token\n        mean_neg_logprobs = np.array([\n            -np.mean(lp) for lp in logprobs_list\n        ], dtype=np.float32)\n        \n        return mean_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 546,
+      "prompt_tokens": 531,
+      "total_tokens": 1077,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.492569741996704
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided candidate detector uses **Total Negative Log-Probability (NLL)** as the signal. It aggregates the sum of log-probabilities across the entire sequence into a single scalar per sample.\n- **Signal**: Global sequence likelihood.\n- **Aggregation**: Summation over the full sequence length.\n- **Limitation**: This approach conflates sequence length with hallucination. Longer sequences naturally accumulate higher NLL regardless of content quality, making it a poor discriminator for atomic claims unless normalized by length (which the current code does not do). It also lacks sensitivity to *local* spikes in surprisal where hallucinations often occur.\n\n### Proposed Detector\nTo explore a different signal family, I will focus on **Local Surprisal Peaks** rather than global sums. Hallucinations often manifest as specific tokens with extremely low probability (high negative log-prob) amidst a relatively coherent context.\n\n- **Signal**: The maximum negative log-probability within a sliding window of the sequence. This captures the \"sharpest\" point of uncertainty.\n- **Aggregation**: Taking the maximum over a local window (e.g., size 5) instead of summing over the whole sequence. This makes the detector invariant to sequence length and more sensitive to localized anomalies.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the maximum local surprisal (negative log-prob)\n        within a sliding window of tokens.\n        \n        Hypothesis: Hallucinated tokens often appear as isolated, high-surprisal events \n        that deviate significantly from the local context, whereas global NLL accumulates \n        noise from both coherent and incoherent text.\n        \"\"\"\n        window_size = 5\n        scores = []\n        \n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # Convert to negative log-prob (higher is worse)\n            nll_seq = -np.array(seq_logprobs, dtype=np.float32)\n            \n            if len(nll_seq) <= window_size:\n                scores.append(np.max(nll_seq))\n            else:\n                # Compute rolling maximum over windows\n                # Pad with the first value to handle start of sequence\n                padded = np.pad(nll_seq, (window_size - 1, 0), mode='edge')\n                # Sliding window max\n                max_nll = np.maximum.accumulate(np.concatenate([nll_seq, np.zeros(window_size - 1)]))\n                # Actually, a simple rolling max via convolution or loop is safer for arbitrary lengths\n                # Using a simple loop for clarity and determinism given numpy availability\n                local_max = np.zeros(len(nll_seq))\n                for i in range(len(nll_seq)):\n                    start = max(0, i - window_size + 1)\n                    local_max[i] = np.max(nll_seq[start:i+1])\n                scores.append(local_max[len(nll_seq) - 1]) # Take the max of the last window\n        \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 739,
+      "prompt_tokens": 552,
+      "total_tokens": 1291,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.751875657995697
+  }
+]

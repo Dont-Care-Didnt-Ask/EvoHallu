@@ -1,0 +1,72 @@
+{
+  "status": "independent_all9_source_byte_parity_passed",
+  "created_utc": "2026-10-21T23:43:54.867338+00:00",
+  "inference_launched": false,
+  "protected_artifacts_verified": 62,
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "per_dataset": [
+    {
+      "dataset": "AVeriTeC__dev_filtered_10shot",
+      "rows": 427,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "da2f055a3d58d9bd8ca11bb6dcb60921fb831d56a036cf3835743844c557a89f",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot",
+      "rows": 2057,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "d3d22fc687967bedf07bcaa7585f65a62d0835621a02b7345eb7c5b5f49b2d40",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+      "rows": 46605,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "37c6a2959ed7cb43c933ad46c432dedc154b7d1e8ce9038b3bd5b15e1c1f77cd",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "geometry__cities",
+      "rows": 1496,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "7c8027a3f1c7315ac6759e68da22a851579484f4e585fa9492c479d4640f273c",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "geometry__common_claim_true_false",
+      "rows": 4450,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "39570b5dfa0497ae09b3f419d81b01216bd21e08b746e8fea45661b476854f5f",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "geometry__companies_true_false",
+      "rows": 1200,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "5848d6ede8b4f0f5e8894aed9772336d2a2c46c181270f8e096db67530434acc",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "geometry__counterfact_true_false",
+      "rows": 31964,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "ab0a378b946563e3654e0cee550492605db514c0aef97489c93d710671d6f9c2",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "popqa__popqa_test_filtered_10shot",
+      "rows": 6974,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "427195708a512c038e6afca0fbfcdf12351cf74a02a6b8c225036b1932d83610",
+      "raw_sha256_matches_source_plan": true
+    },
+    {
+      "dataset": "x-fact__test_filtered_10shot",
+      "rows": 2315,
+      "all_row_and_three_score_arrays_byte_exact": true,
+      "scores_sha256": "0bb7d28754d3d5afab908d7ab32deb42e66d8f23214ee758df4919c7025d6564",
+      "raw_sha256_matches_source_plan": true
+    }
+  ]
+}

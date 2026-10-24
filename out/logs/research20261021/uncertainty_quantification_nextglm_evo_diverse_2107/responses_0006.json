@@ -1,0 +1,38 @@
+[
+  {
+    "content": "1.  **Analysis of Shown Detectors**\n    *   **Detector 1 (NLL Final Token):** Uses the negative log-probability of the *last* token only. Score: 50.0. This is a weak signal because the final token is often a punctuation mark or a generic connector (e.g., \"and\", \".\"), which has high probability regardless of truthfulness.\n    *   **Detector 2 (Total NLL):** Uses the sum of negative log-probabilities for the entire sequence. Score: 74.33. This is a strong signal, as hallucinations generally increase the overall uncertainty (entropy) of the sequence. However, longer sequences naturally have higher NLL than shorter ones, making this score sequence-length dependent.\n\n2.  **Proposed Detector**\n    *   **Signal:** Negative Log-Likelihood (NLL) normalized by sequence length.\n    *   **Aggregation Principle:** Local-refinement. Instead of summing the probabilities (Detector 2) or taking the last token (Detector 1), we calculate the *average* probability per token.\n    *   **Formula:** $\\text{Score} = \\frac{1}{L} \\sum_{t=1}^{L} -\\log(P(x_t))$.\n    *   **Hypothesis for Future:** This detector assumes that hallucinations are characterized by *inconsistent* or *low* average confidence across the sequence, rather than just a high total uncertainty.\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the average negative log-probability per token.\n        \n        Aggregation Principle: Average the NLL across the sequence length.\n        This mitigates the sequence-length bias present in the total NLL detector\n        while capturing the general uncertainty of the generated text.\n        \n        Hypothesis for future: This detector assumes that hallucinations are\n        characterized by low average confidence (high NLL) across the sequence\n        rather than just high total uncertainty.\n        \"\"\"\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # Avoid division by zero for empty sequences\n            length = len(seq_logprobs)\n            if length > 0:\n                avg_neg_logprob = -np.mean(seq_logprobs)\n            else:\n                avg_neg_logprob = 0.0\n            scores.append(avg_neg_logprob)\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 574,
+      "prompt_tokens": 762,
+      "total_tokens": 1336,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 45.5796882090217
+  },
+  {
+    "content": "1.  **Analysis of Shown Detectors**\n    The two shown detectors rely on the \"surprisal\" family of signals.\n    *   **Detector 1** uses the negative log-probability of the *final* token only. It assumes hallucinations are finalized with high confidence.\n    *   **Detector 2** uses the *total* negative log-probability (surprisal) of the entire sequence. It assumes hallucinations are globally less probable (less coherent) than facts.\n\n2.  **Proposed Detector**\n    **Signal:** **Local Token Confidence (Windowed Surprisal).**\n    **Aggregation Principle:** **Mean Absolute Deviation (MAD).**\n    **Hypothesis:** While total surprisal (Detector 2) captures global incoherence, it fails to detect \"local\" hallucinations where a model confidently generates a single false token within a coherent context. This detector calculates the average negative log-probability (confidence) for tokens in sliding windows of size 5. It then measures the deviation of these local confidences from the global mean. Hallucinations are hypothesized to manifest as localized spikes in confidence (or low surprisal) that deviate significantly from the surrounding text's statistical behavior.\n\n3.  **Code Block**\n\n```python\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Calculates the mean absolute deviation of local token confidence.\n        \n        Approach: Uses a sliding window (size 5) to compute local confidence\n        (negative log-probability) for each token. The detector computes the\n        deviation of these local values from the global mean confidence.\n        \n        Hypothesis for future: This detector identifies \"localized confidence\"\n        anomalies. Hallucinations are hypothesized to occur as isolated\n        tokens generated with high confidence (low surprisal) that deviate\n        from the statistical consistency of the surrounding context.\n        \"\"\"\n        scores = []\n        window_size = 5\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n\n        for seq_logprobs in sequence_logprobs:\n            # seq_logprobs length is n_i - 1\n            if len(seq_logprobs) == 0:\n                scores.append(0.0)\n                continue\n\n            # Compute local confidence (negative log-prob) for each token\n            local_confidence = -seq_logprobs\n\n            # Compute global mean confidence for normalization\n            global_mean = np.mean(local_confidence)\n\n            # Calculate Mean Absolute Deviation (MAD) of local confidence\n            # This highlights tokens where confidence is significantly different\n            # from the average confidence of the sequence.\n            mad = np.mean(np.abs(local_confidence - global_mean))\n            \n            scores.append(mad)\n\n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 648,
+      "prompt_tokens": 784,
+      "total_tokens": 1432,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 51.11413228898891
+  }
+]

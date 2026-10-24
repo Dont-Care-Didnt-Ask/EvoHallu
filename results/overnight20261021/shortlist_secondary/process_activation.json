@@ -1,0 +1,15 @@
+{
+  "pid": 18553,
+  "command": [
+    "/workspace/mod1/.venv/bin/python",
+    "/workspace/mod1/scripts/overnight_shortlist_secondary.py",
+    "--execute",
+    "--max-active-seconds",
+    "3600",
+    "--cache-dir",
+    "data/restored/mod1-eval-cache"
+  ],
+  "utc": "2026-10-21T21:54:52.672143+00:00",
+  "helper_sha256": "ea031e91bf51ca4de848c5ce15ca38a1769c860d430905dbc6ea1f77e030ee07",
+  "cpu_only": true
+}

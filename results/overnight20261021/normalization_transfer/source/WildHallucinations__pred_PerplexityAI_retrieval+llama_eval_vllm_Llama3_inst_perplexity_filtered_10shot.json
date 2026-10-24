@@ -1,0 +1,24 @@
+{
+  "status": "complete",
+  "dataset": "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot",
+  "phase": "source",
+  "rows": 46605,
+  "raw_sha256": "2c78d90193e9ceb56a69a988a5383f71336f7e2b2b72fdd6123416b15727ed2d",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "37c6a2959ed7cb43c933ad46c432dedc154b7d1e8ce9038b3bd5b15e1c1f77cd",
+  "bootstrap_sha256": "3dba42113ad0300c21492a8936356ff5f832bedb001ec3872d9d2fa116954347",
+  "source_lp_only_saved_prediction_parity": true,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_512",
+      "score_sha256": "efbd3c585a95efb981dd5eff9ea5a369f323e94094d17a254d38ef813a994cda",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

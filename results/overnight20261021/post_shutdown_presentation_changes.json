@@ -1,0 +1,8 @@
+{
+  "file": "results/overnight20261021/figures/plot_manifest.json",
+  "old_sha256": "621876c0c06cfe72293d8aabbf393a92857a63bb388c606936af224e4f561136",
+  "new_sha256": "d3f310583c60fb5c6479e04a903d7d7cb026fa533684dab2d7e2fddec46b88a7",
+  "reason": "Presentation-only plotting receipt regenerated offline after shutdown to clarify model labels; scientific predictions and selection unchanged.",
+  "metrics_changed": false,
+  "selection_changed": false
+}

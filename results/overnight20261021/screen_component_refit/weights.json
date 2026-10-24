@@ -1,0 +1,69 @@
+{
+  "format": "screen_component_logistic_v1",
+  "feature_names": [
+    "original/normalized_slope",
+    "original/inverse_tail_range",
+    "neutral/total_nll",
+    "neutral/weighted_gap",
+    "neutral/tail_gap_variance",
+    "diverse/total_nll",
+    "diverse/relative_gap_drift",
+    "diverse/tail_gap_variance",
+    "compositional/tail_surprisal_variance",
+    "compositional/tail_surprisal_mean",
+    "compositional/global_correlation",
+    "float64_total_nll"
+  ],
+  "pool_file": "results/overnight20261021/screen_component_refit/component_pool.json",
+  "pool_sha256": "e99a2ccb4992f996b2269b0bba3dc437a2cb98d987a7c78e9952417281aedc43",
+  "inference_module_sha256": "e86f98e49d710317e685af1a57f5ee68ba4b1fd48ac5a919091f0cc0eb564a01",
+  "scaler_mean": [
+    -0.08190692516624073,
+    0.06008983120259763,
+    141.626382176552,
+    147.23154513835055,
+    10.335217454456407,
+    141.62638227830305,
+    -1.8070129546955829,
+    16.910770608151424,
+    0.027019206345442828,
+    0.08123060013624417,
+    -1.731700324281718,
+    141.62630298424313
+  ],
+  "scaler_scale": [
+    0.015821584163036122,
+    0.007750129177164878,
+    15.187002070483352,
+    29.537358627646164,
+    17.269336930659705,
+    15.187001598989518,
+    0.18887597966572858,
+    22.854818938986458,
+    0.747862879920267,
+    0.1332634132627956,
+    0.1552607416735136,
+    15.1870884657076
+  ],
+  "coefficients_standardized": [
+    0.6619613166829457,
+    0.06882607215249709,
+    0.22738473310716598,
+    -0.36025194116576953,
+    0.2680103302043475,
+    0.2273860909411124,
+    -0.03469998022098105,
+    0.47016359921099216,
+    -0.3507088537922056,
+    0.19661074299458306,
+    0.39254964333542425,
+    0.22798322655160028
+  ],
+  "intercept": 1.6825201394315454,
+  "classes": [
+    0,
+    1
+  ],
+  "training_raw_sha256": "8d34da6f189e8bfe67c0bca3e1101607f5b0887d5f1de41b4f373ef08f2f5ced",
+  "source_fit_only": true
+}

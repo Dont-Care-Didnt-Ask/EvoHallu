@@ -1,0 +1,39 @@
+{
+  "status": "complete",
+  "dataset": "geometry__common_claim_true_false",
+  "phase": "target",
+  "rows": 4450,
+  "raw_sha256": "91ee2fea7f6ae640cd9aa974b18ed3c84aecc48d19122e1d008a993c136711ad",
+  "weights_sha256": "e83b7b1e83b6a2e347f0d080bf50bb5d50d67b6ae7f578ce40251f5e94340341",
+  "source_sha256": "a96fdf5af49a1a6f0f6426d79e2ef60b596be1d7ffd38a672afb6338523cc884",
+  "plan_sha256": "5d7849c65f2efbef086c865af5b81ba9793c29b5ed202a9a28859689c1e59c39",
+  "scores_sha256": "f99ce8ed6eeb42c32c0dfd77f97049e6d3b155fbbfb282c815d7d47ec3efb834",
+  "bootstrap_sha256": "d6b0ad1b04ccaa808e3d2e22da5300c22fa0f5909b801a465633dec02cf0c395",
+  "source_lp_only_saved_prediction_parity": false,
+  "transparent_proxy_original_byte_exact": true,
+  "frozen_cases": [
+    {
+      "case": "original_1",
+      "score_sha256": "a1956dd7bb70c730d37c44bd69946c67ccf8945b2401c3434d61fc8b810b7a48",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "original_128",
+      "score_sha256": "a1956dd7bb70c730d37c44bd69946c67ccf8945b2401c3434d61fc8b810b7a48",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "original_512",
+      "score_sha256": "a1956dd7bb70c730d37c44bd69946c67ccf8945b2401c3434d61fc8b810b7a48",
+      "nll_byte_exact": true
+    },
+    {
+      "case": "shuffle451_512",
+      "score_sha256": "a1956dd7bb70c730d37c44bd69946c67ccf8945b2401c3434d61fc8b810b7a48",
+      "nll_byte_exact": true
+    }
+  ],
+  "original_chunk_size": 512,
+  "target_fit": false,
+  "bootstrap_samples": 500
+}

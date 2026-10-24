@@ -1,0 +1,12 @@
+{
+  "verified_utc": "2026-10-22T00:43:58.374599+00:00",
+  "manifest_sha256": "ea1acaa0372cf4b41cfc27332c0090372de934f74e8806c2f075023ae262a331",
+  "files": 5890,
+  "bytes": 159012601,
+  "missing": [],
+  "different": [],
+  "all_exact": true,
+  "excluded_mutable_files": {
+    "results/overnight20261021/live_state.json": "Live monitoring state continues to change; no scientific arrays or selection records."
+  }
+}

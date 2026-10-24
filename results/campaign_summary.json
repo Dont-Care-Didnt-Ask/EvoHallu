@@ -1,0 +1,2459 @@
+{
+  "updated_utc": "2026-10-15T09:26:27.357640+00:00",
+  "held_out_evaluation_complete": true,
+  "datasets_evaluated": 9,
+  "primary_evaluation_directory": "out/campaign/evaluation_with_4b",
+  "bootstrap_units": [
+    "claim"
+  ],
+  "optional_4b_evaluation_verified": true,
+  "optional_4b_structured_evaluation_verified": false,
+  "optional_devstral_evaluation_verified": false,
+  "runs": [
+    {
+      "run": "ablation_laguna_slope_only",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "frozen_ablation",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 0,
+      "requests": 0,
+      "valid_candidates": 0,
+      "validation_auc_percent": 78.7735045646546,
+      "elapsed_seconds": 0.0,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 68.5347209309762,
+      "gain_pp": 2.890838615811731,
+      "duplicate_disjoint_macro_auc_percent": 68.45684832934342,
+      "macro_auc_ci95_percent": [
+        67.54847223281976,
+        69.37273829139961
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2185096967812616,
+        3.550334082594443
+      ]
+    },
+    {
+      "run": "ablation_laguna_slope_range",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "frozen_ablation",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 0,
+      "requests": 0,
+      "valid_candidates": 0,
+      "validation_auc_percent": 79.5356996866058,
+      "elapsed_seconds": 0.0,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 69.21921406573375,
+      "gain_pp": 3.5753317505692763,
+      "duplicate_disjoint_macro_auc_percent": 69.15212943903641,
+      "macro_auc_ci95_percent": [
+        68.20457903435259,
+        70.09403546283603
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.972895746107266,
+        4.20009196085682
+      ]
+    },
+    {
+      "run": "ablation_laguna_slope_variance",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "frozen_ablation",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 0,
+      "requests": 0,
+      "valid_candidates": 0,
+      "validation_auc_percent": 78.88506608529772,
+      "elapsed_seconds": 0.0,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 68.63507318151103,
+      "gain_pp": 2.9911908663465567,
+      "duplicate_disjoint_macro_auc_percent": 68.55868923304708,
+      "macro_auc_ci95_percent": [
+        67.64930264108655,
+        69.47715580410232
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.310900982077947,
+        3.655540942974452
+      ]
+    },
+    {
+      "run": "ablation_qwen_linear_position_nll",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "frozen_ablation",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 0,
+      "requests": 0,
+      "valid_candidates": 0,
+      "validation_auc_percent": 79.61461597856201,
+      "elapsed_seconds": 0.0,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 69.79260638209645,
+      "gain_pp": 4.148724066931976,
+      "duplicate_disjoint_macro_auc_percent": 69.72534613092196,
+      "macro_auc_ci95_percent": [
+        68.79467061951502,
+        70.67484117246624
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.7256829770872364,
+        4.57603375903349
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_devstral_evo_1048",
+      "status": "finished",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "fp8_marlin_eager",
+      "writer_weight_precision": "published_fp8",
+      "requested_rounds": 30,
+      "requests": 6,
+      "valid_candidates": 0,
+      "validation_auc_percent": 75.7504,
+      "elapsed_seconds": 10.908337144181132,
+      "reported_tokens": 0,
+      "protocol_excluded": true,
+      "protocol_exclusion": {
+        "utc": "2026-10-15T08:57:30.513176+00:00",
+        "reason": "All six requests rejected with HTTP400 before token generation: native Mistral tokenizer forbids chat_template_kwargs. This is a request protocol failure, not a writer capability result.",
+        "replacement_run": "uncertainty_quantification_devstral_evo_native_1048",
+        "target_quality_evaluated_at_exclusion": false
+      },
+      "requests_without_usage": 6,
+      "invalid_candidate_errors": {
+        "BadRequestError: Error code: 400 - {'error': {'message': 'chat_template is not supported for Mistral tokenizers. (parameter=chat_template)', 'type': 'BadRequestError', 'param': 'chat_template', 'code': 400}}": 6
+      },
+      "valid_request_fraction": 0.0,
+      "generation_seconds_including_failed_requests": 0.04149284400045872
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1047",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 46,
+      "validation_auc_percent": 79.2575,
+      "elapsed_seconds": 2126.1730163656175,
+      "reported_tokens": 141183,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "NameError: name 'k' is not defined": 1,
+        "ValueError: Input contains NaN.": 8,
+        "TypeError: array type float16 is unsupported in linalg": 2,
+        "ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()": 1
+      },
+      "valid_request_fraction": 0.7666666666666667,
+      "complexity_validation_spearman": 0.25717105717919886,
+      "mean_train_validation_gap_pp": -0.06818695652174,
+      "mean_prediction_spearman": 0.37430575679956424,
+      "prediction_pairs_above_0995_fraction": 0.1072463768115942,
+      "diversity_candidates_with_saved_predictions": 46,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9843660065805728,
+        "identical_ranks": false,
+        "candidate_hash": "a033e9afca603fcc7e24e7a0820d68465fc2dca6315270955748648d3247a27f"
+      },
+      "generation_seconds_including_failed_requests": 1635.040545862168,
+      "macro_auc_percent": 69.42873391244323,
+      "gain_pp": 3.7848515972787595,
+      "duplicate_disjoint_macro_auc_percent": 69.36033626109014,
+      "macro_auc_ci95_percent": [
+        68.43480458936808,
+        70.30431994874816
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.1246537451081293,
+        4.532584242881424
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 43,
+      "validation_auc_percent": 79.5008,
+      "elapsed_seconds": 2008.6850759219378,
+      "reported_tokens": 138096,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "IndexError: index 14924 is out of bounds for axis 1 with size 512": 1,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1,
+        "AxisError: axis 1 is out of bounds for array of dimension 1": 1,
+        "ValueError: Input contains NaN.": 7,
+        "NameError: name 'stats' is not defined": 1,
+        "IndexError: index 0 is out of bounds for axis 0 with size 0": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,512) (27,) ": 1,
+        "TypeError: array type float16 is unsupported in linalg": 1
+      },
+      "valid_request_fraction": 0.7166666666666667,
+      "complexity_validation_spearman": 0.417478661530327,
+      "mean_train_validation_gap_pp": 0.01562558139534985,
+      "mean_prediction_spearman": 0.34334087589940554,
+      "prediction_pairs_above_0995_fraction": 0.11406423034330011,
+      "diversity_candidates_with_saved_predictions": 43,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9790401227201923,
+        "identical_ranks": false,
+        "candidate_hash": "f0d6566237d9d7f42ee6e6cd383d86f24c01838b2c3289a15ef1261dd9054d48"
+      },
+      "generation_seconds_including_failed_requests": 1574.78080095537,
+      "macro_auc_percent": 69.2343481691619,
+      "gain_pp": 3.5904658539974292,
+      "duplicate_disjoint_macro_auc_percent": 69.16826619385816,
+      "macro_auc_ci95_percent": [
+        68.22766941224846,
+        70.10852606216548
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.0007114160564585,
+        4.203339890413913
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_independent_1048",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 35,
+      "validation_auc_percent": 79.0003,
+      "elapsed_seconds": 2327.3694228772074,
+      "reported_tokens": 85793,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: Input contains NaN.": 18,
+        "AttributeError: module 'numpy' has no attribute 'logsumexp'": 1,
+        "NameError: name 'pearsonr' is not defined": 1,
+        "NameError: name 'k' is not defined": 2,
+        "NameError: name 'softmax' is not defined": 1,
+        "IndexError: index 27 is out of bounds for axis 0 with size 27": 2
+      },
+      "valid_request_fraction": 0.5833333333333334,
+      "complexity_validation_spearman": 0.12867481306655484,
+      "mean_train_validation_gap_pp": 0.04967999999999872,
+      "mean_prediction_spearman": 0.2638756320505668,
+      "prediction_pairs_above_0995_fraction": 0.08235294117647059,
+      "diversity_candidates_with_saved_predictions": 35,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9853869245538133,
+        "identical_ranks": false,
+        "candidate_hash": "f2c3e705219d61996cb45b2bde9680ad74a72933b68fdeb525d0cd3eaf4761de"
+      },
+      "generation_seconds_including_failed_requests": 1749.191167615354,
+      "macro_auc_percent": 68.30606336316065,
+      "gain_pp": 2.662181047996171,
+      "duplicate_disjoint_macro_auc_percent": 68.23088588577357,
+      "macro_auc_ci95_percent": [
+        67.2860551552135,
+        69.15058388151309
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.0258157798981937,
+        3.3062571080298073
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_laguna_seeded_1048",
+      "status": "finished",
+      "model": "poolside/Laguna-XS-2.1",
+      "search_mode": "baseline_seeded",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 43,
+      "validation_auc_percent": 78.7735,
+      "elapsed_seconds": 1995.2719495054334,
+      "reported_tokens": 78062,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: Input contains NaN.": 7,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 2,
+        "evaluation timeout after 120.0s": 1,
+        "IndexError: invalid index to scalar variable.": 1,
+        "TypeError: array type float16 is unsupported in linalg": 2,
+        "AxisError: axis 1 is out of bounds for array of dimension 1": 1,
+        "TypeError: cannot unpack non-iterable numpy.float64 object": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 1
+      },
+      "valid_request_fraction": 0.7166666666666667,
+      "complexity_validation_spearman": -0.021008090704746435,
+      "mean_train_validation_gap_pp": 0.1677883720930226,
+      "mean_prediction_spearman": 0.1420967026395826,
+      "prediction_pairs_above_0995_fraction": 0.04413472706155633,
+      "diversity_candidates_with_saved_predictions": 42,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope",
+        "prediction_spearman": 0.9999977650572753,
+        "identical_ranks": false,
+        "candidate_hash": "c60ffa6638ba71c737befd34fd5a642a4d058b31c628949f95ee90203bfbedd0"
+      },
+      "generation_seconds_including_failed_requests": 1440.8621873427182,
+      "macro_auc_percent": 68.5347209309762,
+      "gain_pp": 2.890838615811731,
+      "duplicate_disjoint_macro_auc_percent": 68.45684832934342,
+      "macro_auc_ci95_percent": [
+        67.54847223281976,
+        69.37273829139961
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2185096967812616,
+        3.550334082594443
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_linear_evolution_1047",
+      "status": "finished",
+      "model": "fixed feature pool",
+      "search_mode": "fixed_feature_linear_evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "none",
+      "requested_rounds": null,
+      "requests": 0,
+      "valid_candidates": 60,
+      "validation_auc_percent": 80.13637189444519,
+      "elapsed_seconds": 0.9102252647280693,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 68.50424027661751,
+      "gain_pp": 2.8603579614530332,
+      "duplicate_disjoint_macro_auc_percent": 68.45349544718755,
+      "macro_auc_ci95_percent": [
+        67.52217451230544,
+        69.43529773389668
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.566326303892816,
+        3.145843393135102
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_linear_evolution_1048",
+      "status": "finished",
+      "model": "fixed feature pool",
+      "search_mode": "fixed_feature_linear_evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "none",
+      "requested_rounds": null,
+      "requests": 0,
+      "valid_candidates": 60,
+      "validation_auc_percent": 80.07988145523913,
+      "elapsed_seconds": 0.729416960850358,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 67.55522587072778,
+      "gain_pp": 1.911343555563306,
+      "duplicate_disjoint_macro_auc_percent": 67.48240056135013,
+      "macro_auc_ci95_percent": [
+        66.56320411783423,
+        68.45309481767907
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.3320442872756277,
+        2.431755484933878
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_linear_independent_1047",
+      "status": "finished",
+      "model": "fixed feature pool",
+      "search_mode": "fixed_feature_linear_independent",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "none",
+      "requested_rounds": null,
+      "requests": 0,
+      "valid_candidates": 60,
+      "validation_auc_percent": 76.88121678702822,
+      "elapsed_seconds": 0.6689285300672054,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 66.20051209550056,
+      "gain_pp": 0.5566297803360811,
+      "duplicate_disjoint_macro_auc_percent": 66.11269773942371,
+      "macro_auc_ci95_percent": [
+        65.16169895966945,
+        67.0612871416008
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -0.1466974752959238,
+        1.2720312679868042
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_linear_independent_1048",
+      "status": "finished",
+      "model": "fixed feature pool",
+      "search_mode": "fixed_feature_linear_independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "none",
+      "writer_weight_precision": "none",
+      "requested_rounds": null,
+      "requests": 0,
+      "valid_candidates": 60,
+      "validation_auc_percent": 79.75030658127811,
+      "elapsed_seconds": 0.6717074438929558,
+      "reported_tokens": 0,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {},
+      "valid_request_fraction": null,
+      "generation_seconds_including_failed_requests": 0.0,
+      "macro_auc_percent": 67.30724508057924,
+      "gain_pp": 1.6633627654147602,
+      "duplicate_disjoint_macro_auc_percent": 67.2351077703836,
+      "macro_auc_ci95_percent": [
+        66.30173028558399,
+        68.19332330510744
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.0606195627872097,
+        2.2009032154560653
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-4B",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 42,
+      "valid_candidates": 16,
+      "validation_auc_percent": 78.0317,
+      "elapsed_seconds": 705.6375347152352,
+      "reported_tokens": 147190,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.": 4,
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 9,
+        "AttributeError: 'list' object has no attribute 'shape'": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 28": 2,
+        "ValueError: Shape mismatch: got (), expected (512,)": 1,
+        "ValueError: Input contains NaN.": 3,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 27": 1,
+        "IndexError: index 5120 is out of bounds for axis 0 with size 28": 1,
+        "ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()": 1,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1
+      },
+      "valid_request_fraction": 0.38095238095238093,
+      "complexity_validation_spearman": 0.11331864730826258,
+      "mean_train_validation_gap_pp": 0.05789375000000052,
+      "mean_prediction_spearman": -0.028492109044912315,
+      "prediction_pairs_above_0995_fraction": 0.0,
+      "diversity_candidates_with_saved_predictions": 14,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_TopBottomRatio",
+        "prediction_spearman": 0.9909236406999182,
+        "identical_ranks": false,
+        "candidate_hash": "b45f63c83c4ccba6953cb5a88b0fa0788e8d930ce46b04805030f597e78caecd"
+      },
+      "generation_seconds_including_failed_requests": 386.681858336553,
+      "macro_auc_percent": 68.36932125185352,
+      "gain_pp": 2.725438936689045,
+      "duplicate_disjoint_macro_auc_percent": 68.28462753341414,
+      "macro_auc_ci95_percent": [
+        67.39153217278438,
+        69.19374813183103
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.964823532088282,
+        3.464467764436969
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1047",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 32,
+      "validation_auc_percent": 77.8208,
+      "elapsed_seconds": 1266.4133275095373,
+      "reported_tokens": 214266,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: operands could not be broadcast together with shapes (28,) (6,) ": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 2,
+        "TypeError: list indices must be integers or slices, not tuple": 2,
+        "ValueError: setting an array element with a sequence.": 2,
+        "IndexError: index 26 is out of bounds for axis 0 with size 26": 1,
+        "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>": 1,
+        "AttributeError: 'list' object has no attribute 'shape'": 4,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 512": 2,
+        "IndexError: only integers, slices (`:`), ellipsis (`...`), numpy.newaxis (`None`) and integer or boolean arrays are valid indices": 1,
+        "ValueError: operands could not be broadcast together with shapes (15,) (14,) ": 1,
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 1,
+        "IndexError: index 11 is out of bounds for axis 0 with size 11": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 2,
+        "IndexError: shape mismatch: indexing arrays could not be broadcast together with shapes (27,) (28,) ": 1,
+        "ValueError: operands could not be broadcast together with shapes (27,) (26,) ": 1,
+        "IndexError: invalid index to scalar variable.": 1,
+        "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.": 1,
+        "IndexError: boolean index did not match indexed array along axis 0; size of axis is 27 but size of corresponding boolean axis is 28": 1,
+        "SyntaxError: invalid syntax (<unknown>, line 187)": 1
+      },
+      "valid_request_fraction": 0.5333333333333333,
+      "complexity_validation_spearman": -0.37616865261228233,
+      "mean_train_validation_gap_pp": 0.13758124999999932,
+      "mean_prediction_spearman": 0.2915995669703785,
+      "prediction_pairs_above_0995_fraction": 0.047311827956989246,
+      "diversity_candidates_with_saved_predictions": 31,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.8648884765059747,
+        "identical_ranks": false,
+        "candidate_hash": "83c36ab82dd92b5e1f6d12b45858a707900763c27de9aeb6d2119110c37c1e9c"
+      },
+      "generation_seconds_including_failed_requests": 852.1369413752109,
+      "macro_auc_percent": 68.01845167936695,
+      "gain_pp": 2.374569364202472,
+      "duplicate_disjoint_macro_auc_percent": 67.97178305826702,
+      "macro_auc_ci95_percent": [
+        66.9963926569551,
+        68.9284551586938
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.988705174843352,
+        2.7707381239489837
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 36,
+      "validation_auc_percent": 79.5752,
+      "elapsed_seconds": 1128.5983065348119,
+      "reported_tokens": 221536,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 5,
+        "ImportError: cannot import name 'convolve1d' from 'scipy.signal' (/usr/local/lib/python3.12/dist-packages/scipy/signal/__init__.py)": 1,
+        "ValueError: Input contains NaN.": 6,
+        "ValueError: setting an array element with a sequence. The requested array has an inhomogeneous shape after 1 dimensions. The detected shape was (512,) + inhomogeneous part.": 4,
+        "TypeError: list indices must be integers or slices, not tuple": 3,
+        "IndexError: index 14924 is out of bounds for axis 0 with size 512": 1,
+        "IndexError: index 14924 is out of bounds for axis 1 with size 512": 2,
+        "ValueError: operands could not be broadcast together with shapes (28,512) (28,) ": 1,
+        "ValueError: Input contains infinity or a value too large for dtype('float32').": 1
+      },
+      "valid_request_fraction": 0.6,
+      "complexity_validation_spearman": 0.15934101326514785,
+      "mean_train_validation_gap_pp": -0.5944972222222222,
+      "mean_prediction_spearman": 0.256748264787611,
+      "prediction_pairs_above_0995_fraction": 0.020634920634920634,
+      "diversity_candidates_with_saved_predictions": 36,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope",
+        "prediction_spearman": 0.7614401506293481,
+        "identical_ranks": false,
+        "candidate_hash": "109521072ee3a42a4fa18e7112ac761a2a8bf944bffa2266ed9a04be791e5a21"
+      },
+      "generation_seconds_including_failed_requests": 727.8415014483035,
+      "macro_auc_percent": 69.54116727473746,
+      "gain_pp": 3.8972849595729855,
+      "duplicate_disjoint_macro_auc_percent": 69.4883053848028,
+      "macro_auc_ci95_percent": [
+        68.60788766953256,
+        70.456784772449
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.6013087101239822,
+        4.240313795873778
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_independent_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 12,
+      "valid_candidates": 1,
+      "validation_auc_percent": 75.7504,
+      "elapsed_seconds": 265.94331633485854,
+      "reported_tokens": 35213,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 8,
+        "ImportError: cannot import name 'entropy' from 'scipy.special' (/usr/local/lib/python3.12/dist-packages/scipy/special/__init__.py)": 3
+      },
+      "valid_request_fraction": 0.08333333333333333,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "SequenceLogProb_OutlierScore",
+        "prediction_spearman": 0.9992127342507969,
+        "identical_ranks": false,
+        "candidate_hash": "7f86386bd904aa4004ee5ff6b981651e3d52f4210502aa07a5ed690d46e5b08a"
+      },
+      "generation_seconds_including_failed_requests": 200.4573174789548,
+      "macro_auc_percent": 65.64388231516448,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_macro_auc_percent": 65.61765496897712,
+      "macro_auc_ci95_percent": [
+        64.70175354444672,
+        66.54085353608747
+      ],
+      "paired_macro_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_seeded_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.5-9B",
+      "search_mode": "baseline_seeded",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_default",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 34,
+      "validation_auc_percent": 79.71,
+      "elapsed_seconds": 889.3338226508349,
+      "reported_tokens": 112438,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ImportError: cannot import name 'convolve1d' from 'scipy.signal' (/usr/local/lib/python3.12/dist-packages/scipy/signal/__init__.py)": 1,
+        "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>": 3,
+        "ValueError: operands could not be broadcast together with shapes (27,) (28,) ": 1,
+        "NameError: name 'BaseEstimator' is not defined": 1,
+        "TypeError: list indices must be integers or slices, not tuple": 3,
+        "TypeError: object.__init__() takes exactly one argument (the instance to initialize)": 7,
+        "AttributeError: 'list' object has no attribute 'shape'": 2,
+        "ValueError: Shape mismatch: got (1,), expected (512,)": 1,
+        "ImportError: cannot import name 'Estimator' from 'sklearn.base' (/usr/local/lib/python3.12/dist-packages/sklearn/base.py)": 2,
+        "ValueError: zero-dimensional arrays cannot be concatenated": 1,
+        "ValueError: setting an array element with a sequence.": 1,
+        "ValueError: Shape mismatch: got (), expected (512,)": 1,
+        "ValueError: operands could not be broadcast together with shapes (28,) (27,) ": 1,
+        "ValueError: cannot select an axis to squeeze out which has size not equal to one": 1
+      },
+      "valid_request_fraction": 0.5666666666666667,
+      "complexity_validation_spearman": -0.23346840632205365,
+      "mean_train_validation_gap_pp": 0.18475588235294088,
+      "mean_prediction_spearman": 0.12598907123134262,
+      "prediction_pairs_above_0995_fraction": 0.012477718360071301,
+      "diversity_candidates_with_saved_predictions": 34,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "ExpWeightedNegLogProbWithTop1",
+        "prediction_spearman": 0.8700366032997338,
+        "identical_ranks": false,
+        "candidate_hash": "b1952ddc48d1d087a27c5083ada306773769ac7802fbe63135c02cfe5cced8ff"
+      },
+      "generation_seconds_including_failed_requests": 546.9787961076945,
+      "macro_auc_percent": 69.80096082462103,
+      "gain_pp": 4.157078509456554,
+      "duplicate_disjoint_macro_auc_percent": 69.73390540368717,
+      "macro_auc_ci95_percent": [
+        68.80003297420876,
+        70.68908787224039
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.7308027719782837,
+        4.574525803297222
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "evolution",
+      "seed": 1047,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 57,
+      "validation_auc_percent": 79.6135,
+      "elapsed_seconds": 4456.509634871036,
+      "reported_tokens": 242076,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "ValueError: operands could not be broadcast together with shapes (27,27) (26,) ": 1,
+        "ValueError: Input contains NaN.": 2
+      },
+      "valid_request_fraction": 0.95,
+      "complexity_validation_spearman": -0.16573744000569335,
+      "mean_train_validation_gap_pp": -0.17251228070175434,
+      "mean_prediction_spearman": 0.49377996871557134,
+      "prediction_pairs_above_0995_fraction": 0.03132832080200501,
+      "diversity_candidates_with_saved_predictions": 57,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "ExpWeightedNegLogProbWithTop1",
+        "prediction_spearman": 0.8709576762124998,
+        "identical_ranks": false,
+        "candidate_hash": "39b967bbf368245a19bc78cfd899c5983ecdd8f69546a47416d04b4c9af19c23"
+      },
+      "generation_seconds_including_failed_requests": 3880.3123308923095,
+      "macro_auc_percent": 69.79694193022887,
+      "gain_pp": 4.153059615064393,
+      "duplicate_disjoint_macro_auc_percent": 69.72960583186092,
+      "macro_auc_ci95_percent": [
+        68.79897081425791,
+        70.68268245771469
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.730223018634196,
+        4.5807779344083706
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "evolution",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 53,
+      "validation_auc_percent": 78.7667,
+      "elapsed_seconds": 4874.888502115384,
+      "reported_tokens": 230825,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "TypeError: HallucinationDetector must be an Estimator subclass, got <class 'HallucinationDetector'>": 1,
+        "ValueError: Input contains NaN.": 3,
+        "AttributeError: 'dict' object has no attribute 'pearsonr'": 1,
+        "TypeError: Can't instantiate abstract class HallucinationDetector without an implementation for abstract method '__call__'": 1,
+        "UnboundLocalError: cannot access local variable 'gaps' where it is not associated with a value": 1
+      },
+      "valid_request_fraction": 0.8833333333333333,
+      "complexity_validation_spearman": 0.015686116426672864,
+      "mean_train_validation_gap_pp": 0.4245830188679223,
+      "mean_prediction_spearman": 0.4220489612169358,
+      "prediction_pairs_above_0995_fraction": 0.036284470246734396,
+      "diversity_candidates_with_saved_predictions": 53,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope",
+        "prediction_spearman": 1.0,
+        "identical_ranks": true,
+        "candidate_hash": "06c6dd8c553780efbba5d5fdf77c6015b51511a80afbe1328fbc5e6d7be4627b"
+      },
+      "generation_seconds_including_failed_requests": 3692.17041169852,
+      "macro_auc_percent": 68.53308417221132,
+      "gain_pp": 2.8892018570468423,
+      "duplicate_disjoint_macro_auc_percent": 68.45525628596222,
+      "macro_auc_ci95_percent": [
+        67.54574399923558,
+        69.37271494169951
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.21582571129568,
+        3.549518576617184
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 6,
+      "valid_candidates": 0,
+      "validation_auc_percent": 75.7504,
+      "elapsed_seconds": 344.3198826946318,
+      "reported_tokens": 10222,
+      "protocol_excluded": true,
+      "protocol_exclusion": {
+        "utc": "2026-10-15T02:27:41.536257+00:00",
+        "reason": "Original from-scratch prompt omitted the required __call__ method contract. The first four programs could not instantiate; three implemented other method names and one imported Estimator from sklearn.",
+        "superseded_by": "uncertainty_quantification_qwen38_independent_contract_1048",
+        "test_data_consulted": false
+      },
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "TypeError: Can't instantiate abstract class HallucinationDetector without an implementation for abstract method '__call__'": 5,
+        "ImportError: cannot import name 'Estimator' from 'sklearn.base' (/usr/local/lib/python3.12/dist-packages/sklearn/base.py)": 1
+      },
+      "valid_request_fraction": 0.0,
+      "generation_seconds_including_failed_requests": 307.8408788703382
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_independent_contract_1048",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "independent",
+      "seed": 1048,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 30,
+      "requests": 60,
+      "valid_candidates": 58,
+      "validation_auc_percent": 79.7812,
+      "elapsed_seconds": 2867.458130983636,
+      "reported_tokens": 102000,
+      "protocol_excluded": false,
+      "requests_without_usage": 0,
+      "invalid_candidate_errors": {
+        "AttributeError: 'dict' object has no attribute 'pearsonr'": 2
+      },
+      "valid_request_fraction": 0.9666666666666667,
+      "complexity_validation_spearman": -0.14716312304384216,
+      "mean_train_validation_gap_pp": 0.2464499999999999,
+      "mean_prediction_spearman": 0.5430637862926964,
+      "prediction_pairs_above_0995_fraction": 0.053877551020408164,
+      "diversity_candidates_with_saved_predictions": 50,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "LogProbSlope_BottomMassAvg",
+        "prediction_spearman": 0.9661998110525238,
+        "identical_ranks": false,
+        "candidate_hash": "90b7bae563240e1de77d28ee9b99ba4b2514172fef878500b16af7fedf2e933c"
+      },
+      "generation_seconds_including_failed_requests": 2419.7150781825185,
+      "macro_auc_percent": 69.47011600353005,
+      "gain_pp": 3.8262336883655763,
+      "duplicate_disjoint_macro_auc_percent": 69.40800687086153,
+      "macro_auc_ci95_percent": [
+        68.46817405487955,
+        70.32070050067307
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.203843877882178,
+        4.4795600633481305
+      ]
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_pilot_1046",
+      "status": "finished",
+      "model": "Qwen/Qwen3.8-27B",
+      "search_mode": "evolution",
+      "seed": 1046,
+      "split": "stratified",
+      "serving_profile": "vllm_eager",
+      "writer_weight_precision": "bfloat16",
+      "requested_rounds": 5,
+      "requests": 10,
+      "valid_candidates": 9,
+      "validation_auc_percent": 78.4814,
+      "elapsed_seconds": 841.2694434057921,
+      "reported_tokens": 26075,
+      "protocol_excluded": false,
+      "requests_without_usage": 1,
+      "invalid_candidate_errors": {
+        "APITimeoutError: Request timed out.": 1
+      },
+      "valid_request_fraction": 0.9,
+      "complexity_validation_spearman": -0.41666666666666663,
+      "mean_train_validation_gap_pp": 2.380433333333335,
+      "mean_prediction_spearman": 0.584628560913507,
+      "prediction_pairs_above_0995_fraction": 0.0,
+      "diversity_candidates_with_saved_predictions": 9,
+      "nearest_supplied_formula_on_validation": {
+        "formula": "ExpWeightedNegLogProb",
+        "prediction_spearman": 0.909532927180847,
+        "identical_ranks": false,
+        "candidate_hash": "d4d9306574c880403571ab4c92e4f16a94861f83264e087142e2864a16b4895c"
+      },
+      "generation_seconds_including_failed_requests": 641.613746797666,
+      "macro_auc_percent": 70.11829199274169,
+      "gain_pp": 4.4744096775772135,
+      "duplicate_disjoint_macro_auc_percent": 70.03580133270526,
+      "macro_auc_ci95_percent": [
+        69.14845263364758,
+        71.00219318510781
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.8917648464306067,
+        5.064030375336418
+      ]
+    }
+  ],
+  "held_out_macro_results": {
+    "alignment/ClaimLength": {
+      "macro_auc_percent": 49.368038700219536,
+      "gain_pp": -16.27584361494494,
+      "duplicate_disjoint_macro_auc_percent": 49.37831704224943,
+      "macro_auc_ci95_percent": [
+        48.37355629384975,
+        50.350021067607955
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -16.956713076213425,
+        -15.520040107145421
+      ]
+    },
+    "alignment/ClaimOnlyMeanSurprisal": {
+      "macro_auc_percent": 66.3389614523798,
+      "gain_pp": 0.6950791372153304,
+      "duplicate_disjoint_macro_auc_percent": 66.2508867537223,
+      "macro_auc_ci95_percent": [
+        65.42664870165561,
+        67.20888315576242
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -0.42490852158580306,
+        1.9690390827536912
+      ]
+    },
+    "alignment/ClaimOnlySequenceLogProb": {
+      "macro_auc_percent": 65.68582040005109,
+      "gain_pp": 0.04193808488660977,
+      "duplicate_disjoint_macro_auc_percent": 65.65954427583154,
+      "macro_auc_ci95_percent": [
+        64.76698872844626,
+        66.59526009845818
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -0.014181286198498011,
+        0.0928610663836418
+      ]
+    },
+    "alignment/LastInputTokenSurprisal": {
+      "macro_auc_percent": 50.14900858919563,
+      "gain_pp": -15.494873725968844,
+      "duplicate_disjoint_macro_auc_percent": 50.14900858919563,
+      "macro_auc_ci95_percent": [
+        50.06434262937599,
+        50.22818395745783
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -16.392108118701916,
+        -14.501405312551338
+      ]
+    },
+    "alignment/LegacyTailCropSequenceLogProb": {
+      "macro_auc_percent": 64.521385798152,
+      "gain_pp": -1.122496517012479,
+      "duplicate_disjoint_macro_auc_percent": 64.4716396548385,
+      "macro_auc_ci95_percent": [
+        63.52644841351855,
+        65.52701366518875
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -1.5005942849823806,
+        -0.7580259355436784
+      ]
+    },
+    "alignment/PostClaimSurprisal": {
+      "macro_auc_percent": 65.33971297887359,
+      "gain_pp": -0.30416933629088305,
+      "duplicate_disjoint_macro_auc_percent": 65.26848806899059,
+      "macro_auc_ci95_percent": [
+        64.2966415655381,
+        66.23085462169816
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -1.3765662088564266,
+        0.8149460194033044
+      ]
+    },
+    "new/ablation_laguna_slope_only": {
+      "macro_auc_percent": 68.5347209309762,
+      "gain_pp": 2.890838615811731,
+      "duplicate_disjoint_macro_auc_percent": 68.45684832934342,
+      "macro_auc_ci95_percent": [
+        67.54847223281976,
+        69.37273829139961
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2185096967812616,
+        3.550334082594443
+      ]
+    },
+    "new/ablation_laguna_slope_range": {
+      "macro_auc_percent": 69.21921406573375,
+      "gain_pp": 3.5753317505692763,
+      "duplicate_disjoint_macro_auc_percent": 69.15212943903641,
+      "macro_auc_ci95_percent": [
+        68.20457903435259,
+        70.09403546283603
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.972895746107266,
+        4.20009196085682
+      ]
+    },
+    "new/ablation_laguna_slope_variance": {
+      "macro_auc_percent": 68.63507318151103,
+      "gain_pp": 2.9911908663465567,
+      "duplicate_disjoint_macro_auc_percent": 68.55868923304708,
+      "macro_auc_ci95_percent": [
+        67.64930264108655,
+        69.47715580410232
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.310900982077947,
+        3.655540942974452
+      ]
+    },
+    "new/ablation_qwen_linear_position_nll": {
+      "macro_auc_percent": 69.79260638209645,
+      "gain_pp": 4.148724066931976,
+      "duplicate_disjoint_macro_auc_percent": 69.72534613092196,
+      "macro_auc_ci95_percent": [
+        68.79467061951502,
+        70.67484117246624
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.7256829770872364,
+        4.57603375903349
+      ]
+    },
+    "new/uncertainty_quantification_laguna_evo_1047": {
+      "macro_auc_percent": 69.42873391244323,
+      "gain_pp": 3.7848515972787595,
+      "duplicate_disjoint_macro_auc_percent": 69.36033626109014,
+      "macro_auc_ci95_percent": [
+        68.43480458936808,
+        70.30431994874816
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.1246537451081293,
+        4.532584242881424
+      ]
+    },
+    "new/uncertainty_quantification_laguna_evo_1048": {
+      "macro_auc_percent": 69.2343481691619,
+      "gain_pp": 3.5904658539974292,
+      "duplicate_disjoint_macro_auc_percent": 69.16826619385816,
+      "macro_auc_ci95_percent": [
+        68.22766941224846,
+        70.10852606216548
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.0007114160564585,
+        4.203339890413913
+      ]
+    },
+    "new/uncertainty_quantification_laguna_independent_1048": {
+      "macro_auc_percent": 68.30606336316065,
+      "gain_pp": 2.662181047996171,
+      "duplicate_disjoint_macro_auc_percent": 68.23088588577357,
+      "macro_auc_ci95_percent": [
+        67.2860551552135,
+        69.15058388151309
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.0258157798981937,
+        3.3062571080298073
+      ]
+    },
+    "new/uncertainty_quantification_laguna_seeded_1048": {
+      "macro_auc_percent": 68.5347209309762,
+      "gain_pp": 2.890838615811731,
+      "duplicate_disjoint_macro_auc_percent": 68.45684832934342,
+      "macro_auc_ci95_percent": [
+        67.54847223281976,
+        69.37273829139961
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2185096967812616,
+        3.550334082594443
+      ]
+    },
+    "new/uncertainty_quantification_linear_evolution_1047": {
+      "macro_auc_percent": 68.50424027661751,
+      "gain_pp": 2.8603579614530332,
+      "duplicate_disjoint_macro_auc_percent": 68.45349544718755,
+      "macro_auc_ci95_percent": [
+        67.52217451230544,
+        69.43529773389668
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.566326303892816,
+        3.145843393135102
+      ]
+    },
+    "new/uncertainty_quantification_linear_evolution_1048": {
+      "macro_auc_percent": 67.55522587072778,
+      "gain_pp": 1.911343555563306,
+      "duplicate_disjoint_macro_auc_percent": 67.48240056135013,
+      "macro_auc_ci95_percent": [
+        66.56320411783423,
+        68.45309481767907
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.3320442872756277,
+        2.431755484933878
+      ]
+    },
+    "new/uncertainty_quantification_linear_independent_1047": {
+      "macro_auc_percent": 66.20051209550056,
+      "gain_pp": 0.5566297803360811,
+      "duplicate_disjoint_macro_auc_percent": 66.11269773942371,
+      "macro_auc_ci95_percent": [
+        65.16169895966945,
+        67.0612871416008
+      ],
+      "paired_macro_gain_ci95_pp": [
+        -0.1466974752959238,
+        1.2720312679868042
+      ]
+    },
+    "new/uncertainty_quantification_linear_independent_1048": {
+      "macro_auc_percent": 67.30724508057924,
+      "gain_pp": 1.6633627654147602,
+      "duplicate_disjoint_macro_auc_percent": 67.2351077703836,
+      "macro_auc_ci95_percent": [
+        66.30173028558399,
+        68.19332330510744
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.0606195627872097,
+        2.2009032154560653
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_4b_evo_1048": {
+      "macro_auc_percent": 68.36932125185352,
+      "gain_pp": 2.725438936689045,
+      "duplicate_disjoint_macro_auc_percent": 68.28462753341414,
+      "macro_auc_ci95_percent": [
+        67.39153217278438,
+        69.19374813183103
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.964823532088282,
+        3.464467764436969
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1047": {
+      "macro_auc_percent": 68.01845167936695,
+      "gain_pp": 2.374569364202472,
+      "duplicate_disjoint_macro_auc_percent": 67.97178305826702,
+      "macro_auc_ci95_percent": [
+        66.9963926569551,
+        68.9284551586938
+      ],
+      "paired_macro_gain_ci95_pp": [
+        1.988705174843352,
+        2.7707381239489837
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+      "macro_auc_percent": 69.54116727473746,
+      "gain_pp": 3.8972849595729855,
+      "duplicate_disjoint_macro_auc_percent": 69.4883053848028,
+      "macro_auc_ci95_percent": [
+        68.60788766953256,
+        70.456784772449
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.6013087101239822,
+        4.240313795873778
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_independent_1048": {
+      "macro_auc_percent": 65.64388231516448,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_macro_auc_percent": 65.61765496897712,
+      "macro_auc_ci95_percent": [
+        64.70175354444672,
+        66.54085353608747
+      ],
+      "paired_macro_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "new/uncertainty_quantification_qwen35_9b_seeded_1048": {
+      "macro_auc_percent": 69.80096082462103,
+      "gain_pp": 4.157078509456554,
+      "duplicate_disjoint_macro_auc_percent": 69.73390540368717,
+      "macro_auc_ci95_percent": [
+        68.80003297420876,
+        70.68908787224039
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.7308027719782837,
+        4.574525803297222
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_evo_1047": {
+      "macro_auc_percent": 69.79694193022887,
+      "gain_pp": 4.153059615064393,
+      "duplicate_disjoint_macro_auc_percent": 69.72960583186092,
+      "macro_auc_ci95_percent": [
+        68.79897081425791,
+        70.68268245771469
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.730223018634196,
+        4.5807779344083706
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_evo_1048": {
+      "macro_auc_percent": 68.53308417221132,
+      "gain_pp": 2.8892018570468423,
+      "duplicate_disjoint_macro_auc_percent": 68.45525628596222,
+      "macro_auc_ci95_percent": [
+        67.54574399923558,
+        69.37271494169951
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.21582571129568,
+        3.549518576617184
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_independent_contract_1048": {
+      "macro_auc_percent": 69.47011600353005,
+      "gain_pp": 3.8262336883655763,
+      "duplicate_disjoint_macro_auc_percent": 69.40800687086153,
+      "macro_auc_ci95_percent": [
+        68.46817405487955,
+        70.32070050067307
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.203843877882178,
+        4.4795600633481305
+      ]
+    },
+    "new/uncertainty_quantification_qwen38_pilot_1046": {
+      "macro_auc_percent": 70.11829199274169,
+      "gain_pp": 4.4744096775772135,
+      "duplicate_disjoint_macro_auc_percent": 70.03580133270526,
+      "macro_auc_ci95_percent": [
+        69.14845263364758,
+        71.00219318510781
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.8917648464306067,
+        5.064030375336418
+      ]
+    },
+    "original/EntropySlope": {
+      "macro_auc_percent": 53.03019369706494,
+      "gain_pp": -12.613688618099538,
+      "duplicate_disjoint_macro_auc_percent": 53.00682240997051
+    },
+    "original/ExpWeightedNegLogProb": {
+      "macro_auc_percent": 69.79713233614491,
+      "gain_pp": 4.153250020980437,
+      "duplicate_disjoint_macro_auc_percent": 69.7079021339725
+    },
+    "original/ExpWeightedNegLogProbWithTop1": {
+      "macro_auc_percent": 69.88123547078578,
+      "gain_pp": 4.237353155621307,
+      "duplicate_disjoint_macro_auc_percent": 69.79407957948283
+    },
+    "original/Gap": {
+      "macro_auc_percent": 63.37179868565516,
+      "gain_pp": -2.272083629509318,
+      "duplicate_disjoint_macro_auc_percent": 63.27782598037325
+    },
+    "original/LogProbSlope": {
+      "macro_auc_percent": 68.53308417221132,
+      "gain_pp": 2.8892018570468423,
+      "duplicate_disjoint_macro_auc_percent": 68.45525628596222,
+      "macro_auc_ci95_percent": [
+        67.54574399923558,
+        69.37271494169951
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.21582571129568,
+        3.549518576617184
+      ]
+    },
+    "original/LogProbSlope_BottomMassAvg": {
+      "macro_auc_percent": 68.62132653351364,
+      "gain_pp": 2.977444218349163,
+      "duplicate_disjoint_macro_auc_percent": 68.54390530748542,
+      "macro_auc_ci95_percent": [
+        67.63406091494262,
+        69.46997227745709
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2993630946538794,
+        3.6394939226409995
+      ]
+    },
+    "original/LogProbSlope_OutlierScore": {
+      "macro_auc_percent": 67.92843786693389,
+      "gain_pp": 2.284555551769415,
+      "duplicate_disjoint_macro_auc_percent": 67.85319801634486
+    },
+    "original/LogProbSlope_TopBottomRatio": {
+      "macro_auc_percent": 68.5921695208144,
+      "gain_pp": 2.948287205649919,
+      "duplicate_disjoint_macro_auc_percent": 68.51434830090304,
+      "macro_auc_ci95_percent": [
+        67.60134416080348,
+        69.44034492381682
+      ],
+      "paired_macro_gain_ci95_pp": [
+        2.2675399268112146,
+        3.606285098914487
+      ]
+    },
+    "original/MeanStdTokenEntropy": {
+      "macro_auc_percent": 57.76002776130046,
+      "gain_pp": -7.883854553864019,
+      "duplicate_disjoint_macro_auc_percent": 57.71432860897174
+    },
+    "original/MeanTokenEntropy": {
+      "macro_auc_percent": 58.41996535859058,
+      "gain_pp": -7.223916956573895,
+      "duplicate_disjoint_macro_auc_percent": 58.364222970002615
+    },
+    "original/MinimalLogProb": {
+      "macro_auc_percent": 50.23046957411132,
+      "gain_pp": -15.413412741053158,
+      "duplicate_disjoint_macro_auc_percent": 50.233465176775674
+    },
+    "original/Perplexity": {
+      "macro_auc_percent": 64.17472363290479,
+      "gain_pp": -1.469158682259689,
+      "duplicate_disjoint_macro_auc_percent": 64.08473018173875
+    },
+    "original/PositionWeightedGap": {
+      "macro_auc_percent": 66.43754186548887,
+      "gain_pp": 0.7936595503243922,
+      "duplicate_disjoint_macro_auc_percent": 66.34052043025655
+    },
+    "original/PositionWeightedGapNormalized": {
+      "macro_auc_percent": 64.46233672171176,
+      "gain_pp": -1.1815455934527108,
+      "duplicate_disjoint_macro_auc_percent": 64.36510262177787
+    },
+    "original/PositionWeightedGap_EntropySlope_TopKMassInv": {
+      "macro_auc_percent": 62.75266358002151,
+      "gain_pp": -2.8912187351429637,
+      "duplicate_disjoint_macro_auc_percent": 62.711313334698175
+    },
+    "original/QuartileEntropyDiff": {
+      "macro_auc_percent": 51.71058871826279,
+      "gain_pp": -13.933293596901684,
+      "duplicate_disjoint_macro_auc_percent": 51.65426732015828
+    },
+    "original/QuartileEntropyDiffNormalized": {
+      "macro_auc_percent": 50.961761958413206,
+      "gain_pp": -14.68212035675127,
+      "duplicate_disjoint_macro_auc_percent": 50.90155192029301
+    },
+    "original/QuartileEntropyDiff_PositionWeightedGap": {
+      "macro_auc_percent": 63.86004212833963,
+      "gain_pp": -1.7838401868248468,
+      "duplicate_disjoint_macro_auc_percent": 63.773645244746845
+    },
+    "original/QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay": {
+      "macro_auc_percent": 61.46413403217077,
+      "gain_pp": -4.179748282993707,
+      "duplicate_disjoint_macro_auc_percent": 61.386508221081044
+    },
+    "original/SequenceLogProb": {
+      "macro_auc_percent": 65.64388231516448,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_macro_auc_percent": 65.61765496897712,
+      "macro_auc_ci95_percent": [
+        64.70175354444672,
+        66.54085353608747
+      ],
+      "paired_macro_gain_ci95_pp": [
+        0.0,
+        0.0
+      ]
+    },
+    "original/SequenceLogProbBottom": {
+      "macro_auc_percent": 64.36795478783866,
+      "gain_pp": -1.2759275273258197,
+      "duplicate_disjoint_macro_auc_percent": 64.34947435991306
+    },
+    "original/SequenceLogProb_BottomMassAvg": {
+      "macro_auc_percent": 65.64388231516448,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_macro_auc_percent": 65.61765496897712
+    },
+    "original/SequenceLogProb_OutlierScore": {
+      "macro_auc_percent": 65.64211506656682,
+      "gain_pp": -0.001767248597658977,
+      "duplicate_disjoint_macro_auc_percent": 65.61595654737386
+    },
+    "original/SequenceLogProb_TopBottomRatio": {
+      "macro_auc_percent": 65.64388231516448,
+      "gain_pp": 0.0,
+      "duplicate_disjoint_macro_auc_percent": 65.61765496897712
+    },
+    "original/StdTokenEntropy": {
+      "macro_auc_percent": 54.50715674474415,
+      "gain_pp": -11.136725570420325,
+      "duplicate_disjoint_macro_auc_percent": 54.540648436395976
+    },
+    "supervised/logistic_claim_group": {
+      "macro_auc_percent": 70.1201644242455,
+      "gain_pp": 4.476282109081026,
+      "duplicate_disjoint_macro_auc_percent": 70.05105499798508,
+      "macro_auc_ci95_percent": [
+        69.12182261797636,
+        71.03504114511631
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.8849777921850808,
+        5.072770172883814
+      ]
+    },
+    "supervised/logistic_documented_stratified": {
+      "macro_auc_percent": 70.2778688036649,
+      "gain_pp": 4.633986488500426,
+      "duplicate_disjoint_macro_auc_percent": 70.20393016192303,
+      "macro_auc_ci95_percent": [
+        69.27207273593538,
+        71.155059739815
+      ],
+      "paired_macro_gain_ci95_pp": [
+        4.0304567749381075,
+        5.222864577055541
+      ]
+    },
+    "supervised/logistic_stratified": {
+      "macro_auc_percent": 69.72092428093295,
+      "gain_pp": 4.077041965768473,
+      "duplicate_disjoint_macro_auc_percent": 69.65059423426459,
+      "macro_auc_ci95_percent": [
+        68.73912343894203,
+        70.62075310351513
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.4714556348399173,
+        4.67453774145737
+      ]
+    },
+    "supervised/qda_claim_group": {
+      "macro_auc_percent": 69.44793884638867,
+      "gain_pp": 3.804056531224191,
+      "duplicate_disjoint_macro_auc_percent": 69.36323412068644,
+      "macro_auc_ci95_percent": [
+        68.4977393086654,
+        70.35480756410823
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.092005055388968,
+        4.450214315589362
+      ]
+    },
+    "supervised/qda_documented_stratified": {
+      "macro_auc_percent": 69.94534917263749,
+      "gain_pp": 4.301466857473017,
+      "duplicate_disjoint_macro_auc_percent": 69.86306197118006,
+      "macro_auc_ci95_percent": [
+        68.97781215137422,
+        70.80043788285644
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.7138015504442783,
+        4.909548852963917
+      ]
+    },
+    "supervised/qda_stratified": {
+      "macro_auc_percent": 69.63241802911242,
+      "gain_pp": 3.9885357139479396,
+      "duplicate_disjoint_macro_auc_percent": 69.54665469372682,
+      "macro_auc_ci95_percent": [
+        68.66554424379461,
+        70.51286093248282
+      ],
+      "paired_macro_gain_ci95_pp": [
+        3.347172452629639,
+        4.571941951989141
+      ]
+    }
+  },
+  "supplementary": {
+    "header_suffix_ablation": {
+      "datasets_evaluated": 9,
+      "macro_results": {
+        "alignment/ClaimOnlySequenceLogProb": {
+          "macro_auc_percent": 65.68582040005109,
+          "gain_pp": 0.03927354082881607,
+          "duplicate_disjoint_macro_auc_percent": 65.65954427583154,
+          "macro_auc_ci95_percent": [
+            64.76698872844626,
+            66.59526009845818
+          ],
+          "paired_macro_gain_ci95_pp": [
+            -0.016304303443516466,
+            0.09029520710465225
+          ]
+        },
+        "alignment/LegacyTailCropSequenceLogProb": {
+          "macro_auc_percent": 65.68582040005109,
+          "gain_pp": 0.03927354082881607,
+          "duplicate_disjoint_macro_auc_percent": 65.65954427583154,
+          "macro_auc_ci95_percent": [
+            64.76698872844626,
+            66.59526009845818
+          ],
+          "paired_macro_gain_ci95_pp": [
+            -0.016304303443516466,
+            0.09029520710465225
+          ]
+        },
+        "new/uncertainty_quantification_laguna_evo_1048": {
+          "macro_auc_percent": 69.77275563894828,
+          "gain_pp": 4.126208779726014,
+          "duplicate_disjoint_macro_auc_percent": 69.69414827629248,
+          "macro_auc_ci95_percent": [
+            68.83919629107692,
+            70.62686002265744
+          ],
+          "paired_macro_gain_ci95_pp": [
+            3.3552253987396337,
+            4.97637853387085
+          ]
+        },
+        "new/uncertainty_quantification_linear_evolution_1047": {
+          "macro_auc_percent": 69.64264271496235,
+          "gain_pp": 3.99609585574008,
+          "duplicate_disjoint_macro_auc_percent": 69.57691596367752,
+          "macro_auc_ci95_percent": [
+            68.61663017136699,
+            70.55383245677424
+          ],
+          "paired_macro_gain_ci95_pp": [
+            3.562340059906405,
+            4.441482224869796
+          ]
+        },
+        "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+          "macro_auc_percent": 67.80506431980433,
+          "gain_pp": 2.158517460582061,
+          "duplicate_disjoint_macro_auc_percent": 67.73618181216585,
+          "macro_auc_ci95_percent": [
+            66.81944928008178,
+            68.67124828716517
+          ],
+          "paired_macro_gain_ci95_pp": [
+            1.7472749247875512,
+            2.62754254480914
+          ]
+        },
+        "new/uncertainty_quantification_qwen38_evo_1047": {
+          "macro_auc_percent": 70.03562581173504,
+          "gain_pp": 4.389078952512776,
+          "duplicate_disjoint_macro_auc_percent": 69.9626579588729,
+          "macro_auc_ci95_percent": [
+            69.05253367089323,
+            70.93100105896892
+          ],
+          "paired_macro_gain_ci95_pp": [
+            3.882028583115081,
+            4.9041617278930145
+          ]
+        },
+        "original/LogProbSlope_BottomMassAvg": {
+          "macro_auc_percent": 69.31381202362631,
+          "gain_pp": 3.667265164404043,
+          "duplicate_disjoint_macro_auc_percent": 69.22685088583465,
+          "macro_auc_ci95_percent": [
+            68.33953749172935,
+            70.14538940563865
+          ],
+          "paired_macro_gain_ci95_pp": [
+            2.8678189252328687,
+            4.533746363951159
+          ]
+        },
+        "original/MeanTokenEntropy": {
+          "macro_auc_percent": 58.66820585566073,
+          "gain_pp": -6.978341003561539,
+          "duplicate_disjoint_macro_auc_percent": 58.60789851068879
+        },
+        "original/Perplexity": {
+          "macro_auc_percent": 62.79728286408109,
+          "gain_pp": -2.849263995141179,
+          "duplicate_disjoint_macro_auc_percent": 62.70750022490553
+        },
+        "original/SequenceLogProb": {
+          "macro_auc_percent": 65.64654685922227,
+          "gain_pp": 0.0,
+          "duplicate_disjoint_macro_auc_percent": 65.62032004716583,
+          "macro_auc_ci95_percent": [
+            64.70344446748271,
+            66.54209584776802
+          ],
+          "paired_macro_gain_ci95_pp": [
+            0.0,
+            0.0
+          ]
+        },
+        "supervised/header_refit/logistic_documented_stratified": {
+          "macro_auc_percent": 71.36472859588702,
+          "gain_pp": 5.7181817366647465,
+          "duplicate_disjoint_macro_auc_percent": 71.29600650579198,
+          "macro_auc_ci95_percent": [
+            70.4065164992342,
+            72.25710981453545
+          ],
+          "paired_macro_gain_ci95_pp": [
+            4.959980848232296,
+            6.457249730664276
+          ]
+        },
+        "supervised/header_refit/logistic_stratified": {
+          "macro_auc_percent": 70.8851948740026,
+          "gain_pp": 5.238648014780324,
+          "duplicate_disjoint_macro_auc_percent": 70.81925709538123,
+          "macro_auc_ci95_percent": [
+            69.93448345345023,
+            71.79061494289121
+          ],
+          "paired_macro_gain_ci95_pp": [
+            4.427859068270113,
+            5.994438473697922
+          ]
+        },
+        "supervised/header_refit/qda_documented_stratified": {
+          "macro_auc_percent": 69.02493082349753,
+          "gain_pp": 3.3783839642752582,
+          "duplicate_disjoint_macro_auc_percent": 68.97118622049666,
+          "macro_auc_ci95_percent": [
+            68.02984123706517,
+            69.95560256554924
+          ],
+          "paired_macro_gain_ci95_pp": [
+            2.4945898575042236,
+            4.210763994927687
+          ]
+        },
+        "supervised/header_refit/qda_stratified": {
+          "macro_auc_percent": 69.30155795095287,
+          "gain_pp": 3.6550110917306,
+          "duplicate_disjoint_macro_auc_percent": 69.24615824397326,
+          "macro_auc_ci95_percent": [
+            68.3025939364854,
+            70.20527911799823
+          ],
+          "paired_macro_gain_ci95_pp": [
+            2.7107236082420054,
+            4.536149775647527
+          ]
+        },
+        "supervised/logistic_documented_stratified": {
+          "macro_auc_percent": 67.97849126933008,
+          "gain_pp": 2.331944410107809,
+          "duplicate_disjoint_macro_auc_percent": 67.88735439991711,
+          "macro_auc_ci95_percent": [
+            67.103152828405,
+            68.82516824911517
+          ],
+          "paired_macro_gain_ci95_pp": [
+            1.020291567452442,
+            3.612235250076807
+          ]
+        },
+        "supervised/logistic_stratified": {
+          "macro_auc_percent": 67.93474827696993,
+          "gain_pp": 2.2882014177476577,
+          "duplicate_disjoint_macro_auc_percent": 67.84594952623152,
+          "macro_auc_ci95_percent": [
+            67.0419190122813,
+            68.7767894794137
+          ],
+          "paired_macro_gain_ci95_pp": [
+            0.9879018855967494,
+            3.5130857759958674
+          ]
+        },
+        "supervised/qda_documented_stratified": {
+          "macro_auc_percent": 66.75240732014282,
+          "gain_pp": 1.1058604609205531,
+          "duplicate_disjoint_macro_auc_percent": 66.67398497465672,
+          "macro_auc_ci95_percent": [
+            65.93874225116797,
+            67.59787726589214
+          ],
+          "paired_macro_gain_ci95_pp": [
+            -0.24723511515124336,
+            2.444039484250747
+          ]
+        },
+        "supervised/qda_stratified": {
+          "macro_auc_percent": 67.08302619783782,
+          "gain_pp": 1.4364793386155554,
+          "duplicate_disjoint_macro_auc_percent": 67.01127806554918,
+          "macro_auc_ci95_percent": [
+            66.27757416094923,
+            67.8975083467993
+          ],
+          "paired_macro_gain_ci95_pp": [
+            0.08803814330012483,
+            2.7560127272769037
+          ]
+        }
+      },
+      "evaluation_directory": "out/campaign/header_suffix_ablation_refitted",
+      "method_failures": {
+        "AVeriTeC__dev_filtered_10shot": {},
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {},
+        "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {},
+        "geometry__cities": {},
+        "geometry__common_claim_true_false": {},
+        "geometry__companies_true_false": {},
+        "geometry__counterfact_true_false": {},
+        "popqa__popqa_test_filtered_10shot": {},
+        "x-fact__test_filtered_10shot": {}
+      },
+      "change_from_primary_macro_auc_pp": {
+        "alignment/ClaimOnlySequenceLogProb": 0.0,
+        "alignment/LegacyTailCropSequenceLogProb": 1.1644346018990888,
+        "new/uncertainty_quantification_laguna_evo_1048": 0.5384074697863781,
+        "new/uncertainty_quantification_linear_evolution_1047": 1.1384024383448406,
+        "new/uncertainty_quantification_qwen35_9b_evo_1048": -1.7361029549331306,
+        "new/uncertainty_quantification_qwen38_evo_1047": 0.23868388150617648,
+        "original/LogProbSlope_BottomMassAvg": 0.6924854901126736,
+        "original/MeanTokenEntropy": 0.2482404970701495,
+        "original/Perplexity": -1.3774407688236963,
+        "original/SequenceLogProb": 0.002664544057793705,
+        "supervised/logistic_documented_stratified": -2.2993775343348233,
+        "supervised/logistic_stratified": -1.7861760039630212,
+        "supervised/qda_documented_stratified": -3.1929418524946698,
+        "supervised/qda_stratified": -2.5493918312745905
+      },
+      "paired_change_ci95_pp": {
+        "alignment/ClaimOnlySequenceLogProb": [
+          0.0,
+          0.0
+        ],
+        "alignment/LegacyTailCropSequenceLogProb": [
+          0.7832052157769607,
+          1.5352371319424418
+        ],
+        "new/uncertainty_quantification_laguna_evo_1048": [
+          0.2285567115652283,
+          0.8785085000678335
+        ],
+        "new/uncertainty_quantification_linear_evolution_1047": [
+          0.9239046535559842,
+          1.3788076060868233
+        ],
+        "new/uncertainty_quantification_qwen35_9b_evo_1048": [
+          -2.0686183281059805,
+          -1.337929657056905
+        ],
+        "new/uncertainty_quantification_qwen38_evo_1047": [
+          0.13715167561424263,
+          0.34992142730626036
+        ],
+        "original/LogProbSlope_BottomMassAvg": [
+          0.35938139343178416,
+          1.0593294778260787
+        ],
+        "original/MeanTokenEntropy": null,
+        "original/Perplexity": null,
+        "original/SequenceLogProb": [
+          -0.00026212043554349164,
+          0.00899141052781535
+        ],
+        "supervised/logistic_documented_stratified": [
+          -3.351576418024954,
+          -1.209986589764236
+        ],
+        "supervised/logistic_stratified": [
+          -2.800312379249231,
+          -0.7173665979358695
+        ],
+        "supervised/qda_documented_stratified": [
+          -4.308355291933755,
+          -1.8806419152952127
+        ],
+        "supervised/qda_stratified": [
+          -3.728313128368923,
+          -1.3044122053284863
+        ]
+      }
+    },
+    "transfer_llama32_1b": {
+      "datasets_evaluated": 0,
+      "macro_results": {},
+      "evaluation_directory": "out/campaign/transfer_llama32_1b",
+      "method_failures": {}
+    },
+    "linear_best50": {
+      "datasets_evaluated": 9,
+      "macro_results": {
+        "new/linear_best50_evolution": {
+          "macro_auc_percent": 69.80672378817778,
+          "gain_pp": 4.162841473013302,
+          "duplicate_disjoint_macro_auc_percent": 69.73953778880968,
+          "macro_auc_ci95_percent": [
+            68.86687106127309,
+            70.67625478360836
+          ],
+          "paired_macro_gain_ci95_pp": [
+            3.7216524818158554,
+            4.627647699789553
+          ]
+        },
+        "new/linear_best50_independent": {
+          "macro_auc_percent": 70.15190791557325,
+          "gain_pp": 4.5080256004087715,
+          "duplicate_disjoint_macro_auc_percent": 70.07972881715907,
+          "macro_auc_ci95_percent": [
+            69.18889452537755,
+            71.042918858792
+          ],
+          "paired_macro_gain_ci95_pp": [
+            4.056132045288715,
+            4.916249939359869
+          ]
+        },
+        "original/SequenceLogProb": {
+          "macro_auc_percent": 65.64388231516448,
+          "gain_pp": 0.0,
+          "duplicate_disjoint_macro_auc_percent": 65.61765496897712,
+          "macro_auc_ci95_percent": [
+            64.70175354444672,
+            66.54085353608747
+          ],
+          "paired_macro_gain_ci95_pp": [
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "evaluation_directory": "out/campaign/linear_best50",
+      "method_failures": {
+        "AVeriTeC__dev_filtered_10shot": {},
+        "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {},
+        "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {},
+        "geometry__cities": {},
+        "geometry__common_claim_true_false": {},
+        "geometry__companies_true_false": {},
+        "geometry__counterfact_true_false": {},
+        "popqa__popqa_test_filtered_10shot": {},
+        "x-fact__test_filtered_10shot": {}
+      },
+      "change_from_primary_macro_auc_pp": {
+        "original/SequenceLogProb": 0.0
+      },
+      "paired_change_ci95_pp": {
+        "original/SequenceLogProb": [
+          0.0,
+          0.0
+        ]
+      }
+    }
+  },
+  "writer_evolution_replicates": {
+    "Qwen/Qwen3.5-4B": {
+      "n": 1,
+      "runs": [
+        "uncertainty_quantification_qwen35_4b_evo_1048"
+      ],
+      "validation_auc_mean_percent": 78.0317,
+      "validation_auc_range_percent": [
+        78.0317,
+        78.0317
+      ],
+      "held_out_macro_mean_percent": 68.36932125185352,
+      "held_out_macro_range_percent": [
+        68.36932125185352,
+        68.36932125185352
+      ]
+    },
+    "Qwen/Qwen3.5-9B": {
+      "n": 2,
+      "runs": [
+        "uncertainty_quantification_qwen35_9b_evo_1047",
+        "uncertainty_quantification_qwen35_9b_evo_1048"
+      ],
+      "validation_auc_mean_percent": 78.69800000000001,
+      "validation_auc_range_percent": [
+        77.8208,
+        79.5752
+      ],
+      "held_out_macro_mean_percent": 68.7798094770522,
+      "held_out_macro_range_percent": [
+        68.01845167936695,
+        69.54116727473746
+      ],
+      "held_out_macro_sample_sd_pp": 1.076722523305001
+    },
+    "Qwen/Qwen3.8-27B": {
+      "n": 2,
+      "runs": [
+        "uncertainty_quantification_qwen38_evo_1047",
+        "uncertainty_quantification_qwen38_evo_1048"
+      ],
+      "validation_auc_mean_percent": 79.1901,
+      "validation_auc_range_percent": [
+        78.7667,
+        79.6135
+      ],
+      "held_out_macro_mean_percent": 69.16501305122009,
+      "held_out_macro_range_percent": [
+        68.53308417221132,
+        69.79694193022887
+      ],
+      "held_out_macro_sample_sd_pp": 0.8936823911494368
+    },
+    "poolside/Laguna-XS-2.1": {
+      "n": 2,
+      "runs": [
+        "uncertainty_quantification_laguna_evo_1047",
+        "uncertainty_quantification_laguna_evo_1048"
+      ],
+      "validation_auc_mean_percent": 79.37915,
+      "validation_auc_range_percent": [
+        79.2575,
+        79.5008
+      ],
+      "held_out_macro_mean_percent": 69.33154104080256,
+      "held_out_macro_range_percent": [
+        69.2343481691619,
+        69.42873391244323
+      ],
+      "held_out_macro_sample_sd_pp": 0.137451477240216
+    }
+  },
+  "primary_run_selection": [
+    {
+      "run": "uncertainty_quantification_qwen35_4b_evo_1048",
+      "macro_result_available": true
+    },
+    {
+      "run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "macro_result_available": true
+    },
+    {
+      "run": "uncertainty_quantification_qwen38_evo_1047",
+      "macro_result_available": true
+    },
+    {
+      "run": "uncertainty_quantification_laguna_evo_1048",
+      "macro_result_available": true
+    },
+    {
+      "run": "uncertainty_quantification_linear_evolution_1047",
+      "macro_result_available": true
+    }
+  ],
+  "held_out_method_failures": {
+    "AVeriTeC__dev_filtered_10shot": {},
+    "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {},
+    "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {},
+    "geometry__cities": {},
+    "geometry__common_claim_true_false": {},
+    "geometry__companies_true_false": {},
+    "geometry__counterfact_true_false": {},
+    "popqa__popqa_test_filtered_10shot": {},
+    "x-fact__test_filtered_10shot": {}
+  },
+  "feedback_comparisons_seed_1048": [
+    {
+      "model": "poolside/Laguna-XS-2.1",
+      "seed": 1048,
+      "control_mode": "independent",
+      "evolution_run": "uncertainty_quantification_laguna_evo_1048",
+      "control_run": "uncertainty_quantification_laguna_independent_1048",
+      "evolution_minus_control_macro_auc_pp": 0.9282848060012583,
+      "paired_ci95_pp": [
+        0.6711153027109567,
+        1.1879702510658994
+      ]
+    },
+    {
+      "model": "poolside/Laguna-XS-2.1",
+      "seed": 1048,
+      "control_mode": "baseline_seeded",
+      "evolution_run": "uncertainty_quantification_laguna_evo_1048",
+      "control_run": "uncertainty_quantification_laguna_seeded_1048",
+      "evolution_minus_control_macro_auc_pp": 0.6996272381856983,
+      "paired_ci95_pp": [
+        0.4231217625721535,
+        0.9935829375736621
+      ]
+    },
+    {
+      "model": "Qwen/Qwen3.5-9B",
+      "seed": 1048,
+      "control_mode": "independent",
+      "evolution_run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "control_run": "uncertainty_quantification_qwen35_9b_independent_1048",
+      "evolution_minus_control_macro_auc_pp": 3.8972849595729855,
+      "paired_ci95_pp": [
+        3.6013087101239796,
+        4.2403137958737895
+      ]
+    },
+    {
+      "model": "Qwen/Qwen3.5-9B",
+      "seed": 1048,
+      "control_mode": "baseline_seeded",
+      "evolution_run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "control_run": "uncertainty_quantification_qwen35_9b_seeded_1048",
+      "evolution_minus_control_macro_auc_pp": -0.2597935498835682,
+      "paired_ci95_pp": [
+        -0.6880010933821409,
+        0.11042163626381554
+      ]
+    },
+    {
+      "model": "Qwen/Qwen3.8-27B",
+      "seed": 1048,
+      "control_mode": "independent",
+      "evolution_run": "uncertainty_quantification_qwen38_evo_1048",
+      "control_run": "uncertainty_quantification_qwen38_independent_contract_1048",
+      "evolution_minus_control_macro_auc_pp": -0.937031831318734,
+      "paired_ci95_pp": [
+        -1.251166386792053,
+        -0.6381775632545136
+      ]
+    }
+  ],
+  "validation_selected_comparator_differences": [
+    {
+      "method": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": -0.25200528166011793,
+      "paired_ci95_pp": [
+        -0.412237675009084,
+        -0.10722410732264141
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -1.908547551811381,
+      "paired_ci95_pp": [
+        -2.436485569846435,
+        -1.3673398010833382
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -1.3516030290794276,
+      "paired_ci95_pp": [
+        -1.9910937508534523,
+        -0.7932824414889877
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_9b_evo_1048",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": 0.9198407412238225,
+      "paired_ci95_pp": [
+        0.37202621092794397,
+        1.5105297046920547
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_9b_evo_1048",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -0.7367015289274406,
+      "paired_ci95_pp": [
+        -1.1830292418058552,
+        -0.24884457385742878
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_9b_evo_1048",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -0.17975700619548718,
+      "paired_ci95_pp": [
+        -0.7129348668219172,
+        0.33249219739665814
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen38_evo_1047",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": 1.17561539671523,
+      "paired_ci95_pp": [
+        0.6355020662584357,
+        1.7688926148214883
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen38_evo_1047",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -0.480926873436033,
+      "paired_ci95_pp": [
+        -0.9376939571501222,
+        -0.014779186058834149
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen38_evo_1047",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": 0.07601764929592036,
+      "paired_ci95_pp": [
+        -0.43240305157945247,
+        0.610190408735763
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_laguna_evo_1048",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": 0.6130216356482663,
+      "paired_ci95_pp": [
+        0.3535982406439068,
+        0.8860893815149602
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_laguna_evo_1048",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -1.0435206345029968,
+      "paired_ci95_pp": [
+        -1.4317264728083097,
+        -0.6989394108581019
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_laguna_evo_1048",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -0.48657611177104343,
+      "paired_ci95_pp": [
+        -0.9731285890724649,
+        -0.057493971876787495
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_linear_evolution_1047",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": -0.11708625689612973,
+      "paired_ci95_pp": [
+        -0.563356720105579,
+        0.37296595898002516
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_linear_evolution_1047",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -1.7736285270473928,
+      "paired_ci95_pp": [
+        -2.1989448667544935,
+        -1.3304767905343755
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_linear_evolution_1047",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -1.2166840043154394,
+      "paired_ci95_pp": [
+        -1.7137410648264315,
+        -0.7009636825701536
+      ]
+    }
+  ],
+  "restricted_search_validation_seed_sweep": {
+    "utc": "2026-10-15T08:46:02.065225+00:00",
+    "runs": 100,
+    "candidates_per_run": 60,
+    "new_seeds": [
+      1049,
+      1098
+    ],
+    "original_four_controls_reproduced_exactly": true,
+    "feature_pool": [
+      "length",
+      "nll_sum",
+      "nll_mean",
+      "nll_std",
+      "nll_max",
+      "nll_q90",
+      "nll_q10",
+      "nll_position_slope",
+      "nll_exp_weighted",
+      "entropy_mean",
+      "entropy_std",
+      "entropy_last_minus_first",
+      "top1_mass_top512_mean",
+      "top1_top2_gap_mean",
+      "top512_entropy_mean",
+      "nll_last_quarter",
+      "nll_first_quarter"
+    ],
+    "feature_scales": [
+      30.0,
+      100.0,
+      5.0,
+      3.0,
+      15.0,
+      10.0,
+      2.0,
+      5.0,
+      5.0,
+      5.0,
+      3.0,
+      3.0,
+      1.0,
+      5.0,
+      6.0,
+      5.0,
+      5.0
+    ],
+    "outer_split_seed": 441,
+    "mode_summary": {
+      "independent": {
+        "n_seeds": 50,
+        "mean_percent": 79.38182427215334,
+        "sample_sd_pp": 1.0190089641560371,
+        "min_max_percent": [
+          76.05486669391833,
+          80.36630785302266
+        ]
+      },
+      "evolution": {
+        "n_seeds": 50,
+        "mean_percent": 79.89993527728573,
+        "sample_sd_pp": 0.7291833542987758,
+        "min_max_percent": [
+          77.4838760957442,
+          80.70695371758187
+        ]
+      }
+    },
+    "evolution_minus_independent_mean_pp": 0.5181110051323969,
+    "independent_seed_bootstrap_ci95_pp": [
+      0.1856989769269177,
+      0.8677783076713429
+    ],
+    "elapsed_seconds_including_feature_extraction": 28.488586593419313,
+    "held_out_datasets_read": false,
+    "primary_winners_changed": false,
+    "scope": "Validation-only seed variability of restricted fixed-feature search; no inference about LLM search or held-out gains",
+    "paired_seed_bootstrap_ci95_pp": [
+      0.21157188195484988,
+      0.840082947268019
+    ],
+    "paired_seed_difference_sd_pp": 1.1369574002547111
+  },
+  "exploratory_header_refit_comparisons": [
+    {
+      "original_method": "supervised/logistic_documented_stratified",
+      "refitted_method": "supervised/header_refit/logistic_documented_stratified",
+      "original_macro_auc_percent": 70.2778688036649,
+      "frozen_trimmed_macro_auc_percent": 67.97849126933008,
+      "refitted_trimmed_macro_auc_percent": 71.36472859588702,
+      "refit_minus_frozen_macro_auc_pp": 3.3862373265569374,
+      "paired_refit_gain_ci95_pp": [
+        2.43568988076525,
+        4.338775454465922
+      ],
+      "refit_minus_original_full_macro_auc_pp": 1.0868597922221142,
+      "paired_refit_minus_original_full_ci95_pp": [
+        0.6054872231427118,
+        1.5970651476756346
+      ]
+    },
+    {
+      "original_method": "supervised/qda_documented_stratified",
+      "refitted_method": "supervised/header_refit/qda_documented_stratified",
+      "original_macro_auc_percent": 69.94534917263749,
+      "frozen_trimmed_macro_auc_percent": 66.75240732014282,
+      "refitted_trimmed_macro_auc_percent": 69.02493082349753,
+      "refit_minus_frozen_macro_auc_pp": 2.272523503354705,
+      "paired_refit_gain_ci95_pp": [
+        0.9990987005935417,
+        3.535569614785162
+      ],
+      "refit_minus_original_full_macro_auc_pp": -0.9204183491399647,
+      "paired_refit_minus_original_full_ci95_pp": [
+        -1.4994832594505978,
+        -0.35443321044881626
+      ]
+    },
+    {
+      "original_method": "supervised/logistic_stratified",
+      "refitted_method": "supervised/header_refit/logistic_stratified",
+      "original_macro_auc_percent": 69.72092428093295,
+      "frozen_trimmed_macro_auc_percent": 67.93474827696993,
+      "refitted_trimmed_macro_auc_percent": 70.8851948740026,
+      "refit_minus_frozen_macro_auc_pp": 2.9504465970326663,
+      "paired_refit_gain_ci95_pp": [
+        2.0361497524882317,
+        3.9162062366586086
+      ],
+      "refit_minus_original_full_macro_auc_pp": 1.164270593069645,
+      "paired_refit_minus_original_full_ci95_pp": [
+        0.7016778151102284,
+        1.6844224995113333
+      ]
+    },
+    {
+      "original_method": "supervised/qda_stratified",
+      "refitted_method": "supervised/header_refit/qda_stratified",
+      "original_macro_auc_percent": 69.63241802911242,
+      "frozen_trimmed_macro_auc_percent": 67.08302619783782,
+      "refitted_trimmed_macro_auc_percent": 69.30155795095287,
+      "refit_minus_frozen_macro_auc_pp": 2.2185317531150446,
+      "paired_refit_gain_ci95_pp": [
+        1.0765138873683444,
+        3.278381662978362
+      ],
+      "refit_minus_original_full_macro_auc_pp": -0.3308600781595459,
+      "paired_refit_minus_original_full_ci95_pp": [
+        -1.0225953851934426,
+        0.3571023154880804
+      ]
+    }
+  ],
+  "untuned_formula_ablations": [
+    {
+      "ablation": "ablation_laguna_slope_only",
+      "parent": "uncertainty_quantification_laguna_evo_1048",
+      "ablation_minus_parent_macro_auc_pp": -0.6996272381856983,
+      "paired_ci95_pp": [
+        -0.9935829375736621,
+        -0.4231217625721535
+      ]
+    },
+    {
+      "ablation": "ablation_laguna_slope_range",
+      "parent": "uncertainty_quantification_laguna_evo_1048",
+      "ablation_minus_parent_macro_auc_pp": -0.015134103428152912,
+      "paired_ci95_pp": [
+        -0.04795284312638214,
+        0.01611890498414213
+      ]
+    },
+    {
+      "ablation": "ablation_laguna_slope_variance",
+      "parent": "uncertainty_quantification_laguna_evo_1048",
+      "ablation_minus_parent_macro_auc_pp": -0.5992749876508725,
+      "paired_ci95_pp": [
+        -0.8657911085536372,
+        -0.3507025012515209
+      ]
+    },
+    {
+      "ablation": "ablation_qwen_linear_position_nll",
+      "parent": "uncertainty_quantification_qwen38_evo_1047",
+      "ablation_minus_parent_macro_auc_pp": -0.004335548132416989,
+      "paired_ci95_pp": [
+        -0.011693333342765408,
+        0.0019446121656364558
+      ]
+    }
+  ],
+  "notes": [
+    "Writer winners and original comparators selected using validation, before held-out evaluation.",
+    "Macro averages weight the nine datasets equally.",
+    "Bootstrap intervals and contrasts are exploratory, conditional on the fixed datasets, without multiplicity adjustment.",
+    "Cross-condition paired intervals verify identical ordered labels and claim groups; all cohorts use the same deterministic per-dataset bootstrap seed.",
+    "Replicate means include every completed primary evolution seed; n=2 is exploratory.",
+    "Reported tokens exclude usage unavailable after a failed or timed-out request.",
+    "Timing includes pilot and infrastructure overhead; generation curves isolate request time."
+  ]
+}

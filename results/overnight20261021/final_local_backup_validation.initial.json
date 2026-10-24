@@ -1,0 +1,11 @@
+{
+  "verified_utc": "2026-10-22T00:43:31.558799+00:00",
+  "manifest_sha256": "109b3aaf9310403b0a583785f4af34c035ad633a5e0617db3969ac68195e4573",
+  "files": 5891,
+  "bytes": 159022924,
+  "missing": [],
+  "different": [
+    "results/overnight20261021/live_state.json"
+  ],
+  "all_exact": false
+}

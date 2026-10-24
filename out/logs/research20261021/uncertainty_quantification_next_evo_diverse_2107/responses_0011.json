@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Average Negative Log-Probability (Avg-NLPL)**: This approach normalizes the total surprise by sequence length. While intuitive, it dilutes the signal if hallucinations are localized to short segments within long sequences. Score: 71.9975.\n2.  **Total Negative Log-Probability (Total-NLPL)**: This sums the surprise across all tokens. It captures the cumulative \"cost\" of generating the sequence but ignores length normalization, potentially favoring longer hallucinated sequences or penalizing long grounded sequences unfairly. Score: 74.3286.\n\n**Observation**: The Total-NLPL approach outperforms the Avg-NLPL approach in this specific dataset. This suggests that the *cumulative* divergence from the model's prior (total surprise) is a stronger indicator of hallucination than the *average* surprise, possibly because hallucinated regions often involve a burst of low-probability tokens that sum up to a significant value, whereas the average gets washed out by high-probability context tokens.\n\n### Proposed Detector\n**Signal**: Cumulative Negative Log-Probability (Total Surprise).\n**Aggregation Principle**: Sum the negative log-probabilities of all generated tokens (excluding the first) to create a scalar score per sequence.\n\n**Hypothesis for Future**: Incorporating a penalty term based on the variance of token-level log-probabilities within the sequence could further distinguish between \"consistent but unlikely\" sequences and \"chaotic/hallucinated\" sequences, as hallucinations often exhibit higher internal entropy/variance than grounded text.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any, List\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by measuring the total cumulative negative log-probability \n        of the generated sequence tokens.\n        \n        Hypothesis: Hallucinated sequences often contain bursts of tokens with very low \n        conditional probabilities, leading to a higher cumulative surprise score compared \n        to grounded sequences, even if the average surprise is similar.\n        \"\"\"\n        sequence_logprobs = stats[\"sequence_logprobs\"]\n        \n        # Calculate total negative log-prob for each sequence\n        # sequence_logprobs is a list of arrays, each of shape (n_i - 1,)\n        # We sum the negative log-probs for each sequence to get a scalar score per sample\n        scores = np.array([-np.sum(seq) for seq in sequence_logprobs], dtype=np.float32)\n        \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 616,
+      "prompt_tokens": 905,
+      "total_tokens": 1521,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 12.81411880601081
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detectors rely exclusively on **global aggregation** of the entire sequence's log-probabilities:\n1.  **Average Surprisal**: Normalizes total negative log-prob by sequence length. Hypothesis: Hallucinations increase average token surprise.\n2.  **Total Surprisal**: Sums negative log-probabilities. Hypothesis: Hallucinations increase total sequence improbability.\n\nBoth methods treat the sequence as a \"bag of tokens\" (or a uniform sum), ignoring the **temporal structure** and **local context** of generation. They assume hallucinations are uniformly distributed or that their cumulative effect dominates the signal. However, hallucinations often appear as specific, localized bursts of incoherence or factual errors that might be diluted by long, fluent (low-surprisal) preamble text in the global average.\n\n### Proposed Detector\n**Signal**: **Contiguous Run of High Surprisal**.\nInstead of averaging, this detector scans the sequence for the **maximum length of a contiguous subsequence** where the average negative log-probability exceeds a dynamic threshold (e.g., the sequence mean + 1 standard deviation).\n\n**Aggregation Principle**: **Local Maximal Deviation**.\nThe score is defined as the length of the longest contiguous window of tokens that are collectively \"surprised\" beyond the sequence's baseline noise level. This hypothesizes that hallucinations manifest as distinct, localized regions of incoherence that stand out against the model's usual fluent generation, which global averages might miss if the hallucination is short relative to the total sequence length.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any, List\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by identifying the longest contiguous run of tokens \n        where the local average surprisal significantly exceeds the sequence baseline.\n        \n        Hypothesis: Hallucinations manifest as localized bursts of incoherence that \n        create contiguous windows of high surprisal, distinguishable from the \n        model's typical fluent generation patterns which global averages may dilute.\n        \"\"\"\n        seq_logprobs = stats[\"sequence_logprobs\"]\n        N = len(seq_logprobs)\n        scores = np.zeros(N, dtype=np.float32)\n\n        for i in range(N):\n            probs = seq_logprobs[i]\n            n_tokens = len(probs)\n            if n_tokens == 0:\n                scores[i] = 0.0\n                continue\n\n            # Calculate global mean and std for this sequence as a baseline\n            mean_sp = np.mean(probs)\n            std_sp = np.std(probs)\n            threshold = mean_sp + 1.5 * std_sp\n\n            # Find contiguous runs where local mean > threshold\n            max_run_length = 0\n            current_run_length = 0\n            current_sum = 0.0\n\n            for p in probs:\n                if p > threshold:\n                    current_run_length += 1\n                    current_sum += p\n                else:\n                    if current_run_length > max_run_length:\n                        max_run_length = current_run_length\n                    current_run_length = 0\n                    current_sum = 0.0\n            \n            # Check the run ending at the last token\n            if current_run_length > max_run_length:\n                max_run_length = current_run_length\n            \n            scores[i] = float(max_run_length)\n\n        return scores\n```",
+    "usage": {
+      "completion_tokens": 806,
+      "prompt_tokens": 926,
+      "total_tokens": 1732,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 13.10062217200175
+  }
+]

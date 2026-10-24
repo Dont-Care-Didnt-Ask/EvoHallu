@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\n1.  **Average Surprisal Detector (Score: 71.9959)**: This approach calculates the mean negative log-probability (surprisal) per token across the sequence. It normalizes for sequence length, assuming hallucinations cause a sustained elevation in per-token surprise.\n2.  **Total Sum Surprisal Detector (Score: 74.3286)**: This approach sums the negative log-probabilities across the entire sequence. It achieved a higher score than the average, suggesting that the *magnitude* of the total surprise is a stronger indicator than the average, possibly because longer hallucinated segments accumulate higher total surprisal even if the per-token average doesn't spike as dramatically as the total sum suggests.\n\n### Proposed Detector\n**Signal**: Total Negative Log-Probability (Sum of Surprisal).\n**Aggregation Principle**: Summation.\n\n**Rationale**: The second detector (Total Sum) outperformed the average-based detector. Hallucinations often involve generating long chains of plausible-sounding but factually incorrect content. While the *average* surprisal might be diluted by the correct prefix/suffix, the *total* accumulated surprisal over the hallucinated segment remains high. Summing provides a more robust signal for detecting the \"volume\" of unlikely token sequences, which correlates better with the extent of hallucination than the mean.\n\n```python\nimport numpy as np\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations by summing the negative log-probabilities of the generated sequence.\n        Hypothesis: Hallucinated segments often consist of extended sequences of low-probability tokens; \n        summing surprisal captures the cumulative 'cost' of these unlikely sequences better than averaging, \n        as it is less sensitive to short, isolated anomalies in longer sequences.\n        \"\"\"\n        log_probs_list = stats[\"sequence_logprobs\"]\n        # Calculate total negative log-prob (sum of surprisal) per sequence\n        scores = np.array([-np.sum(lp, dtype=np.float32) for lp in log_probs_list], dtype=np.float32)\n        return scores\n```",
+    "usage": {
+      "completion_tokens": 536,
+      "prompt_tokens": 754,
+      "total_tokens": 1290,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 6.333549643983133
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided candidates rely entirely on **global sequence-level aggregation** of log-probabilities:\n1.  **Average Surprisal**: Normalizes by length, assuming hallucinations increase the average uncertainty per token.\n2.  **Total Negative Log-Prob**: Sums uncertainty, assuming hallucinations add more \"surprise\" tokens overall.\n\nBoth approaches treat the sequence as a single unit. They fail to capture the **localization** of hallucinations. A hallucination is often a specific burst of high uncertainty (a \"spike\") within an otherwise coherent sequence. Averaging or summing these spikes can dilute the signal if the hallucinated segment is short relative to the total sequence length, or if the rest of the sequence is also somewhat uncertain.\n\n### Proposed Detector\n**Signal**: **Local Uncertainty Spikes**. Instead of global averages, we identify the maximum deviation of log-probability from the sequence's local baseline (or the global mean of the sequence) within a sliding window.\n**Aggregation Principle**: **Max-Pooling over Local Windows**. We aggregate the maximum normalized surprisal found in any local window of the sequence. This is robust to length variations and specifically targets the \"burst\" nature of hallucinations, ignoring low-uncertainty filler text.\n\nThis differs structurally from the shown methods by shifting from **mean/sum aggregation** (global) to **max aggregation** (local extremum), making it invariant to sequence length and sensitive to localized anomalies.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    \"\"\"\n    Detects hallucinations by identifying localized bursts of high uncertainty.\n    Hypothesis: Hallucinations manifest as discrete spikes in surprisal that exceed \n    the local context baseline, rather than a uniform increase in average uncertainty.\n    \"\"\"\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        log_probs_list = stats[\"sequence_logprobs\"]\n        scores = np.zeros(len(log_probs_list), dtype=np.float32)\n        \n        window_size = 5  # Local context window\n        \n        for i, lp in enumerate(log_probs_list):\n            if len(lp) == 0:\n                scores[i] = 0.0\n                continue\n            \n            # Calculate local baseline (mean of the sequence)\n            local_mean = np.mean(lp)\n            \n            # Calculate normalized surprisal (surprise relative to local mean)\n            # High positive values indicate tokens much less likely than average\n            normalized_surprisal = -lp - local_mean\n            \n            # Use a sliding window max to capture localized bursts\n            # Pad to handle edges\n            padded = np.pad(normalized_surprisal, (window_size, window_size), mode='edge')\n            window_scores = []\n            \n            for w in range(window_size, len(padded) - window_size):\n                window = padded[w-window_size:w+window_size+1]\n                window_scores.append(np.max(window))\n            \n            if window_scores:\n                scores[i] = float(np.max(window_scores))\n            else:\n                scores[i] = 0.0\n                \n        return scores\n```",
+    "usage": {
+      "completion_tokens": 735,
+      "prompt_tokens": 774,
+      "total_tokens": 1509,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.631878343992867
+  }
+]

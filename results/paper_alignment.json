@@ -1,0 +1,1601 @@
+{
+  "created_utc": "2026-10-15T09:52:50.008031+00:00",
+  "analysis_status": "posthoc annotation-polarity audit; primary artifacts preserved",
+  "label_provenance": {
+    "checked_utc": "2026-10-15",
+    "fact_checker": {
+      "url": "https://raw.githubusercontent.com/IINemo/lm-polygraph/4d635e81128411d792acd584f78b0f849a21cd0b/src/lm_polygraph/generation_metrics/openai_fact_check.py",
+      "commit": "4d635e81128411d792acd584f78b0f849a21cd0b",
+      "sha256": "d71415af076a0b7cec44a248b730800c9d54a8be4526471f48d1869326c76ae6",
+      "false_label": 1,
+      "true_label": 0
+    },
+    "uhead_exporter": {
+      "url": "https://github.com/IINemo/llm-uncertainty-head/blob/fc213edc26526b446e76e8253f7fe3b964a54be7/luh/cli/generate_dataset/run_extract_verify_claims.py",
+      "commit": "fc213edc26526b446e76e8253f7fe3b964a54be7",
+      "annotation_field": "verified",
+      "annotation_producer": "OpenAIFactCheck"
+    }
+  },
+  "uhead_csv_audit": {
+    "file": "data/claims/UHEAD_bio_gemma_annotated_by_mistral/test_filtered_10shot.csv",
+    "sha256": "3f6d06b3c63c4954e7133da2e219e0cb5a408ec4aef9fc88e832c898132d89e9",
+    "rows": 2057,
+    "verified_equals_is_correct_all_rows": true,
+    "is_hallu_equals_one_minus_verified_all_rows": true,
+    "csv_sha256_matches_original_campaign_audit": true,
+    "verified_positive_rows": 542,
+    "supplied_is_hallu_positive_rows": 1515,
+    "prediction_labels_match_supplied_csv": true,
+    "inference": "The supplied UHEAD CSV appears to invert the upstream false=1 convention during conversion. The exact CSV conversion script is unavailable; this is not a certified paper reproduction."
+  },
+  "primary_artifact_sha256_before_and_after": {
+    "out/campaign/evaluation_with_4b/all_datasets.json": "4fe23b1833878339ab57509d19a529c6af8ba5636561e3427902d41250863511",
+    "out/campaign/evaluation_with_4b/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_scores.npz": "1052a839a46dcfface01759db8c943b86e6cb90cd7b78f3ab5526c0f16bbe8d6",
+    "out/campaign/evaluation_with_4b/UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot_bootstrap.npz": "01349a0d5f467e4e090da82076ddf64986c38c5161dbe650763e6f5ee4555749",
+    "results/campaign_summary.json": "5d886979f503b9a6579d3178d239a0602b90c083d373263f3a6872dae83d13b5"
+  },
+  "primary_artifacts_unchanged": true,
+  "protocol": {
+    "secondary_label_field": "verified for UHEAD only; original is_hallu everywhere else",
+    "predictions_models_seeds_and_splits_unchanged": true,
+    "bootstrap": "Complement each UHEAD per-method AUC draw; preserve original claim resampling and every other dataset draw",
+    "new_gpu_hours": 0,
+    "new_model_generations": 0,
+    "do_not_use": "Do not choose dataset polarity by maximizing AUC; compare only the independently source-supported convention."
+  },
+  "methods": {
+    "alignment/ClaimLength": {
+      "supplied_label_macro_auc_percent": 49.368038700219536,
+      "uhead_verified_macro_auc_percent": 51.371375565271364,
+      "uhead_supplied_auc_percent": 40.98498410726681,
+      "uhead_verified_auc_percent": 59.01501589273319,
+      "uhead_verified_macro_auc_ci95_percent": [
+        50.3628882728255,
+        52.49216395340404
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -18.116318917294123,
+        -16.578807515153457
+      ],
+      "uhead_verified_gain_over_nll_pp": -17.339797488807108
+    },
+    "alignment/ClaimOnlyMeanSurprisal": {
+      "supplied_label_macro_auc_percent": 66.3389614523798,
+      "uhead_verified_macro_auc_percent": 66.9372020882515,
+      "uhead_supplied_auc_percent": 47.307917138577324,
+      "uhead_verified_auc_percent": 52.692082861422676,
+      "uhead_verified_macro_auc_ci95_percent": [
+        66.02237591731323,
+        67.88114045373003
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -3.117403974711237,
+        -0.5649707827162999
+      ],
+      "uhead_verified_gain_over_nll_pp": -1.773970965826976
+    },
+    "alignment/ClaimOnlySequenceLogProb": {
+      "supplied_label_macro_auc_percent": 65.68582040005109,
+      "uhead_verified_macro_auc_percent": 68.71450580241667,
+      "uhead_supplied_auc_percent": 36.37091568935491,
+      "uhead_verified_auc_percent": 63.62908431064509,
+      "uhead_verified_macro_auc_ci95_percent": [
+        67.77456377874562,
+        69.68925724419319
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -0.042144572227321986,
+        0.0516018322533987
+      ],
+      "uhead_verified_gain_over_nll_pp": 0.0033327483381953016
+    },
+    "alignment/LastInputTokenSurprisal": {
+      "supplied_label_macro_auc_percent": 50.14900858919563,
+      "uhead_verified_macro_auc_percent": 50.14900858919563,
+      "uhead_supplied_auc_percent": 50.0,
+      "uhead_verified_auc_percent": 50.0,
+      "uhead_verified_macro_auc_ci95_percent": [
+        50.06434262937599,
+        50.22818395745783
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -19.551708219691605,
+        -17.58227429308052
+      ],
+      "uhead_verified_gain_over_nll_pp": -18.56216446488284
+    },
+    "alignment/LegacyTailCropSequenceLogProb": {
+      "supplied_label_macro_auc_percent": 64.521385798152,
+      "uhead_verified_macro_auc_percent": 67.54567346677126,
+      "uhead_supplied_auc_percent": 36.39070549121333,
+      "uhead_verified_auc_percent": 63.60929450878667,
+      "uhead_verified_macro_auc_ci95_percent": [
+        66.56547669986733,
+        68.5652420454559
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -1.5203041421082188,
+        -0.8362486435848091
+      ],
+      "uhead_verified_gain_over_nll_pp": -1.1654995873072096
+    },
+    "alignment/PostClaimSurprisal": {
+      "supplied_label_macro_auc_percent": 65.33971297887359,
+      "uhead_verified_macro_auc_percent": 66.79789323724384,
+      "uhead_supplied_auc_percent": 43.43818883733392,
+      "uhead_verified_auc_percent": 56.56181116266608,
+      "uhead_verified_macro_auc_ci95_percent": [
+        65.92731255575333,
+        67.69702279530011
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -2.930154168495791,
+        -0.7579893837874496
+      ],
+      "uhead_verified_gain_over_nll_pp": -1.9132798168346312
+    },
+    "new/ablation_laguna_slope_only": {
+      "supplied_label_macro_auc_percent": 68.5347209309762,
+      "uhead_verified_macro_auc_percent": 70.36045701011918,
+      "uhead_supplied_auc_percent": 41.78418764385664,
+      "uhead_verified_auc_percent": 58.21581235614336,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.43604586822883,
+        71.28132754287061
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.9483735618989778,
+        2.374840768702495
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.6492839560407049
+    },
+    "new/ablation_laguna_slope_range": {
+      "supplied_label_macro_auc_percent": 69.21921406573375,
+      "uhead_verified_macro_auc_percent": 71.27767821473168,
+      "uhead_supplied_auc_percent": 40.73691132950933,
+      "uhead_verified_auc_percent": 59.26308867049067,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.3226206212068,
+        72.23332315722877
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        1.9248451323357518,
+        3.277139582644648
+      ],
+      "uhead_verified_gain_over_nll_pp": 2.5665051606532074
+    },
+    "new/ablation_laguna_slope_variance": {
+      "supplied_label_macro_auc_percent": 68.63507318151103,
+      "uhead_verified_macro_auc_percent": 70.46771031976361,
+      "uhead_supplied_auc_percent": 41.75313287786343,
+      "uhead_verified_auc_percent": 58.24686712213657,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.52499173081226,
+        71.39580495643628
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        1.0449557745551314,
+        2.504908453829097
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.7565372656851395
+    },
+    "new/ablation_qwen_linear_position_nll": {
+      "supplied_label_macro_auc_percent": 69.79260638209645,
+      "uhead_verified_macro_auc_percent": 72.00030931721162,
+      "uhead_supplied_auc_percent": 40.06533679198178,
+      "uhead_verified_auc_percent": 59.93466320801822,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.02897978528084,
+        73.00739444715204
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.837786079930318,
+        3.732785532270554
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.2891362631331447
+    },
+    "new/uncertainty_quantification_laguna_evo_1047": {
+      "supplied_label_macro_auc_percent": 69.42873391244323,
+      "uhead_verified_macro_auc_percent": 71.28192538165166,
+      "uhead_supplied_auc_percent": 41.660638388562106,
+      "uhead_verified_auc_percent": 58.339361611437894,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.37501994334912,
+        72.20750662869015
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        1.8491785922184458,
+        3.294983385096918
+      ],
+      "uhead_verified_gain_over_nll_pp": 2.5707523275731887
+    },
+    "new/uncertainty_quantification_laguna_evo_1048": {
+      "supplied_label_macro_auc_percent": 69.2343481691619,
+      "uhead_verified_macro_auc_percent": 71.26677773438163,
+      "uhead_supplied_auc_percent": 40.85406695651115,
+      "uhead_verified_auc_percent": 59.14593304348885,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.30657868521197,
+        72.21817498059957
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        1.9250801796307289,
+        3.2440083743617003
+      ],
+      "uhead_verified_gain_over_nll_pp": 2.555604680303162
+    },
+    "new/uncertainty_quantification_laguna_independent_1048": {
+      "supplied_label_macro_auc_percent": 68.30606336316065,
+      "uhead_verified_macro_auc_percent": 70.22365118590356,
+      "uhead_supplied_auc_percent": 41.37085479765689,
+      "uhead_verified_auc_percent": 58.62914520234311,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.2276564719841,
+        71.16537922277247
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.8219856043018037,
+        2.240082767903953
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.512478131825091
+    },
+    "new/uncertainty_quantification_laguna_seeded_1048": {
+      "supplied_label_macro_auc_percent": 68.5347209309762,
+      "uhead_verified_macro_auc_percent": 70.36045701011918,
+      "uhead_supplied_auc_percent": 41.78418764385664,
+      "uhead_verified_auc_percent": 58.21581235614336,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.43604586822883,
+        71.28132754287061
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.9483735618989778,
+        2.374840768702495
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.6492839560407049
+    },
+    "new/uncertainty_quantification_linear_evolution_1047": {
+      "supplied_label_macro_auc_percent": 68.50424027661751,
+      "uhead_verified_macro_auc_percent": 71.26903459122732,
+      "uhead_supplied_auc_percent": 37.558425584255836,
+      "uhead_verified_auc_percent": 62.441574415744164,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.25269052323401,
+        72.21310911872486
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.2707362749143387,
+        2.8605467572685925
+      ],
+      "uhead_verified_gain_over_nll_pp": 2.5578615371488524
+    },
+    "new/uncertainty_quantification_linear_evolution_1048": {
+      "supplied_label_macro_auc_percent": 67.55522587072778,
+      "uhead_verified_macro_auc_percent": 69.88356202537645,
+      "uhead_supplied_auc_percent": 39.52248730408097,
+      "uhead_verified_auc_percent": 60.47751269591903,
+      "uhead_verified_macro_auc_ci95_percent": [
+        68.92532376435847,
+        70.91361908252443
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.6590596105551677,
+        1.6751911781312183
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.172388971297977
+    },
+    "new/uncertainty_quantification_linear_independent_1047": {
+      "supplied_label_macro_auc_percent": 66.20051209550056,
+      "uhead_verified_macro_auc_percent": 67.45723555382423,
+      "uhead_supplied_auc_percent": 44.34474443754339,
+      "uhead_verified_auc_percent": 55.65525556245661,
+      "uhead_verified_macro_auc_ci95_percent": [
+        66.44999497540846,
+        68.43300360185088
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        -1.9498222586761846,
+        -0.6191298961733016
+      ],
+      "uhead_verified_gain_over_nll_pp": -1.2539375002542386
+    },
+    "new/uncertainty_quantification_linear_independent_1048": {
+      "supplied_label_macro_auc_percent": 67.30724508057924,
+      "uhead_verified_macro_auc_percent": 69.51754606147684,
+      "uhead_supplied_auc_percent": 40.05364558596081,
+      "uhead_verified_auc_percent": 59.94635441403919,
+      "uhead_verified_macro_auc_ci95_percent": [
+        68.56397322348519,
+        70.52265302827652
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.2415925407219966,
+        1.3430870007841205
+      ],
+      "uhead_verified_gain_over_nll_pp": 0.8063730073983635
+    },
+    "new/uncertainty_quantification_qwen35_4b_evo_1048": {
+      "supplied_label_macro_auc_percent": 68.36932125185352,
+      "uhead_verified_macro_auc_percent": 69.82754210468912,
+      "uhead_supplied_auc_percent": 43.43800616223984,
+      "uhead_verified_auc_percent": 56.56199383776016,
+      "uhead_verified_macro_auc_ci95_percent": [
+        68.85599652648466,
+        70.72959987531549
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.31435271339703447,
+        1.9361570858606953
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.1163690506106434
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1047": {
+      "supplied_label_macro_auc_percent": 68.01845167936695,
+      "uhead_verified_macro_auc_percent": 70.75966060960806,
+      "uhead_supplied_auc_percent": 37.66455981391497,
+      "uhead_verified_auc_percent": 62.33544018608503,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.7801935204427,
+        71.71797223713963
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        1.6253923217900046,
+        2.460447921884006
+      ],
+      "uhead_verified_gain_over_nll_pp": 2.04848755552959
+    },
+    "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+      "supplied_label_macro_auc_percent": 69.54116727473746,
+      "uhead_verified_macro_auc_percent": 72.45291355391643,
+      "uhead_supplied_auc_percent": 36.89714174369466,
+      "uhead_verified_auc_percent": 63.10285825630534,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.47150785527913,
+        73.4749562294025
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        3.423882477174785,
+        4.080065117634025
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.7417404998379595
+    },
+    "new/uncertainty_quantification_qwen35_9b_independent_1048": {
+      "supplied_label_macro_auc_percent": 65.64388231516448,
+      "uhead_verified_macro_auc_percent": 68.71117305407847,
+      "uhead_supplied_auc_percent": 36.19719167488705,
+      "uhead_verified_auc_percent": 63.80280832511295,
+      "uhead_verified_macro_auc_ci95_percent": [
+        67.76812611410631,
+        69.69588356563352
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.0,
+        0.0
+      ],
+      "uhead_verified_gain_over_nll_pp": 0.0
+    },
+    "new/uncertainty_quantification_qwen35_9b_seeded_1048": {
+      "supplied_label_macro_auc_percent": 69.80096082462103,
+      "uhead_verified_macro_auc_percent": 72.02586228155639,
+      "uhead_supplied_auc_percent": 39.987943443790876,
+      "uhead_verified_auc_percent": 60.012056556209124,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.05144051546108,
+        73.02243931610728
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.870074725517079,
+        3.7476615486075815
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.3146892274779134
+    },
+    "new/uncertainty_quantification_qwen38_evo_1047": {
+      "supplied_label_macro_auc_percent": 69.79694193022887,
+      "uhead_verified_macro_auc_percent": 72.00196563063089,
+      "uhead_supplied_auc_percent": 40.07739334819092,
+      "uhead_verified_auc_percent": 59.92260665180908,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.02760286267238,
+        73.0060477505826
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.841814878833987,
+        3.7354270603230537
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.2907925765524197
+    },
+    "new/uncertainty_quantification_qwen38_evo_1048": {
+      "supplied_label_macro_auc_percent": 68.53308417221132,
+      "uhead_verified_macro_auc_percent": 70.36005161680328,
+      "uhead_supplied_auc_percent": 41.77864649933628,
+      "uhead_verified_auc_percent": 58.22135350066372,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.43153991959534,
+        71.280179981225
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.9443936696875457,
+        2.375874196068943
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.6488785627248035
+    },
+    "new/uncertainty_quantification_qwen38_independent_contract_1048": {
+      "supplied_label_macro_auc_percent": 69.47011600353005,
+      "uhead_verified_macro_auc_percent": 71.43142406545556,
+      "uhead_supplied_auc_percent": 41.17411372133523,
+      "uhead_verified_auc_percent": 58.82588627866477,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.48686394666997,
+        72.34551414545149
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.0615058736000296,
+        3.3982402467049666
+      ],
+      "uhead_verified_gain_over_nll_pp": 2.720251011377087
+    },
+    "new/uncertainty_quantification_qwen38_pilot_1046": {
+      "supplied_label_macro_auc_percent": 70.11829199274169,
+      "uhead_verified_macro_auc_percent": 71.74405973556763,
+      "uhead_supplied_auc_percent": 42.68404515728326,
+      "uhead_verified_auc_percent": 57.31595484271674,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.82365205788045,
+        72.6916998866169
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.407465797278523,
+        3.6317650848041
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.0328866814891597
+    },
+    "original/EntropySlope": {
+      "supplied_label_macro_auc_percent": 53.03019369706494,
+      "uhead_verified_macro_auc_percent": 55.64405778950124,
+      "uhead_supplied_auc_percent": 38.23761158403663,
+      "uhead_verified_auc_percent": 61.76238841596337,
+      "uhead_verified_gain_over_nll_pp": -13.067115264577232
+    },
+    "original/ExpWeightedNegLogProb": {
+      "supplied_label_macro_auc_percent": 69.79713233614491,
+      "uhead_verified_macro_auc_percent": 70.60597705825552,
+      "uhead_supplied_auc_percent": 46.36019875050235,
+      "uhead_verified_auc_percent": 53.63980124949765,
+      "uhead_verified_gain_over_nll_pp": 1.8948040041770469
+    },
+    "original/ExpWeightedNegLogProbWithTop1": {
+      "supplied_label_macro_auc_percent": 69.88123547078578,
+      "uhead_verified_macro_auc_percent": 70.78369102999484,
+      "uhead_supplied_auc_percent": 45.93894998355924,
+      "uhead_verified_auc_percent": 54.06105001644076,
+      "uhead_verified_gain_over_nll_pp": 2.0725179759163694
+    },
+    "original/Gap": {
+      "supplied_label_macro_auc_percent": 63.37179868565516,
+      "uhead_verified_macro_auc_percent": 63.031211121363675,
+      "uhead_supplied_auc_percent": 51.532644039311684,
+      "uhead_verified_auc_percent": 48.467355960688316,
+      "uhead_verified_gain_over_nll_pp": -5.6799619327147965
+    },
+    "original/LogProbSlope": {
+      "supplied_label_macro_auc_percent": 68.53308417221132,
+      "uhead_verified_macro_auc_percent": 70.36005161680328,
+      "uhead_supplied_auc_percent": 41.77864649933628,
+      "uhead_verified_auc_percent": 58.22135350066372,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.43153991959534,
+        71.280179981225
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.9443936696875457,
+        2.375874196068943
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.6488785627248035
+    },
+    "original/LogProbSlope_BottomMassAvg": {
+      "supplied_label_macro_auc_percent": 68.62132653351364,
+      "uhead_verified_macro_auc_percent": 70.44905174145879,
+      "uhead_supplied_auc_percent": 41.77523656424683,
+      "uhead_verified_auc_percent": 58.22476343575317,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.50918858622398,
+        71.37962998715032
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        1.0307314030215906,
+        2.477864283451288
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.7378786873803165
+    },
+    "original/LogProbSlope_OutlierScore": {
+      "supplied_label_macro_auc_percent": 67.92843786693389,
+      "uhead_verified_macro_auc_percent": 69.7646473181373,
+      "uhead_supplied_auc_percent": 41.7370574695846,
+      "uhead_verified_auc_percent": 58.2629425304154,
+      "uhead_verified_gain_over_nll_pp": 1.0534742640588348
+    },
+    "original/LogProbSlope_TopBottomRatio": {
+      "supplied_label_macro_auc_percent": 68.5921695208144,
+      "uhead_verified_macro_auc_percent": 70.40772992064282,
+      "uhead_supplied_auc_percent": 41.82997820077211,
+      "uhead_verified_auc_percent": 58.17002179922789,
+      "uhead_verified_macro_auc_ci95_percent": [
+        69.46893188049576,
+        71.3428239703748
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.9949814514184729,
+        2.438659904749336
+      ],
+      "uhead_verified_gain_over_nll_pp": 1.6965568665643502
+    },
+    "original/MeanStdTokenEntropy": {
+      "supplied_label_macro_auc_percent": 57.76002776130046,
+      "uhead_verified_macro_auc_percent": 58.5893185624593,
+      "uhead_supplied_auc_percent": 46.268191394785234,
+      "uhead_verified_auc_percent": 53.731808605214766,
+      "uhead_verified_gain_over_nll_pp": -10.121854491619175
+    },
+    "original/MeanTokenEntropy": {
+      "supplied_label_macro_auc_percent": 58.41996535859058,
+      "uhead_verified_macro_auc_percent": 59.80066431409497,
+      "uhead_supplied_auc_percent": 43.78685470023017,
+      "uhead_verified_auc_percent": 56.21314529976983,
+      "uhead_verified_gain_over_nll_pp": -8.910508739983499
+    },
+    "original/MinimalLogProb": {
+      "supplied_label_macro_auc_percent": 50.23046957411132,
+      "uhead_verified_macro_auc_percent": 50.2390079433234,
+      "uhead_supplied_auc_percent": 49.961577338545666,
+      "uhead_verified_auc_percent": 50.038422661454334,
+      "uhead_verified_gain_over_nll_pp": -18.47216511075507
+    },
+    "original/Perplexity": {
+      "supplied_label_macro_auc_percent": 64.17472363290479,
+      "uhead_verified_macro_auc_percent": 64.16761960146845,
+      "uhead_supplied_auc_percent": 50.03196814146359,
+      "uhead_verified_auc_percent": 49.96803185853641,
+      "uhead_verified_gain_over_nll_pp": -4.543553452610027
+    },
+    "original/PositionWeightedGap": {
+      "supplied_label_macro_auc_percent": 66.43754186548887,
+      "uhead_verified_macro_auc_percent": 66.50767557012625,
+      "uhead_supplied_auc_percent": 49.68439832913181,
+      "uhead_verified_auc_percent": 50.31560167086819,
+      "uhead_verified_gain_over_nll_pp": -2.2034974839522192
+    },
+    "original/PositionWeightedGapNormalized": {
+      "supplied_label_macro_auc_percent": 64.46233672171176,
+      "uhead_verified_macro_auc_percent": 64.53387770114796,
+      "uhead_supplied_auc_percent": 49.67806559253711,
+      "uhead_verified_auc_percent": 50.32193440746289,
+      "uhead_verified_gain_over_nll_pp": -4.177295352930514
+    },
+    "original/PositionWeightedGap_EntropySlope_TopKMassInv": {
+      "supplied_label_macro_auc_percent": 62.75266358002151,
+      "uhead_verified_macro_auc_percent": 64.57466496835224,
+      "uhead_supplied_auc_percent": 41.800993752511786,
+      "uhead_verified_auc_percent": 58.199006247488214,
+      "uhead_verified_gain_over_nll_pp": -4.136508085726234
+    },
+    "original/QuartileEntropyDiff": {
+      "supplied_label_macro_auc_percent": 51.71058871826279,
+      "uhead_verified_macro_auc_percent": 53.99931820621774,
+      "uhead_supplied_auc_percent": 39.70071730420274,
+      "uhead_verified_auc_percent": 60.29928269579726,
+      "uhead_verified_gain_over_nll_pp": -14.711854847860735
+    },
+    "original/QuartileEntropyDiffNormalized": {
+      "supplied_label_macro_auc_percent": 50.961761958413206,
+      "uhead_verified_macro_auc_percent": 53.24469996931147,
+      "uhead_supplied_auc_percent": 39.72677895095782,
+      "uhead_verified_auc_percent": 60.27322104904218,
+      "uhead_verified_gain_over_nll_pp": -15.466473084767003
+    },
+    "original/QuartileEntropyDiff_PositionWeightedGap": {
+      "supplied_label_macro_auc_percent": 63.86004212833963,
+      "uhead_verified_macro_auc_percent": 65.65013626690478,
+      "uhead_supplied_auc_percent": 41.94457637645683,
+      "uhead_verified_auc_percent": 58.05542362354317,
+      "uhead_verified_gain_over_nll_pp": -3.061036787173691
+    },
+    "original/QuartileEntropyDiff_PositionWeightedGap_TopKMassDecay": {
+      "supplied_label_macro_auc_percent": 61.46413403217077,
+      "uhead_verified_macro_auc_percent": 63.53208375457228,
+      "uhead_supplied_auc_percent": 40.694226249193186,
+      "uhead_verified_auc_percent": 59.305773750806814,
+      "uhead_verified_gain_over_nll_pp": -5.179089299506195
+    },
+    "original/SequenceLogProb": {
+      "supplied_label_macro_auc_percent": 65.64388231516448,
+      "uhead_verified_macro_auc_percent": 68.71117305407847,
+      "uhead_supplied_auc_percent": 36.19719167488705,
+      "uhead_verified_auc_percent": 63.80280832511295,
+      "uhead_verified_macro_auc_ci95_percent": [
+        67.76812611410631,
+        69.69588356563352
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        0.0,
+        0.0
+      ],
+      "uhead_verified_gain_over_nll_pp": 0.0
+    },
+    "original/SequenceLogProbBottom": {
+      "supplied_label_macro_auc_percent": 64.36795478783866,
+      "uhead_verified_macro_auc_percent": 67.61690575919656,
+      "uhead_supplied_auc_percent": 35.37972062888946,
+      "uhead_verified_auc_percent": 64.62027937111054,
+      "uhead_verified_gain_over_nll_pp": -1.0942672948819165
+    },
+    "original/SequenceLogProb_BottomMassAvg": {
+      "supplied_label_macro_auc_percent": 65.64388231516448,
+      "uhead_verified_macro_auc_percent": 68.71117305407847,
+      "uhead_supplied_auc_percent": 36.19719167488705,
+      "uhead_verified_auc_percent": 63.80280832511295,
+      "uhead_verified_gain_over_nll_pp": 0.0
+    },
+    "original/SequenceLogProb_OutlierScore": {
+      "supplied_label_macro_auc_percent": 65.64211506656682,
+      "uhead_verified_macro_auc_percent": 68.70958171483066,
+      "uhead_supplied_auc_percent": 36.19640008281271,
+      "uhead_verified_auc_percent": 63.80359991718729,
+      "uhead_verified_gain_over_nll_pp": -0.0015913392478097421
+    },
+    "original/SequenceLogProb_TopBottomRatio": {
+      "supplied_label_macro_auc_percent": 65.64388231516448,
+      "uhead_verified_macro_auc_percent": 68.71117305407847,
+      "uhead_supplied_auc_percent": 36.19719167488705,
+      "uhead_verified_auc_percent": 63.80280832511295,
+      "uhead_verified_gain_over_nll_pp": 0.0
+    },
+    "original/StdTokenEntropy": {
+      "supplied_label_macro_auc_percent": 54.50715674474415,
+      "uhead_verified_macro_auc_percent": 53.954273658157504,
+      "uhead_supplied_auc_percent": 52.487973889639896,
+      "uhead_verified_auc_percent": 47.512026110360104,
+      "uhead_verified_gain_over_nll_pp": -14.756899395920968
+    },
+    "supervised/logistic_claim_group": {
+      "supplied_label_macro_auc_percent": 70.1201644242455,
+      "uhead_verified_macro_auc_percent": 72.36338751654245,
+      "uhead_supplied_auc_percent": 39.90549608466382,
+      "uhead_verified_auc_percent": 60.09450391533618,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.41244629383993,
+        73.25410961105139
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        3.0963859272746026,
+        4.225631201324802
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.6522144624639736
+    },
+    "supervised/logistic_documented_stratified": {
+      "supplied_label_macro_auc_percent": 70.2778688036649,
+      "uhead_verified_macro_auc_percent": 72.60658383999018,
+      "uhead_supplied_auc_percent": 39.520782336536236,
+      "uhead_verified_auc_percent": 60.479217663463764,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.62832104370031,
+        73.52759479740455
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        3.3091373343430583,
+        4.49688972432571
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.8954107859117073
+    },
+    "supervised/logistic_stratified": {
+      "supplied_label_macro_auc_percent": 69.72092428093295,
+      "uhead_verified_macro_auc_percent": 71.87903431087814,
+      "uhead_supplied_auc_percent": 40.28850486524667,
+      "uhead_verified_auc_percent": 59.71149513475333,
+      "uhead_verified_macro_auc_ci95_percent": [
+        70.88639269725395,
+        72.79174610504394
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.5863357373381892,
+        3.741183792990949
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.167861256799668
+    },
+    "supervised/qda_claim_group": {
+      "supplied_label_macro_auc_percent": 69.44793884638867,
+      "uhead_verified_macro_auc_percent": 72.15361408795955,
+      "uhead_supplied_auc_percent": 37.82446141293096,
+      "uhead_verified_auc_percent": 62.17553858706904,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.19637570805692,
+        73.02325524534196
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.805981258998914,
+        4.0462668958374195
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.4424410338810816
+    },
+    "supervised/qda_documented_stratified": {
+      "supplied_label_macro_auc_percent": 69.94534917263749,
+      "uhead_verified_macro_auc_percent": 72.34927222176897,
+      "uhead_supplied_auc_percent": 39.182346278908334,
+      "uhead_verified_auc_percent": 60.817653721091666,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.3899870942425,
+        73.26262306310886
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.9907365477719026,
+        4.242624567719269
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.6380991676904983
+    },
+    "supervised/qda_stratified": {
+      "supplied_label_macro_auc_percent": 69.63241802911242,
+      "uhead_verified_macro_auc_percent": 72.10232061592706,
+      "uhead_supplied_auc_percent": 38.88543835933409,
+      "uhead_verified_auc_percent": 61.11456164066591,
+      "uhead_verified_macro_auc_ci95_percent": [
+        71.16996382071017,
+        72.97376948719389
+      ],
+      "uhead_verified_gain_ci95_pp": [
+        2.766671670308494,
+        4.015124049809649
+      ],
+      "uhead_verified_gain_over_nll_pp": 3.391147561848584
+    }
+  },
+  "feedback_comparisons": [
+    {
+      "model": "poolside/Laguna-XS-2.1",
+      "seed": 1048,
+      "control_mode": "independent",
+      "evolution_run": "uncertainty_quantification_laguna_evo_1048",
+      "control_run": "uncertainty_quantification_laguna_independent_1048",
+      "evolution_minus_control_macro_auc_pp": 0.9282848060012583,
+      "paired_ci95_pp": [
+        0.6711153027109567,
+        1.1879702510658994
+      ],
+      "uhead_verified_evolution_minus_control_macro_auc_pp": 1.043126548478071,
+      "uhead_verified_paired_ci95_pp": [
+        0.8056894161523958,
+        1.284585640224701
+      ]
+    },
+    {
+      "model": "poolside/Laguna-XS-2.1",
+      "seed": 1048,
+      "control_mode": "baseline_seeded",
+      "evolution_run": "uncertainty_quantification_laguna_evo_1048",
+      "control_run": "uncertainty_quantification_laguna_seeded_1048",
+      "evolution_minus_control_macro_auc_pp": 0.6996272381856983,
+      "paired_ci95_pp": [
+        0.4231217625721535,
+        0.9935829375736621
+      ],
+      "uhead_verified_evolution_minus_control_macro_auc_pp": 0.9063207242624571,
+      "uhead_verified_paired_ci95_pp": [
+        0.6009754098206115,
+        1.1862034516556204
+      ]
+    },
+    {
+      "model": "Qwen/Qwen3.5-9B",
+      "seed": 1048,
+      "control_mode": "independent",
+      "evolution_run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "control_run": "uncertainty_quantification_qwen35_9b_independent_1048",
+      "evolution_minus_control_macro_auc_pp": 3.8972849595729855,
+      "paired_ci95_pp": [
+        3.6013087101239796,
+        4.2403137958737895
+      ],
+      "uhead_verified_evolution_minus_control_macro_auc_pp": 3.7417404998379595,
+      "uhead_verified_paired_ci95_pp": [
+        3.423882477174784,
+        4.080065117634021
+      ]
+    },
+    {
+      "model": "Qwen/Qwen3.5-9B",
+      "seed": 1048,
+      "control_mode": "baseline_seeded",
+      "evolution_run": "uncertainty_quantification_qwen35_9b_evo_1048",
+      "control_run": "uncertainty_quantification_qwen35_9b_seeded_1048",
+      "evolution_minus_control_macro_auc_pp": -0.2597935498835682,
+      "paired_ci95_pp": [
+        -0.6880010933821409,
+        0.11042163626381554
+      ],
+      "uhead_verified_evolution_minus_control_macro_auc_pp": 0.42705127236004614,
+      "uhead_verified_paired_ci95_pp": [
+        0.04057624088529779,
+        0.8487150781984736
+      ]
+    },
+    {
+      "model": "Qwen/Qwen3.8-27B",
+      "seed": 1048,
+      "control_mode": "independent",
+      "evolution_run": "uncertainty_quantification_qwen38_evo_1048",
+      "control_run": "uncertainty_quantification_qwen38_independent_contract_1048",
+      "evolution_minus_control_macro_auc_pp": -0.937031831318734,
+      "paired_ci95_pp": [
+        -1.251166386792053,
+        -0.6381775632545136
+      ],
+      "uhead_verified_evolution_minus_control_macro_auc_pp": -1.0713724486522835,
+      "uhead_verified_paired_ci95_pp": [
+        -1.3745944055281274,
+        -0.7498319770799794
+      ]
+    }
+  ],
+  "formula_ablations": [
+    {
+      "ablation": "ablation_laguna_slope_only",
+      "parent": "uncertainty_quantification_laguna_evo_1048",
+      "ablation_minus_parent_macro_auc_pp": -0.6996272381856983,
+      "paired_ci95_pp": [
+        -0.9935829375736621,
+        -0.4231217625721535
+      ],
+      "uhead_verified_ablation_minus_parent_macro_auc_pp": -0.9063207242624571,
+      "uhead_verified_paired_ci95_pp": [
+        -1.1862034516556206,
+        -0.6009754098206115
+      ]
+    },
+    {
+      "ablation": "ablation_laguna_slope_range",
+      "parent": "uncertainty_quantification_laguna_evo_1048",
+      "ablation_minus_parent_macro_auc_pp": -0.015134103428152912,
+      "paired_ci95_pp": [
+        -0.04795284312638214,
+        0.01611890498414213
+      ],
+      "uhead_verified_ablation_minus_parent_macro_auc_pp": 0.010900480350045427,
+      "uhead_verified_paired_ci95_pp": [
+        -0.021146420409758306,
+        0.04269733717394167
+      ]
+    },
+    {
+      "ablation": "ablation_laguna_slope_variance",
+      "parent": "uncertainty_quantification_laguna_evo_1048",
+      "ablation_minus_parent_macro_auc_pp": -0.5992749876508725,
+      "paired_ci95_pp": [
+        -0.8657911085536372,
+        -0.3507025012515209
+      ],
+      "uhead_verified_ablation_minus_parent_macro_auc_pp": -0.7990674146180226,
+      "uhead_verified_paired_ci95_pp": [
+        -1.0569899244388519,
+        -0.515332917705657
+      ]
+    },
+    {
+      "ablation": "ablation_qwen_linear_position_nll",
+      "parent": "uncertainty_quantification_qwen38_evo_1047",
+      "ablation_minus_parent_macro_auc_pp": -0.004335548132416989,
+      "paired_ci95_pp": [
+        -0.011693333342765408,
+        0.0019446121656364558
+      ],
+      "uhead_verified_ablation_minus_parent_macro_auc_pp": -0.0016563134192750795,
+      "uhead_verified_paired_ci95_pp": [
+        -0.009476882095951735,
+        0.005244703679930669
+      ]
+    }
+  ],
+  "validation_selected_comparator_differences": [
+    {
+      "method": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": -0.25200528166011793,
+      "paired_ci95_pp": [
+        -0.412237675009084,
+        -0.10722410732264141
+      ],
+      "uhead_verified_macro_difference_pp": -0.6215096367696731,
+      "uhead_verified_paired_ci95_pp": [
+        -0.7843313656074997,
+        -0.46952587145480784
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -1.908547551811381,
+      "paired_ci95_pp": [
+        -2.436485569846435,
+        -1.3673398010833382
+      ],
+      "uhead_verified_macro_difference_pp": -2.779041735301064,
+      "uhead_verified_paired_ci95_pp": [
+        -3.311776670093056,
+        -2.241006091694783
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_4b_evo_1048",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -1.3516030290794276,
+      "paired_ci95_pp": [
+        -1.9910937508534523,
+        -0.7932824414889877
+      ],
+      "uhead_verified_macro_difference_pp": -2.0514922061890246,
+      "uhead_verified_paired_ci95_pp": [
+        -2.669769403614614,
+        -1.4679006807606259
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_9b_evo_1048",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": 0.9198407412238225,
+      "paired_ci95_pp": [
+        0.37202621092794397,
+        1.5105297046920547
+      ],
+      "uhead_verified_macro_difference_pp": 2.003861812457643,
+      "uhead_verified_paired_ci95_pp": [
+        1.3988846545968519,
+        2.6209729258434162
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_9b_evo_1048",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -0.7367015289274406,
+      "paired_ci95_pp": [
+        -1.1830292418058552,
+        -0.24884457385742878
+      ],
+      "uhead_verified_macro_difference_pp": -0.15367028607374777,
+      "uhead_verified_paired_ci95_pp": [
+        -0.588389466482128,
+        0.3383816767340878
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen35_9b_evo_1048",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -0.17975700619548718,
+      "paired_ci95_pp": [
+        -0.7129348668219172,
+        0.33249219739665814
+      ],
+      "uhead_verified_macro_difference_pp": 0.5738792430382915,
+      "uhead_verified_paired_ci95_pp": [
+        0.09515182115725013,
+        1.1449158404411401
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen38_evo_1047",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": 1.17561539671523,
+      "paired_ci95_pp": [
+        0.6355020662584357,
+        1.7688926148214883
+      ],
+      "uhead_verified_macro_difference_pp": 1.5529138891721033,
+      "uhead_verified_paired_ci95_pp": [
+        0.9563331379792172,
+        2.1587752643902585
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen38_evo_1047",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -0.480926873436033,
+      "paired_ci95_pp": [
+        -0.9376939571501222,
+        -0.014779186058834149
+      ],
+      "uhead_verified_macro_difference_pp": -0.6046182093592876,
+      "uhead_verified_paired_ci95_pp": [
+        -1.0116283403982833,
+        -0.14930833824873796
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_qwen38_evo_1047",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": 0.07601764929592036,
+      "paired_ci95_pp": [
+        -0.43240305157945247,
+        0.610190408735763
+      ],
+      "uhead_verified_macro_difference_pp": 0.12293131975275173,
+      "uhead_verified_paired_ci95_pp": [
+        -0.32119545182636106,
+        0.6102087249835847
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_laguna_evo_1048",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": 0.6130216356482663,
+      "paired_ci95_pp": [
+        0.3535982406439068,
+        0.8860893815149602
+      ],
+      "uhead_verified_macro_difference_pp": 0.8177259929228455,
+      "uhead_verified_paired_ci95_pp": [
+        0.5388080694452497,
+        1.077498949979118
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_laguna_evo_1048",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -1.0435206345029968,
+      "paired_ci95_pp": [
+        -1.4317264728083097,
+        -0.6989394108581019
+      ],
+      "uhead_verified_macro_difference_pp": -1.3398061056085453,
+      "uhead_verified_paired_ci95_pp": [
+        -1.7866209229991512,
+        -0.9736577609964115
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_laguna_evo_1048",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -0.48657611177104343,
+      "paired_ci95_pp": [
+        -0.9731285890724649,
+        -0.057493971876787495
+      ],
+      "uhead_verified_macro_difference_pp": -0.612256576496506,
+      "uhead_verified_paired_ci95_pp": [
+        -1.1039739783603362,
+        -0.20470141654949842
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_linear_evolution_1047",
+      "comparator": "original/LogProbSlope_BottomMassAvg",
+      "macro_difference_pp": -0.11708625689612973,
+      "paired_ci95_pp": [
+        -0.563356720105579,
+        0.37296595898002516
+      ],
+      "uhead_verified_macro_difference_pp": 0.819982849768536,
+      "uhead_verified_paired_ci95_pp": [
+        0.32569767889451484,
+        1.2966193183656356
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_linear_evolution_1047",
+      "comparator": "supervised/logistic_documented_stratified",
+      "macro_difference_pp": -1.7736285270473928,
+      "paired_ci95_pp": [
+        -2.1989448667544935,
+        -1.3304767905343755
+      ],
+      "uhead_verified_macro_difference_pp": -1.3375492487628549,
+      "uhead_verified_paired_ci95_pp": [
+        -1.789273171658481,
+        -0.8890889285713081
+      ]
+    },
+    {
+      "method": "new/uncertainty_quantification_linear_evolution_1047",
+      "comparator": "supervised/logistic_stratified",
+      "macro_difference_pp": -1.2166840043154394,
+      "paired_ci95_pp": [
+        -1.7137410648264315,
+        -0.7009636825701536
+      ],
+      "uhead_verified_macro_difference_pp": -0.6099997196508156,
+      "uhead_verified_paired_ci95_pp": [
+        -1.0604340418150144,
+        -0.11711790158509172
+      ]
+    }
+  ],
+  "supplementary": {
+    "header_suffix_ablation": {
+      "alignment/ClaimOnlySequenceLogProb": {
+        "supplied_label_macro_auc_percent": 65.68582040005109,
+        "uhead_verified_macro_auc_percent": 68.71450580241667,
+        "uhead_supplied_auc_percent": 36.37091568935491,
+        "uhead_verified_auc_percent": 63.62908431064509,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.77456377874562,
+          69.68925724419319
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          -0.04000652052322806,
+          0.052905937251290766
+        ],
+        "uhead_verified_gain_over_nll_pp": 0.005363630772620809
+      },
+      "alignment/LegacyTailCropSequenceLogProb": {
+        "supplied_label_macro_auc_percent": 65.68582040005109,
+        "uhead_verified_macro_auc_percent": 68.71450580241667,
+        "uhead_supplied_auc_percent": 36.37091568935491,
+        "uhead_verified_auc_percent": 63.62908431064509,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.77456377874562,
+          69.68925724419319
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          -0.04000652052322806,
+          0.052905937251290766
+        ],
+        "uhead_verified_gain_over_nll_pp": 0.005363630772620809
+      },
+      "new/uncertainty_quantification_laguna_evo_1048": {
+        "supplied_label_macro_auc_percent": 69.77275563894828,
+        "uhead_verified_macro_auc_percent": 71.05267206847563,
+        "uhead_supplied_auc_percent": 44.24037606712701,
+        "uhead_verified_auc_percent": 55.75962393287299,
+        "uhead_verified_macro_auc_ci95_percent": [
+          70.11496776197093,
+          71.96757234716637
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          1.4880472433599305,
+          3.1651904818946583
+        ],
+        "uhead_verified_gain_over_nll_pp": 2.3435298968315834
+      },
+      "new/uncertainty_quantification_linear_evolution_1047": {
+        "supplied_label_macro_auc_percent": 69.64264271496235,
+        "uhead_verified_macro_auc_percent": 71.85432390768187,
+        "uhead_supplied_auc_percent": 40.04743463276217,
+        "uhead_verified_auc_percent": 59.95256536723783,
+        "uhead_verified_macro_auc_ci95_percent": [
+          70.90479325557521,
+          72.82155821773834
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          2.685259498186969,
+          3.609755082143125
+        ],
+        "uhead_verified_gain_over_nll_pp": 3.145181736037827
+      },
+      "new/uncertainty_quantification_qwen35_9b_evo_1048": {
+        "supplied_label_macro_auc_percent": 67.80506431980433,
+        "uhead_verified_macro_auc_percent": 70.15436075006237,
+        "uhead_supplied_auc_percent": 39.42816606383886,
+        "uhead_verified_auc_percent": 60.57183393616114,
+        "uhead_verified_macro_auc_ci95_percent": [
+          69.19177314233363,
+          71.17701885717558
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          0.9709687769734477,
+          1.9373508183463328
+        ],
+        "uhead_verified_gain_over_nll_pp": 1.44521857841832
+      },
+      "new/uncertainty_quantification_qwen38_evo_1047": {
+        "supplied_label_macro_auc_percent": 70.03562581173504,
+        "uhead_verified_macro_auc_percent": 71.95868035581184,
+        "uhead_supplied_auc_percent": 41.346254551654425,
+        "uhead_verified_auc_percent": 58.653745448345575,
+        "uhead_verified_macro_auc_ci95_percent": [
+          71.02938569515253,
+          72.95388077388763
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          2.7172293504869502,
+          3.768871117849077
+        ],
+        "uhead_verified_gain_over_nll_pp": 3.2495381841677897
+      },
+      "original/LogProbSlope_BottomMassAvg": {
+        "supplied_label_macro_auc_percent": 69.31381202362631,
+        "uhead_verified_macro_auc_percent": 70.49264823443066,
+        "uhead_supplied_auc_percent": 44.69523705138041,
+        "uhead_verified_auc_percent": 55.30476294861959,
+        "uhead_verified_macro_auc_ci95_percent": [
+          69.5632084588905,
+          71.40336670124617
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          0.9115568676697758,
+          2.6969729712425514
+        ],
+        "uhead_verified_gain_over_nll_pp": 1.7835060627866142
+      },
+      "original/MeanTokenEntropy": {
+        "supplied_label_macro_auc_percent": 58.66820585566073,
+        "uhead_verified_macro_auc_percent": 59.77479744962948,
+        "uhead_supplied_auc_percent": 45.020337827140644,
+        "uhead_verified_auc_percent": 54.979662172859356,
+        "uhead_verified_gain_over_nll_pp": -8.934344722014565
+      },
+      "original/Perplexity": {
+        "supplied_label_macro_auc_percent": 62.79728286408109,
+        "uhead_verified_macro_auc_percent": 62.482337470402726,
+        "uhead_supplied_auc_percent": 51.417254271552615,
+        "uhead_verified_auc_percent": 48.582745728447385,
+        "uhead_verified_gain_over_nll_pp": -6.226804701241321
+      },
+      "original/SequenceLogProb": {
+        "supplied_label_macro_auc_percent": 65.64654685922227,
+        "uhead_verified_macro_auc_percent": 68.70914217164405,
+        "uhead_supplied_auc_percent": 36.21832109410203,
+        "uhead_verified_auc_percent": 63.78167890589797,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.76539871477556,
+          69.69603895085179
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          0.0,
+          0.0
+        ],
+        "uhead_verified_gain_over_nll_pp": 0.0
+      },
+      "supervised/header_refit/logistic_documented_stratified": {
+        "supplied_label_macro_auc_percent": 71.36472859588702,
+        "uhead_verified_macro_auc_percent": 73.6118216938807,
+        "uhead_supplied_auc_percent": 39.88808105902841,
+        "uhead_verified_auc_percent": 60.11191894097159,
+        "uhead_verified_macro_auc_ci95_percent": [
+          72.7002414964252,
+          74.49888249603154
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          4.105243616453072,
+          5.6417287195188415
+        ],
+        "uhead_verified_gain_over_nll_pp": 4.902679522236653
+      },
+      "supervised/header_refit/logistic_stratified": {
+        "supplied_label_macro_auc_percent": 70.8851948740026,
+        "uhead_verified_macro_auc_percent": 72.8801422162153,
+        "uhead_supplied_auc_percent": 41.02273696004286,
+        "uhead_verified_auc_percent": 58.97726303995714,
+        "uhead_verified_macro_auc_ci95_percent": [
+          71.93916793454356,
+          73.79977601709888
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          3.3831035266868024,
+          4.924946890139357
+        ],
+        "uhead_verified_gain_over_nll_pp": 4.171000044571258
+      },
+      "supervised/header_refit/qda_documented_stratified": {
+        "supplied_label_macro_auc_percent": 69.02493082349753,
+        "uhead_verified_macro_auc_percent": 71.46463112809131,
+        "uhead_supplied_auc_percent": 39.02134862932788,
+        "uhead_verified_auc_percent": 60.97865137067212,
+        "uhead_verified_macro_auc_ci95_percent": [
+          70.4959328382628,
+          72.36885669057031
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          1.8720348472416295,
+          3.5326657338905267
+        ],
+        "uhead_verified_gain_over_nll_pp": 2.755488956447266
+      },
+      "supervised/header_refit/qda_stratified": {
+        "supplied_label_macro_auc_percent": 69.30155795095287,
+        "uhead_verified_macro_auc_percent": 71.32183623954433,
+        "uhead_supplied_auc_percent": 40.9087477013384,
+        "uhead_verified_auc_percent": 59.0912522986616,
+        "uhead_verified_macro_auc_ci95_percent": [
+          70.39679875350177,
+          72.24386624039604
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          1.6697984176518799,
+          3.49084064941625
+        ],
+        "uhead_verified_gain_over_nll_pp": 2.6126940679002786
+      },
+      "supervised/logistic_documented_stratified": {
+        "supplied_label_macro_auc_percent": 67.97849126933008,
+        "uhead_verified_macro_auc_percent": 68.71587620093517,
+        "uhead_supplied_auc_percent": 46.68176780777709,
+        "uhead_verified_auc_percent": 53.31823219222291,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.89960313709847,
+          69.5714348405694
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          -1.3794657041109106,
+          1.3355874121359723
+        ],
+        "uhead_verified_gain_over_nll_pp": 0.0067340292911239885
+      },
+      "supervised/logistic_stratified": {
+        "supplied_label_macro_auc_percent": 67.93474827696993,
+        "uhead_verified_macro_auc_percent": 68.59291987518755,
+        "uhead_supplied_auc_percent": 47.03822780802066,
+        "uhead_verified_auc_percent": 52.96177219197934,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.78457981586156,
+          69.41785518298902
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          -1.5000011861670002,
+          1.2411889001783727
+        ],
+        "uhead_verified_gain_over_nll_pp": -0.11622229645649895
+      },
+      "supervised/qda_documented_stratified": {
+        "supplied_label_macro_auc_percent": 66.75240732014282,
+        "uhead_verified_macro_auc_percent": 67.4963414921578,
+        "uhead_supplied_auc_percent": 46.65229622593256,
+        "uhead_verified_auc_percent": 53.34770377406744,
+        "uhead_verified_macro_auc_ci95_percent": [
+          66.70621932776741,
+          68.33735383350403
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          -2.6476705492622052,
+          0.2689623699080286
+        ],
+        "uhead_verified_gain_over_nll_pp": -1.21280067948625
+      },
+      "supervised/qda_stratified": {
+        "supplied_label_macro_auc_percent": 67.08302619783782,
+        "uhead_verified_macro_auc_percent": 67.91740483865394,
+        "uhead_supplied_auc_percent": 46.2452961163275,
+        "uhead_verified_auc_percent": 53.7547038836725,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.09952641396802,
+          68.74881265009614
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          -2.231819268557248,
+          0.6835774703210713
+        ],
+        "uhead_verified_gain_over_nll_pp": -0.7917373329901096
+      }
+    },
+    "linear_best50": {
+      "new/linear_best50_evolution": {
+        "supplied_label_macro_auc_percent": 69.80672378817778,
+        "uhead_verified_macro_auc_percent": 72.22703346982244,
+        "uhead_supplied_auc_percent": 39.10860643259898,
+        "uhead_verified_auc_percent": 60.89139356740102,
+        "uhead_verified_macro_auc_ci95_percent": [
+          71.29971937808216,
+          73.17904119334797
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          3.0433628978849767,
+          3.9627936516752906
+        ],
+        "uhead_verified_gain_over_nll_pp": 3.5158604157439726
+      },
+      "new/linear_best50_independent": {
+        "supplied_label_macro_auc_percent": 70.15190791557325,
+        "uhead_verified_macro_auc_percent": 72.42388542082685,
+        "uhead_supplied_auc_percent": 39.7761012263588,
+        "uhead_verified_auc_percent": 60.2238987736412,
+        "uhead_verified_macro_auc_ci95_percent": [
+          71.42139347895248,
+          73.42550007573757
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          3.232273412677066,
+          4.175133600298478
+        ],
+        "uhead_verified_gain_over_nll_pp": 3.7127123667483772
+      },
+      "original/SequenceLogProb": {
+        "supplied_label_macro_auc_percent": 65.64388231516448,
+        "uhead_verified_macro_auc_percent": 68.71117305407847,
+        "uhead_supplied_auc_percent": 36.19719167488705,
+        "uhead_verified_auc_percent": 63.80280832511295,
+        "uhead_verified_macro_auc_ci95_percent": [
+          67.76812611410631,
+          69.69588356563352
+        ],
+        "uhead_verified_gain_ci95_pp": [
+          0.0,
+          0.0
+        ],
+        "uhead_verified_gain_over_nll_pp": 0.0
+      }
+    }
+  },
+  "paper_figure2_comparisons": [
+    {
+      "paper_method": "Sequence Probability",
+      "paper_figure_2_auc_percent": 68.7,
+      "local_method": "original/SequenceLogProb",
+      "identity_status": "ranking-equivalent baseline",
+      "supplied_label_auc_percent": 65.64388231516448,
+      "uhead_verified_auc_percent": 68.71117305407847,
+      "uhead_verified_minus_published_pp": 0.011173054078469136,
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Perplexity",
+      "paper_figure_2_auc_percent": 64.2,
+      "local_method": "original/Perplexity",
+      "identity_status": "ranking-equivalent baseline",
+      "supplied_label_auc_percent": 64.17472363290479,
+      "uhead_verified_auc_percent": 64.16761960146845,
+      "uhead_verified_minus_published_pp": -0.03238039853155783,
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Mean Token Entropy",
+      "paper_figure_2_auc_percent": 59.9,
+      "local_method": "original/MeanTokenEntropy",
+      "identity_status": "same named baseline; remaining extraction differences possible",
+      "supplied_label_auc_percent": 58.41996535859058,
+      "uhead_verified_auc_percent": 59.80066431409497,
+      "uhead_verified_minus_published_pp": -0.09933568590502517,
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "RAUQ",
+      "paper_figure_2_auc_percent": 61.8,
+      "local_method": "",
+      "identity_status": "not evaluated: attention statistics not cached",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "AttentionScore",
+      "paper_figure_2_auc_percent": 56.0,
+      "local_method": "",
+      "identity_status": "not evaluated: attention statistics not cached",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-1",
+      "paper_figure_2_auc_percent": 70.8,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-3",
+      "paper_figure_2_auc_percent": 70.6,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-5",
+      "paper_figure_2_auc_percent": 70.6,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-7",
+      "paper_figure_2_auc_percent": 68.7,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-9",
+      "paper_figure_2_auc_percent": 68.7,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-11",
+      "paper_figure_2_auc_percent": 64.5,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-13",
+      "paper_figure_2_auc_percent": 63.8,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Gpt-15",
+      "paper_figure_2_auc_percent": 62.0,
+      "local_method": "",
+      "identity_status": "no certified paper-ID to repository-class mapping",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Anth-1",
+      "paper_figure_2_auc_percent": 73.4,
+      "local_method": "",
+      "identity_status": "historical Claude implementation/population unavailable",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Anth-8",
+      "paper_figure_2_auc_percent": 72.7,
+      "local_method": "",
+      "identity_status": "historical Claude implementation/population unavailable",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Anth-15",
+      "paper_figure_2_auc_percent": 71.9,
+      "local_method": "",
+      "identity_status": "historical Claude implementation/population unavailable",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Anth-22",
+      "paper_figure_2_auc_percent": 71.6,
+      "local_method": "",
+      "identity_status": "historical Claude implementation/population unavailable",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    },
+    {
+      "paper_method": "Evo-Anth-30",
+      "paper_figure_2_auc_percent": 71.0,
+      "local_method": "",
+      "identity_status": "historical Claude implementation/population unavailable",
+      "supplied_label_auc_percent": "",
+      "uhead_verified_auc_percent": "",
+      "uhead_verified_minus_published_pp": "",
+      "paper_source": "https://aclanthology.org/2026.acl-srw.115.pdf#page=4"
+    }
+  ],
+  "paper_table3_note": "Rounded per-dataset context only; different feature pools. Do not infer a controlled superiority comparison or reconstruct Figure 2 by averaging this table.",
+  "paper_internal_consistency_check": {
+    "table3_evo_anth1_mean_of_nine_displayed_test_auc_percent": 74.66666666666667,
+    "figure2_evo_anth1_reported_macro_auc_percent": 73.4,
+    "note": "The displayed Table 3 mean and Figure 2 macro differ by more than rounding alone explains; the PDF does not give an explicit reconciliation. Keep the two published results separate."
+  }
+}

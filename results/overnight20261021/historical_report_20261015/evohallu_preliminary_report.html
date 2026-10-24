@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>EvoHallu Preliminary Report</title><style>*{box-sizing:border-box}body{margin:0;background:#f6f7f9;color:#17212b;font:16px/1.7 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}main{max-width:1120px;margin:32px auto;padding:40px 56px;background:white;border:1px solid #e0e5eb;border-radius:12px}h1{font-size:2.3rem;line-height:1.2;margin-top:12px}h2{margin-top:2.1em;font-size:1.35rem;border-bottom:1px solid #e0e5eb;padding-bottom:8px}a{color:#1759a7}p,ul,ol{max-width:100%}li{margin-bottom:8px}code{font:0.87em ui-monospace,SFMono-Regular,Consolas,monospace;background:#f0f3f6;padding:2px 5px;border-radius:4px;overflow-wrap:anywhere}pre{background:#f0f3f6;padding:16px;border-radius:6px;overflow:auto;line-height:1.5}pre code{padding:0;background:none;white-space:pre;overflow-wrap:normal}table{display:block;width:100%;overflow-x:auto;border-collapse:collapse;margin:22px 0;font-size:.9rem;line-height:1.45}th,td{border:1px solid #dce2e8;padding:10px 12px;text-align:left;vertical-align:top}th{background:#edf2f7;font-weight:600}tr:nth-child(even){background:#fafbfc}.filelinks{font-size:14px;color:#536474;margin-bottom:28px}@media(max-width:700px){main{margin:0;padding:24px 18px;border:0;border-radius:0}h1{font-size:1.8rem}table{font-size:.8rem}}@media print{body{background:white;font-size:10pt}main{border:0;padding:0;margin:0;max-width:none}.filelinks{display:none}h2{break-after:avoid}table{display:table;font-size:8pt}pre{white-space:pre-wrap}}</style></head><body><main><nav class="filelinks">Updated report · <a href="evohallu_preliminary_report.md">Markdown source</a></nav><h1>EvoHallu Preliminary Report</h1>
+<p>Experiment campaign: 15 October 2026. Code and selection audit: 19 October 2026.</p>
+<p>Four new language models were tested as authors of Python hallucination detectors. The strongest primary directed-AUROC evolution result selected on validation was <strong>Qwen3.8-27B: 69.80 macro AUROC</strong>, compared with <strong>65.64 for Sequence NLL</strong>, a gain of <strong>4.15 percentage points</strong>. Evolutionary feedback improved Laguna's results, but an advantage over generation without feedback was not consistent across writers.</p>
+<p>All primary results use the original <strong><code>is_hallu</code></strong> target labels. The metric is <strong>ROC-AUC / AUROC</strong>, expressed on a 0–100 scale and averaged equally across nine datasets. Alternative label diagnostics are excluded from these results and do not replace the supplied target labels.</p>
+<p><strong>Reporting reconciliation, 21 October:</strong> the author clarified that paper reporting applies <code>max(AUC, 100-AUC)</code> separately to each method/dataset before averaging. With that rule, Sequence NLL is <strong>68.71</strong>, reproducing the published <strong>68.7</strong>. The baseline discrepancy is resolved without changing <code>is_hallu</code>. For the existing validation-selected evolution programs, paper-compatible macro scores are <strong>Qwen9B 72.45, Qwen27B 72.00, Laguna 71.27, Qwen4B 70.10</strong>. Directed AUROC remains the historical training/validation selection metric and is retained throughout this report. Full paired reporting columns for all 58 methods: <a href="results/next_experiments/paper_reporting.csv">paper_reporting.csv</a>. These are reporting transforms of existing results, not new searches or a matched-budget superiority claim.</p>
+<h2>1. Models and their roles</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Model or method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Original code writer configured in EvoHallu</td>
+<td>GPT-OSS-120B; not rerun in this campaign</td>
+</tr>
+<tr>
+<td>New code writers</td>
+<td>Qwen3.8-27B, Laguna XS 2.1, Qwen3.5-9B, Qwen3.5-4B</td>
+</tr>
+<tr>
+<td>Fixed feature model</td>
+<td><strong>Llama3.1-8b-instruct</strong>, shared across the primary experiments</td>
+</tr>
+<tr>
+<td>Evaluated detector</td>
+<td>A generated Python class, <code>HallucinationDetector(Estimator)</code></td>
+</tr>
+<tr>
+<td>Baseline detector</td>
+<td><code>SequenceLogProb</code>: <code>score = -sum(sequence_logprobs)</code>; <strong>65.643882 AUROC</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Qwen and Laguna replaced the <strong>code-writing model</strong>. Llama3.1-8b-instruct remained the source of token-level features. Evaluation executes the generated formula; it does not call the writer model for each claim. Language-model weights were not fine-tuned. Separate logistic regression and QDA controls were fitted on fixed features.</p>
+<p>The feature checkpoint was inherited from the supplied EvoHallu repository. Its exact identifier and pinned revision are recorded in <a href="results/feature_model_provenance.json">feature_model_provenance.json</a>. A subsequent metadata check found that all four Safetensors weight files have the same published SHA-256 hashes as the corresponding <a href="https://huggingface.co/meta-llama/Llama-3.1-8B-Instruct">official Meta Llama-3.1-8B-Instruct checkpoint</a>. Some configuration files differ, so this does not establish identity of the entire model package. The check compared published file metadata; it did not rerun inference. Details are in <a href="results/feature_checkpoint_identity_audit.json">feature_checkpoint_identity_audit.json</a>.</p>
+<h2>2. Input data and feature extraction</h2>
+<p>The supplied data comprise <strong>10 CSV files: one PopQA training file and nine evaluation datasets</strong>.</p>
+<ul>
+<li><strong>PopQA training file:</strong> 7,007 rows, split into <strong>5,605 training / 1,402 validation</strong> rows using a stratified split with <code>split_seed=441</code>.</li>
+<li><strong>Evaluation datasets:</strong> AVeriTeC, UHEAD, WildHallucinations, Cities, Companies, CommonClaim, CounterFact, PopQA test, and X-Fact: <strong>97,488 claims</strong> in total.</li>
+<li>The main feature-extraction path uses <code>claim</code> as input text and <code>is_hallu</code> as the target. It does not use <code>primed_text</code>. The <code>10shot</code> filename suffix does not itself introduce ten demonstrations into the model input.</li>
+<li>Llama computes features for the supplied claim text: token log-probabilities, top-512 logits, and their token indices. It does not generate new answers for verification. The extraction template contains the instruction <code>Generate true statement</code> and the supplied claim.</li>
+</ul>
+<p>Primary results retain the existing feature-array preparation convention. Attention and hidden-state features were not extracted into the primary caches. Token alignment and template-suffix effects were investigated separately. These runs therefore establish results on our cached inputs; byte-for-byte agreement with the paper's historical caches has not been verified.</p>
+<h2>3. Parent selection inside evolution</h2>
+<p>Actual entry point: <code>src/experiments/main.py</code> → <code>extension_trial=true</code> → <code>src/experiments/extension_trial.py</code>. The runner reuses the repository's original <code>ProgramsDatabase</code> and prompt builder.</p>
+<ol>
+<li>Initialize <strong>two islands</strong>, each containing the Sequence NLL baseline. Randomly choose an island for each round.</li>
+<li>Evaluate candidate fitness using <strong>training AUROC on 5,605 rows</strong>. The stored fitness is <code>round(100 * roc_auc_score(...), 4)</code>. Validation scores are not used as population fitness or shown as the scores attached to parent examples in the prompt.</li>
+<li>Within each island, group programs by <strong>identical training fitness</strong>. These are score groups, not semantic or code-similarity clusters.</li>
+<li>Apply the schedule <code>p(r) = 0.6 + (r / 30) * (0.2 - 0.6)</code>, with <code>r=0..29</code>, to narrow sampling toward the top fraction of score groups: from 60% to approximately 21.33%. The implementation uses a <code>nearest</code> quantile and scores strictly above its threshold. Filtering applies only when more groups remain above the threshold than the number of required examples; it may be skipped for small populations.</li>
+<li>Sample up to <strong>two distinct score groups</strong>, weighted by <code>softmax(train_score / 40)</code>. Within each group, sample a program with a modest preference for shorter source code. Parent selection is probabilistic.</li>
+<li>Pass parent code and its <strong>training fitness</strong> to the writer. Generate <strong>two candidates from the same prompt</strong>, with temperature <strong>0.7</strong>, <code>top_p=0.8</code>, <code>top_k=20</code>, and at most <strong>4,096 output tokens</strong>. The serving context limit is 16K.</li>
+<li>Evaluate candidates in separate processes, first on training and then on validation data. Enforce time/memory limits, finite-score checks, and exact-source deduplication by SHA-256. Insert programs with successful training evaluations into the selected island in response order.</li>
+</ol>
+<p>The insertion condition permits a training-successful candidate to enter the population even if validation fails. <strong>No such cases occurred in the recorded runs:</strong> all 463 candidates with successful training evaluations also received validation scores. Island resets are disabled in the reused database, and older programs are not automatically removed.</p>
+<h2>4. Final program and seed selection</h2>
+<p>The selection stages are separate:</p>
+<pre><code class="language-text">PopQA training   → population fitness and parent sampling
+PopQA validation → best program across all candidates in a run
+PopQA validation → best evolution seed for each writer
+Nine test sets   → evaluation of frozen programs
+</code></pre>
+<ul>
+<li><strong>Run winner:</strong> the highest stored validation AUROC among all successfully evaluated candidates generated during that run.</li>
+<li>Ties retain the first candidate in ledger order. If baseline validation AUROC is at least as high as the best generated candidate's score, retain Sequence NLL. Selection uses training/validation scores rounded to four decimal places on the percentage scale.</li>
+<li>Save the chosen source as <strong><code>frozen_estimator.py</code></strong>. The remaining candidates retain their source and validation predictions in the logs; they are not all evaluated on the nine test datasets.</li>
+<li><strong>Primary writer seed:</strong> the highest PopQA validation score among that writer's completed primary <code>evolution</code> runs. Pilot runs, protocol-excluded attempts, <code>independent</code>, and <code>baseline_seeded</code> runs are excluded from this seed selection.</li>
+<li>No validation splits from the other eight datasets are used for selection; those datasets serve as test sets.</li>
+<li>The complete test table contains <strong>58 methods</strong>: 25 supplied formulas, 6 diagnostic baselines, 6 fitted control models, and 21 frozen programs. It includes both seeds, control arms, and the pilot; inclusion in the table does not make a run the primary result for its writer.</li>
+</ul>
+<p>For example, Laguna seed 1047 achieves <strong>69.43</strong> on the test sets, while seed 1048 achieves <strong>69.23</strong>. The primary result is <strong>1048</strong>, because its validation score is higher: <strong>79.5008 versus 79.2575</strong>. The test result did not override validation selection. The Qwen27B pilot, with test AUROC <strong>70.12</strong>, is also excluded from the primary comparison because it used a different generation budget.</p>
+<h2>5. Completed primary evolution runs</h2>
+<table>
+<thead>
+<tr>
+<th>Writer</th>
+<th style="text-align:right">Seed</th>
+<th style="text-align:right">Rounds / requests</th>
+<th style="text-align:right">Valid candidates</th>
+<th style="text-align:right">Selected round¹</th>
+<th style="text-align:right">Selected train AUROC</th>
+<th style="text-align:right">Selected validation AUROC</th>
+<th style="text-align:right">Macro test AUROC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Qwen3.8-27B</strong></td>
+<td style="text-align:right"><strong>1047</strong></td>
+<td style="text-align:right"><strong>30 / 60</strong></td>
+<td style="text-align:right"><strong>57</strong></td>
+<td style="text-align:right"><strong>5</strong></td>
+<td style="text-align:right"><strong>79.9031</strong></td>
+<td style="text-align:right"><strong>79.6135</strong></td>
+<td style="text-align:right"><strong>69.80</strong></td>
+</tr>
+<tr>
+<td>Qwen3.8-27B</td>
+<td style="text-align:right">1048</td>
+<td style="text-align:right">30 / 60</td>
+<td style="text-align:right">53</td>
+<td style="text-align:right">14</td>
+<td style="text-align:right">79.8256</td>
+<td style="text-align:right">78.7667</td>
+<td style="text-align:right">68.53</td>
+</tr>
+<tr>
+<td>Laguna XS 2.1</td>
+<td style="text-align:right">1047</td>
+<td style="text-align:right">30 / 60</td>
+<td style="text-align:right">46</td>
+<td style="text-align:right">28</td>
+<td style="text-align:right">80.1655</td>
+<td style="text-align:right">79.2575</td>
+<td style="text-align:right">69.43</td>
+</tr>
+<tr>
+<td><strong>Laguna XS 2.1</strong></td>
+<td style="text-align:right"><strong>1048</strong></td>
+<td style="text-align:right"><strong>30 / 60</strong></td>
+<td style="text-align:right"><strong>43</strong></td>
+<td style="text-align:right"><strong>28</strong></td>
+<td style="text-align:right"><strong>80.5794</strong></td>
+<td style="text-align:right"><strong>79.5008</strong></td>
+<td style="text-align:right"><strong>69.23</strong></td>
+</tr>
+<tr>
+<td>Qwen3.5-9B</td>
+<td style="text-align:right">1047</td>
+<td style="text-align:right">30 / 60</td>
+<td style="text-align:right">32</td>
+<td style="text-align:right">12</td>
+<td style="text-align:right">77.5949</td>
+<td style="text-align:right">77.8208</td>
+<td style="text-align:right">68.02</td>
+</tr>
+<tr>
+<td><strong>Qwen3.5-9B</strong></td>
+<td style="text-align:right"><strong>1048</strong></td>
+<td style="text-align:right"><strong>30 / 60</strong></td>
+<td style="text-align:right"><strong>36</strong></td>
+<td style="text-align:right"><strong>16</strong></td>
+<td style="text-align:right"><strong>79.3900</strong></td>
+<td style="text-align:right"><strong>79.5752</strong></td>
+<td style="text-align:right"><strong>69.54</strong></td>
+</tr>
+<tr>
+<td><strong>Qwen3.5-4B</strong></td>
+<td style="text-align:right"><strong>1048</strong></td>
+<td style="text-align:right"><strong>21 / 42</strong></td>
+<td style="text-align:right"><strong>16</strong></td>
+<td style="text-align:right"><strong>10</strong></td>
+<td style="text-align:right"><strong>79.4759</strong></td>
+<td style="text-align:right"><strong>78.0317</strong></td>
+<td style="text-align:right"><strong>68.37</strong></td>
+</tr>
+</tbody>
+</table>
+<p>¹ Round numbers are one-based here and zero-based in the JSONL logs. Bold rows are the primary runs selected by validation.</p>
+<p>Primary evolution totals: <strong>7 runs, 201 rounds, 402 generation requests, and 283 valid candidates</strong>. Qwen4B stopped after three consecutive rounds without a successful validation evaluation. These are seven separate searches, not one continuous evolution trajectory.</p>
+<p>Additional comparisons using the same <code>is_hallu</code> targets:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th style="text-align:right">Macro test AUROC</th>
+<th style="text-align:right">Gain over NLL, percentage points</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequence NLL</td>
+<td style="text-align:right"><strong>65.64</strong></td>
+<td style="text-align:right">—</td>
+</tr>
+<tr>
+<td>Qwen27B, primary evolution</td>
+<td style="text-align:right"><strong>69.80</strong></td>
+<td style="text-align:right"><strong>+4.15</strong></td>
+</tr>
+<tr>
+<td>Qwen9B, primary evolution</td>
+<td style="text-align:right"><strong>69.54</strong></td>
+<td style="text-align:right"><strong>+3.90</strong></td>
+</tr>
+<tr>
+<td>Laguna, primary evolution</td>
+<td style="text-align:right"><strong>69.23</strong></td>
+<td style="text-align:right"><strong>+3.59</strong></td>
+</tr>
+<tr>
+<td>Qwen4B, primary evolution</td>
+<td style="text-align:right"><strong>68.37</strong></td>
+<td style="text-align:right"><strong>+2.73</strong></td>
+</tr>
+<tr>
+<td>Supplied <code>LogProbSlope_BottomMassAvg</code>, selected by validation</td>
+<td style="text-align:right"><strong>68.62</strong></td>
+<td style="text-align:right"><strong>+2.98</strong></td>
+</tr>
+<tr>
+<td>Logistic regression, 14 fixed features</td>
+<td style="text-align:right"><strong>70.28</strong></td>
+<td style="text-align:right"><strong>+4.63</strong></td>
+</tr>
+<tr>
+<td>QDA, the same 14 features</td>
+<td style="text-align:right"><strong>69.95</strong></td>
+<td style="text-align:right"><strong>+4.30</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The supplied formulas were evaluated separately on validation data; <code>LogProbSlope_BottomMassAvg</code> had the highest validation score. The highest test score across all 25 supplied formulas is <strong>69.88</strong>, but that is a descriptive maximum selected on test performance. The new 69.80 result therefore does not outperform every supplied formula.</p>
+<h2>6. Controls: does evolutionary feedback help?</h2>
+<p><code>independent</code> generates each program from scratch without population examples. <code>baseline_seeded</code> includes the same original NLL example and its training score in every prompt; improvements are never fed back. Both controls use the same final validation-selection rule as evolution.</p>
+<p>Matched comparisons at <strong>seed 1048, with 60 requests in each arm</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Writer / control</th>
+<th style="text-align:right">Evolution</th>
+<th style="text-align:right">Control</th>
+<th style="text-align:right">Evolution − control, percentage points</th>
+<th>Paired 95% interval</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Laguna / independent</td>
+<td style="text-align:right">69.23</td>
+<td style="text-align:right">68.31</td>
+<td style="text-align:right"><strong>+0.93</strong></td>
+<td>+0.67 … +1.19</td>
+</tr>
+<tr>
+<td>Laguna / baseline_seeded</td>
+<td style="text-align:right">69.23</td>
+<td style="text-align:right">68.53</td>
+<td style="text-align:right"><strong>+0.70</strong></td>
+<td>+0.42 … +0.99</td>
+</tr>
+<tr>
+<td>Qwen27B / independent</td>
+<td style="text-align:right">68.53</td>
+<td style="text-align:right">69.47</td>
+<td style="text-align:right"><strong>−0.94</strong></td>
+<td>−1.25 … −0.64</td>
+</tr>
+<tr>
+<td>Qwen9B / baseline_seeded</td>
+<td style="text-align:right">69.54</td>
+<td style="text-align:right">69.80</td>
+<td style="text-align:right"><strong>−0.26</strong></td>
+<td>−0.69 … +0.11</td>
+</tr>
+</tbody>
+</table>
+<p>The Qwen27B comparison uses evolution seed 1048; its 68.53 must not be replaced by the validation-selected seed-1047 result of 69.80. Qwen9B independent stopped after 12 requests with one valid candidate and retained NLL. That incomplete search is not a matched 60-request control.</p>
+<p>Intervals use 500 paired bootstrap replicates over groups of identical normalized claims. They describe the fixed nine-dataset collection and frozen programs. They do not capture variation across search seeds and are not adjusted for multiple comparisons.</p>
+<p>The evidence supports a benefit from feedback for Laguna in these runs. It does not establish a universal advantage of evolution across writers. The fixed-example control more directly isolates feedback; the independent control removes both feedback and code examples.</p>
+<h2>7. Properties of the discovered formulas</h2>
+<ul>
+<li><strong>Qwen27B:</strong> position-weighted NLL that emphasizes later tokens. Algebraically, the main expression reduces to <code>n * weighted_mean(NLL, weights=1..n)</code>, subject to floating-point differences. A simplified float64 implementation achieves <strong>69.7926</strong>, compared with <strong>69.7969</strong> for the original: <strong>−0.0043 percentage points</strong>.</li>
+<li><strong>Laguna:</strong> negative correlation between position and log-probability, a normalized range of top-512 entropy, and variance of top-1 probability. Removing the variance component gives <strong>69.2192</strong>, compared with <strong>69.2343</strong>: <strong>−0.0151 percentage points</strong>.</li>
+<li><strong>Qwen9B:</strong> total NLL plus the change in mean gap between the first and last quarters and gap variance near the end. Alternative-token probabilities are normalized within top-512, so this is not an exact full-vocabulary probability gap.</li>
+<li><strong>Qwen4B:</strong> a combination of transformed position/log-probability correlation and second differences of log-probabilities.</li>
+</ul>
+<p>The writer proposed the coefficients in the primary formulas, and selection operated on whole programs. Those coefficients were not fitted by gradient descent. Comments mentioning “learned weights” in generated code do not imply that a separate fitting step occurred.</p>
+<p>The top five saved candidates per run have also been exported by validation score. No manual diversity curation of a top-k collection was used to change the primary results.</p>
+<h2>8. Coverage of the proposed extensions</h2>
+<table>
+<thead>
+<tr>
+<th>Idea from <code>EXPERIMENT_EXTENSIONS.md</code></th>
+<th>Completed work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>New code-writing models</td>
+<td>Four writers, seven primary evolution runs, all nine test datasets</td>
+</tr>
+<tr>
+<td>Deliberately increase diversity</td>
+<td>Measured candidate-prediction diversity; two-stage generation and a completed structured-family intervention were not tested</td>
+</tr>
+<tr>
+<td>Explain differences between Claude models</td>
+<td>Historical Claude populations were unavailable; no explanation was established</td>
+</tr>
+<tr>
+<td>Supervised evolution</td>
+<td>Fitted fixed-feature logistic regression and QDA; full evolution of programs with fitted parameters was not implemented</td>
+</tr>
+<tr>
+<td>Test whether evolution is necessary</td>
+<td>Completed independent/fixed-example controls and separate CPU coefficient searches; results depend on the writer</td>
+</tr>
+<tr>
+<td>Transfer to another feature model</td>
+<td>Preserved six Llama-3.2-1B feature caches; no complete transfer-quality comparison</td>
+</tr>
+<tr>
+<td>Complexity and useful features</td>
+<td>Completed four formula ablations and feature diagnostics; historical Claude formulas were unavailable</td>
+</tr>
+</tbody>
+</table>
+<h2>9. Differences from the paper and original runner</h2>
+<p>The <a href="https://aclanthology.org/2026.acl-srw.115.pdf">paper, Sections 4–5 and Figure 2</a> describes typical searches of <strong>500 rounds × 2 candidates</strong>, followed by selection of the top three candidates per run. For GPT-OSS, the authors manually curated a diverse collection of 16 high-validation-scoring methods. For Claude, Figure 2 displays selected test-rank positions among the top 30 methods selected by validation. Our one-winner-per-run protocol does not reproduce that collection-selection procedure.</p>
+<p>In the supplied original UQ branch of <code>main.py</code>, the candidate with the highest <strong>training AUC in the current processed batch</strong> is evaluated and logged on train/validation/testset. That choice uses <code>extra_metrics[&quot;AUC&quot;]</code>, rounded to two decimal places, while population insertion uses the four-decimal <code>score</code>. That block does not implement our final <code>argmax(validation)</code> over all candidates from the run.</p>
+<p>Our runner uses <strong>30 × 2</strong>, explicit resource limits and stopping conditions, validation evaluation for each successfully executed candidate, one frozen winner per run, and a separate nine-dataset evaluation. Each full primary search uses <strong>6% of the paper's typical round budget</strong>. Multiple writers and control arms do not substitute for a longer evolution trajectory.</p>
+<p>The author's reporting clarification resolves the baseline comparison:</p>
+<table>
+<thead>
+<tr>
+<th>Baseline</th>
+<th style="text-align:right">Directed macro AUROC</th>
+<th style="text-align:right">Paper-compatible macro AUROC</th>
+<th style="text-align:right">Published</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sequence Probability / NLL</td>
+<td style="text-align:right">65.6439</td>
+<td style="text-align:right"><strong>68.7112</strong></td>
+<td style="text-align:right">68.7</td>
+</tr>
+<tr>
+<td>Perplexity</td>
+<td style="text-align:right">64.1747</td>
+<td style="text-align:right"><strong>64.1747</strong></td>
+<td style="text-align:right">64.2</td>
+</tr>
+<tr>
+<td>Mean Token Entropy</td>
+<td style="text-align:right">58.4200</td>
+<td style="text-align:right"><strong>59.9043</strong></td>
+<td style="text-align:right">59.9</td>
+</tr>
+</tbody>
+</table>
+<p>All three reproduce the paper at its displayed precision. The reporting rule is applied per dataset before averaging; it does not complement any labels. Mean Token Entropy changes direction on both UHEAD and Cities, illustrating why flipping UHEAD labels alone was not the correct general explanation. Training fitness, validation-selected candidates, and frozen predictions remain unchanged. A certified mapping from repository classes to every <code>Evo-Gpt-*</code> alias remains unavailable; baseline agreement does not establish a matched writer comparison. The paper's displayed best Evo-Gpt and Evo-Anth values are 70.8 and 73.4. <a href="https://aclanthology.org/2026.acl-srw.115.pdf#page=4">Figure 2</a></p>
+<h2>10. Code changes</h2>
+<p>The archived diff from the <strong>supplied ZIP to the audited experiment snapshot</strong> includes <strong>57 code/configuration/test files: 5,660 insertions and 50 deletions</strong>. The complete repository diff, including documentation, result tables, and binary figures, covers <strong>112 files</strong>. These counts describe the experiment snapshot before this English report and the additional checkpoint metadata audit.</p>
+<table>
+<thead>
+<tr>
+<th>File or component</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/experiments/main.py</code></td>
+<td>Dispatches bounded experiments to <code>extension_trial</code>; removes an unused import</td>
+</tr>
+<tr>
+<td><code>src/experiments/extension_trial.py</code></td>
+<td>Local generation, control modes, resource limits, isolated evaluation, deduplication, candidate ledger, validation selection, and frozen source export</td>
+</tr>
+<tr>
+<td><code>src/packing/evaluate/uncertainty_quantification/task_uncertainty_quantification.py</code></td>
+<td>Opens the separate test file only for <code>testset</code>; fixes the imports/class execution namespace; saves predictions; adds a claim-group split option; clarifies the log-probability input description</td>
+</tr>
+<tr>
+<td><code>src/packing/evaluate/uncertainty_quantification/precompute_raw_stats_separated.py</code></td>
+<td>Supports probability-only feature extraction, dynamic GPU microbatches, dtype/attention-backend settings, and metadata</td>
+</tr>
+<tr>
+<td><code>supervised_baselines.py</code>, <code>alignment_baselines.py</code></td>
+<td>Adds diagnostic detectors, fixed 14/17-feature pools, and fitted logistic/QDA controls</td>
+</tr>
+<tr>
+<td><code>scripts/evaluate_cached_claims.py</code> and related evaluators</td>
+<td>Reuses shared caches, evaluates frozen programs, computes bootstrap comparisons, checks overlap, and verifies additions without changing existing predictions</td>
+</tr>
+<tr>
+<td><code>scripts/fit_supervised_baselines.py</code></td>
+<td>Tunes logistic/QDA hyperparameters with three-fold CV inside the 5,605 training rows; validation/test do not participate in fitting or hyperparameter selection</td>
+</tr>
+<tr>
+<td>Other <code>scripts/</code></td>
+<td>Campaign scheduling, local serving, provenance, diagnostics, cache archiving, and pod shutdown</td>
+</tr>
+<tr>
+<td><code>configs/</code>, <code>requirements-trial.txt</code>, <code>tests/test_extension_trial.py</code></td>
+<td>Model/budget configurations, dependencies, and protocol checks</td>
+</tr>
+</tbody>
+</table>
+<p>The original <strong><code>programs_database.py</code>, <code>packing/model/prompt.py</code>, <code>features.py</code>, and <code>found_formulas.py</code> were unchanged</strong>. Orchestration and final selection changed; islands and parent sampling were inherited from the supplied implementation.</p>
+<p>The separate 21 October preparation adds opt-in neutral/diverse/compositional prompts, frozen-context trials, saved training predictions, and top-three validation exports. These additions preserve the original default prompt and are not included in the historical 57-file experiment patch. Their prepared studies, completed CPU control, and validation are documented in <a href="NEXT_EXPERIMENTS.md">NEXT_EXPERIMENTS.md</a>.</p>
+<h2>11. Limitations and resource use</h2>
+<ul>
+<li>Primary evolution uses the original stratified split. An audit found <strong>88 shared normalized claims between train and validation</strong>, and <strong>412 shared unique claims between PopQA train and PopQA test</strong>. Duplicate-disjoint evaluations and grouped fitted controls are available, but full evolution was not rerun on a cleaned/grouped split.</li>
+<li>Each writer has only one or two primary seeds. This is insufficient for a stable ranking of writer capability. Models were not matched on elapsed time or token budgets.</li>
+<li>Some additional controls and ablations were introduced after inspecting early results. The campaign is not a single preregistered blind confirmatory experiment. Primary candidate/seed selection nevertheless uses PopQA validation rather than test scores.</li>
+<li>Devstral's six initial requests failed with HTTP400 before generation. This is a client-protocol failure, not a model-quality result. Six initial Qwen27B independent requests with an incomplete evaluator-interface description were also excluded; the corrected run is separate.</li>
+<li>Across controls, pilot, and excluded attempts: <strong>676 LLM requests, 463 valid candidates</strong>, and approximately <strong>1.785 million reported input-plus-output tokens</strong>. Requests and valid programs should not be interpreted as distinct scientific ideas.</li>
+<li>A100 80 GB rental: <strong>10.18 hours</strong>, estimated GPU cost <strong>$18.23</strong>, external model API spending <strong>$0</strong>. This includes feature caching, model changes, and evaluation. The pod was stopped after the campaign.</li>
+</ul>
+<h2>12. Audit evidence and full diff</h2>
+<p>Preparing this report required no new GPU runs, model generations, or searches. The experiment pipeline was not modified during the reporting audit.</p>
+<p>All <strong>15 LLM runs / 676 requests</strong> were checked against their ledgers: selected candidates match the validation-maximum rule with baseline fallback, and frozen source files match the selected code. The original population algorithm reproduced <strong>335 saved prompts and island selections with no mismatches</strong>. Three prompts from the excluded independent run using the old interface description were not replayed. This replay did not regenerate model responses or re-execute candidate programs.</p>
+<p>All nine test tables contain the same <strong>58 methods, with zero scoring failures</strong>. Of 23 frozen source files, 21 are included; the two protocol-excluded attempts are absent from the final cohort. Primary writer seeds were independently reconstructed from validation scores and match the reported selections.</p>
+<p>Available review artifacts:</p>
+<ul>
+<li><a href="results/technical_review/full_code.patch">Full code/configuration diff</a>.</li>
+<li><a href="results/technical_review/full_repository.patch">Full repository diff, including documents, results, and binary figures</a>.</li>
+<li><a href="results/technical_review/uncommitted_user_documents.patch">Existing uncommitted edits to the two earlier reports</a>.</li>
+<li><a href="results/technical_review/selection_audit.csv">Per-run selection audit, CSV</a> and <a href="results/technical_review/selection_audit.json">JSON</a>.</li>
+<li><a href="results/technical_review/top_validation_candidates.csv">Top five saved validation candidates per run</a>.</li>
+<li><a href="results/technical_review/diff_manifest.json">Diff boundaries, SHA-256 hashes, and application checks</a>.</li>
+</ul>
+<p>The main patches compare the actual supplied ZIP with the audited working files. Import commit <code>49504d5</code> had already extended <code>.gitignore</code>; two original sweep-example CSVs were ignored by git but remained on disk and are preserved in the ZIP comparison. The experiment snapshot is HEAD <code>45dff51361a6f252a17ff71f479bbfb9ea4c5431</code>, plus the existing edits to <code>REPORT_RU.md</code> and <code>EXPERIMENT_RESULTS_RU.md</code>.</p>
+<p>Both ZIP-to-snapshot patches were applied to an isolated copy of the original archive and verified byte-for-byte for every affected file. Datasets, weights, caches, environments, and credentials are excluded. All 23 frozen programs, including the exclusion markers, are exported separately under <code>frozen_estimators/</code> in the review package. New reporting and audit artifacts are outside the historical diff.</p>
+<p>Primary result sources: <code>results/run_table.csv</code>, <code>results/method_table.csv</code>, <code>results/campaign_summary.json</code>, <code>results/search_budget_audit.json</code>, and <code>results/validation_controls/original_formulas.json</code>. Detailed run records: <code>out/logs/mod1/*/{trial_config.json,candidates.jsonl,summary.json,frozen_estimator.py}</code>.</p>
+</main></body></html>

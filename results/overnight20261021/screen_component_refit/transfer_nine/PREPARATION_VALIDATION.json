@@ -1,0 +1,35 @@
+{
+  "status": "prepared_review_only_not_launched",
+  "created_utc": "2026-10-21T20:51:22.932194+00:00",
+  "focused_tests_passed": 15,
+  "test_seconds": 3.74,
+  "compile_passed": true,
+  "dry_run_completed": true,
+  "new_dataset_indices": [
+    6,
+    7,
+    8
+  ],
+  "reused_target_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "protected_files": 73,
+  "all_protected_sha256_match_now": true,
+  "real_cache_audits_or_scoring_calls": 0,
+  "fit_or_gpu_calls": 0,
+  "requires_complete_numeric427_receipt": true,
+  "deadline_utc": "2026-10-22T02:06:00+00:00",
+  "max_active_seconds_default": 1200,
+  "report_outputs_separate_from_original_six": true,
+  "sha256": {
+    "scripts/overnight_component_head_transfer9.py": "b798e54cfa4fa2e11787ab2e35534f27d1a71e61371dda22408859c9aba55068",
+    "tests/test_overnight_component_head_transfer9.py": "2d54654e02edba946fd57c773519b2b18970855ad76c60a6e99590e184d49e68",
+    "results/overnight20261021/screen_component_refit/transfer_nine/PLAN.json": "76e8570c70ef8d125db46156bcb0e36ea2421d9aafba7fb98ab377298bc0b2f4"
+  },
+  "target_cache_identity_pinned_once_before_reuse": true
+}

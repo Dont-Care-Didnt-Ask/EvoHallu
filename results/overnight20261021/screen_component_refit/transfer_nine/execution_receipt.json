@@ -1,0 +1,19 @@
+{
+  "status": "complete_exploratory_nine",
+  "jobs": [
+    {
+      "dataset": "popqa__popqa_test_filtered_10shot",
+      "status": "scored_and_published"
+    },
+    {
+      "dataset": "x-fact__test_filtered_10shot",
+      "status": "scored_and_published"
+    },
+    {
+      "dataset": "geometry__counterfact_true_false",
+      "status": "scored_and_published"
+    }
+  ],
+  "finished_utc": "2026-10-22T00:30:22.105678+00:00",
+  "original_six_unchanged": true
+}

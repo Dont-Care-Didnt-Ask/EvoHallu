@@ -1,0 +1,78 @@
+{
+  "completed_utc": "2026-10-22T00:04:29.467251+00:00",
+  "decision_complete": true,
+  "writer": {
+    "model": "zai-org/GLM-4.7-Flash",
+    "revision": "7dd20894a642a0aa287e9827cb1a1f7f91386b67",
+    "status": "pilot_finished",
+    "pilot": {
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 3195.209233962989
+    },
+    "extension": null,
+    "max_job_minutes": 60,
+    "startup": {
+      "exit_code": 0,
+      "timed_out": false,
+      "skipped": false,
+      "elapsed_seconds": 72.62222139400546
+    },
+    "pilot_jobs": [
+      {
+        "job": "nextglm_evo_original_2107",
+        "full_budget": true,
+        "valid_candidates": 28,
+        "elapsed_seconds": 3182.667130187998,
+        "requests": 60,
+        "summary_sha256": "b620558c14e15d4dc69aaadf69d1b04cf4427c4c6ee705d4b6934e860f8513d7"
+      },
+      {
+        "job": "nextglm_evo_diverse_2107",
+        "full_budget": true,
+        "valid_candidates": 36,
+        "elapsed_seconds": 2934.2295058630116,
+        "requests": 60,
+        "summary_sha256": "fadbb55452bea5d11a2971caf6f97ea26e1046b238763da551575635b1311f05"
+      }
+    ],
+    "extension_gate": {
+      "eligible": true,
+      "required_minutes": 73.95778782073995,
+      "remaining_minutes": 65.54244628333333,
+      "run": false
+    },
+    "devstral_reservation": {
+      "run": false,
+      "enabled": true,
+      "remaining_minutes": 65.54237715000001,
+      "required_minutes": 75,
+      "writer_cutoff_utc": "2026-10-22T01:10:00+00:00",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+      "prefetch_receipt_sha256": "0d3fc236ec2ebd979cfca60ccde47a3e6f3590adaf4e638feb961981dd615cd6",
+      "reason": "less_than_75_minutes_before_writer_cutoff"
+    }
+  },
+  "errors": [],
+  "writer_cutoff_utc": "2026-10-22T01:10:00+00:00",
+  "devstral": {
+    "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+    "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+    "status": "skipped",
+    "entry_gate": {
+      "run": false,
+      "enabled": true,
+      "remaining_minutes": 65.5089148,
+      "required_minutes": 75,
+      "writer_cutoff_utc": "2026-10-22T01:10:00+00:00",
+      "model": "mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "revision": "55c5b41e98c2dbd21b0c8afffc540dcfc9eb5128",
+      "prefetch_receipt_sha256": "0d3fc236ec2ebd979cfca60ccde47a3e6f3590adaf4e638feb961981dd615cd6",
+      "reason": "less_than_75_minutes_before_writer_cutoff"
+    },
+    "reason": "less_than_75_minutes_before_writer_cutoff"
+  },
+  "prefer_devstral_breadth": true
+}

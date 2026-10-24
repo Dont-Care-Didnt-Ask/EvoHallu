@@ -1,0 +1,41 @@
+{
+  "status": "finished",
+  "started_utc": "2026-10-21T20:26:09.106581+00:00",
+  "pid": 12570,
+  "manifest": "results/next_experiments/feedback_overlap_manifest.json",
+  "manifest_sha256": "c06460d1620ef8d9d13476ec9bf147bf03b662201c2cc74c66f63c320ae5b291",
+  "parent_source_manifest_sha256": "7b934d2abe42b7bc83cca49db82e15220c6ff06a5635c80c19155fc70c74352c",
+  "same_original_job_ids": [
+    "next_fixed_neutral_2107",
+    "next_fixed_neutral_4319",
+    "next_fixed_neutral_8741"
+  ],
+  "extra_requests": 0,
+  "source_preflight": {
+    "unstarted_adaptive_jobs": 6,
+    "source_controller_pid": 2988,
+    "source_feedback_phase_not_started": true
+  },
+  "analysis_job_identities_unchanged": true,
+  "prior_overlap_owners_terminal": {
+    "sampler_execution_state": {
+      "manifest_sha256": "5dd44749b9df9be59d3efacbbb9f303ba22381bf565c8dc9de015c9d11182a3d",
+      "terminal_evidence": "recorded_controller_stopped_event"
+    },
+    "interface_pilot_state": {
+      "manifest_sha256": "8901cf6f8a4be3becceed0f65005d2d0cf98d1b29212e62b73c312d611fb4ace",
+      "terminal_evidence": "recorded_controller_stopped_event"
+    }
+  },
+  "maximum_search_jobs": 4,
+  "intervention": "Scheduling only; marker-aware inspect hook confined to this controller process",
+  "helper_sha256": "1bb5dc37d65c4e324f9cb6852b11ecdc25a478d38fa531fb5cd9dc5db5d27190",
+  "controller_sha256": "18db8d5f719a0f3b56f58da63172ca048a6198ee3d5e1f78593b499ef2b124ec",
+  "exit_code": 0,
+  "finished_utc": "2026-10-21T21:15:48.219372+00:00",
+  "full_original_feedback_jobs": [
+    "next_fixed_neutral_2107",
+    "next_fixed_neutral_4319",
+    "next_fixed_neutral_8741"
+  ]
+}

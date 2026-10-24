@@ -1,0 +1,38 @@
+[
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector uses **Total Negative Log-Probability (NLL)** as the signal. It aggregates log-probabilities across the entire sequence by summing them.\n- **Approach**: Global likelihood scoring.\n- **Weakness**: This approach is sensitive to sequence length. Longer sequences naturally accumulate higher NLL values even if the model is confident per token. Without length normalization, it confuses \"long\" with \"hallucinated,\" which degrades ROC-AUC performance on variable-length atomic claims.\n\n### Proposed Detector\n**Signal**: Mean Negative Log-Probability (per-token confidence).\n**Aggregation Principle**: Average the negative log-probabilities across the generated tokens for each sample.\n**Specific Change**: Replace the summation (`-np.sum`) with the mean (`-np.mean`). This normalizes the score by sequence length, ensuring the detector evaluates the *average* confidence of the model rather than the *total* uncertainty. This isolates the \"unlikelihood\" of the specific content from the \"length\" of the content.\n\n```python\nimport numpy as np\nfrom typing import Dict, Any\n\nclass HallucinationDetector(Estimator):\n    def __init__(self, context: Dict[str, Any]) -> None:\n        super().__init__(\n            context,\n            stats_dependencies=[\n                \"sequence_logprobs\",\n            ],\n            level=\"sequence\",\n        )\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        \"\"\"\n        Detects hallucinations based on average token unlikelihood.\n        \n        Approach: Computes the mean negative log-probability per generated token.\n        Hypothesis: Atomic hallucinations manifest as localized drops in confidence; \n        normalizing by length prevents long, valid sequences from being penalized \n        simply due to their length, improving separation between true and false claims.\n        \"\"\"\n        # Calculate mean negative log-prob for each sample\n        # sequence_logprobs: List[np.ndarray], inner array length n_i - 1\n        mean_neg_logprobs = np.array([\n            -np.mean(seq_logprobs) \n            for seq_logprobs in stats[\"sequence_logprobs\"]\n        ], dtype=np.float32)\n        \n        return mean_neg_logprobs\n```",
+    "usage": {
+      "completion_tokens": 494,
+      "prompt_tokens": 531,
+      "total_tokens": 1025,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 5.812611222994747
+  },
+  {
+    "content": "### Analysis of Shown Detectors\nThe provided detector sums the negative log-probabilities across the entire sequence. This approach assumes that hallucinated content is globally rare or highly improbable within the model's distribution. However, hallucinations can also be locally probable (plausible-sounding) but globally inconsistent, or they might be spread out such that the total surprisal doesn't spike significantly compared to a coherent but complex sequence. This method lacks sensitivity to local coherence breaks or specific structural anomalies within the generation process.\n\n### Proposed Detector\n**Signal:** Local Windowed Surprisal Variance.\n**Aggregation Principle:** Compute the variance of negative log-probabilities within sliding windows of fixed length (e.g., 5 tokens) across the sequence, then aggregate the maximum window variance per sample.\n\n**Hypothesis:** Hallucinations often manifest as a sudden, localized drop in probability (high surprisal) or a shift in distributional mode that creates a \"spike\" in variance within a short context window, even if the global average surprisal remains moderate. This detector explores the **local structural instability** of the generation rather than global rarity.\n\n```python\nimport numpy as np\nfrom sklearn.base import BaseEstimator, RegressorMixin\n\nclass HallucinationDetector(BaseEstimator, RegressorMixin):\n    def __init__(self, window_size: int = 5):\n        \"\"\"\n        Detects hallucinations based on local variance of token surprisal.\n        Hypothesis: Hallucinated segments often exhibit high local variance in \n        negative log-probability due to distributional shifts or rare token clusters,\n        even if global perplexity is acceptable.\n        \"\"\"\n        self.window_size = window_size\n\n    def __call__(self, stats: Dict[str, np.ndarray]) -> np.ndarray:\n        scores = []\n        for seq_logprobs in stats[\"sequence_logprobs\"]:\n            # seq_logprobs is a list of arrays; assuming single sequence per sample as per typical usage\n            # If stats[\"sequence_logprobs\"] is a list of lists, we flatten or iterate.\n            # Based on input description: List[np.ndarray], shape (n_i-1,)\n            # We assume one sequence per sample in the list provided to __call__ if level=\"sequence\"\n            # However, the input to __call__ is stats dict. \n            # The example code iterates over stats[\"sequence_logprobs\"]. \n            # Let's assume stats[\"sequence_logprobs\"] is a list of 1D arrays for the batch.\n            \n            lp = np.array(seq_logprobs)\n            if len(lp) < self.window_size:\n                # Fallback to mean if sequence too short\n                score = np.mean(-lp)\n            else:\n                # Calculate negative log probs\n                nlps = -lp\n                # Sliding window variance\n                variances = []\n                for i in range(len(nlps) - self.window_size + 1):\n                    window = nlps[i:i + self.window_size]\n                    variances.append(np.var(window))\n                \n                # Aggregate: Maximum local variance\n                score = float(np.max(variances))\n            scores.append(score)\n        \n        return np.array(scores, dtype=np.float32)\n```",
+    "usage": {
+      "completion_tokens": 696,
+      "prompt_tokens": 552,
+      "total_tokens": 1248,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": null,
+        "audio_tokens": null,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": null,
+        "text_tokens": null
+      },
+      "prompt_tokens_details": null
+    },
+    "finish_reason": "stop",
+    "generation_seconds": 8.160129355994286
+  }
+]

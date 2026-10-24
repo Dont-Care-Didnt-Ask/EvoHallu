@@ -1,0 +1,542 @@
+{
+  "AVeriTeC__dev_filtered_10shot": {
+    "rows": 427,
+    "duplicate_disjoint_rows": 427,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.76780435366837,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.76780435366837,
+        "auc_ci95_percent": [
+          57.23204458167941,
+          70.23949108842564
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 64.07686105885514,
+        "gain_pp": 0.3090567051867832,
+        "duplicate_disjoint_auc_percent": 64.07686105885514,
+        "auc_ci95_percent": [
+          57.598897979168726,
+          70.63944511074374
+        ],
+        "paired_gain_ci95_pp": [
+          -0.19528257165908225,
+          0.7266338534528775
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 60.053748992206394,
+        "gain_pp": -3.7140553614619765,
+        "duplicate_disjoint_auc_percent": 60.053748992206394,
+        "auc_ci95_percent": [
+          53.75677346055892,
+          65.24196484938672
+        ],
+        "paired_gain_ci95_pp": [
+          -12.34182580634718,
+          4.025131493172355
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 419,
+    "bootstrap_unit": "claim"
+  },
+  "UHEAD_bio_gemma_annotated_by_mistral__test_filtered_10shot": {
+    "rows": 2057,
+    "duplicate_disjoint_rows": 2057,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 36.19719167488705,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 36.19719167488705,
+        "auc_ci95_percent": [
+          33.727009008119055,
+          38.4683483385775
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 36.33967824826763,
+        "gain_pp": 0.14248657338057913,
+        "duplicate_disjoint_auc_percent": 36.33967824826763,
+        "auc_ci95_percent": [
+          33.893160635460575,
+          38.773579761397436
+        ],
+        "paired_gain_ci95_pp": [
+          -0.20270017607436794,
+          0.5037672040745057
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 47.068125631751364,
+        "gain_pp": 10.87093395686431,
+        "duplicate_disjoint_auc_percent": 47.068125631751364,
+        "auc_ci95_percent": [
+          44.136144905637416,
+          50.278591120367885
+        ],
+        "paired_gain_ci95_pp": [
+          7.546597737961442,
+          14.124829170489988
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2051,
+    "bootstrap_unit": "claim"
+  },
+  "WildHallucinations__pred_PerplexityAI_retrieval+llama_eval_vllm_Llama3_inst_perplexity_filtered_10shot": {
+    "rows": 46605,
+    "duplicate_disjoint_rows": 46599,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 70.68591510605297,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 70.6814726670195,
+        "auc_ci95_percent": [
+          70.04724940140954,
+          71.3095596991671
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 70.18523478033742,
+        "gain_pp": -0.5006803257155523,
+        "duplicate_disjoint_auc_percent": 70.18073684259143,
+        "auc_ci95_percent": [
+          69.53714604460333,
+          70.82868155847078
+        ],
+        "paired_gain_ci95_pp": [
+          -0.5822018178116647,
+          -0.40657428525755385
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 56.53485134728782,
+        "gain_pp": -14.151063758765158,
+        "duplicate_disjoint_auc_percent": 56.531281731875005,
+        "auc_ci95_percent": [
+          55.82269615697366,
+          57.31277942074098
+        ],
+        "paired_gain_ci95_pp": [
+          -14.877762264906458,
+          -13.44351495372171
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 46283,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__cities": {
+    "rows": 1496,
+    "duplicate_disjoint_rows": 1495,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 91.93696559810117,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 91.92635067900837,
+        "auc_ci95_percent": [
+          90.53825859295301,
+          93.26341852742824
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 91.28817667076554,
+        "gain_pp": -0.6487889273356306,
+        "duplicate_disjoint_auc_percent": 91.27669322566558,
+        "auc_ci95_percent": [
+          89.91320765237256,
+          92.73071766129574
+        ],
+        "paired_gain_ci95_pp": [
+          -1.002999281770098,
+          -0.33076019650262994
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 94.50120106379936,
+        "gain_pp": 2.5642354656981836,
+        "duplicate_disjoint_auc_percent": 94.49419782516877,
+        "auc_ci95_percent": [
+          93.27403519425663,
+          95.64922499350455
+        ],
+        "paired_gain_ci95_pp": [
+          1.1745624762187064,
+          3.919820464410194
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1496,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__common_claim_true_false": {
+    "rows": 4450,
+    "duplicate_disjoint_rows": 4450,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 63.26080040398939,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 63.26080040398939,
+        "auc_ci95_percent": [
+          61.68247129343744,
+          64.88894884275209
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 64.49132180280269,
+        "gain_pp": 1.230521398813289,
+        "duplicate_disjoint_auc_percent": 64.49132180280269,
+        "auc_ci95_percent": [
+          62.90455118020134,
+          66.08783181688483
+        ],
+        "paired_gain_ci95_pp": [
+          1.0454073090308362,
+          1.4076566265208579
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 71.29509910364852,
+        "gain_pp": 8.034298699659137,
+        "duplicate_disjoint_auc_percent": 71.29509910364852,
+        "auc_ci95_percent": [
+          69.81915558369963,
+          72.82859276608947
+        ],
+        "paired_gain_ci95_pp": [
+          6.440357642989744,
+          9.66626604827122
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 4447,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__companies_true_false": {
+    "rows": 1200,
+    "duplicate_disjoint_rows": 1200,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 72.58069444444443,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 72.58069444444443,
+        "auc_ci95_percent": [
+          69.65842172941194,
+          75.38574147158444
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 75.79541666666665,
+        "gain_pp": 3.2147222222222216,
+        "duplicate_disjoint_auc_percent": 75.79541666666665,
+        "auc_ci95_percent": [
+          72.92174064902362,
+          78.43377814253222
+        ],
+        "paired_gain_ci95_pp": [
+          2.7467950618238692,
+          3.7253419094186766
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 79.34555555555556,
+        "gain_pp": 6.76486111111112,
+        "duplicate_disjoint_auc_percent": 79.34555555555556,
+        "auc_ci95_percent": [
+          76.82556289431062,
+          81.86325745838987
+        ],
+        "paired_gain_ci95_pp": [
+          2.414485448610186,
+          11.032386031749022
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 1186,
+    "bootstrap_unit": "claim"
+  },
+  "geometry__counterfact_true_false": {
+    "rows": 31964,
+    "duplicate_disjoint_rows": 31964,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 68.08486277916116,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 68.08486277916116,
+        "auc_ci95_percent": [
+          67.48551431303397,
+          68.65757659018908
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 68.69179851485092,
+        "gain_pp": 0.606935735689762,
+        "duplicate_disjoint_auc_percent": 68.69179851485092,
+        "auc_ci95_percent": [
+          68.10177597432265,
+          69.22769443227565
+        ],
+        "paired_gain_ci95_pp": [
+          0.5094306196416121,
+          0.700965519454805
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 71.33836595766032,
+        "gain_pp": 3.253503178499162,
+        "duplicate_disjoint_auc_percent": 71.33836595766032,
+        "auc_ci95_percent": [
+          70.74118887356569,
+          71.86070532128338
+        ],
+        "paired_gain_ci95_pp": [
+          2.716425512900247,
+          3.778301663119106
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 31938,
+    "bootstrap_unit": "claim"
+  },
+  "popqa__popqa_test_filtered_10shot": {
+    "rows": 6974,
+    "duplicate_disjoint_rows": 6454,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 74.05170876856083,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 73.83072001100092,
+        "auc_ci95_percent": [
+          72.4306032260263,
+          75.34065956942705
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 74.99404855573879,
+        "gain_pp": 0.9423397871779593,
+        "duplicate_disjoint_auc_percent": 74.77507556784063,
+        "auc_ci95_percent": [
+          73.37324450193952,
+          76.2494835505655
+        ],
+        "paired_gain_ci95_pp": [
+          0.6909184580440115,
+          1.2315196108483066
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 74.39202447845406,
+        "gain_pp": 0.3403157098932241,
+        "duplicate_disjoint_auc_percent": 73.61086197166217,
+        "auc_ci95_percent": [
+          72.9959975274333,
+          75.67685114036003
+        ],
+        "paired_gain_ci95_pp": [
+          -1.1827355495751073,
+          1.8834161178586601
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 6686,
+    "bootstrap_unit": "claim"
+  },
+  "x-fact__test_filtered_10shot": {
+    "rows": 2315,
+    "duplicate_disjoint_rows": 2315,
+    "failed": {},
+    "methods": {
+      "original/SequenceLogProb": {
+        "auc_percent": 50.22899770761495,
+        "gain_pp": 0.0,
+        "duplicate_disjoint_auc_percent": 50.22899770761495,
+        "auc_ci95_percent": [
+          47.85887972459884,
+          52.86128885641865
+        ],
+        "paired_gain_ci95_pp": [
+          0.0,
+          0.0
+        ]
+      },
+      "new/next_evo_original_2107__primary": {
+        "auc_percent": 50.90948931825624,
+        "gain_pp": 0.6804916106412873,
+        "duplicate_disjoint_auc_percent": 50.90948931825624,
+        "auc_ci95_percent": [
+          48.519744321624906,
+          53.40026893496758
+        ],
+        "paired_gain_ci95_pp": [
+          0.4246631961436915,
+          0.9024554502470342
+        ]
+      },
+      "new/next_evo_original_2107__trainbest": {
+        "auc_percent": 56.78773927170221,
+        "gain_pp": 6.558741564087256,
+        "duplicate_disjoint_auc_percent": 56.78773927170221,
+        "auc_ci95_percent": [
+          54.39392672751039,
+          58.89343386634296
+        ],
+        "paired_gain_ci95_pp": [
+          2.7453084256308036,
+          10.198202999818891
+        ]
+      }
+    },
+    "feature_model_metadata": {
+      "model_id": "/workspace/mod1-models/llama31",
+      "hidden_size": 4096,
+      "num_layers": 32,
+      "num_attention_heads": 32,
+      "vocab_size": 128256,
+      "modalities": "logits",
+      "model_dtype": "torch.float32",
+      "requested_forward_batch_size": 16,
+      "max_padded_forward_tokens": 16384,
+      "cpu_feature_threads": 12
+    },
+    "unique_normalized_claims": 2315,
+    "bootstrap_unit": "claim"
+  }
+}

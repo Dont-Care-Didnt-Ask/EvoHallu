@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "utc": "2026-10-21T22:37:09.465157+00:00",
+  "tests": 36,
+  "elapsed_seconds": 0.88,
+  "command": "pytest -q tests/test_overnight_late_extensions.py tests/test_overnight_devstral.py",
+  "models_or_gpu_used": false
+}

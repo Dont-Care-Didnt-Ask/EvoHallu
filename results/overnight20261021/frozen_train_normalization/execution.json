@@ -1,0 +1,14 @@
+{
+  "status": "complete_exploratory_train_only_control",
+  "started_utc": "2026-10-21T22:26:59.744646+00:00",
+  "cutoff_utc": "2026-10-21T22:56:59.744646+00:00",
+  "workers": 4,
+  "gpu_calls": 0,
+  "phases": [
+    "fit_train_only_complete",
+    "reference_all9_complete",
+    "frozen_all9_complete"
+  ],
+  "plan_sha256": "252334fbb472c819747888ae860d131b156e2e5c49790c210d1486d523f2b6f5",
+  "finished_utc": "2026-10-21T22:30:21.239241+00:00"
+}

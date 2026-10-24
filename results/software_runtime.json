@@ -1,0 +1,16 @@
+{
+  "cpu_count_allocated": "24",
+  "memory_GB_allocated": "117",
+  "gpu_count": "1",
+  "modules": {
+    "torch": "2.13.0+cu130",
+    "transformers": "5.17.0",
+    "vllm": "0.31.0",
+    "numpy": "2.1.2",
+    "scipy": "1.18.1",
+    "sklearn": "1.9.1"
+  },
+  "torch_cuda": "13.0",
+  "compat_deb_sha256": "f7e29a545c1334bb5ca4b054213de9c9ceb70f8bf561aa214075020c4e0b60cf",
+  "compat_source": "https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-compat-13-0_580.178.04-1ubuntu1_amd64.deb"
+}
